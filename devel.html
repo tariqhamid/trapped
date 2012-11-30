@@ -4,16 +4,16 @@
 <script src="/vendor/amber/js/amber.js"></script>
 </head>
 <body>
-<script type="text/javascript">
-    loadAmber({
-        files: ['Sample.js'],
-        packageHome: './',
+<script type="text/javascript"> 
+	loadAmber({
+		files: ['Trapped.js', 'Sample.js'],
+		packageHome: './',
         ready: function () {
             smalltalk.Browser._openOn_(smalltalk.Application);
             smalltalk.Trapped._start();
             //smalltalk.Application._open();
         }
-    });
+	});
 </script>
 <div trapped-app="Application">
 </div>
