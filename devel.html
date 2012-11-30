@@ -1,19 +1,21 @@
 <html>
 <head>
-<title>{{name}}</title>
+<title trapped-app="Name"></title>
 <script src="/vendor/amber/js/amber.js"></script>
 </head>
 <body>
-<script type="text/javascript"> 
-	loadAmber({
-		files: [],
-		packageHome: './',
-		ready: function() {
-			smalltalk.Browser._openOn_(smalltalk.Application);
-			smalltalk.Application._open();
-	}});
+<script type="text/javascript">
+    loadAmber({
+        files: ['Sample.js'],
+        packageHome: './',
+        ready: function () {
+            smalltalk.Browser._openOn_(smalltalk.Application);
+            smalltalk.Trapped._start();
+            //smalltalk.Application._open();
+        }
+    });
 </script>
-<div>
+<div trapped-app="Application">
 </div>
 </body>
 </html>
