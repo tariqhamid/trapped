@@ -29,6 +29,7 @@ var $1,$2;
 var bb;
 var model;
 var result;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[["bar", [(1), [(2), (5)]], "baz"]]),smalltalk.send("moo","__minus_gt",["zoo"])])]);
 $1=smalltalk.send((smalltalk.EavModel || EavModel),"_new",[]);
 smalltalk.send($1,"_getBlock_",[(function(x){
@@ -57,6 +58,7 @@ var $1,$2;
 var bb;
 var model;
 var result;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[["bar", [(1), [(2), (3)]], "baz"]]),smalltalk.send("moo","__minus_gt",["zoo"])])]);
 $1=smalltalk.send((smalltalk.EavModel || EavModel),"_new",[]);
 smalltalk.send($1,"_getBlock_",[(function(x){
@@ -92,6 +94,7 @@ var self=this;
 var bb;
 var model;
 var result;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[["bar", [(1), [(2), (3)]], "baz"]]),smalltalk.send("moo","__minus_gt",["zoo"])])]);
 model=smalltalk.send(smalltalk.send((smalltalk.EavModel || EavModel),"_new",[]),"_getBlock_",[(function(x){
 return smalltalk.send(smalltalk.send(smalltalk.send(x,"_root",[]),"_at_",["foo"]),"_at_",[(2)]);
@@ -113,6 +116,7 @@ fn: function (){
 var self=this;
 var bb;
 var result;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
 smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
 return smalltalk.send(r,"_second",[]);
@@ -134,6 +138,7 @@ fn: function (){
 var self=this;
 var bb;
 var result;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(2), [(1), (0)]]]);
 smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
 result=r;
@@ -153,6 +158,8 @@ var self=this;
 var bb;
 var result;
 var newValue;
+result=nil;
+newValue=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
 smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
 newValue=r;
@@ -180,6 +187,7 @@ var self=this;
 var bb;
 var result;
 var newValue;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
 newValue=smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[[(4), (5), (6)]])]);
 smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
@@ -205,6 +213,7 @@ var self=this;
 var bb;
 var result;
 var newValue;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
 newValue=smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[[(4), (5), (6)]])]);
 smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
@@ -229,6 +238,7 @@ fn: function (){
 var self=this;
 var bb;
 var result;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
 smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
 return smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[[(4), (5), (6)]])]);
@@ -250,6 +260,7 @@ fn: function (){
 var self=this;
 var bb;
 var result;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
 smalltalk.send(bb,"_model_read_",[self["@rootModel"],(function(r){
 return smalltalk.send(smalltalk.send(r,"_at_",[(2)]),"_at_put_",[(1),(0)]);
@@ -271,6 +282,7 @@ fn: function (){
 var self=this;
 var bb;
 var result;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (4)]]]);
 smalltalk.send(bb,"_model_read_",[self["@rootModel"],(function(r){
 return smalltalk.send(r,"_at_put_",[(2),nil]);
@@ -292,6 +304,7 @@ fn: function (){
 var self=this;
 var bb;
 var result;
+result=nil;
 bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
 smalltalk.send(bb,"_model_read_",[self["@rootModel"],(function(r){
 result=r;
