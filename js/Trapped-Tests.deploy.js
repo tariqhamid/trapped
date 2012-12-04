@@ -20,6 +20,70 @@ return self}
 smalltalk.IsolatorTest);
 
 smalltalk.addMethod(
+"_testNontrivialModelGetsAppropriateValueForModification",
+smalltalk.method({
+selector: "testNontrivialModelGetsAppropriateValueForModification",
+fn: function (){
+var self=this;
+var $1,$2;
+var bb;
+var model;
+var result;
+bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[["bar", [(1), [(2), (5)]], "baz"]]),smalltalk.send("moo","__minus_gt",["zoo"])])]);
+$1=smalltalk.send((smalltalk.EavModel || EavModel),"_new",[]);
+smalltalk.send($1,"_getBlock_",[(function(x){
+return smalltalk.send(smalltalk.send(smalltalk.send(x,"_root",[]),"_at_",["foo"]),"_at_",[(2)]);
+})]);
+$2=smalltalk.send($1,"_putBlock_",[(function(x,y){
+return smalltalk.send(smalltalk.send(smalltalk.send(x,"_root",[]),"_at_",["foo"]),"_at_put_",[(2),y]);
+})]);
+model=$2;
+smalltalk.send(bb,"_model_modify_",[model,(function(r){
+result=r;
+return result;
+})]);
+smalltalk.send(self,"_assert_equals_",[[(1), [(2), (5)]],result]);
+return self}
+}),
+smalltalk.IsolatorTest);
+
+smalltalk.addMethod(
+"_testNontrivialModelModifiesAppropriateValue",
+smalltalk.method({
+selector: "testNontrivialModelModifiesAppropriateValue",
+fn: function (){
+var self=this;
+var $1,$2;
+var bb;
+var model;
+var result;
+bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[["bar", [(1), [(2), (3)]], "baz"]]),smalltalk.send("moo","__minus_gt",["zoo"])])]);
+$1=smalltalk.send((smalltalk.EavModel || EavModel),"_new",[]);
+smalltalk.send($1,"_getBlock_",[(function(x){
+return smalltalk.send(smalltalk.send(smalltalk.send(x,"_root",[]),"_at_",["foo"]),"_at_",[(2)]);
+})]);
+$2=smalltalk.send($1,"_putBlock_",[(function(x,y){
+return smalltalk.send(smalltalk.send(smalltalk.send(x,"_root",[]),"_at_",["foo"]),"_at_put_",[(2),y]);
+})]);
+model=$2;
+smalltalk.send(bb,"_model_modify_",[model,(function(r){
+return smalltalk.symbolFor("new");
+})]);
+smalltalk.send(bb,"_model_read_",[model,(function(r){
+result=r;
+return result;
+})]);
+smalltalk.send(self,"_assert_equals_",[smalltalk.symbolFor("new"),result]);
+smalltalk.send(bb,"_model_read_",[self["@rootModel"],(function(r){
+result=r;
+return result;
+})]);
+smalltalk.send(self,"_assert_equals_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[["bar", smalltalk.symbolFor("new"), "baz"]]),smalltalk.send("moo","__minus_gt",["zoo"])]),result]);
+return self}
+}),
+smalltalk.IsolatorTest);
+
+smalltalk.addMethod(
 "_testNontrivialModelReturnsAppropriateValue",
 smalltalk.method({
 selector: "testNontrivialModelReturnsAppropriateValue",
@@ -37,6 +101,143 @@ result=r;
 return result;
 })]);
 smalltalk.send(self,"_assert_equals_",[[(1), [(2), (3)]],result]);
+return self}
+}),
+smalltalk.IsolatorTest);
+
+smalltalk.addMethod(
+"_testRootModelExaminesThenModifiesRoot",
+smalltalk.method({
+selector: "testRootModelExaminesThenModifiesRoot",
+fn: function (){
+var self=this;
+var bb;
+var result;
+bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
+smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
+return smalltalk.send(r,"_second",[]);
+})]);
+smalltalk.send(bb,"_model_read_",[self["@rootModel"],(function(r){
+result=r;
+return result;
+})]);
+smalltalk.send(self,"_assert_equals_",[[(2), (3)],result]);
+return self}
+}),
+smalltalk.IsolatorTest);
+
+smalltalk.addMethod(
+"_testRootModelGetsRootForModification",
+smalltalk.method({
+selector: "testRootModelGetsRootForModification",
+fn: function (){
+var self=this;
+var bb;
+var result;
+bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(2), [(1), (0)]]]);
+smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
+result=r;
+return result;
+})]);
+smalltalk.send(self,"_assert_equals_",[[(2), [(1), (0)]],result]);
+return self}
+}),
+smalltalk.IsolatorTest);
+
+smalltalk.addMethod(
+"_testRootModelModifiesAndDeeplyIsolatesInPlaceModifiedRoot",
+smalltalk.method({
+selector: "testRootModelModifiesAndDeeplyIsolatesInPlaceModifiedRoot",
+fn: function (){
+var self=this;
+var bb;
+var result;
+var newValue;
+bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
+smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
+newValue=r;
+newValue;
+smalltalk.send(r,"_at_put_",[(1),(4)]);
+return r;
+})]);
+smalltalk.send(newValue,"_at_put_",[(2),"bar"]);
+smalltalk.send(bb,"_model_read_",[self["@rootModel"],(function(r){
+result=r;
+return result;
+})]);
+smalltalk.send(newValue,"_at_put_",[(2),"baz"]);
+smalltalk.send(self,"_assert_equals_",[[(4), [(2), (3)]],result]);
+return self}
+}),
+smalltalk.IsolatorTest);
+
+smalltalk.addMethod(
+"_testRootModelModifiesAndDeeplyIsolatesRoot",
+smalltalk.method({
+selector: "testRootModelModifiesAndDeeplyIsolatesRoot",
+fn: function (){
+var self=this;
+var bb;
+var result;
+var newValue;
+bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
+newValue=smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[[(4), (5), (6)]])]);
+smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
+return newValue;
+})]);
+smalltalk.send(smalltalk.send(newValue,"_at_",["foo"]),"_at_put_",[(1),"bar"]);
+smalltalk.send(bb,"_model_read_",[self["@rootModel"],(function(r){
+result=r;
+return result;
+})]);
+smalltalk.send(smalltalk.send(newValue,"_at_",["foo"]),"_at_put_",[(3),"baz"]);
+smalltalk.send(self,"_assert_equals_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[[(4), (5), (6)]])]),result]);
+return self}
+}),
+smalltalk.IsolatorTest);
+
+smalltalk.addMethod(
+"_testRootModelModifiesAndIsolatesRoot",
+smalltalk.method({
+selector: "testRootModelModifiesAndIsolatesRoot",
+fn: function (){
+var self=this;
+var bb;
+var result;
+var newValue;
+bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
+newValue=smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[[(4), (5), (6)]])]);
+smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
+return newValue;
+})]);
+smalltalk.send(newValue,"_at_put_",["foo","bar"]);
+smalltalk.send(bb,"_model_read_",[self["@rootModel"],(function(r){
+result=r;
+return result;
+})]);
+smalltalk.send(newValue,"_at_put_",["foo","baz"]);
+smalltalk.send(self,"_assert_equals_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[[(4), (5), (6)]])]),result]);
+return self}
+}),
+smalltalk.IsolatorTest);
+
+smalltalk.addMethod(
+"_testRootModelModifiesRoot",
+smalltalk.method({
+selector: "testRootModelModifiesRoot",
+fn: function (){
+var self=this;
+var bb;
+var result;
+bb=smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[[(1), [(2), (3)]]]);
+smalltalk.send(bb,"_model_modify_",[self["@rootModel"],(function(r){
+return smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[[(4), (5), (6)]])]);
+})]);
+smalltalk.send(bb,"_model_read_",[self["@rootModel"],(function(r){
+result=r;
+return result;
+})]);
+smalltalk.send(self,"_assert_equals_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("foo","__minus_gt",[[(4), (5), (6)]])]),result]);
 return self}
 }),
 smalltalk.IsolatorTest);

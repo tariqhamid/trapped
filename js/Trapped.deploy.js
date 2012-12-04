@@ -68,6 +68,19 @@ smalltalk.EavModel);
 
 smalltalk.addClass('Isolator', smalltalk.Object, ['root'], 'Trapped');
 smalltalk.addMethod(
+"_model_modify_",
+smalltalk.method({
+selector: "model:modify:",
+fn: function (anEavModel,aBlock){
+var self=this;
+var newValue;
+newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send(anEavModel,"_on_",[self])]);
+smalltalk.send(anEavModel,"_on_put_",[self,smalltalk.send(newValue,"_deepCopy",[])]);
+return self}
+}),
+smalltalk.Isolator);
+
+smalltalk.addMethod(
 "_model_read_",
 smalltalk.method({
 selector: "model:read:",

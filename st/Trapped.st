@@ -55,6 +55,13 @@ root := anObject
 
 !Isolator methodsFor: 'action'!
 
+model: anEavModel modify: aBlock
+
+| newValue |
+newValue := aBlock value: (anEavModel on: self).
+anEavModel on: self put: newValue deepCopy
+!
+
 model: anEavModel read: aBlock
 
 aBlock value: (anEavModel on: self) deepCopy
