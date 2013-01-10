@@ -1,16 +1,16 @@
 <html>
 <head>
-<title>{{name}}</title>
-<script src="/vendor/amber/js/amber.js"></script>
+    <title>{{name}}</title>
+    <script src="/vendor/amber/js/amber.js"></script>
 </head>
 <body>
-<script type="text/javascript"> 
-	loadAmber({
-		files: ['Trapped.js', 'Trapped-Tests.js'],
-		packageHome: './',
-		ready: function() {
-			smalltalk.Browser._openOn_(smalltalk.IsolatorTest);
-	}});
+<script type="text/javascript">
+    loadAmber({
+        files:['Trapped.js', 'Trapped-Tests.js'],
+        packageHome:'./',
+        ready:function () {
+            smalltalk.Browser._openOn_(smalltalk.IsolatorTest);
+        }});
 </script>
 <div>
 </div>
