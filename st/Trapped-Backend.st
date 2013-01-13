@@ -1,7 +1,7 @@
-Smalltalk current createPackage: 'Trapped' properties: #{}!
+Smalltalk current createPackage: 'Trapped-Backend' properties: #{}!
 Object subclass: #EavModel
 	instanceVariableNames: 'getBlock putBlock'
-	package: 'Trapped'!
+	package: 'Trapped-Backend'!
 !EavModel commentStamp!
 External actor value model.!
 
@@ -39,7 +39,7 @@ putBlock := [ self error: 'No putter block.' ].
 
 Object subclass: #Isolator
 	instanceVariableNames: 'root'
-	package: 'Trapped'!
+	package: 'Trapped-Backend'!
 
 !Isolator methodsFor: 'accessing'!
 
@@ -72,8 +72,4 @@ aBlock value: (anEavModel on: self) deepCopy
 on: anObject
 ^self new root: anObject
 ! !
-
-Object subclass: #Trapped
-	instanceVariableNames: ''
-	package: 'Trapped'!
 
