@@ -119,15 +119,17 @@ selector: "start",
 category: 'action',
 fn: function (){
 var self=this;
-var $1,$2;
 smalltalk.send(smalltalk.send("[data-trap]","_asJQuery",[]),"_each_",[(function(index,elem){
 var trap;
+var jq;
 var viewName;
 var modelName;
 var tokens;
 var model;
 var view;
-trap=smalltalk.send(smalltalk.send(jQuery,"_value_",[elem]),"_attr_",["data-trap"]);
+jq=smalltalk.send(elem,"_asJQuery",[]);
+jq;
+trap=smalltalk.send(jq,"_attr_",["data-trap"]);
 trap;
 tokens=smalltalk.send(trap,"_tokenize_",[":"]);
 tokens;
@@ -137,17 +139,12 @@ modelName=smalltalk.send(tokens,"_second",[]);
 modelName;
 model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[modelName]);
 model;
-$1=smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Smalltalk || Smalltalk),"_current",[]),"_at_",[viewName]),"_new",[]);
-smalltalk.send($1,"_startOn_",[elem]);
-smalltalk.send($1,"_observe_",[model]);
-$2=smalltalk.send($1,"_yourself",[]);
-view=$2;
-return view;
+return smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Smalltalk || Smalltalk),"_current",[]),"_at_",[viewName]),"_new",[]),"_appendToJQuery_",[jq]);
 })]);
 return self},
 args: [],
-source: "start\x0a\x09'[data-trap]' asJQuery each: [ :index :elem |\x0a    \x09| trap viewName modelName tokens model view |\x0a        trap := (jQuery value: elem) attr: 'data-trap'.\x0a        tokens := trap tokenize: ':'.\x0a        viewName := tokens first.\x0a        modelName := tokens second.\x0a       \x09model := Trapped current byName: modelName.\x0a        view := (Smalltalk current at: viewName) new\x0a        \x09startOn: elem;\x0a            observe: model;\x0a            yourself.\x0a    ]",
-messageSends: ["each:", "attr:", "value:", "tokenize:", "first", "second", "byName:", "current", "startOn:", "new", "at:", "observe:", "yourself", "asJQuery"],
+source: "start\x0a\x09'[data-trap]' asJQuery each: [ :index :elem |\x0a    \x09| trap jq viewName modelName tokens model view |\x0a        jq := elem asJQuery.\x0a        trap := jq attr: 'data-trap'.\x0a        tokens := trap tokenize: ':'.\x0a        viewName := tokens first.\x0a        modelName := tokens second.\x0a       \x09model := Trapped current byName: modelName.\x0a        \x22TODO do something with model\x22\x0a        (Smalltalk current at: viewName) new appendToJQuery: jq.\x0a    ]",
+messageSends: ["each:", "asJQuery", "attr:", "tokenize:", "first", "second", "byName:", "current", "appendToJQuery:", "new", "at:"],
 referencedClasses: ["Trapped", "Smalltalk"]
 }),
 smalltalk.Trapped);
@@ -193,51 +190,18 @@ smalltalk.TrappedFly);
 
 smalltalk.addClass('TrappedView', smalltalk.Widget, [], 'Trapped-Frontend');
 smalltalk.addMethod(
-"_observe_",
-smalltalk.method({
-selector: "observe:",
-category: 'initializing',
-fn: function (aFly){
-var self=this;
-return self},
-args: ["aFly"],
-source: "observe: aFly",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedView);
-
-smalltalk.addMethod(
 "_renderOn_",
 smalltalk.method({
 selector: "renderOn:",
 category: 'rendering',
 fn: function (html){
 var self=this;
+smalltalk.send(smalltalk.send(html,"_root",[]),"_empty",[]);
 smalltalk.send(html,"_with_",[smalltalk.send(smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]),"__comma",[": contents"])]);
 return self},
 args: ["html"],
-source: "renderOn: html\x0a\x09html with: self class name, ': contents'",
-messageSends: ["with:", ",", "name", "class"],
-referencedClasses: []
-}),
-smalltalk.TrappedView);
-
-smalltalk.addMethod(
-"_startOn_",
-smalltalk.method({
-selector: "startOn:",
-category: 'initializing',
-fn: function (aHTMLElement){
-var self=this;
-var el;
-el=smalltalk.send(jQuery,"_value_",[aHTMLElement]);
-smalltalk.send(el,"_empty",[]);
-smalltalk.send(self,"_appendToJQuery_",[el]);
-return self},
-args: ["aHTMLElement"],
-source: "startOn: aHTMLElement\x0a\x09| el |\x0a    el := jQuery value: aHTMLElement.\x0a    el empty.\x0a    self appendToJQuery: el.",
-messageSends: ["value:", "empty", "appendToJQuery:"],
+source: "renderOn: html\x0a\x09html root empty.\x0a\x09html with: self class name, ': contents'",
+messageSends: ["empty", "root", "with:", ",", "name", "class"],
 referencedClasses: []
 }),
 smalltalk.TrappedView);

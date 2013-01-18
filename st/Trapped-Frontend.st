@@ -41,16 +41,15 @@ register: aFly name: aString
 
 start
 	'[data-trap]' asJQuery each: [ :index :elem |
-    	| trap viewName modelName tokens model view |
-        trap := (jQuery value: elem) attr: 'data-trap'.
+    	| trap jq viewName modelName tokens model view |
+        jq := elem asJQuery.
+        trap := jq attr: 'data-trap'.
         tokens := trap tokenize: ':'.
         viewName := tokens first.
         modelName := tokens second.
        	model := Trapped current byName: modelName.
-        view := (Smalltalk current at: viewName) new
-        	startOn: elem;
-            observe: model;
-            yourself.
+        "TODO do something with model"
+        (Smalltalk current at: viewName) new appendToJQuery: jq.
     ]
 ! !
 
@@ -79,21 +78,10 @@ Widget subclass: #TrappedView
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
 
-!TrappedView methodsFor: 'initializing'!
-
-observe: aFly
-!
-
-startOn: aHTMLElement
-	| el |
-    el := jQuery value: aHTMLElement.
-    el empty.
-    self appendToJQuery: el.
-! !
-
 !TrappedView methodsFor: 'rendering'!
 
 renderOn: html
+	html root empty.
 	html with: self class name, ': contents'
 ! !
 
