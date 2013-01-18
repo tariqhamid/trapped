@@ -86,11 +86,12 @@ selector: "initialize",
 category: 'initialization',
 fn: function (){
 var self=this;
+smalltalk.send(self,"_initialize",[],smalltalk.TrappedSingleton);
 self["@registry"]=smalltalk.HashedCollection._fromPairs_([]);
 return self},
 args: [],
-source: "initialize\x0a\x09registry := #{}.",
-messageSends: [],
+source: "initialize\x0a\x09super initialize.\x0a\x09registry := #{}.",
+messageSends: ["initialize"],
 referencedClasses: []
 }),
 smalltalk.Trapped);

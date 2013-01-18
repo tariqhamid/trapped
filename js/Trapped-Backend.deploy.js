@@ -17,6 +17,7 @@ smalltalk.method({
 selector: "initialize",
 fn: function (){
 var self=this;
+smalltalk.send(self,"_initialize",[],smalltalk.Object);
 self["@getBlock"]=(function(){
 return smalltalk.send(self,"_error_",["No getter block."]);
 });

@@ -65,6 +65,7 @@ smalltalk.method({
 selector: "initialize",
 fn: function (){
 var self=this;
+smalltalk.send(self,"_initialize",[],smalltalk.TrappedSingleton);
 self["@registry"]=smalltalk.HashedCollection._fromPairs_([]);
 return self}
 }),

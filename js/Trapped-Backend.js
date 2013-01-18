@@ -24,6 +24,7 @@ selector: "initialize",
 category: 'initialization',
 fn: function (){
 var self=this;
+smalltalk.send(self,"_initialize",[],smalltalk.Object);
 self["@getBlock"]=(function(){
 return smalltalk.send(self,"_error_",["No getter block."]);
 });
@@ -32,8 +33,8 @@ return smalltalk.send(self,"_error_",["No putter block."]);
 });
 return self},
 args: [],
-source: "initialize\x0a\x0agetBlock := [ self error: 'No getter block.' ].\x0aputBlock := [ self error: 'No putter block.' ].",
-messageSends: ["error:"],
+source: "initialize\x0a\x09super initialize.\x0a\x09getBlock := [ self error: 'No getter block.' ].\x0a\x09putBlock := [ self error: 'No putter block.' ].",
+messageSends: ["initialize", "error:"],
 referencedClasses: []
 }),
 smalltalk.EavModel);
@@ -164,7 +165,7 @@ smalltalk.addMethod(
 "_on_",
 smalltalk.method({
 selector: "on:",
-category: 'initialization',
+category: 'instance creation',
 fn: function (anObject){
 var self=this;
 var $1;

@@ -32,9 +32,9 @@ putBlock := aBlock
 !EavModel methodsFor: 'initialization'!
 
 initialize
-
-getBlock := [ self error: 'No getter block.' ].
-putBlock := [ self error: 'No putter block.' ].
+	super initialize.
+	getBlock := [ self error: 'No getter block.' ].
+	putBlock := [ self error: 'No putter block.' ].
 ! !
 
 Object subclass: #Isolator
@@ -67,7 +67,7 @@ model: anEavModel read: aBlock
 aBlock value: (anEavModel on: self) deepCopy
 ! !
 
-!Isolator class methodsFor: 'initialization'!
+!Isolator class methodsFor: 'instance creation'!
 
 on: anObject
 ^self new root: anObject

@@ -57,6 +57,7 @@ start
 !Trapped methodsFor: 'initialization'!
 
 initialize
+	super initialize.
 	registry := #{}.
 ! !
 
