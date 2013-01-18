@@ -145,7 +145,7 @@ smalltalk.TrappedFly);
 
 
 
-smalltalk.addClass('TrappedView', smalltalk.Object, [], 'Trapped-Frontend');
+smalltalk.addClass('TrappedView', smalltalk.Widget, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_observe_",
 smalltalk.method({
@@ -157,12 +157,26 @@ return self}
 smalltalk.TrappedView);
 
 smalltalk.addMethod(
+"_renderOn_",
+smalltalk.method({
+selector: "renderOn:",
+fn: function (html){
+var self=this;
+smalltalk.send(html,"_with_",[smalltalk.send(smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]),"__comma",[": contents"])]);
+return self}
+}),
+smalltalk.TrappedView);
+
+smalltalk.addMethod(
 "_startOn_",
 smalltalk.method({
 selector: "startOn:",
 fn: function (aHTMLElement){
 var self=this;
-smalltalk.send(smalltalk.send(jQuery,"_value_",[aHTMLElement]),"_html_",[smalltalk.send(smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]),"__comma",[": contents"])]);
+var el;
+el=smalltalk.send(jQuery,"_value_",[aHTMLElement]);
+smalltalk.send(el,"_empty",[]);
+smalltalk.send(self,"_appendToJQuery_",[el]);
 return self}
 }),
 smalltalk.TrappedView);

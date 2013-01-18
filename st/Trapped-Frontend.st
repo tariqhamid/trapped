@@ -74,16 +74,25 @@ start
 	Trapped current register: self name: self name
 ! !
 
-Object subclass: #TrappedView
+Widget subclass: #TrappedView
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
 
-!TrappedView methodsFor: 'not yet classified'!
+!TrappedView methodsFor: 'initializing'!
 
 observe: aFly
 !
 
 startOn: aHTMLElement
-	(jQuery value: aHTMLElement) html: self class name, ': contents'
+	| el |
+    el := jQuery value: aHTMLElement.
+    el empty.
+    self appendToJQuery: el.
+! !
+
+!TrappedView methodsFor: 'rendering'!
+
+renderOn: html
+	html with: self class name, ': contents'
 ! !
 

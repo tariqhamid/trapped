@@ -190,12 +190,12 @@ smalltalk.TrappedFly);
 
 
 
-smalltalk.addClass('TrappedView', smalltalk.Object, [], 'Trapped-Frontend');
+smalltalk.addClass('TrappedView', smalltalk.Widget, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_observe_",
 smalltalk.method({
 selector: "observe:",
-category: 'not yet classified',
+category: 'initializing',
 fn: function (aFly){
 var self=this;
 return self},
@@ -207,17 +207,36 @@ referencedClasses: []
 smalltalk.TrappedView);
 
 smalltalk.addMethod(
+"_renderOn_",
+smalltalk.method({
+selector: "renderOn:",
+category: 'rendering',
+fn: function (html){
+var self=this;
+smalltalk.send(html,"_with_",[smalltalk.send(smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]),"__comma",[": contents"])]);
+return self},
+args: ["html"],
+source: "renderOn: html\x0a\x09html with: self class name, ': contents'",
+messageSends: ["with:", ",", "name", "class"],
+referencedClasses: []
+}),
+smalltalk.TrappedView);
+
+smalltalk.addMethod(
 "_startOn_",
 smalltalk.method({
 selector: "startOn:",
-category: 'not yet classified',
+category: 'initializing',
 fn: function (aHTMLElement){
 var self=this;
-smalltalk.send(smalltalk.send(jQuery,"_value_",[aHTMLElement]),"_html_",[smalltalk.send(smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]),"__comma",[": contents"])]);
+var el;
+el=smalltalk.send(jQuery,"_value_",[aHTMLElement]);
+smalltalk.send(el,"_empty",[]);
+smalltalk.send(self,"_appendToJQuery_",[el]);
 return self},
 args: ["aHTMLElement"],
-source: "startOn: aHTMLElement\x0a\x09(jQuery value: aHTMLElement) html: self class name, ': contents'",
-messageSends: ["html:", ",", "name", "class", "value:"],
+source: "startOn: aHTMLElement\x0a\x09| el |\x0a    el := jQuery value: aHTMLElement.\x0a    el empty.\x0a    self appendToJQuery: el.",
+messageSends: ["value:", "empty", "appendToJQuery:"],
 referencedClasses: []
 }),
 smalltalk.TrappedView);
