@@ -1,4 +1,53 @@
 Smalltalk current createPackage: 'Trapped-Frontend' properties: #{}!
+Object subclass: #TrappedFly
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+
+!TrappedFly methodsFor: 'action'!
+
+name
+	^ self class name
+!
+
+start
+	Trapped current register: self name: self name
+! !
+
+!TrappedFly class methodsFor: 'action'!
+
+start
+	self new start
+! !
+
+Object subclass: #TrappedPathStack
+	instanceVariableNames: 'elements'
+	package: 'Trapped-Frontend'!
+
+!TrappedPathStack methodsFor: 'accessing'!
+
+elements
+	^elements
+! !
+
+!TrappedPathStack methodsFor: 'descending'!
+
+append: anArray
+    elements := elements, anArray
+!
+
+with: anArray do: aBlock
+	| old |
+    old := elements.
+    [ self append: anArray.
+	aBlock value ] ensure: [ elements := old ]
+! !
+
+!TrappedPathStack methodsFor: 'initializing'!
+
+initialize
+	elements := #().
+! !
+
 Object subclass: #TrappedSingleton
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
@@ -41,15 +90,13 @@ register: aFly name: aString
 
 start
 	'[data-trap]' asJQuery each: [ :index :elem |
-    	| trap jq viewName modelName tokens model view |
+    	| trap jq viewName modelName tokens |
         jq := elem asJQuery.
         trap := jq attr: 'data-trap'.
         tokens := trap tokenize: ':'.
         viewName := tokens first.
         modelName := tokens second.
-       	model := Trapped current byName: modelName.
-        "TODO do something with model"
-        (Smalltalk current at: viewName) new appendToJQuery: jq.
+        Trapped with: { modelName } do: [(Smalltalk current at: viewName) new appendToJQuery: jq].
     ]
 ! !
 
@@ -60,18 +107,24 @@ initialize
 	registry := #{}.
 ! !
 
-TrappedSingleton subclass: #TrappedFly
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
+Trapped class instanceVariableNames: 'path'!
 
-!TrappedFly methodsFor: 'action'!
+!Trapped class methodsFor: 'accessing'!
 
-name
-	^ self class name
-!
+path
+	^path
+! !
 
-start
-	Trapped current register: self name: self name
+!Trapped class methodsFor: 'action'!
+
+with: anArray do: aBlock
+	path with: anArray do: aBlock
+! !
+
+!Trapped class methodsFor: 'initialization'!
+
+initialize
+	path := TrappedPathStack new
 ! !
 
 Widget subclass: #TrappedView
@@ -82,6 +135,6 @@ Widget subclass: #TrappedView
 
 renderOn: html
 	html root empty.
-	html with: self class name, ': contents'
+	html with: self class name, ': ', Trapped path elements
 ! !
 
