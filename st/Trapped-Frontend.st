@@ -19,35 +19,6 @@ start
 	self new start
 ! !
 
-Object subclass: #TrappedPathStack
-	instanceVariableNames: 'elements'
-	package: 'Trapped-Frontend'!
-
-!TrappedPathStack methodsFor: 'accessing'!
-
-elements
-	^elements
-! !
-
-!TrappedPathStack methodsFor: 'descending'!
-
-append: anArray
-    elements := elements, anArray
-!
-
-with: anArray do: aBlock
-	| old |
-    old := elements.
-    [ self append: anArray.
-	aBlock value ] ensure: [ elements := old ]
-! !
-
-!TrappedPathStack methodsFor: 'initializing'!
-
-initialize
-	elements := #().
-! !
-
 Object subclass: #TrappedSingleton
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
@@ -96,7 +67,7 @@ start
         tokens := trap tokenize: ':'.
         viewName := tokens first.
         modelName := tokens second.
-        Trapped with: { modelName } do: [(Smalltalk current at: viewName) new appendToJQuery: jq].
+        { modelName } trapDescend: [(Smalltalk current at: viewName) new appendToJQuery: jq].
     ]
 ! !
 
@@ -107,24 +78,39 @@ initialize
 	registry := #{}.
 ! !
 
-Trapped class instanceVariableNames: 'path'!
-
 !Trapped class methodsFor: 'accessing'!
 
 path
-	^path
+	^TrappedPathStack current elements
 ! !
 
-!Trapped class methodsFor: 'action'!
+TrappedSingleton subclass: #TrappedPathStack
+	instanceVariableNames: 'elements'
+	package: 'Trapped-Frontend'!
+
+!TrappedPathStack methodsFor: 'accessing'!
+
+elements
+	^elements
+! !
+
+!TrappedPathStack methodsFor: 'descending'!
+
+append: anArray
+    elements := elements, anArray
+!
 
 with: anArray do: aBlock
-	path with: anArray do: aBlock
+	| old |
+    old := elements.
+    [ self append: anArray.
+	aBlock value ] ensure: [ elements := old ]
 ! !
 
-!Trapped class methodsFor: 'initialization'!
+!TrappedPathStack methodsFor: 'initialization'!
 
 initialize
-	path := TrappedPathStack new
+	elements := #().
 ! !
 
 Widget subclass: #TrappedView
@@ -135,6 +121,18 @@ Widget subclass: #TrappedView
 
 renderOn: html
 	html root empty.
-	html with: self class name, ': ', Trapped path elements
+	html with: self class name, ': ', Trapped path
+! !
+
+!Array methodsFor: '*Trapped-Frontend'!
+
+trapDescend: aBlock
+	TrappedPathStack current with: self do: aBlock
+! !
+
+!Array methodsFor: '*Trapped-Frontend'!
+
+trapDescend: aBlock
+	TrappedPathStack current with: self do: aBlock
 ! !
 

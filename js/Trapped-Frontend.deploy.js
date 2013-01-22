@@ -37,61 +37,6 @@ return self}
 smalltalk.TrappedFly.klass);
 
 
-smalltalk.addClass('TrappedPathStack', smalltalk.Object, ['elements'], 'Trapped-Frontend');
-smalltalk.addMethod(
-"_append_",
-smalltalk.method({
-selector: "append:",
-fn: function (anArray){
-var self=this;
-self["@elements"]=smalltalk.send(self["@elements"],"__comma",[anArray]);
-return self}
-}),
-smalltalk.TrappedPathStack);
-
-smalltalk.addMethod(
-"_elements",
-smalltalk.method({
-selector: "elements",
-fn: function (){
-var self=this;
-return self["@elements"];
-}
-}),
-smalltalk.TrappedPathStack);
-
-smalltalk.addMethod(
-"_initialize",
-smalltalk.method({
-selector: "initialize",
-fn: function (){
-var self=this;
-self["@elements"]=[];
-return self}
-}),
-smalltalk.TrappedPathStack);
-
-smalltalk.addMethod(
-"_with_do_",
-smalltalk.method({
-selector: "with:do:",
-fn: function (anArray,aBlock){
-var self=this;
-var old;
-old=self["@elements"];
-smalltalk.send((function(){
-smalltalk.send(self,"_append_",[anArray]);
-return smalltalk.send(aBlock,"_value",[]);
-}),"_ensure_",[(function(){
-self["@elements"]=old;
-return self["@elements"];
-})]);
-return self}
-}),
-smalltalk.TrappedPathStack);
-
-
-
 smalltalk.addClass('TrappedSingleton', smalltalk.Object, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_start",
@@ -197,7 +142,7 @@ viewName=smalltalk.send(tokens,"_first",[]);
 viewName;
 modelName=smalltalk.send(tokens,"_second",[]);
 modelName;
-return smalltalk.send((smalltalk.Trapped || Trapped),"_with_do_",[[modelName],(function(){
+return smalltalk.send([modelName],"_trapDescend_",[(function(){
 return smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Smalltalk || Smalltalk),"_current",[]),"_at_",[viewName]),"_new",[]),"_appendToJQuery_",[jq]);
 })]);
 })]);
@@ -206,28 +151,53 @@ return self}
 smalltalk.Trapped);
 
 
-smalltalk.Trapped.klass.iVarNames = ['path'];
-smalltalk.addMethod(
-"_initialize",
-smalltalk.method({
-selector: "initialize",
-fn: function (){
-var self=this;
-self["@path"]=smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_new",[]);
-return self}
-}),
-smalltalk.Trapped.klass);
-
 smalltalk.addMethod(
 "_path",
 smalltalk.method({
 selector: "path",
 fn: function (){
 var self=this;
-return self["@path"];
+var $1;
+$1=smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_elements",[]);
+return $1;
 }
 }),
 smalltalk.Trapped.klass);
+
+
+smalltalk.addClass('TrappedPathStack', smalltalk.TrappedSingleton, ['elements'], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_append_",
+smalltalk.method({
+selector: "append:",
+fn: function (anArray){
+var self=this;
+self["@elements"]=smalltalk.send(self["@elements"],"__comma",[anArray]);
+return self}
+}),
+smalltalk.TrappedPathStack);
+
+smalltalk.addMethod(
+"_elements",
+smalltalk.method({
+selector: "elements",
+fn: function (){
+var self=this;
+return self["@elements"];
+}
+}),
+smalltalk.TrappedPathStack);
+
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+fn: function (){
+var self=this;
+self["@elements"]=[];
+return self}
+}),
+smalltalk.TrappedPathStack);
 
 smalltalk.addMethod(
 "_with_do_",
@@ -235,10 +205,19 @@ smalltalk.method({
 selector: "with:do:",
 fn: function (anArray,aBlock){
 var self=this;
-smalltalk.send(self["@path"],"_with_do_",[anArray,aBlock]);
+var old;
+old=self["@elements"];
+smalltalk.send((function(){
+smalltalk.send(self,"_append_",[anArray]);
+return smalltalk.send(aBlock,"_value",[]);
+}),"_ensure_",[(function(){
+self["@elements"]=old;
+return self["@elements"];
+})]);
 return self}
 }),
-smalltalk.Trapped.klass);
+smalltalk.TrappedPathStack);
+
 
 
 smalltalk.addClass('TrappedView', smalltalk.Widget, [], 'Trapped-Frontend');
@@ -249,10 +228,32 @@ selector: "renderOn:",
 fn: function (html){
 var self=this;
 smalltalk.send(smalltalk.send(html,"_root",[]),"_empty",[]);
-smalltalk.send(html,"_with_",[smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]),"__comma",[": "]),"__comma",[smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]),"_elements",[])])]);
+smalltalk.send(html,"_with_",[smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]),"__comma",[": "]),"__comma",[smalltalk.send((smalltalk.Trapped || Trapped),"_path",[])])]);
 return self}
 }),
 smalltalk.TrappedView);
 
 
+
+smalltalk.addMethod(
+"_trapDescend_",
+smalltalk.method({
+selector: "trapDescend:",
+fn: function (aBlock){
+var self=this;
+smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_with_do_",[self,aBlock]);
+return self}
+}),
+smalltalk.Array);
+
+smalltalk.addMethod(
+"_trapDescend_",
+smalltalk.method({
+selector: "trapDescend:",
+fn: function (aBlock){
+var self=this;
+smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_with_do_",[self,aBlock]);
+return self}
+}),
+smalltalk.Array);
 
