@@ -1,12 +1,13 @@
 Smalltalk current createPackage: 'Trapped-Demo' properties: #{}!
-TrappedFly subclass: #App
+TrappedPlainModel subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
 
 !App methodsFor: 'initialization'!
 
 initialize
-	self payload: #{'items'->#('hello' 'world')}
+	super initialize.
+	self payload: #{'items'->#('hello' 'world'). 'title' -> 'To-Do List'}
 ! !
 
 Widget subclass: #AppView
@@ -16,18 +17,8 @@ Widget subclass: #AppView
 !AppView methodsFor: 'rendering'!
 
 renderOn: html
-	html h2: 'To-Do List'.
+	html h2 trapShow: #('title').
 	html p trapShow: #('items')
-! !
-
-TrappedFly subclass: #Name
-	instanceVariableNames: ''
-	package: 'Trapped-Demo'!
-
-!Name methodsFor: 'initialization'!
-
-initialize
-	self payload: 'To-Do List'
 ! !
 
 Widget subclass: #NameView

@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title data-trap="NameView:Name"></title>
+    <title data-trap="NameView: App title"></title>
     <script src="/vendor/amber/js/amber.js"></script>
 </head>
 <body>
@@ -11,14 +11,13 @@
         ready:function () {
             $(function() {
                 smalltalk.Browser._openOn_(smalltalk.App);
-                smalltalk.Name._start();
                 smalltalk.App._start();
                 smalltalk.Trapped._start();
             });
         }
     });
 </script>
-<div data-trap="AppView:App">
+<div data-trap="AppView: App">
 </div>
 </body>
 </html>

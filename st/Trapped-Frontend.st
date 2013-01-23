@@ -1,9 +1,9 @@
 Smalltalk current createPackage: 'Trapped-Frontend' properties: #{}!
-Object subclass: #TrappedFly
+Object subclass: #TrappedPlainModel
 	instanceVariableNames: 'payload'
 	package: 'Trapped-Frontend'!
 
-!TrappedFly methodsFor: 'accessing'!
+!TrappedPlainModel methodsFor: 'accessing'!
 
 payload
 	^payload
@@ -13,17 +13,24 @@ payload: anObject
 	payload := anObject
 ! !
 
-!TrappedFly methodsFor: 'action'!
+!TrappedPlainModel methodsFor: 'action'!
 
 name
 	^ self class name
+!
+
+read: path do: aBlock
+	| data |
+    data := path inject: self payload
+    	into: [ :soFar :segment | soFar at: segment ].
+	aBlock value: data.
 !
 
 start
 	Trapped current register: self name: self name
 ! !
 
-!TrappedFly class methodsFor: 'action'!
+!TrappedPlainModel class methodsFor: 'action'!
 
 start
 	self new start
@@ -63,14 +70,6 @@ byName: aString
 	^ registry at: aString
 !
 
-read: path do: aBlock
-	| model |
-    model := path allButFirst
-    	inject: (self byName: path first) payload
-        into: [ :soFar :segment | soFar at: segment ].
-	aBlock value: model.
-!
-
 register: aFly name: aString
 	registry at: aString put: aFly
 ! !
@@ -79,13 +78,15 @@ register: aFly name: aString
 
 start
 	'[data-trap]' asJQuery each: [ :index :elem |
-    	| trap jq viewName modelName tokens |
+    	| trap jq viewName modelName tokens path |
         jq := elem asJQuery.
         trap := jq attr: 'data-trap'.
         tokens := trap tokenize: ':'.
         viewName := tokens first.
-        modelName := tokens second.
-        { modelName } trapDescend: [(Smalltalk current at: viewName) new appendToJQuery: jq].
+        tokens := (tokens second tokenize: ' ') select: [ :each | each notEmpty ].
+        modelName := tokens first.
+        path := Trapped parse: tokens allButFirst.
+        { modelName }, path trapDescend: [(Smalltalk current at: viewName) new appendToJQuery: jq].
     ]
 ! !
 
@@ -97,6 +98,14 @@ initialize
 ! !
 
 !Trapped class methodsFor: 'accessing'!
+
+parse: anArray
+	^anArray collect: [ :each |
+    	| asNum |
+       	<asNum = parseInt(each)>.
+        asNum = asNum ifTrue: [ asNum ] ifFalse: [
+			each first = '#' ifTrue: [ each allButFirst asSymbol ] ifFalse: [ each ]]]
+!
 
 path
 	^TrappedPathStack current elements
@@ -146,11 +155,12 @@ trapDescend: aBlock
 !TagBrush methodsFor: '*Trapped-Frontend'!
 
 trap: path read: aBlock
-	path trapDescend: [ | actual |
+	path trapDescend: [ | actual model |
     	actual := Trapped path.
+        model := Trapped current byName: actual first.
        	"TODO register for later"
-        [ Trapped current read: actual do: [ :model |
-        	aBlock value: self value: model
+        [ model read: actual allButFirst do: [ :data |
+        	aBlock value: self value: data
     	]] fork
     ]
 !
