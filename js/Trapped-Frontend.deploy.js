@@ -220,21 +220,6 @@ smalltalk.TrappedPathStack);
 
 
 
-smalltalk.addClass('TrappedView', smalltalk.Widget, [], 'Trapped-Frontend');
-smalltalk.addMethod(
-"_renderOn_",
-smalltalk.method({
-selector: "renderOn:",
-fn: function (html){
-var self=this;
-smalltalk.send(smalltalk.send(html,"_root",[]),"_empty",[]);
-smalltalk.send(html,"_with_",[smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]),"__comma",[": "]),"__comma",[smalltalk.send((smalltalk.Trapped || Trapped),"_path",[])])]);
-return self}
-}),
-smalltalk.TrappedView);
-
-
-
 smalltalk.addMethod(
 "_trapDescend_",
 smalltalk.method({
@@ -256,4 +241,41 @@ smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"
 return self}
 }),
 smalltalk.Array);
+
+smalltalk.addMethod(
+"_trap_read_",
+smalltalk.method({
+selector: "trap:read:",
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send(path,"_trapDescend_",[(function(){
+var actual;
+var model;
+actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
+actual;
+model=smalltalk.send(smalltalk.send("<< ","__comma",[actual]),"__comma",[" >>"]);
+model;
+return smalltalk.send((function(){
+return smalltalk.send(aBlock,"_value_value_",[self,model]);
+}),"_fork",[]);
+})]);
+return self}
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+"_trapShow_",
+smalltalk.method({
+selector: "trapShow:",
+fn: function (path){
+var self=this;
+var $1;
+smalltalk.send(self,"_trap_read_",[path,(function(brush,model){
+smalltalk.send(brush,"_empty",[]);
+$1=smalltalk.send(brush,"_with_",[model]);
+return $1;
+})]);
+return self}
+}),
+smalltalk.TagBrush);
 

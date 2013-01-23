@@ -113,17 +113,6 @@ initialize
 	elements := #().
 ! !
 
-Widget subclass: #TrappedView
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
-
-!TrappedView methodsFor: 'rendering'!
-
-renderOn: html
-	html root empty.
-	html with: self class name, ': ', Trapped path
-! !
-
 !Array methodsFor: '*Trapped-Frontend'!
 
 trapDescend: aBlock
@@ -134,5 +123,20 @@ trapDescend: aBlock
 
 trapDescend: aBlock
 	TrappedPathStack current with: self do: aBlock
+! !
+
+!TagBrush methodsFor: '*Trapped-Frontend'!
+
+trap: path read: aBlock
+	path trapDescend: [ | actual model |
+    	actual := Trapped path.
+        model := '<< ', actual, ' >>'.
+       	"TODO register for later"
+        [aBlock value: self value: model] fork
+    ]
+!
+
+trapShow: path
+	self trap: path read: [ :brush :model | brush empty; with: model ]
 ! !
 

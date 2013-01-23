@@ -3,15 +3,28 @@ TrappedFly subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
 
-TrappedView subclass: #AppView
+Widget subclass: #AppView
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
+
+!AppView methodsFor: 'rendering'!
+
+renderOn: html
+	html h2: 'To-Do List'.
+	html p trapShow: #('items')
+! !
 
 TrappedFly subclass: #Name
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
 
-TrappedView subclass: #NameView
+Widget subclass: #NameView
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
+
+!NameView methodsFor: 'rendering'!
+
+renderOn: html
+	html root trapShow: #()
+! !
 

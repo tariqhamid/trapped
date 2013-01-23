@@ -295,55 +295,82 @@ smalltalk.TrappedPathStack);
 
 
 
-smalltalk.addClass('TrappedView', smalltalk.Widget, [], 'Trapped-Frontend');
 smalltalk.addMethod(
-"_renderOn_",
+"_trapDescend_",
 smalltalk.method({
-selector: "renderOn:",
-category: 'rendering',
-fn: function (html){
+selector: "trapDescend:",
+category: '*Trapped-Frontend',
+fn: function (aBlock){
 var self=this;
-smalltalk.send(smalltalk.send(html,"_root",[]),"_empty",[]);
-smalltalk.send(html,"_with_",[smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]),"__comma",[": "]),"__comma",[smalltalk.send((smalltalk.Trapped || Trapped),"_path",[])])]);
+smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_with_do_",[self,aBlock]);
 return self},
-args: ["html"],
-source: "renderOn: html\x0a\x09html root empty.\x0a\x09html with: self class name, ': ', Trapped path",
-messageSends: ["empty", "root", "with:", ",", "path", "name", "class"],
+args: ["aBlock"],
+source: "trapDescend: aBlock\x0a\x09TrappedPathStack current with: self do: aBlock",
+messageSends: ["with:do:", "current"],
+referencedClasses: ["TrappedPathStack"]
+}),
+smalltalk.Array);
+
+smalltalk.addMethod(
+"_trapDescend_",
+smalltalk.method({
+selector: "trapDescend:",
+category: '*Trapped-Frontend',
+fn: function (aBlock){
+var self=this;
+smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_with_do_",[self,aBlock]);
+return self},
+args: ["aBlock"],
+source: "trapDescend: aBlock\x0a\x09TrappedPathStack current with: self do: aBlock",
+messageSends: ["with:do:", "current"],
+referencedClasses: ["TrappedPathStack"]
+}),
+smalltalk.Array);
+
+smalltalk.addMethod(
+"_trap_read_",
+smalltalk.method({
+selector: "trap:read:",
+category: '*Trapped-Frontend',
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send(path,"_trapDescend_",[(function(){
+var actual;
+var model;
+actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
+actual;
+model=smalltalk.send(smalltalk.send("<< ","__comma",[actual]),"__comma",[" >>"]);
+model;
+return smalltalk.send((function(){
+return smalltalk.send(aBlock,"_value_value_",[self,model]);
+}),"_fork",[]);
+})]);
+return self},
+args: ["path", "aBlock"],
+source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := '<< ', actual, ' >>'.\x0a       \x09\x22TODO register for later\x22\x0a        [aBlock value: self value: model] fork\x0a    ]",
+messageSends: ["trapDescend:", "path", ",", "fork", "value:value:"],
 referencedClasses: ["Trapped"]
 }),
-smalltalk.TrappedView);
-
-
+smalltalk.TagBrush);
 
 smalltalk.addMethod(
-"_trapDescend_",
+"_trapShow_",
 smalltalk.method({
-selector: "trapDescend:",
+selector: "trapShow:",
 category: '*Trapped-Frontend',
-fn: function (aBlock){
+fn: function (path){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_with_do_",[self,aBlock]);
+var $1;
+smalltalk.send(self,"_trap_read_",[path,(function(brush,model){
+smalltalk.send(brush,"_empty",[]);
+$1=smalltalk.send(brush,"_with_",[model]);
+return $1;
+})]);
 return self},
-args: ["aBlock"],
-source: "trapDescend: aBlock\x0a\x09TrappedPathStack current with: self do: aBlock",
-messageSends: ["with:do:", "current"],
-referencedClasses: ["TrappedPathStack"]
+args: ["path"],
+source: "trapShow: path\x0a\x09self trap: path read: [ :brush :model | brush empty; with: model ]",
+messageSends: ["trap:read:", "empty", "with:"],
+referencedClasses: []
 }),
-smalltalk.Array);
-
-smalltalk.addMethod(
-"_trapDescend_",
-smalltalk.method({
-selector: "trapDescend:",
-category: '*Trapped-Frontend',
-fn: function (aBlock){
-var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_with_do_",[self,aBlock]);
-return self},
-args: ["aBlock"],
-source: "trapDescend: aBlock\x0a\x09TrappedPathStack current with: self do: aBlock",
-messageSends: ["with:do:", "current"],
-referencedClasses: ["TrappedPathStack"]
-}),
-smalltalk.Array);
+smalltalk.TagBrush);
 
