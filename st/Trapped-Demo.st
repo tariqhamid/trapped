@@ -3,6 +3,12 @@ TrappedFly subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
 
+!App methodsFor: 'initialization'!
+
+initialize
+	self payload: #{'items'->#('hello' 'world')}
+! !
+
 Widget subclass: #AppView
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
@@ -17,6 +23,12 @@ renderOn: html
 TrappedFly subclass: #Name
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
+
+!Name methodsFor: 'initialization'!
+
+initialize
+	self payload: 'To-Do List'
+! !
 
 Widget subclass: #NameView
 	instanceVariableNames: ''

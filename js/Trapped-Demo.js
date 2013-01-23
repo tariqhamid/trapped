@@ -1,5 +1,21 @@
 smalltalk.addPackage('Trapped-Demo', {});
 smalltalk.addClass('App', smalltalk.TrappedFly, [], 'Trapped-Demo');
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+category: 'initialization',
+fn: function (){
+var self=this;
+smalltalk.send(self,"_payload_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("items","__minus_gt",[["hello", "world"]])])]);
+return self},
+args: [],
+source: "initialize\x0a\x09self payload: #{'items'->#('hello' 'world')}",
+messageSends: ["payload:", "->"],
+referencedClasses: []
+}),
+smalltalk.App);
+
 
 
 smalltalk.addClass('AppView', smalltalk.Widget, [], 'Trapped-Demo');
@@ -23,6 +39,22 @@ smalltalk.AppView);
 
 
 smalltalk.addClass('Name', smalltalk.TrappedFly, [], 'Trapped-Demo');
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+category: 'initialization',
+fn: function (){
+var self=this;
+smalltalk.send(self,"_payload_",["To-Do List"]);
+return self},
+args: [],
+source: "initialize\x0a\x09self payload: 'To-Do List'",
+messageSends: ["payload:"],
+referencedClasses: []
+}),
+smalltalk.Name);
+
 
 
 smalltalk.addClass('NameView', smalltalk.Widget, [], 'Trapped-Demo');

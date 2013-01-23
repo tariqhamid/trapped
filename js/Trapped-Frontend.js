@@ -1,5 +1,5 @@
 smalltalk.addPackage('Trapped-Frontend', {});
-smalltalk.addClass('TrappedFly', smalltalk.Object, [], 'Trapped-Frontend');
+smalltalk.addClass('TrappedFly', smalltalk.Object, ['payload'], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_name",
 smalltalk.method({
@@ -14,6 +14,38 @@ return $1;
 args: [],
 source: "name\x0a\x09^ self class name",
 messageSends: ["name", "class"],
+referencedClasses: []
+}),
+smalltalk.TrappedFly);
+
+smalltalk.addMethod(
+"_payload",
+smalltalk.method({
+selector: "payload",
+category: 'accessing',
+fn: function (){
+var self=this;
+return self["@payload"];
+},
+args: [],
+source: "payload\x0a\x09^payload",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedFly);
+
+smalltalk.addMethod(
+"_payload_",
+smalltalk.method({
+selector: "payload:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+self["@payload"]=anObject;
+return self},
+args: ["anObject"],
+source: "payload: anObject\x0a\x09payload := anObject",
+messageSends: [],
 referencedClasses: []
 }),
 smalltalk.TrappedFly);
@@ -145,6 +177,26 @@ return self},
 args: [],
 source: "initialize\x0a\x09super initialize.\x0a\x09registry := #{}.",
 messageSends: ["initialize"],
+referencedClasses: []
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
+"_read_do_",
+smalltalk.method({
+selector: "read:do:",
+category: 'accessing',
+fn: function (path,aBlock){
+var self=this;
+var model;
+model=smalltalk.send(smalltalk.send(path,"_allButFirst",[]),"_inject_into_",[smalltalk.send(smalltalk.send(self,"_byName_",[smalltalk.send(path,"_first",[])]),"_payload",[]),(function(soFar,segment){
+return smalltalk.send(soFar,"_at_",[segment]);
+})]);
+smalltalk.send(aBlock,"_value_",[model]);
+return self},
+args: ["path", "aBlock"],
+source: "read: path do: aBlock\x0a\x09| model |\x0a    model := path allButFirst\x0a    \x09inject: (self byName: path first) payload\x0a        into: [ :soFar :segment | soFar at: segment ].\x0a\x09aBlock value: model.",
+messageSends: ["inject:into:", "payload", "byName:", "first", "at:", "allButFirst", "value:"],
 referencedClasses: []
 }),
 smalltalk.Trapped);
@@ -336,19 +388,18 @@ fn: function (path,aBlock){
 var self=this;
 smalltalk.send(path,"_trapDescend_",[(function(){
 var actual;
-var model;
 actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
 actual;
-model=smalltalk.send(smalltalk.send("<< ","__comma",[actual]),"__comma",[" >>"]);
-model;
 return smalltalk.send((function(){
+return smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_read_do_",[actual,(function(model){
 return smalltalk.send(aBlock,"_value_value_",[self,model]);
+})]);
 }),"_fork",[]);
 })]);
 return self},
 args: ["path", "aBlock"],
-source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := '<< ', actual, ' >>'.\x0a       \x09\x22TODO register for later\x22\x0a        [aBlock value: self value: model] fork\x0a    ]",
-messageSends: ["trapDescend:", "path", ",", "fork", "value:value:"],
+source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual |\x0a    \x09actual := Trapped path.\x0a       \x09\x22TODO register for later\x22\x0a        [ Trapped current read: actual do: [ :model |\x0a        \x09aBlock value: self value: model\x0a    \x09]] fork\x0a    ]",
+messageSends: ["trapDescend:", "path", "fork", "read:do:", "value:value:", "current"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TagBrush);

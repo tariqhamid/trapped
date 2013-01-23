@@ -1,7 +1,17 @@
 Smalltalk current createPackage: 'Trapped-Frontend' properties: #{}!
 Object subclass: #TrappedFly
-	instanceVariableNames: ''
+	instanceVariableNames: 'payload'
 	package: 'Trapped-Frontend'!
+
+!TrappedFly methodsFor: 'accessing'!
+
+payload
+	^payload
+!
+
+payload: anObject
+	payload := anObject
+! !
 
 !TrappedFly methodsFor: 'action'!
 
@@ -51,6 +61,14 @@ TrappedSingleton subclass: #Trapped
 
 byName: aString
 	^ registry at: aString
+!
+
+read: path do: aBlock
+	| model |
+    model := path allButFirst
+    	inject: (self byName: path first) payload
+        into: [ :soFar :segment | soFar at: segment ].
+	aBlock value: model.
 !
 
 register: aFly name: aString
@@ -128,11 +146,12 @@ trapDescend: aBlock
 !TagBrush methodsFor: '*Trapped-Frontend'!
 
 trap: path read: aBlock
-	path trapDescend: [ | actual model |
+	path trapDescend: [ | actual |
     	actual := Trapped path.
-        model := '<< ', actual, ' >>'.
        	"TODO register for later"
-        [aBlock value: self value: model] fork
+        [ Trapped current read: actual do: [ :model |
+        	aBlock value: self value: model
+    	]] fork
     ]
 !
 

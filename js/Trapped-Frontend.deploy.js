@@ -1,5 +1,5 @@
 smalltalk.addPackage('Trapped-Frontend', {});
-smalltalk.addClass('TrappedFly', smalltalk.Object, [], 'Trapped-Frontend');
+smalltalk.addClass('TrappedFly', smalltalk.Object, ['payload'], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_name",
 smalltalk.method({
@@ -10,6 +10,28 @@ var $1;
 $1=smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]);
 return $1;
 }
+}),
+smalltalk.TrappedFly);
+
+smalltalk.addMethod(
+"_payload",
+smalltalk.method({
+selector: "payload",
+fn: function (){
+var self=this;
+return self["@payload"];
+}
+}),
+smalltalk.TrappedFly);
+
+smalltalk.addMethod(
+"_payload_",
+smalltalk.method({
+selector: "payload:",
+fn: function (anObject){
+var self=this;
+self["@payload"]=anObject;
+return self}
 }),
 smalltalk.TrappedFly);
 
@@ -105,6 +127,21 @@ fn: function (){
 var self=this;
 smalltalk.send(self,"_initialize",[],smalltalk.TrappedSingleton);
 self["@registry"]=smalltalk.HashedCollection._fromPairs_([]);
+return self}
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
+"_read_do_",
+smalltalk.method({
+selector: "read:do:",
+fn: function (path,aBlock){
+var self=this;
+var model;
+model=smalltalk.send(smalltalk.send(path,"_allButFirst",[]),"_inject_into_",[smalltalk.send(smalltalk.send(self,"_byName_",[smalltalk.send(path,"_first",[])]),"_payload",[]),(function(soFar,segment){
+return smalltalk.send(soFar,"_at_",[segment]);
+})]);
+smalltalk.send(aBlock,"_value_",[model]);
 return self}
 }),
 smalltalk.Trapped);
@@ -250,13 +287,12 @@ fn: function (path,aBlock){
 var self=this;
 smalltalk.send(path,"_trapDescend_",[(function(){
 var actual;
-var model;
 actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
 actual;
-model=smalltalk.send(smalltalk.send("<< ","__comma",[actual]),"__comma",[" >>"]);
-model;
 return smalltalk.send((function(){
+return smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_read_do_",[actual,(function(model){
 return smalltalk.send(aBlock,"_value_value_",[self,model]);
+})]);
 }),"_fork",[]);
 })]);
 return self}
