@@ -11,11 +11,11 @@ renderOn: html
 	html root trapShow: #()
 ! !
 
-Object subclass: #TrappedPlainModel
+Object subclass: #TrappedModelWrapper
 	instanceVariableNames: 'payload'
 	package: 'Trapped-Frontend'!
 
-!TrappedPlainModel methodsFor: 'accessing'!
+!TrappedModelWrapper methodsFor: 'accessing'!
 
 payload
 	^payload
@@ -25,21 +25,33 @@ payload: anObject
 	payload := anObject
 ! !
 
-!TrappedPlainModel methodsFor: 'action'!
+!TrappedModelWrapper methodsFor: 'action'!
 
 name
 	^ self class name
 !
+
+start
+	Trapped current register: self name: self name
+! !
+
+!TrappedModelWrapper class methodsFor: 'action'!
+
+start
+	self new start
+! !
+
+TrappedModelWrapper subclass: #TrappedPlainModel
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+
+!TrappedPlainModel methodsFor: 'action'!
 
 read: path do: aBlock
 	| data |
     data := path inject: self payload
     	into: [ :soFar :segment | soFar at: segment ].
 	aBlock value: data.
-!
-
-start
-	Trapped current register: self name: self name
 ! !
 
 !TrappedPlainModel class methodsFor: 'action'!

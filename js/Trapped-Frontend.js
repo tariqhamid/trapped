@@ -19,7 +19,7 @@ smalltalk.TrappedDumbView);
 
 
 
-smalltalk.addClass('TrappedPlainModel', smalltalk.Object, ['payload'], 'Trapped-Frontend');
+smalltalk.addClass('TrappedModelWrapper', smalltalk.Object, ['payload'], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_name",
 smalltalk.method({
@@ -36,7 +36,7 @@ source: "name\x0a\x09^ self class name",
 messageSends: ["name", "class"],
 referencedClasses: []
 }),
-smalltalk.TrappedPlainModel);
+smalltalk.TrappedModelWrapper);
 
 smalltalk.addMethod(
 "_payload",
@@ -52,7 +52,7 @@ source: "payload\x0a\x09^payload",
 messageSends: [],
 referencedClasses: []
 }),
-smalltalk.TrappedPlainModel);
+smalltalk.TrappedModelWrapper);
 
 smalltalk.addMethod(
 "_payload_",
@@ -68,8 +68,43 @@ source: "payload: anObject\x0a\x09payload := anObject",
 messageSends: [],
 referencedClasses: []
 }),
-smalltalk.TrappedPlainModel);
+smalltalk.TrappedModelWrapper);
 
+smalltalk.addMethod(
+"_start",
+smalltalk.method({
+selector: "start",
+category: 'action',
+fn: function (){
+var self=this;
+smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_register_name_",[self,smalltalk.send(self,"_name",[])]);
+return self},
+args: [],
+source: "start\x0a\x09Trapped current register: self name: self name",
+messageSends: ["register:name:", "name", "current"],
+referencedClasses: ["Trapped"]
+}),
+smalltalk.TrappedModelWrapper);
+
+
+smalltalk.addMethod(
+"_start",
+smalltalk.method({
+selector: "start",
+category: 'action',
+fn: function (){
+var self=this;
+smalltalk.send(smalltalk.send(self,"_new",[]),"_start",[]);
+return self},
+args: [],
+source: "start\x0a\x09self new start",
+messageSends: ["start", "new"],
+referencedClasses: []
+}),
+smalltalk.TrappedModelWrapper.klass);
+
+
+smalltalk.addClass('TrappedPlainModel', smalltalk.TrappedModelWrapper, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_read_do_",
 smalltalk.method({
@@ -87,22 +122,6 @@ args: ["path", "aBlock"],
 source: "read: path do: aBlock\x0a\x09| data |\x0a    data := path inject: self payload\x0a    \x09into: [ :soFar :segment | soFar at: segment ].\x0a\x09aBlock value: data.",
 messageSends: ["inject:into:", "payload", "at:", "value:"],
 referencedClasses: []
-}),
-smalltalk.TrappedPlainModel);
-
-smalltalk.addMethod(
-"_start",
-smalltalk.method({
-selector: "start",
-category: 'action',
-fn: function (){
-var self=this;
-smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_register_name_",[self,smalltalk.send(self,"_name",[])]);
-return self},
-args: [],
-source: "start\x0a\x09Trapped current register: self name: self name",
-messageSends: ["register:name:", "name", "current"],
-referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedPlainModel);
 

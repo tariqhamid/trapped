@@ -13,7 +13,7 @@ smalltalk.TrappedDumbView);
 
 
 
-smalltalk.addClass('TrappedPlainModel', smalltalk.Object, ['payload'], 'Trapped-Frontend');
+smalltalk.addClass('TrappedModelWrapper', smalltalk.Object, ['payload'], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_name",
 smalltalk.method({
@@ -25,7 +25,7 @@ $1=smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]);
 return $1;
 }
 }),
-smalltalk.TrappedPlainModel);
+smalltalk.TrappedModelWrapper);
 
 smalltalk.addMethod(
 "_payload",
@@ -36,7 +36,7 @@ var self=this;
 return self["@payload"];
 }
 }),
-smalltalk.TrappedPlainModel);
+smalltalk.TrappedModelWrapper);
 
 smalltalk.addMethod(
 "_payload_",
@@ -47,8 +47,33 @@ var self=this;
 self["@payload"]=anObject;
 return self}
 }),
-smalltalk.TrappedPlainModel);
+smalltalk.TrappedModelWrapper);
 
+smalltalk.addMethod(
+"_start",
+smalltalk.method({
+selector: "start",
+fn: function (){
+var self=this;
+smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_register_name_",[self,smalltalk.send(self,"_name",[])]);
+return self}
+}),
+smalltalk.TrappedModelWrapper);
+
+
+smalltalk.addMethod(
+"_start",
+smalltalk.method({
+selector: "start",
+fn: function (){
+var self=this;
+smalltalk.send(smalltalk.send(self,"_new",[]),"_start",[]);
+return self}
+}),
+smalltalk.TrappedModelWrapper.klass);
+
+
+smalltalk.addClass('TrappedPlainModel', smalltalk.TrappedModelWrapper, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_read_do_",
 smalltalk.method({
@@ -60,17 +85,6 @@ data=smalltalk.send(path,"_inject_into_",[smalltalk.send(self,"_payload",[]),(fu
 return smalltalk.send(soFar,"_at_",[segment]);
 })]);
 smalltalk.send(aBlock,"_value_",[data]);
-return self}
-}),
-smalltalk.TrappedPlainModel);
-
-smalltalk.addMethod(
-"_start",
-smalltalk.method({
-selector: "start",
-fn: function (){
-var self=this;
-smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_register_name_",[self,smalltalk.send(self,"_name",[])]);
 return self}
 }),
 smalltalk.TrappedPlainModel);
