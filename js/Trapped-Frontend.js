@@ -1,4 +1,55 @@
 smalltalk.addPackage('Trapped-Frontend', {});
+smalltalk.addClass('TrappedDumbDispatcher', smalltalk.TrappedDispatcher, ['queue'], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_add_",
+smalltalk.method({
+selector: "add:",
+category: 'accessing',
+fn: function (aTriplet){
+var self=this;
+smalltalk.send(self["@queue"],"_add_",[aTriplet]);
+return self},
+args: ["aTriplet"],
+source: "add: aTriplet\x0a\x09queue add: aTriplet\x0a\x09",
+messageSends: ["add:"],
+referencedClasses: []
+}),
+smalltalk.TrappedDumbDispatcher);
+
+smalltalk.addMethod(
+"_do_",
+smalltalk.method({
+selector: "do:",
+category: 'enumeration',
+fn: function (aBlock){
+var self=this;
+smalltalk.send(self["@queue"],"_do_",[aBlock]);
+return self},
+args: ["aBlock"],
+source: "do: aBlock\x0a\x09queue do: aBlock",
+messageSends: ["do:"],
+referencedClasses: []
+}),
+smalltalk.TrappedDumbDispatcher);
+
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+category: 'initialization',
+fn: function (){
+var self=this;
+self["@queue"]=smalltalk.send((smalltalk.OrderedCollection || OrderedCollection),"_new",[]);
+return self},
+args: [],
+source: "initialize\x0a\x09queue := OrderedCollection new",
+messageSends: ["new"],
+referencedClasses: ["OrderedCollection"]
+}),
+smalltalk.TrappedDumbDispatcher);
+
+
+
 smalltalk.addClass('TrappedDumbView', smalltalk.Widget, [], 'Trapped-Frontend');
 smalltalk.TrappedDumbView.comment="I just read and show an actual path."
 smalltalk.addMethod(
@@ -19,92 +70,24 @@ smalltalk.TrappedDumbView);
 
 
 
-smalltalk.addClass('TrappedModelWrapper', smalltalk.Object, ['payload'], 'Trapped-Frontend');
-smalltalk.addMethod(
-"_name",
-smalltalk.method({
-selector: "name",
-category: 'action',
-fn: function (){
-var self=this;
-var $1;
-$1=smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]);
-return $1;
-},
-args: [],
-source: "name\x0a\x09^ self class name",
-messageSends: ["name", "class"],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_payload",
-smalltalk.method({
-selector: "payload",
-category: 'accessing',
-fn: function (){
-var self=this;
-return self["@payload"];
-},
-args: [],
-source: "payload\x0a\x09^payload",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_payload_",
-smalltalk.method({
-selector: "payload:",
-category: 'accessing',
-fn: function (anObject){
-var self=this;
-self["@payload"]=anObject;
-return self},
-args: ["anObject"],
-source: "payload: anObject\x0a\x09payload := anObject",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_start",
-smalltalk.method({
-selector: "start",
-category: 'action',
-fn: function (){
-var self=this;
-smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_register_name_",[self,smalltalk.send(self,"_name",[])]);
-return self},
-args: [],
-source: "start\x0a\x09Trapped current register: self name: self name",
-messageSends: ["register:name:", "name", "current"],
-referencedClasses: ["Trapped"]
-}),
-smalltalk.TrappedModelWrapper);
-
-
-smalltalk.addMethod(
-"_start",
-smalltalk.method({
-selector: "start",
-category: 'action',
-fn: function (){
-var self=this;
-smalltalk.send(smalltalk.send(self,"_new",[]),"_start",[]);
-return self},
-args: [],
-source: "start\x0a\x09self new start",
-messageSends: ["start", "new"],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper.klass);
-
-
 smalltalk.addClass('TrappedPlainModel', smalltalk.TrappedModelWrapper, [], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+category: 'initialization',
+fn: function (){
+var self=this;
+smalltalk.send(self,"_initialize",[],smalltalk.TrappedModelWrapper);
+smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.TrappedDumbDispatcher || TrappedDumbDispatcher),"_new",[])]);
+return self},
+args: [],
+source: "initialize\x0a\x09super initialize.\x0a    self dispatcher: TrappedDumbDispatcher new",
+messageSends: ["initialize", "dispatcher:", "new"],
+referencedClasses: ["TrappedDumbDispatcher"]
+}),
+smalltalk.TrappedPlainModel);
+
 smalltalk.addMethod(
 "_read_do_",
 smalltalk.method({
@@ -121,24 +104,6 @@ return self},
 args: ["path", "aBlock"],
 source: "read: path do: aBlock\x0a\x09| data |\x0a    data := path inject: self payload\x0a    \x09into: [ :soFar :segment | soFar at: segment ].\x0a\x09aBlock value: data.",
 messageSends: ["inject:into:", "payload", "at:", "value:"],
-referencedClasses: []
-}),
-smalltalk.TrappedPlainModel);
-
-smalltalk.addMethod(
-"_watch_do_",
-smalltalk.method({
-selector: "watch:do:",
-category: 'action',
-fn: function (path,aBlock){
-var self=this;
-smalltalk.send((function(){
-return smalltalk.send(self,"_read_do_",[path,aBlock]);
-}),"_fork",[]);
-return self},
-args: ["path", "aBlock"],
-source: "watch: path do: aBlock\x0a\x09[ self read: path do: aBlock ] fork",
-messageSends: ["fork", "read:do:"],
 referencedClasses: []
 }),
 smalltalk.TrappedPlainModel);
