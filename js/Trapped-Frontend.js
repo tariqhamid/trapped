@@ -125,6 +125,24 @@ referencedClasses: []
 }),
 smalltalk.TrappedPlainModel);
 
+smalltalk.addMethod(
+"_watch_do_",
+smalltalk.method({
+selector: "watch:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send((function(){
+return smalltalk.send(self,"_read_do_",[path,aBlock]);
+}),"_fork",[]);
+return self},
+args: ["path", "aBlock"],
+source: "watch: path do: aBlock\x0a\x09[ self read: path do: aBlock ] fork",
+messageSends: ["fork", "read:do:"],
+referencedClasses: []
+}),
+smalltalk.TrappedPlainModel);
+
 
 smalltalk.addMethod(
 "_start",
@@ -478,16 +496,14 @@ actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
 actual;
 model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[smalltalk.send(actual,"_first",[])]);
 model;
-return smalltalk.send((function(){
-return smalltalk.send(model,"_read_do_",[smalltalk.send(actual,"_allButFirst",[]),(function(data){
+return smalltalk.send(model,"_watch_do_",[smalltalk.send(actual,"_allButFirst",[]),(function(data){
 return smalltalk.send(aBlock,"_value_value_",[self,data]);
 })]);
-}),"_fork",[]);
 })]);
 return self},
 args: ["path", "aBlock"],
-source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := Trapped current byName: actual first.\x0a       \x09\x22TODO register for later\x22\x0a        [ model read: actual allButFirst do: [ :data |\x0a        \x09aBlock value: self value: data\x0a    \x09]] fork\x0a    ]",
-messageSends: ["trapDescend:", "path", "byName:", "first", "current", "fork", "read:do:", "allButFirst", "value:value:"],
+source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := Trapped current byName: actual first.\x0a        model watch: actual allButFirst do: [ :data |\x0a        \x09aBlock value: self value: data\x0a    \x09]\x0a    ]",
+messageSends: ["trapDescend:", "path", "byName:", "first", "current", "watch:do:", "allButFirst", "value:value:"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TagBrush);

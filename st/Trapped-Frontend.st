@@ -52,6 +52,10 @@ read: path do: aBlock
     data := path inject: self payload
     	into: [ :soFar :segment | soFar at: segment ].
 	aBlock value: data.
+!
+
+watch: path do: aBlock
+	[ self read: path do: aBlock ] fork
 ! !
 
 !TrappedPlainModel class methodsFor: 'action'!
@@ -183,10 +187,9 @@ trap: path read: aBlock
 	path trapDescend: [ | actual model |
     	actual := Trapped path.
         model := Trapped current byName: actual first.
-       	"TODO register for later"
-        [ model read: actual allButFirst do: [ :data |
+        model watch: actual allButFirst do: [ :data |
         	aBlock value: self value: data
-    	]] fork
+    	]
     ]
 !
 

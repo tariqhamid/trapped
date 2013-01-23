@@ -89,6 +89,19 @@ return self}
 }),
 smalltalk.TrappedPlainModel);
 
+smalltalk.addMethod(
+"_watch_do_",
+smalltalk.method({
+selector: "watch:do:",
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send((function(){
+return smalltalk.send(self,"_read_do_",[path,aBlock]);
+}),"_fork",[]);
+return self}
+}),
+smalltalk.TrappedPlainModel);
+
 
 smalltalk.addMethod(
 "_start",
@@ -361,11 +374,9 @@ actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
 actual;
 model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[smalltalk.send(actual,"_first",[])]);
 model;
-return smalltalk.send((function(){
-return smalltalk.send(model,"_read_do_",[smalltalk.send(actual,"_allButFirst",[]),(function(data){
+return smalltalk.send(model,"_watch_do_",[smalltalk.send(actual,"_allButFirst",[]),(function(data){
 return smalltalk.send(aBlock,"_value_value_",[self,data]);
 })]);
-}),"_fork",[]);
 })]);
 return self}
 }),
