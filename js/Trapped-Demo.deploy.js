@@ -29,17 +29,3 @@ smalltalk.AppView);
 
 
 
-smalltalk.addClass('NameView', smalltalk.Widget, [], 'Trapped-Demo');
-smalltalk.addMethod(
-"_renderOn_",
-smalltalk.method({
-selector: "renderOn:",
-fn: function (html){
-var self=this;
-smalltalk.send(smalltalk.send(html,"_root",[]),"_trapShow_",[[]]);
-return self}
-}),
-smalltalk.NameView);
-
-
-

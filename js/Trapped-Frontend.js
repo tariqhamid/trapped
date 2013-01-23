@@ -1,4 +1,24 @@
 smalltalk.addPackage('Trapped-Frontend', {});
+smalltalk.addClass('TrappedDumbView', smalltalk.Widget, [], 'Trapped-Frontend');
+smalltalk.TrappedDumbView.comment="I just read and show an actual path."
+smalltalk.addMethod(
+"_renderOn_",
+smalltalk.method({
+selector: "renderOn:",
+category: 'rendering',
+fn: function (html){
+var self=this;
+smalltalk.send(smalltalk.send(html,"_root",[]),"_trapShow_",[[]]);
+return self},
+args: ["html"],
+source: "renderOn: html\x0a\x09html root trapShow: #()",
+messageSends: ["trapShow:", "root"],
+referencedClasses: []
+}),
+smalltalk.TrappedDumbView);
+
+
+
 smalltalk.addClass('TrappedPlainModel', smalltalk.Object, ['payload'], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_name",
@@ -224,6 +244,7 @@ selector: "start",
 category: 'action',
 fn: function (){
 var self=this;
+var $1;
 smalltalk.send(smalltalk.send("[data-trap]","_asJQuery",[]),"_each_",[(function(index,elem){
 var trap;
 var jq;
@@ -237,6 +258,11 @@ trap=smalltalk.send(jq,"_attr_",["data-trap"]);
 trap;
 tokens=smalltalk.send(trap,"_tokenize_",[":"]);
 tokens;
+$1=smalltalk.send(smalltalk.send(tokens,"_size",[]),"__eq",[(1)]);
+if(smalltalk.assert($1)){
+tokens=smalltalk.send(["TrappedDumbView"],"__comma",[tokens]);
+tokens;
+};
 viewName=smalltalk.send(tokens,"_first",[]);
 viewName;
 tokens=smalltalk.send(smalltalk.send(smalltalk.send(tokens,"_second",[]),"_tokenize_",[" "]),"_select_",[(function(each){
@@ -253,8 +279,8 @@ return smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Sm
 })]);
 return self},
 args: [],
-source: "start\x0a\x09'[data-trap]' asJQuery each: [ :index :elem |\x0a    \x09| trap jq viewName modelName tokens path |\x0a        jq := elem asJQuery.\x0a        trap := jq attr: 'data-trap'.\x0a        tokens := trap tokenize: ':'.\x0a        viewName := tokens first.\x0a        tokens := (tokens second tokenize: ' ') select: [ :each | each notEmpty ].\x0a        modelName := tokens first.\x0a        path := Trapped parse: tokens allButFirst.\x0a        { modelName }, path trapDescend: [(Smalltalk current at: viewName) new appendToJQuery: jq].\x0a    ]",
-messageSends: ["each:", "asJQuery", "attr:", "tokenize:", "first", "select:", "notEmpty", "second", "parse:", "allButFirst", "trapDescend:", "appendToJQuery:", "new", "at:", "current", ","],
+source: "start\x0a\x09'[data-trap]' asJQuery each: [ :index :elem |\x0a    \x09| trap jq viewName modelName tokens path |\x0a        jq := elem asJQuery.\x0a        trap := jq attr: 'data-trap'.\x0a        tokens := trap tokenize: ':'.\x0a        tokens size = 1 ifTrue: [ tokens := { 'TrappedDumbView' }, tokens ].\x0a        viewName := tokens first.\x0a        tokens := (tokens second tokenize: ' ') select: [ :each | each notEmpty ].\x0a        modelName := tokens first.\x0a        path := Trapped parse: tokens allButFirst.\x0a        { modelName }, path trapDescend: [(Smalltalk current at: viewName) new appendToJQuery: jq].\x0a    ]",
+messageSends: ["each:", "asJQuery", "attr:", "tokenize:", "ifTrue:", ",", "=", "size", "first", "select:", "notEmpty", "second", "parse:", "allButFirst", "trapDescend:", "appendToJQuery:", "new", "at:", "current"],
 referencedClasses: ["Trapped", "Smalltalk"]
 }),
 smalltalk.Trapped);

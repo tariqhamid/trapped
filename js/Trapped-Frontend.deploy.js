@@ -1,4 +1,18 @@
 smalltalk.addPackage('Trapped-Frontend', {});
+smalltalk.addClass('TrappedDumbView', smalltalk.Widget, [], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_renderOn_",
+smalltalk.method({
+selector: "renderOn:",
+fn: function (html){
+var self=this;
+smalltalk.send(smalltalk.send(html,"_root",[]),"_trapShow_",[[]]);
+return self}
+}),
+smalltalk.TrappedDumbView);
+
+
+
 smalltalk.addClass('TrappedPlainModel', smalltalk.Object, ['payload'], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_name",
@@ -163,6 +177,7 @@ smalltalk.method({
 selector: "start",
 fn: function (){
 var self=this;
+var $1;
 smalltalk.send(smalltalk.send("[data-trap]","_asJQuery",[]),"_each_",[(function(index,elem){
 var trap;
 var jq;
@@ -176,6 +191,11 @@ trap=smalltalk.send(jq,"_attr_",["data-trap"]);
 trap;
 tokens=smalltalk.send(trap,"_tokenize_",[":"]);
 tokens;
+$1=smalltalk.send(smalltalk.send(tokens,"_size",[]),"__eq",[(1)]);
+if(smalltalk.assert($1)){
+tokens=smalltalk.send(["TrappedDumbView"],"__comma",[tokens]);
+tokens;
+};
 viewName=smalltalk.send(tokens,"_first",[]);
 viewName;
 tokens=smalltalk.send(smalltalk.send(smalltalk.send(tokens,"_second",[]),"_tokenize_",[" "]),"_select_",[(function(each){

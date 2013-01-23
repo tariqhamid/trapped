@@ -1,4 +1,16 @@
 Smalltalk current createPackage: 'Trapped-Frontend' properties: #{}!
+Widget subclass: #TrappedDumbView
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedDumbView commentStamp!
+I just read and show an actual path.!
+
+!TrappedDumbView methodsFor: 'rendering'!
+
+renderOn: html
+	html root trapShow: #()
+! !
+
 Object subclass: #TrappedPlainModel
 	instanceVariableNames: 'payload'
 	package: 'Trapped-Frontend'!
@@ -82,6 +94,7 @@ start
         jq := elem asJQuery.
         trap := jq attr: 'data-trap'.
         tokens := trap tokenize: ':'.
+        tokens size = 1 ifTrue: [ tokens := { 'TrappedDumbView' }, tokens ].
         viewName := tokens first.
         tokens := (tokens second tokenize: ' ') select: [ :each | each notEmpty ].
         modelName := tokens first.

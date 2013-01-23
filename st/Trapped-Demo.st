@@ -21,13 +21,3 @@ renderOn: html
 	html p trapShow: #('items')
 ! !
 
-Widget subclass: #NameView
-	instanceVariableNames: ''
-	package: 'Trapped-Demo'!
-
-!NameView methodsFor: 'rendering'!
-
-renderOn: html
-	html root trapShow: #()
-! !
-
