@@ -192,13 +192,11 @@ var self=this;
 smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_add_",[[true,path,(function(){
 return smalltalk.send(self,"_read_do_",[path,aBlock]);
 })]]);
-smalltalk.send((function(){
-return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_run",[]);
-}),"_fork",[]);
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_dirty_",[true]);
 return self},
 args: ["path", "aBlock"],
-source: "watch: path do: aBlock\x0a\x09self dispatcher add: { true. path. [ self read: path do: aBlock ] }.\x0a    [ self dispatcher run ] fork",
-messageSends: ["add:", "read:do:", "dispatcher", "fork", "run"],
+source: "watch: path do: aBlock\x0a\x09self dispatcher add: { true. path. [ self read: path do: aBlock ] }.\x0a    self dispatcher dirty: true",
+messageSends: ["add:", "read:do:", "dispatcher", "dirty:"],
 referencedClasses: []
 }),
 smalltalk.TrappedModelWrapper);
@@ -252,30 +250,6 @@ messageSends: ["error:", ",", "name", "class"],
 referencedClasses: []
 }),
 smalltalk.Object);
-
-smalltalk.addMethod(
-"_asTrapPathOn_",
-smalltalk.method({
-selector: "asTrapPathOn:",
-category: '*Trapped-Common',
-fn: function (anObject){
-var self=this;
-var $1;
-$1=smalltalk.send(self,"_inject_into_",[anObject,(function(soFar,segment){
-if(($receiver = soFar) == nil || $receiver == undefined){
-return soFar;
-} else {
-return smalltalk.send(segment,"_reverseTrapAt_",[soFar]);
-};
-})]);
-return $1;
-},
-args: ["anObject"],
-source: "asTrapPathOn: anObject\x0a    ^ self inject: anObject into: [ :soFar :segment |\x0a        soFar ifNotNil: [ segment reverseTrapAt: soFar ]\x0a    ]",
-messageSends: ["inject:into:", "ifNotNil:", "reverseTrapAt:"],
-referencedClasses: []
-}),
-smalltalk.SequenceableCollection);
 
 smalltalk.addMethod(
 "_reverseTrapAt_",

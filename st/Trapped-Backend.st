@@ -73,3 +73,19 @@ on: anObject
 ^self new root: anObject
 ! !
 
+!SequenceableCollection methodsFor: '*Trapped-Backend'!
+
+asEavModel
+    | model |
+    model := EavModel new.
+    model getBlock: [ :anObject |
+        self inject: anObject into: [ :soFar :segment |
+            soFar ifNotNil: [ segment reverseTrapAt: soFar ]]].
+    self isEmpty ifFalse: [
+        model putBlock: [ :anObject :value | | penultimate |
+            penultimate :=  self allButLast inject: anObject into: [ :soFar :segment |
+                soFar ifNotNil: [ segment reverseTrapAt: soFar ]].
+            self last reverseTrapAt: penultimate put: value ]].
+    ^model
+! !
+

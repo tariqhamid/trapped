@@ -144,9 +144,7 @@ var self=this;
 smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_add_",[[true,path,(function(){
 return smalltalk.send(self,"_read_do_",[path,aBlock]);
 })]]);
-smalltalk.send((function(){
-return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_run",[]);
-}),"_fork",[]);
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_dirty_",[true]);
 return self}
 }),
 smalltalk.TrappedModelWrapper);
@@ -185,25 +183,6 @@ smalltalk.send(self,"_error_",[smalltalk.send(smalltalk.send("Trapped cannot put
 return self}
 }),
 smalltalk.Object);
-
-smalltalk.addMethod(
-"_asTrapPathOn_",
-smalltalk.method({
-selector: "asTrapPathOn:",
-fn: function (anObject){
-var self=this;
-var $1;
-$1=smalltalk.send(self,"_inject_into_",[anObject,(function(soFar,segment){
-if(($receiver = soFar) == nil || $receiver == undefined){
-return soFar;
-} else {
-return smalltalk.send(segment,"_reverseTrapAt_",[soFar]);
-};
-})]);
-return $1;
-}
-}),
-smalltalk.SequenceableCollection);
 
 smalltalk.addMethod(
 "_reverseTrapAt_",

@@ -86,7 +86,7 @@ start
 
 watch: path do: aBlock
 	self dispatcher add: { true. path. [ self read: path do: aBlock ] }.
-    [ self dispatcher run ] fork
+    self dispatcher dirty: true
 ! !
 
 !TrappedModelWrapper class methodsFor: 'action'!
@@ -103,14 +103,6 @@ reverseTrapAt: anObject
 
 reverseTrapAt: anObject put: value
 	self error: 'Trapped cannot put at ', self class name, ' type key.'
-! !
-
-!SequenceableCollection methodsFor: '*Trapped-Common'!
-
-asTrapPathOn: anObject
-    ^ self inject: anObject into: [ :soFar :segment |
-        soFar ifNotNil: [ segment reverseTrapAt: soFar ]
-    ]
 ! !
 
 !String methodsFor: '*Trapped-Common'!

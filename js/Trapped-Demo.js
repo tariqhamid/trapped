@@ -100,19 +100,19 @@ selector: "modify:do:",
 category: 'action',
 fn: function (path,aBlock){
 var self=this;
-var data;
 var newValue;
-data=smalltalk.send(smalltalk.send(path,"_allButLast",[]),"_asTrapPathOn_",[smalltalk.send(self,"_payload",[])]);
-newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send([smalltalk.send(path,"_last",[])],"_asTrapPathOn_",[data])]);
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[smalltalk.send(self,"_payload",[])])]);
 smalltalk.send((function(){
-return smalltalk.send(smalltalk.send(path,"_last",[]),"_reverseTrapAt_put_",[data,newValue]);
+return smalltalk.send(eavModel,"_on_put_",[smalltalk.send(self,"_payload",[]),newValue]);
 }),"_ensure_",[(function(){
 return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
 })]);
 return self},
 args: ["path", "aBlock"],
-source: "modify: path do: aBlock\x0a\x09| data newValue |\x0a    data := path allButLast asTrapPathOn: self payload.\x0a\x09newValue := aBlock value: ({ path last } asTrapPathOn: data).\x0a    [ path last reverseTrapAt: data put: newValue ] ensure: [ self dispatcher changed: path ]",
-messageSends: ["asTrapPathOn:", "payload", "allButLast", "value:", "last", "ensure:", "changed:", "dispatcher", "reverseTrapAt:put:"],
+source: "modify: path do: aBlock\x0a    | newValue eavModel |\x0a    eavModel := path asEavModel.\x0a    newValue := aBlock value: (eavModel on: self payload).\x0a    [ eavModel on: self payload put: newValue ] ensure: [ self dispatcher changed: path ]\x0a",
+messageSends: ["asEavModel", "value:", "on:", "payload", "ensure:", "changed:", "dispatcher", "on:put:"],
 referencedClasses: []
 }),
 smalltalk.TrappedPlainModel);
@@ -124,13 +124,13 @@ selector: "read:do:",
 category: 'action',
 fn: function (path,aBlock){
 var self=this;
-var data;
-data=smalltalk.send(path,"_asTrapPathOn_",[smalltalk.send(self,"_payload",[])]);
-smalltalk.send(aBlock,"_value_",[data]);
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[smalltalk.send(self,"_payload",[])])]);
 return self},
 args: ["path", "aBlock"],
-source: "read: path do: aBlock\x0a\x09| data |\x0a    data := path asTrapPathOn: self payload.\x0a\x09aBlock value: data.",
-messageSends: ["asTrapPathOn:", "payload", "value:"],
+source: "read: path do: aBlock\x0a    | eavModel |\x0a    eavModel := path asEavModel.\x0a    aBlock value: (eavModel on: self payload)\x0a",
+messageSends: ["asEavModel", "value:", "on:", "payload"],
 referencedClasses: []
 }),
 smalltalk.TrappedPlainModel);

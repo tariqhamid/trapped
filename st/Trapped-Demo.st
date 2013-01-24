@@ -41,16 +41,16 @@ TrappedModelWrapper subclass: #TrappedPlainModel
 !TrappedPlainModel methodsFor: 'action'!
 
 modify: path do: aBlock
-	| data newValue |
-    data := path allButLast asTrapPathOn: self payload.
-	newValue := aBlock value: ({ path last } asTrapPathOn: data).
-    [ path last reverseTrapAt: data put: newValue ] ensure: [ self dispatcher changed: path ]
+    | newValue eavModel |
+    eavModel := path asEavModel.
+    newValue := aBlock value: (eavModel on: self payload).
+    [ eavModel on: self payload put: newValue ] ensure: [ self dispatcher changed: path ]
 !
 
 read: path do: aBlock
-	| data |
-    data := path asTrapPathOn: self payload.
-	aBlock value: data.
+    | eavModel |
+    eavModel := path asEavModel.
+    aBlock value: (eavModel on: self payload)
 ! !
 
 !TrappedPlainModel methodsFor: 'initialization'!

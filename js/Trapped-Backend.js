@@ -180,3 +180,46 @@ referencedClasses: []
 smalltalk.Isolator.klass);
 
 
+smalltalk.addMethod(
+"_asEavModel",
+smalltalk.method({
+selector: "asEavModel",
+category: '*Trapped-Backend',
+fn: function (){
+var self=this;
+var $1;
+var model;
+model=smalltalk.send((smalltalk.EavModel || EavModel),"_new",[]);
+smalltalk.send(model,"_getBlock_",[(function(anObject){
+return smalltalk.send(self,"_inject_into_",[anObject,(function(soFar,segment){
+if(($receiver = soFar) == nil || $receiver == undefined){
+return soFar;
+} else {
+return smalltalk.send(segment,"_reverseTrapAt_",[soFar]);
+};
+})]);
+})]);
+$1=smalltalk.send(self,"_isEmpty",[]);
+if(! smalltalk.assert($1)){
+smalltalk.send(model,"_putBlock_",[(function(anObject,value){
+var penultimate;
+penultimate=smalltalk.send(smalltalk.send(self,"_allButLast",[]),"_inject_into_",[anObject,(function(soFar,segment){
+if(($receiver = soFar) == nil || $receiver == undefined){
+return soFar;
+} else {
+return smalltalk.send(segment,"_reverseTrapAt_",[soFar]);
+};
+})]);
+penultimate;
+return smalltalk.send(smalltalk.send(self,"_last",[]),"_reverseTrapAt_put_",[penultimate,value]);
+})]);
+};
+return model;
+},
+args: [],
+source: "asEavModel\x0a    | model |\x0a    model := EavModel new.\x0a    model getBlock: [ :anObject |\x0a        self inject: anObject into: [ :soFar :segment |\x0a            soFar ifNotNil: [ segment reverseTrapAt: soFar ]]].\x0a    self isEmpty ifFalse: [\x0a        model putBlock: [ :anObject :value | | penultimate |\x0a            penultimate :=  self allButLast inject: anObject into: [ :soFar :segment |\x0a                soFar ifNotNil: [ segment reverseTrapAt: soFar ]].\x0a            self last reverseTrapAt: penultimate put: value ]].\x0a    ^model",
+messageSends: ["new", "getBlock:", "inject:into:", "ifNotNil:", "reverseTrapAt:", "ifFalse:", "putBlock:", "allButLast", "reverseTrapAt:put:", "last", "isEmpty"],
+referencedClasses: ["EavModel"]
+}),
+smalltalk.SequenceableCollection);
+

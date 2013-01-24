@@ -129,3 +129,41 @@ return $1;
 smalltalk.Isolator.klass);
 
 
+smalltalk.addMethod(
+"_asEavModel",
+smalltalk.method({
+selector: "asEavModel",
+fn: function (){
+var self=this;
+var $1;
+var model;
+model=smalltalk.send((smalltalk.EavModel || EavModel),"_new",[]);
+smalltalk.send(model,"_getBlock_",[(function(anObject){
+return smalltalk.send(self,"_inject_into_",[anObject,(function(soFar,segment){
+if(($receiver = soFar) == nil || $receiver == undefined){
+return soFar;
+} else {
+return smalltalk.send(segment,"_reverseTrapAt_",[soFar]);
+};
+})]);
+})]);
+$1=smalltalk.send(self,"_isEmpty",[]);
+if(! smalltalk.assert($1)){
+smalltalk.send(model,"_putBlock_",[(function(anObject,value){
+var penultimate;
+penultimate=smalltalk.send(smalltalk.send(self,"_allButLast",[]),"_inject_into_",[anObject,(function(soFar,segment){
+if(($receiver = soFar) == nil || $receiver == undefined){
+return soFar;
+} else {
+return smalltalk.send(segment,"_reverseTrapAt_",[soFar]);
+};
+})]);
+penultimate;
+return smalltalk.send(smalltalk.send(self,"_last",[]),"_reverseTrapAt_put_",[penultimate,value]);
+})]);
+};
+return model;
+}
+}),
+smalltalk.SequenceableCollection);
+

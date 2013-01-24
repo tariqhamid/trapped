@@ -74,12 +74,12 @@ smalltalk.method({
 selector: "modify:do:",
 fn: function (path,aBlock){
 var self=this;
-var data;
 var newValue;
-data=smalltalk.send(smalltalk.send(path,"_allButLast",[]),"_asTrapPathOn_",[smalltalk.send(self,"_payload",[])]);
-newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send([smalltalk.send(path,"_last",[])],"_asTrapPathOn_",[data])]);
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[smalltalk.send(self,"_payload",[])])]);
 smalltalk.send((function(){
-return smalltalk.send(smalltalk.send(path,"_last",[]),"_reverseTrapAt_put_",[data,newValue]);
+return smalltalk.send(eavModel,"_on_put_",[smalltalk.send(self,"_payload",[]),newValue]);
 }),"_ensure_",[(function(){
 return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
 })]);
@@ -93,9 +93,9 @@ smalltalk.method({
 selector: "read:do:",
 fn: function (path,aBlock){
 var self=this;
-var data;
-data=smalltalk.send(path,"_asTrapPathOn_",[smalltalk.send(self,"_payload",[])]);
-smalltalk.send(aBlock,"_value_",[data]);
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[smalltalk.send(self,"_payload",[])])]);
 return self}
 }),
 smalltalk.TrappedPlainModel);
