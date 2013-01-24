@@ -94,6 +94,30 @@ referencedClasses: ["TrappedDumbDispatcher"]
 smalltalk.TrappedPlainModel);
 
 smalltalk.addMethod(
+"_modify_do_",
+smalltalk.method({
+selector: "modify:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+var data;
+var newValue;
+data=smalltalk.send(smalltalk.send(path,"_allButLast",[]),"_asTrapPathOn_",[smalltalk.send(self,"_payload",[])]);
+newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send([smalltalk.send(path,"_last",[])],"_asTrapPathOn_",[data])]);
+smalltalk.send((function(){
+return smalltalk.send(smalltalk.send(path,"_last",[]),"_reverseTrapAt_put_",[data,newValue]);
+}),"_ensure_",[(function(){
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
+})]);
+return self},
+args: ["path", "aBlock"],
+source: "modify: path do: aBlock\x0a\x09| data newValue |\x0a    data := path allButLast asTrapPathOn: self payload.\x0a\x09newValue := aBlock value: ({ path last } asTrapPathOn: data).\x0a    [ path last reverseTrapAt: data put: newValue ] ensure: [ self dispatcher changed: path ]",
+messageSends: ["asTrapPathOn:", "payload", "allButLast", "value:", "last", "ensure:", "changed:", "dispatcher", "reverseTrapAt:put:"],
+referencedClasses: []
+}),
+smalltalk.TrappedPlainModel);
+
+smalltalk.addMethod(
 "_read_do_",
 smalltalk.method({
 selector: "read:do:",

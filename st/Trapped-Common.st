@@ -49,6 +49,7 @@ I wrap a model which can be any object.
 
 My subclasses need to provide implementation for:
 	read:do:
+    modify:do:
 	(optionally) name
 
 and must initialize:
@@ -98,6 +99,10 @@ start
 
 reverseTrapAt: anObject
 	^nil
+!
+
+reverseTrapAt: anObject put: value
+	self error: 'Trapped cannot put at ', self class name, ' type key.'
 ! !
 
 !SequenceableCollection methodsFor: '*Trapped-Common'!
@@ -112,17 +117,29 @@ asTrapPathOn: anObject
 
 reverseTrapAt: anObject
 	^anObject at: self ifAbsent: [nil]
+!
+
+reverseTrapAt: anObject put: value
+	^anObject at: self put: value
 ! !
 
 !Symbol methodsFor: '*Trapped-Common'!
 
 reverseTrapAt: anObject
 	^[anObject perform: self] on: MessageNotUnderstood do: [^nil]
+!
+
+reverseTrapAt: anObject put: value
+    ^anObject perform: (self, ':') asSymbol withArguments: { value }
 ! !
 
 !Number methodsFor: '*Trapped-Common'!
 
 reverseTrapAt: anObject
 	^anObject at: self ifAbsent: [nil]
+!
+
+reverseTrapAt: anObject put: value
+	^anObject at: self put: value
 ! !
 

@@ -40,6 +40,13 @@ TrappedModelWrapper subclass: #TrappedPlainModel
 
 !TrappedPlainModel methodsFor: 'action'!
 
+modify: path do: aBlock
+	| data newValue |
+    data := path allButLast asTrapPathOn: self payload.
+	newValue := aBlock value: ({ path last } asTrapPathOn: data).
+    [ path last reverseTrapAt: data put: newValue ] ensure: [ self dispatcher changed: path ]
+!
+
 read: path do: aBlock
 	| data |
     data := path asTrapPathOn: self payload.

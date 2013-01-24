@@ -83,7 +83,7 @@ smalltalk.TrappedDispatcher);
 
 
 smalltalk.addClass('TrappedModelWrapper', smalltalk.Object, ['dispatcher', 'payload'], 'Trapped-Common');
-smalltalk.TrappedModelWrapper.comment="I am base class for model wrappers.\x0aI wrap a model which can be any object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a\x09(optionally) name\x0a\x0aand must initialize:\x0a\x09payload\x0a\x09dispatcher\x0a"
+smalltalk.TrappedModelWrapper.comment="I am base class for model wrappers.\x0aI wrap a model which can be any object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a    modify:do:\x0a\x09(optionally) name\x0a\x0aand must initialize:\x0a\x09payload\x0a\x09dispatcher\x0a"
 smalltalk.addMethod(
 "_dispatcher",
 smalltalk.method({
@@ -238,6 +238,22 @@ referencedClasses: []
 smalltalk.Object);
 
 smalltalk.addMethod(
+"_reverseTrapAt_put_",
+smalltalk.method({
+selector: "reverseTrapAt:put:",
+category: '*Trapped-Common',
+fn: function (anObject,value){
+var self=this;
+smalltalk.send(self,"_error_",[smalltalk.send(smalltalk.send("Trapped cannot put at ","__comma",[smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[])]),"__comma",[" type key."])]);
+return self},
+args: ["anObject", "value"],
+source: "reverseTrapAt: anObject put: value\x0a\x09self error: 'Trapped cannot put at ', self class name, ' type key.'",
+messageSends: ["error:", ",", "name", "class"],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
 "_asTrapPathOn_",
 smalltalk.method({
 selector: "asTrapPathOn:",
@@ -282,6 +298,24 @@ referencedClasses: []
 smalltalk.String);
 
 smalltalk.addMethod(
+"_reverseTrapAt_put_",
+smalltalk.method({
+selector: "reverseTrapAt:put:",
+category: '*Trapped-Common',
+fn: function (anObject,value){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_at_put_",[self,value]);
+return $1;
+},
+args: ["anObject", "value"],
+source: "reverseTrapAt: anObject put: value\x0a\x09^anObject at: self put: value",
+messageSends: ["at:put:"],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
 "_reverseTrapAt_",
 smalltalk.method({
 selector: "reverseTrapAt:",
@@ -308,6 +342,24 @@ referencedClasses: ["MessageNotUnderstood"]
 smalltalk.Symbol);
 
 smalltalk.addMethod(
+"_reverseTrapAt_put_",
+smalltalk.method({
+selector: "reverseTrapAt:put:",
+category: '*Trapped-Common',
+fn: function (anObject,value){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_perform_withArguments_",[smalltalk.send(smalltalk.send(self,"__comma",[":"]),"_asSymbol",[]),[value]]);
+return $1;
+},
+args: ["anObject", "value"],
+source: "reverseTrapAt: anObject put: value\x0a    ^anObject perform: (self, ':') asSymbol withArguments: { value }",
+messageSends: ["perform:withArguments:", "asSymbol", ","],
+referencedClasses: []
+}),
+smalltalk.Symbol);
+
+smalltalk.addMethod(
 "_reverseTrapAt_",
 smalltalk.method({
 selector: "reverseTrapAt:",
@@ -323,6 +375,24 @@ return $1;
 args: ["anObject"],
 source: "reverseTrapAt: anObject\x0a\x09^anObject at: self ifAbsent: [nil]",
 messageSends: ["at:ifAbsent:"],
+referencedClasses: []
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+"_reverseTrapAt_put_",
+smalltalk.method({
+selector: "reverseTrapAt:put:",
+category: '*Trapped-Common',
+fn: function (anObject,value){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_at_put_",[self,value]);
+return $1;
+},
+args: ["anObject", "value"],
+source: "reverseTrapAt: anObject put: value\x0a\x09^anObject at: self put: value",
+messageSends: ["at:put:"],
 referencedClasses: []
 }),
 smalltalk.Number);

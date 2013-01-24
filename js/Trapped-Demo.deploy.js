@@ -69,6 +69,25 @@ return self}
 smalltalk.TrappedPlainModel);
 
 smalltalk.addMethod(
+"_modify_do_",
+smalltalk.method({
+selector: "modify:do:",
+fn: function (path,aBlock){
+var self=this;
+var data;
+var newValue;
+data=smalltalk.send(smalltalk.send(path,"_allButLast",[]),"_asTrapPathOn_",[smalltalk.send(self,"_payload",[])]);
+newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send([smalltalk.send(path,"_last",[])],"_asTrapPathOn_",[data])]);
+smalltalk.send((function(){
+return smalltalk.send(smalltalk.send(path,"_last",[]),"_reverseTrapAt_put_",[data,newValue]);
+}),"_ensure_",[(function(){
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
+})]);
+return self}
+}),
+smalltalk.TrappedPlainModel);
+
+smalltalk.addMethod(
 "_read_do_",
 smalltalk.method({
 selector: "read:do:",
