@@ -1,27 +1,4 @@
 Smalltalk current createPackage: 'Trapped-Frontend' properties: #{}!
-TrappedDispatcher subclass: #TrappedDumbDispatcher
-	instanceVariableNames: 'queue'
-	package: 'Trapped-Frontend'!
-
-!TrappedDumbDispatcher methodsFor: 'accessing'!
-
-add: aTriplet
-	queue add: aTriplet.
-    self dirty: aTriplet first
-! !
-
-!TrappedDumbDispatcher methodsFor: 'enumeration'!
-
-do: aBlock
-	queue do: aBlock
-! !
-
-!TrappedDumbDispatcher methodsFor: 'initialization'!
-
-initialize
-	queue := OrderedCollection new
-! !
-
 Widget subclass: #TrappedDumbView
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
@@ -32,32 +9,6 @@ I just read and show an actual path.!
 
 renderOn: html
 	html root trapShow: #()
-! !
-
-TrappedModelWrapper subclass: #TrappedPlainModel
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
-
-!TrappedPlainModel methodsFor: 'action'!
-
-read: path do: aBlock
-	| data |
-    data := path inject: self payload
-    	into: [ :soFar :segment | soFar at: segment ].
-	aBlock value: data.
-! !
-
-!TrappedPlainModel methodsFor: 'initialization'!
-
-initialize
-	super initialize.
-    self dispatcher: TrappedDumbDispatcher new
-! !
-
-!TrappedPlainModel class methodsFor: 'action'!
-
-start
-	self new start
 ! !
 
 Object subclass: #TrappedSingleton
