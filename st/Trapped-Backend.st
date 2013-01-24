@@ -73,6 +73,47 @@ on: anObject
 ^self new root: anObject
 ! !
 
+Object subclass: #TrappedDispatcher
+	instanceVariableNames: ''
+	package: 'Trapped-Backend'!
+!TrappedDispatcher commentStamp!
+I am base class for change event dispatchers.
+I manage changed path - action block subscriptions.
+These subscription must be three-element arrays
+	{ dirty. path. block }
+
+My subclasses need to provide implementation for:
+	add:
+    do:
+    (optionally) run!
+
+!TrappedDispatcher methodsFor: 'action'!
+
+changed: path
+	| needsToRun |
+    needsToRun := false.
+	self do: [ :each |
+		| aPath lesser |
+		aPath := each second.
+		lesser := aPath size min: path size.
+		(path copyFrom: 1 to: lesser) = (aPath copyFrom: 1 to: lesser) ifTrue: [
+			each at: 1 put: true.
+            needsToRun := true.
+		]
+	].
+	self dirty: needsToRun
+!
+
+dirty: aBoolean
+	aBoolean ifTrue: [[ self run ] fork]
+!
+
+run
+	self do: [ :each |
+		each first ifTrue: [[ each third value ] ensure: [ each at: 1 put: false ]]
+	]
+! !
+
 !Object methodsFor: '*Trapped-Backend'!
 
 reverseTrapAt: anObject

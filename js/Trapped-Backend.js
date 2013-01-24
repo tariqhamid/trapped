@@ -180,6 +180,89 @@ referencedClasses: []
 smalltalk.Isolator.klass);
 
 
+smalltalk.addClass('TrappedDispatcher', smalltalk.Object, [], 'Trapped-Backend');
+smalltalk.TrappedDispatcher.comment="I am base class for change event dispatchers.\x0aI manage changed path - action block subscriptions.\x0aThese subscription must be three-element arrays\x0a\x09{ dirty. path. block }\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09add:\x0a    do:\x0a    (optionally) run\x0a"
+smalltalk.addMethod(
+"_changed_",
+smalltalk.method({
+selector: "changed:",
+category: 'action',
+fn: function (path){
+var self=this;
+var $1;
+var needsToRun;
+needsToRun=false;
+smalltalk.send(self,"_do_",[(function(each){
+var aPath;
+var lesser;
+aPath=smalltalk.send(each,"_second",[]);
+aPath;
+lesser=smalltalk.send(smalltalk.send(aPath,"_size",[]),"_min_",[smalltalk.send(path,"_size",[])]);
+lesser;
+$1=smalltalk.send(smalltalk.send(path,"_copyFrom_to_",[(1),lesser]),"__eq",[smalltalk.send(aPath,"_copyFrom_to_",[(1),lesser])]);
+if(smalltalk.assert($1)){
+smalltalk.send(each,"_at_put_",[(1),true]);
+needsToRun=true;
+return needsToRun;
+};
+})]);
+smalltalk.send(self,"_dirty_",[needsToRun]);
+return self},
+args: ["path"],
+source: "changed: path\x0a\x09| needsToRun |\x0a    needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09| aPath lesser |\x0a\x09\x09aPath := each second.\x0a\x09\x09lesser := aPath size min: path size.\x0a\x09\x09(path copyFrom: 1 to: lesser) = (aPath copyFrom: 1 to: lesser) ifTrue: [\x0a\x09\x09\x09each at: 1 put: true.\x0a            needsToRun := true.\x0a\x09\x09]\x0a\x09].\x0a\x09self dirty: needsToRun",
+messageSends: ["do:", "second", "min:", "size", "ifTrue:", "at:put:", "=", "copyFrom:to:", "dirty:"],
+referencedClasses: []
+}),
+smalltalk.TrappedDispatcher);
+
+smalltalk.addMethod(
+"_dirty_",
+smalltalk.method({
+selector: "dirty:",
+category: 'action',
+fn: function (aBoolean){
+var self=this;
+if(smalltalk.assert(aBoolean)){
+smalltalk.send((function(){
+return smalltalk.send(self,"_run",[]);
+}),"_fork",[]);
+};
+return self},
+args: ["aBoolean"],
+source: "dirty: aBoolean\x0a\x09aBoolean ifTrue: [[ self run ] fork]",
+messageSends: ["ifTrue:", "fork", "run"],
+referencedClasses: []
+}),
+smalltalk.TrappedDispatcher);
+
+smalltalk.addMethod(
+"_run",
+smalltalk.method({
+selector: "run",
+category: 'action',
+fn: function (){
+var self=this;
+var $1;
+smalltalk.send(self,"_do_",[(function(each){
+$1=smalltalk.send(each,"_first",[]);
+if(smalltalk.assert($1)){
+return smalltalk.send((function(){
+return smalltalk.send(smalltalk.send(each,"_third",[]),"_value",[]);
+}),"_ensure_",[(function(){
+return smalltalk.send(each,"_at_put_",[(1),false]);
+})]);
+};
+})]);
+return self},
+args: [],
+source: "run\x0a\x09self do: [ :each |\x0a\x09\x09each first ifTrue: [[ each third value ] ensure: [ each at: 1 put: false ]]\x0a\x09]",
+messageSends: ["do:", "ifTrue:", "ensure:", "at:put:", "value", "third", "first"],
+referencedClasses: []
+}),
+smalltalk.TrappedDispatcher);
+
+
+
 smalltalk.addMethod(
 "_reverseTrapAt_",
 smalltalk.method({

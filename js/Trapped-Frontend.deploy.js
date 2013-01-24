@@ -13,6 +13,102 @@ smalltalk.TrappedDumbView);
 
 
 
+smalltalk.addClass('TrappedModelWrapper', smalltalk.Object, ['dispatcher', 'payload'], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_dispatcher",
+smalltalk.method({
+selector: "dispatcher",
+fn: function (){
+var self=this;
+return self["@dispatcher"];
+}
+}),
+smalltalk.TrappedModelWrapper);
+
+smalltalk.addMethod(
+"_dispatcher_",
+smalltalk.method({
+selector: "dispatcher:",
+fn: function (aDispatcher){
+var self=this;
+self["@dispatcher"]=aDispatcher;
+return self}
+}),
+smalltalk.TrappedModelWrapper);
+
+smalltalk.addMethod(
+"_name",
+smalltalk.method({
+selector: "name",
+fn: function (){
+var self=this;
+var $1;
+$1=smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]);
+return $1;
+}
+}),
+smalltalk.TrappedModelWrapper);
+
+smalltalk.addMethod(
+"_payload",
+smalltalk.method({
+selector: "payload",
+fn: function (){
+var self=this;
+return self["@payload"];
+}
+}),
+smalltalk.TrappedModelWrapper);
+
+smalltalk.addMethod(
+"_payload_",
+smalltalk.method({
+selector: "payload:",
+fn: function (anObject){
+var self=this;
+self["@payload"]=anObject;
+return self}
+}),
+smalltalk.TrappedModelWrapper);
+
+smalltalk.addMethod(
+"_start",
+smalltalk.method({
+selector: "start",
+fn: function (){
+var self=this;
+smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_register_name_",[self,smalltalk.send(self,"_name",[])]);
+return self}
+}),
+smalltalk.TrappedModelWrapper);
+
+smalltalk.addMethod(
+"_watch_do_",
+smalltalk.method({
+selector: "watch:do:",
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_add_",[[true,path,(function(){
+return smalltalk.send(self,"_read_do_",[path,aBlock]);
+})]]);
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_dirty_",[true]);
+return self}
+}),
+smalltalk.TrappedModelWrapper);
+
+
+smalltalk.addMethod(
+"_start",
+smalltalk.method({
+selector: "start",
+fn: function (){
+var self=this;
+smalltalk.send(smalltalk.send(self,"_new",[]),"_start",[]);
+return self}
+}),
+smalltalk.TrappedModelWrapper.klass);
+
+
 smalltalk.addClass('TrappedSingleton', smalltalk.Object, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_start",

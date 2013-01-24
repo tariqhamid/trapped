@@ -11,6 +11,61 @@ renderOn: html
 	html root trapShow: #()
 ! !
 
+Object subclass: #TrappedModelWrapper
+	instanceVariableNames: 'dispatcher payload'
+	package: 'Trapped-Frontend'!
+!TrappedModelWrapper commentStamp!
+I am base class for model wrappers.
+I wrap a model which can be any object.
+
+My subclasses need to provide implementation for:
+	read:do:
+    modify:do:
+	(optionally) name
+
+and must initialize:
+	payload
+	dispatcher!
+
+!TrappedModelWrapper methodsFor: 'accessing'!
+
+dispatcher
+	^dispatcher
+!
+
+dispatcher: aDispatcher
+	dispatcher := aDispatcher
+!
+
+name
+	^ self class name
+!
+
+payload
+	^payload
+!
+
+payload: anObject
+	payload := anObject
+! !
+
+!TrappedModelWrapper methodsFor: 'action'!
+
+start
+	Trapped current register: self name: self name
+!
+
+watch: path do: aBlock
+	self dispatcher add: { true. path. [ self read: path do: aBlock ] }.
+    self dispatcher dirty: true
+! !
+
+!TrappedModelWrapper class methodsFor: 'action'!
+
+start
+	self new start
+! !
+
 Object subclass: #TrappedSingleton
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
