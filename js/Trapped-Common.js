@@ -25,11 +25,31 @@ needsToRun=true;
 return needsToRun;
 };
 })]);
-return needsToRun;
-},
+smalltalk.send(self,"_dirty_",[needsToRun]);
+return self},
 args: ["path"],
-source: "changed: path\x0a\x09| needsToRun |\x0a    needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09| aPath lesser |\x0a\x09\x09aPath := each second.\x0a\x09\x09lesser := aPath size min: path size.\x0a\x09\x09(path copyFrom: 1 to: lesser) = (aPath copyFrom: 1 to: lesser) ifTrue: [\x0a\x09\x09\x09each at: 1 put: true.\x0a            needsToRun := true.\x0a\x09\x09]\x0a\x09].\x0a\x09^needsToRun",
-messageSends: ["do:", "second", "min:", "size", "ifTrue:", "at:put:", "=", "copyFrom:to:"],
+source: "changed: path\x0a\x09| needsToRun |\x0a    needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09| aPath lesser |\x0a\x09\x09aPath := each second.\x0a\x09\x09lesser := aPath size min: path size.\x0a\x09\x09(path copyFrom: 1 to: lesser) = (aPath copyFrom: 1 to: lesser) ifTrue: [\x0a\x09\x09\x09each at: 1 put: true.\x0a            needsToRun := true.\x0a\x09\x09]\x0a\x09].\x0a\x09self dirty: needsToRun",
+messageSends: ["do:", "second", "min:", "size", "ifTrue:", "at:put:", "=", "copyFrom:to:", "dirty:"],
+referencedClasses: []
+}),
+smalltalk.TrappedDispatcher);
+
+smalltalk.addMethod(
+"_dirty_",
+smalltalk.method({
+selector: "dirty:",
+category: 'action',
+fn: function (aBoolean){
+var self=this;
+if(smalltalk.assert(aBoolean)){
+smalltalk.send((function(){
+return smalltalk.send(self,"_run",[]);
+}),"_fork",[]);
+};
+return self},
+args: ["aBoolean"],
+source: "dirty: aBoolean\x0a\x09aBoolean ifTrue: [[ self run ] fork]",
+messageSends: ["ifTrue:", "fork", "run"],
 referencedClasses: []
 }),
 smalltalk.TrappedDispatcher);

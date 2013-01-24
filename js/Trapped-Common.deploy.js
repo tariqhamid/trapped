@@ -23,8 +23,23 @@ needsToRun=true;
 return needsToRun;
 };
 })]);
-return needsToRun;
-}
+smalltalk.send(self,"_dirty_",[needsToRun]);
+return self}
+}),
+smalltalk.TrappedDispatcher);
+
+smalltalk.addMethod(
+"_dirty_",
+smalltalk.method({
+selector: "dirty:",
+fn: function (aBoolean){
+var self=this;
+if(smalltalk.assert(aBoolean)){
+smalltalk.send((function(){
+return smalltalk.send(self,"_run",[]);
+}),"_fork",[]);
+};
+return self}
 }),
 smalltalk.TrappedDispatcher);
 

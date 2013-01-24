@@ -7,6 +7,7 @@ selector: "add:",
 fn: function (aTriplet){
 var self=this;
 smalltalk.send(self["@queue"],"_add_",[aTriplet]);
+smalltalk.send(self,"_dirty_",[smalltalk.send(aTriplet,"_first",[])]);
 return self}
 }),
 smalltalk.TrappedDumbDispatcher);

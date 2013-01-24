@@ -27,7 +27,11 @@ changed: path
             needsToRun := true.
 		]
 	].
-	^needsToRun
+	self dirty: needsToRun
+!
+
+dirty: aBoolean
+	aBoolean ifTrue: [[ self run ] fork]
 !
 
 run

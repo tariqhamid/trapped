@@ -8,10 +8,11 @@ category: 'accessing',
 fn: function (aTriplet){
 var self=this;
 smalltalk.send(self["@queue"],"_add_",[aTriplet]);
+smalltalk.send(self,"_dirty_",[smalltalk.send(aTriplet,"_first",[])]);
 return self},
 args: ["aTriplet"],
-source: "add: aTriplet\x0a\x09queue add: aTriplet\x0a\x09",
-messageSends: ["add:"],
+source: "add: aTriplet\x0a\x09queue add: aTriplet.\x0a    self dirty: aTriplet first\x0a\x09",
+messageSends: ["add:", "dirty:", "first"],
 referencedClasses: []
 }),
 smalltalk.TrappedDumbDispatcher);

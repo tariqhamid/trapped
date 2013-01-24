@@ -6,7 +6,8 @@ TrappedDispatcher subclass: #TrappedDumbDispatcher
 !TrappedDumbDispatcher methodsFor: 'accessing'!
 
 add: aTriplet
-	queue add: aTriplet
+	queue add: aTriplet.
+    self dirty: aTriplet first
 ! !
 
 !TrappedDumbDispatcher methodsFor: 'enumeration'!
