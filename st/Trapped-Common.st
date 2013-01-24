@@ -94,3 +94,35 @@ start
 	self new start
 ! !
 
+!Object methodsFor: '*Trapped-Common'!
+
+reverseTrapAt: anObject
+	^nil
+! !
+
+!SequenceableCollection methodsFor: '*Trapped-Common'!
+
+asTrapPathOn: anObject
+    ^ self inject: anObject into: [ :soFar :segment |
+        soFar ifNotNil: [ segment reverseTrapAt: soFar ]
+    ]
+! !
+
+!String methodsFor: '*Trapped-Common'!
+
+reverseTrapAt: anObject
+	^anObject at: self ifAbsent: [nil]
+! !
+
+!Symbol methodsFor: '*Trapped-Common'!
+
+reverseTrapAt: anObject
+	^[anObject perform: self] on: MessageNotUnderstood do: [^nil]
+! !
+
+!Number methodsFor: '*Trapped-Common'!
+
+reverseTrapAt: anObject
+	^anObject at: self ifAbsent: [nil]
+! !
+

@@ -7,6 +7,7 @@ Widget subclass: #AppView
 
 renderOn: html
 	html h2 trapShow: #('title').
+    html p with: [ html span trapShow: #('items' #size). html with: ' item(s).' ].
 	html p trapShow: #('items')
 ! !
 
@@ -41,8 +42,7 @@ TrappedModelWrapper subclass: #TrappedPlainModel
 
 read: path do: aBlock
 	| data |
-    data := path inject: self payload
-    	into: [ :soFar :segment | soFar at: segment ].
+    data := path asTrapPathOn: self payload.
 	aBlock value: data.
 ! !
 

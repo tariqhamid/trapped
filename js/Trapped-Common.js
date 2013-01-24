@@ -221,3 +221,109 @@ referencedClasses: []
 smalltalk.TrappedModelWrapper.klass);
 
 
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+category: '*Trapped-Common',
+fn: function (anObject){
+var self=this;
+return nil;
+},
+args: ["anObject"],
+source: "reverseTrapAt: anObject\x0a\x09^nil",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+"_asTrapPathOn_",
+smalltalk.method({
+selector: "asTrapPathOn:",
+category: '*Trapped-Common',
+fn: function (anObject){
+var self=this;
+var $1;
+$1=smalltalk.send(self,"_inject_into_",[anObject,(function(soFar,segment){
+if(($receiver = soFar) == nil || $receiver == undefined){
+return soFar;
+} else {
+return smalltalk.send(segment,"_reverseTrapAt_",[soFar]);
+};
+})]);
+return $1;
+},
+args: ["anObject"],
+source: "asTrapPathOn: anObject\x0a    ^ self inject: anObject into: [ :soFar :segment |\x0a        soFar ifNotNil: [ segment reverseTrapAt: soFar ]\x0a    ]",
+messageSends: ["inject:into:", "ifNotNil:", "reverseTrapAt:"],
+referencedClasses: []
+}),
+smalltalk.SequenceableCollection);
+
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+category: '*Trapped-Common',
+fn: function (anObject){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_at_ifAbsent_",[self,(function(){
+return nil;
+})]);
+return $1;
+},
+args: ["anObject"],
+source: "reverseTrapAt: anObject\x0a\x09^anObject at: self ifAbsent: [nil]",
+messageSends: ["at:ifAbsent:"],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+category: '*Trapped-Common',
+fn: function (anObject){
+var self=this;
+var $1;
+var $early={};
+try {
+$1=smalltalk.send((function(){
+return smalltalk.send(anObject,"_perform_",[self]);
+}),"_on_do_",[(smalltalk.MessageNotUnderstood || MessageNotUnderstood),(function(){
+throw $early=[nil];
+})]);
+return $1;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+},
+args: ["anObject"],
+source: "reverseTrapAt: anObject\x0a\x09^[anObject perform: self] on: MessageNotUnderstood do: [^nil]",
+messageSends: ["on:do:", "perform:"],
+referencedClasses: ["MessageNotUnderstood"]
+}),
+smalltalk.Symbol);
+
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+category: '*Trapped-Common',
+fn: function (anObject){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_at_ifAbsent_",[self,(function(){
+return nil;
+})]);
+return $1;
+},
+args: ["anObject"],
+source: "reverseTrapAt: anObject\x0a\x09^anObject at: self ifAbsent: [nil]",
+messageSends: ["at:ifAbsent:"],
+referencedClasses: []
+}),
+smalltalk.Number);
+

@@ -7,6 +7,10 @@ selector: "renderOn:",
 fn: function (html){
 var self=this;
 smalltalk.send(smalltalk.send(html,"_h2",[]),"_trapShow_",[["title"]]);
+smalltalk.send(smalltalk.send(html,"_p",[]),"_with_",[(function(){
+smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[["items", smalltalk.symbolFor("size")]]);
+return smalltalk.send(html,"_with_",[" item(s)."]);
+})]);
 smalltalk.send(smalltalk.send(html,"_p",[]),"_trapShow_",[["items"]]);
 return self}
 }),
@@ -71,9 +75,7 @@ selector: "read:do:",
 fn: function (path,aBlock){
 var self=this;
 var data;
-data=smalltalk.send(path,"_inject_into_",[smalltalk.send(self,"_payload",[]),(function(soFar,segment){
-return smalltalk.send(soFar,"_at_",[segment]);
-})]);
+data=smalltalk.send(path,"_asTrapPathOn_",[smalltalk.send(self,"_payload",[])]);
 smalltalk.send(aBlock,"_value_",[data]);
 return self}
 }),

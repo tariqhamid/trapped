@@ -8,11 +8,15 @@ category: 'rendering',
 fn: function (html){
 var self=this;
 smalltalk.send(smalltalk.send(html,"_h2",[]),"_trapShow_",[["title"]]);
+smalltalk.send(smalltalk.send(html,"_p",[]),"_with_",[(function(){
+smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[["items", smalltalk.symbolFor("size")]]);
+return smalltalk.send(html,"_with_",[" item(s)."]);
+})]);
 smalltalk.send(smalltalk.send(html,"_p",[]),"_trapShow_",[["items"]]);
 return self},
 args: ["html"],
-source: "renderOn: html\x0a\x09html h2 trapShow: #('title').\x0a\x09html p trapShow: #('items')",
-messageSends: ["trapShow:", "h2", "p"],
+source: "renderOn: html\x0a\x09html h2 trapShow: #('title').\x0a    html p with: [ html span trapShow: #('items' #size). html with: ' item(s).' ].\x0a\x09html p trapShow: #('items')",
+messageSends: ["trapShow:", "h2", "with:", "span", "p"],
 referencedClasses: []
 }),
 smalltalk.AppView);
@@ -97,14 +101,12 @@ category: 'action',
 fn: function (path,aBlock){
 var self=this;
 var data;
-data=smalltalk.send(path,"_inject_into_",[smalltalk.send(self,"_payload",[]),(function(soFar,segment){
-return smalltalk.send(soFar,"_at_",[segment]);
-})]);
+data=smalltalk.send(path,"_asTrapPathOn_",[smalltalk.send(self,"_payload",[])]);
 smalltalk.send(aBlock,"_value_",[data]);
 return self},
 args: ["path", "aBlock"],
-source: "read: path do: aBlock\x0a\x09| data |\x0a    data := path inject: self payload\x0a    \x09into: [ :soFar :segment | soFar at: segment ].\x0a\x09aBlock value: data.",
-messageSends: ["inject:into:", "payload", "at:", "value:"],
+source: "read: path do: aBlock\x0a\x09| data |\x0a    data := path asTrapPathOn: self payload.\x0a\x09aBlock value: data.",
+messageSends: ["asTrapPathOn:", "payload", "value:"],
 referencedClasses: []
 }),
 smalltalk.TrappedPlainModel);

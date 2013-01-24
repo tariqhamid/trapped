@@ -164,3 +164,84 @@ return self}
 smalltalk.TrappedModelWrapper.klass);
 
 
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+fn: function (anObject){
+var self=this;
+return nil;
+}
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+"_asTrapPathOn_",
+smalltalk.method({
+selector: "asTrapPathOn:",
+fn: function (anObject){
+var self=this;
+var $1;
+$1=smalltalk.send(self,"_inject_into_",[anObject,(function(soFar,segment){
+if(($receiver = soFar) == nil || $receiver == undefined){
+return soFar;
+} else {
+return smalltalk.send(segment,"_reverseTrapAt_",[soFar]);
+};
+})]);
+return $1;
+}
+}),
+smalltalk.SequenceableCollection);
+
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+fn: function (anObject){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_at_ifAbsent_",[self,(function(){
+return nil;
+})]);
+return $1;
+}
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+fn: function (anObject){
+var self=this;
+var $1;
+var $early={};
+try {
+$1=smalltalk.send((function(){
+return smalltalk.send(anObject,"_perform_",[self]);
+}),"_on_do_",[(smalltalk.MessageNotUnderstood || MessageNotUnderstood),(function(){
+throw $early=[nil];
+})]);
+return $1;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}
+}),
+smalltalk.Symbol);
+
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+fn: function (anObject){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_at_ifAbsent_",[self,(function(){
+return nil;
+})]);
+return $1;
+}
+}),
+smalltalk.Number);
+
