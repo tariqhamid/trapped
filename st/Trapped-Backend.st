@@ -73,6 +73,16 @@ on: anObject
 ^self new root: anObject
 ! !
 
+!Object methodsFor: '*Trapped-Backend'!
+
+reverseTrapAt: anObject
+	^nil
+!
+
+reverseTrapAt: anObject put: value
+	self error: 'Trapped cannot put at ', self class name, ' type key.'
+! !
+
 !SequenceableCollection methodsFor: '*Trapped-Backend'!
 
 asEavModel
@@ -87,5 +97,35 @@ asEavModel
                 soFar ifNotNil: [ segment reverseTrapAt: soFar ]].
             self last reverseTrapAt: penultimate put: value ]].
     ^model
+! !
+
+!String methodsFor: '*Trapped-Backend'!
+
+reverseTrapAt: anObject
+	^anObject at: self ifAbsent: [nil]
+!
+
+reverseTrapAt: anObject put: value
+	^anObject at: self put: value
+! !
+
+!Symbol methodsFor: '*Trapped-Backend'!
+
+reverseTrapAt: anObject
+	^[anObject perform: self] on: MessageNotUnderstood do: [^nil]
+!
+
+reverseTrapAt: anObject put: value
+    ^anObject perform: (self, ':') asSymbol withArguments: { value }
+! !
+
+!Number methodsFor: '*Trapped-Backend'!
+
+reverseTrapAt: anObject
+	^anObject at: self ifAbsent: [nil]
+!
+
+reverseTrapAt: anObject put: value
+	^anObject at: self put: value
 ! !
 

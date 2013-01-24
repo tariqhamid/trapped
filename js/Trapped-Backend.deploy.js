@@ -130,6 +130,28 @@ smalltalk.Isolator.klass);
 
 
 smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+fn: function (anObject){
+var self=this;
+return nil;
+}
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+"_reverseTrapAt_put_",
+smalltalk.method({
+selector: "reverseTrapAt:put:",
+fn: function (anObject,value){
+var self=this;
+smalltalk.send(self,"_error_",[smalltalk.send(smalltalk.send("Trapped cannot put at ","__comma",[smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[])]),"__comma",[" type key."])]);
+return self}
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
 "_asEavModel",
 smalltalk.method({
 selector: "asEavModel",
@@ -166,4 +188,94 @@ return model;
 }
 }),
 smalltalk.SequenceableCollection);
+
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+fn: function (anObject){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_at_ifAbsent_",[self,(function(){
+return nil;
+})]);
+return $1;
+}
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+"_reverseTrapAt_put_",
+smalltalk.method({
+selector: "reverseTrapAt:put:",
+fn: function (anObject,value){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_at_put_",[self,value]);
+return $1;
+}
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+fn: function (anObject){
+var self=this;
+var $1;
+var $early={};
+try {
+$1=smalltalk.send((function(){
+return smalltalk.send(anObject,"_perform_",[self]);
+}),"_on_do_",[(smalltalk.MessageNotUnderstood || MessageNotUnderstood),(function(){
+throw $early=[nil];
+})]);
+return $1;
+}
+catch(e) {if(e===$early)return e[0]; throw e}
+}
+}),
+smalltalk.Symbol);
+
+smalltalk.addMethod(
+"_reverseTrapAt_put_",
+smalltalk.method({
+selector: "reverseTrapAt:put:",
+fn: function (anObject,value){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_perform_withArguments_",[smalltalk.send(smalltalk.send(self,"__comma",[":"]),"_asSymbol",[]),[value]]);
+return $1;
+}
+}),
+smalltalk.Symbol);
+
+smalltalk.addMethod(
+"_reverseTrapAt_",
+smalltalk.method({
+selector: "reverseTrapAt:",
+fn: function (anObject){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_at_ifAbsent_",[self,(function(){
+return nil;
+})]);
+return $1;
+}
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+"_reverseTrapAt_put_",
+smalltalk.method({
+selector: "reverseTrapAt:put:",
+fn: function (anObject,value){
+var self=this;
+var $1;
+$1=smalltalk.send(anObject,"_at_put_",[self,value]);
+return $1;
+}
+}),
+smalltalk.Number);
 
