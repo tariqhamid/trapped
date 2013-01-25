@@ -40,7 +40,7 @@ The `App` instance is put into global `AppVM` variable in `demo.html` initializa
 
 Trapped is pretty light: the view model wraps any object (via `payload:`,
 as seen in `App >> initialize`). The view is subclass of plain `Widget`, but inside it,
-uses of `trapShow:` (which itself uses `trap:read:`) and `trapDescend:` allows you
+uses of `trapShow:` (which itself uses `trap:read:`), `trap:toggle:` and `trapDescend:` allows you
 to bind data from view model.
 
 To see viewmodel->view update working, try
@@ -61,6 +61,6 @@ The `modify:do:` should be used for update since it changes as well as signals t
 It is planned that `read:do:` and `modify:do:` will guard the data by doing deep copies
 behind the scene against remembering and modifying out of sync.
 If you wish to, you can change the raw data you put into `payload:` by hand,
-but then be sure to call `AppVM changed: #('title')` or similar
-(you can do `AppVM changed: #()` to signal everything in `AppVM` has changed,
+but then be sure to call `AppVM dispatcher changed: #('title')` or similar
+(you can do `AppVM dispatcher changed: #()` to signal everything in `AppVM` has changed,
 but then everything depending upon it will redraw).

@@ -67,6 +67,7 @@ selector: "payload:",
 fn: function (anObject){
 var self=this;
 self["@payload"]=anObject;
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
 return self}
 }),
 smalltalk.TrappedModelWrapper);
@@ -374,8 +375,61 @@ actual;
 model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[smalltalk.send(actual,"_first",[])]);
 model;
 return smalltalk.send(model,"_watch_do_",[smalltalk.send(actual,"_allButFirst",[]),(function(data){
-return smalltalk.send(aBlock,"_value_value_",[self,data]);
+return smalltalk.send(actual,"_trapDescend_",[(function(){
+return smalltalk.send(self,"_with_",[(function(html){
+return smalltalk.send(aBlock,"_value_value_",[data,html]);
 })]);
+})]);
+})]);
+})]);
+return self}
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+"_trap_toggle_",
+smalltalk.method({
+selector: "trap:toggle:",
+fn: function (path,aBlock){
+var self=this;
+var $1,$2;
+smalltalk.send(self,"_trap_toggle_ifNotPresent_",[path,aBlock,(function(){
+$1=smalltalk.send(self,"_asJQuery",[]);
+smalltalk.send($1,"_empty",[]);
+$2=smalltalk.send($1,"_hide",[]);
+return $2;
+})]);
+return self}
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+"_trap_toggle_ifNotPresent_",
+smalltalk.method({
+selector: "trap:toggle:ifNotPresent:",
+fn: function (path,aBlock,anotherBlock){
+var self=this;
+var $1,$2,$3,$4;
+var shown;
+shown=nil;
+smalltalk.send(self,"_trap_read_",[path,(function(data,html){
+$1=smalltalk.send(shown,"__eq",[smalltalk.send(data,"_notNil",[])]);
+if(! smalltalk.assert($1)){
+shown=smalltalk.send(data,"_notNil",[]);
+shown;
+if(smalltalk.assert(shown)){
+$2=smalltalk.send(self,"_asJQuery",[]);
+smalltalk.send($2,"_empty",[]);
+$3=smalltalk.send($2,"_show",[]);
+$3;
+};
+if(smalltalk.assert(shown)){
+$4=aBlock;
+} else {
+$4=anotherBlock;
+};
+return smalltalk.send($4,"_value_value_",[data,html]);
+};
 })]);
 return self}
 }),
@@ -387,11 +441,29 @@ smalltalk.method({
 selector: "trapShow:",
 fn: function (path){
 var self=this;
-var $1;
-smalltalk.send(self,"_trap_read_",[path,(function(brush,model){
-smalltalk.send(brush,"_empty",[]);
-$1=smalltalk.send(brush,"_with_",[model]);
-return $1;
+smalltalk.send(self,"_trapShow_default_",[path,(function(){
+})]);
+return self}
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+"_trapShow_default_",
+smalltalk.method({
+selector: "trapShow:default:",
+fn: function (path,anObject){
+var self=this;
+var $1,$3,$2;
+smalltalk.send(self,"_trap_read_",[path,(function(model,html){
+$1=smalltalk.send(html,"_root",[]);
+smalltalk.send($1,"_empty",[]);
+if(($receiver = model) == nil || $receiver == undefined){
+$3=anObject;
+} else {
+$3=model;
+};
+$2=smalltalk.send($1,"_with_",[$3]);
+return $2;
 })]);
 return self}
 }),

@@ -8,15 +8,19 @@ category: 'rendering',
 fn: function (html){
 var self=this;
 smalltalk.send(smalltalk.send(html,"_h2",[]),"_trapShow_",[["title"]]);
+smalltalk.send(smalltalk.send(html,"_div",[]),"_trap_toggle_ifNotPresent_",[["items"],(function(){
 smalltalk.send(smalltalk.send(html,"_p",[]),"_with_",[(function(){
-smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[["items", smalltalk.symbolFor("size")]]);
+smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[[smalltalk.symbolFor("size")]]);
 return smalltalk.send(html,"_with_",[" item(s)."]);
 })]);
-smalltalk.send(smalltalk.send(html,"_p",[]),"_trapShow_",[["items"]]);
+return smalltalk.send(smalltalk.send(html,"_p",[]),"_trapShow_",[[]]);
+}),(function(){
+return smalltalk.send(html,"_with_",["Loading ..."]);
+})]);
 return self},
 args: ["html"],
-source: "renderOn: html\x0a\x09html h2 trapShow: #('title').\x0a    html p with: [ html span trapShow: #('items' #size). html with: ' item(s).' ].\x0a\x09html p trapShow: #('items')",
-messageSends: ["trapShow:", "h2", "with:", "span", "p"],
+source: "renderOn: html\x0a\x09html h2 trapShow: #('title').\x0a    html div trap: #('items') toggle: [\x0a        html p with: [ html span trapShow: #(#size). html with: ' item(s).' ].\x0a\x09\x09html p trapShow: #()\x0a    ] ifNotPresent: [ html with: 'Loading ...' ]",
+messageSends: ["trapShow:", "h2", "trap:toggle:ifNotPresent:", "with:", "span", "p", "div"],
 referencedClasses: []
 }),
 smalltalk.AppView);
@@ -146,11 +150,15 @@ category: 'initialization',
 fn: function (){
 var self=this;
 smalltalk.send(self,"_initialize",[],smalltalk.TrappedPlainModel);
-smalltalk.send(self,"_payload_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("items","__minus_gt",[["hello", "world"]]),smalltalk.send("title","__minus_gt",["To-Do List"])])]);
+smalltalk.send(self,"_payload_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("title","__minus_gt",["To-Do List"])])]);
+smalltalk.send((function(){
+smalltalk.send(smalltalk.send(self,"_payload",[]),"_at_put_",["items",["hello", "world"]]);
+return smalltalk.send(self,"_payload_",[smalltalk.send(self,"_payload",[])]);
+}),"_valueWithTimeout_",[(2000)]);
 return self},
 args: [],
-source: "initialize\x0a\x09super initialize.\x0a\x09self payload: #{'items'->#('hello' 'world'). 'title' -> 'To-Do List'}",
-messageSends: ["initialize", "payload:", "->"],
+source: "initialize\x0a\x09super initialize.\x0a\x09self payload: #{'title' -> 'To-Do List'}.\x0a    [ self payload at: 'items' put: #('hello' 'world'). self payload: self payload ] valueWithTimeout: 2000\x0a",
+messageSends: ["initialize", "payload:", "->", "valueWithTimeout:", "at:put:", "payload"],
 referencedClasses: []
 }),
 smalltalk.App);

@@ -7,8 +7,10 @@ Widget subclass: #AppView
 
 renderOn: html
 	html h2 trapShow: #('title').
-    html p with: [ html span trapShow: #('items' #size). html with: ' item(s).' ].
-	html p trapShow: #('items')
+    html div trap: #('items') toggle: [
+        html p with: [ html span trapShow: #(#size). html with: ' item(s).' ].
+		html p trapShow: #()
+    ] ifNotPresent: [ html with: 'Loading ...' ]
 ! !
 
 TrappedDispatcher subclass: #TrappedDumbDispatcher
@@ -68,6 +70,7 @@ TrappedPlainModel subclass: #App
 
 initialize
 	super initialize.
-	self payload: #{'items'->#('hello' 'world'). 'title' -> 'To-Do List'}
+	self payload: #{'title' -> 'To-Do List'}.
+    [ self payload at: 'items' put: #('hello' 'world'). self payload: self payload ] valueWithTimeout: 2000
 ! !
 

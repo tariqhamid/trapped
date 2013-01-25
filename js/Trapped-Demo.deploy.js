@@ -7,11 +7,15 @@ selector: "renderOn:",
 fn: function (html){
 var self=this;
 smalltalk.send(smalltalk.send(html,"_h2",[]),"_trapShow_",[["title"]]);
+smalltalk.send(smalltalk.send(html,"_div",[]),"_trap_toggle_ifNotPresent_",[["items"],(function(){
 smalltalk.send(smalltalk.send(html,"_p",[]),"_with_",[(function(){
-smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[["items", smalltalk.symbolFor("size")]]);
+smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[[smalltalk.symbolFor("size")]]);
 return smalltalk.send(html,"_with_",[" item(s)."]);
 })]);
-smalltalk.send(smalltalk.send(html,"_p",[]),"_trapShow_",[["items"]]);
+return smalltalk.send(smalltalk.send(html,"_p",[]),"_trapShow_",[[]]);
+}),(function(){
+return smalltalk.send(html,"_with_",["Loading ..."]);
+})]);
 return self}
 }),
 smalltalk.AppView);
@@ -110,7 +114,11 @@ selector: "initialize",
 fn: function (){
 var self=this;
 smalltalk.send(self,"_initialize",[],smalltalk.TrappedPlainModel);
-smalltalk.send(self,"_payload_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("items","__minus_gt",[["hello", "world"]]),smalltalk.send("title","__minus_gt",["To-Do List"])])]);
+smalltalk.send(self,"_payload_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("title","__minus_gt",["To-Do List"])])]);
+smalltalk.send((function(){
+smalltalk.send(smalltalk.send(self,"_payload",[]),"_at_put_",["items",["hello", "world"]]);
+return smalltalk.send(self,"_payload_",[smalltalk.send(self,"_payload",[])]);
+}),"_valueWithTimeout_",[(2000)]);
 return self}
 }),
 smalltalk.App);

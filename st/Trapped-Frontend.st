@@ -46,7 +46,8 @@ payload
 !
 
 payload: anObject
-	payload := anObject
+	payload := anObject.
+    self dispatcher changed: #()
 ! !
 
 !TrappedModelWrapper methodsFor: 'action'!
@@ -190,12 +191,32 @@ trap: path read: aBlock
     	actual := Trapped path.
         model := Trapped current byName: actual first.
         model watch: actual allButFirst do: [ :data |
-        	aBlock value: self value: data
+        	actual trapDescend: [ self with: [ :html | aBlock value: data value: html ] ]
     	]
     ]
 !
 
+trap: path toggle: aBlock
+    self trap: path toggle: aBlock ifNotPresent: [ self asJQuery empty; hide ]
+!
+
+trap: path toggle: aBlock ifNotPresent: anotherBlock
+    | shown |
+    shown := nil.
+    self trap: path read: [ :data : html |
+        shown = data notNil ifFalse: [
+            shown := data notNil.
+            shown ifTrue: [ self asJQuery empty; show ].
+            (shown ifTrue: [aBlock] ifFalse: [anotherBlock]) value: data value: html.
+        ]
+    ]
+!
+
 trapShow: path
-	self trap: path read: [ :brush :model | brush empty; with: model ]
+	self trapShow: path default: []
+!
+
+trapShow: path default: anObject
+	self trap: path read: [ :model :html | html root empty; with: (model ifNil: [anObject]) ]
 ! !
 

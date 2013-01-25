@@ -95,10 +95,11 @@ category: 'accessing',
 fn: function (anObject){
 var self=this;
 self["@payload"]=anObject;
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
 return self},
 args: ["anObject"],
-source: "payload: anObject\x0a\x09payload := anObject",
-messageSends: [],
+source: "payload: anObject\x0a\x09payload := anObject.\x0a    self dispatcher changed: #()",
+messageSends: ["changed:", "dispatcher"],
 referencedClasses: []
 }),
 smalltalk.TrappedModelWrapper);
@@ -497,14 +498,77 @@ actual;
 model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[smalltalk.send(actual,"_first",[])]);
 model;
 return smalltalk.send(model,"_watch_do_",[smalltalk.send(actual,"_allButFirst",[]),(function(data){
-return smalltalk.send(aBlock,"_value_value_",[self,data]);
+return smalltalk.send(actual,"_trapDescend_",[(function(){
+return smalltalk.send(self,"_with_",[(function(html){
+return smalltalk.send(aBlock,"_value_value_",[data,html]);
+})]);
+})]);
 })]);
 })]);
 return self},
 args: ["path", "aBlock"],
-source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := Trapped current byName: actual first.\x0a        model watch: actual allButFirst do: [ :data |\x0a        \x09aBlock value: self value: data\x0a    \x09]\x0a    ]",
-messageSends: ["trapDescend:", "path", "byName:", "first", "current", "watch:do:", "allButFirst", "value:value:"],
+source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := Trapped current byName: actual first.\x0a        model watch: actual allButFirst do: [ :data |\x0a        \x09actual trapDescend: [ self with: [ :html | aBlock value: data value: html ] ]\x0a    \x09]\x0a    ]",
+messageSends: ["trapDescend:", "path", "byName:", "first", "current", "watch:do:", "allButFirst", "with:", "value:value:"],
 referencedClasses: ["Trapped"]
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+"_trap_toggle_",
+smalltalk.method({
+selector: "trap:toggle:",
+category: '*Trapped-Frontend',
+fn: function (path,aBlock){
+var self=this;
+var $1,$2;
+smalltalk.send(self,"_trap_toggle_ifNotPresent_",[path,aBlock,(function(){
+$1=smalltalk.send(self,"_asJQuery",[]);
+smalltalk.send($1,"_empty",[]);
+$2=smalltalk.send($1,"_hide",[]);
+return $2;
+})]);
+return self},
+args: ["path", "aBlock"],
+source: "trap: path toggle: aBlock\x0a    self trap: path toggle: aBlock ifNotPresent: [ self asJQuery empty; hide ]",
+messageSends: ["trap:toggle:ifNotPresent:", "empty", "asJQuery", "hide"],
+referencedClasses: []
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+"_trap_toggle_ifNotPresent_",
+smalltalk.method({
+selector: "trap:toggle:ifNotPresent:",
+category: '*Trapped-Frontend',
+fn: function (path,aBlock,anotherBlock){
+var self=this;
+var $1,$2,$3,$4;
+var shown;
+shown=nil;
+smalltalk.send(self,"_trap_read_",[path,(function(data,html){
+$1=smalltalk.send(shown,"__eq",[smalltalk.send(data,"_notNil",[])]);
+if(! smalltalk.assert($1)){
+shown=smalltalk.send(data,"_notNil",[]);
+shown;
+if(smalltalk.assert(shown)){
+$2=smalltalk.send(self,"_asJQuery",[]);
+smalltalk.send($2,"_empty",[]);
+$3=smalltalk.send($2,"_show",[]);
+$3;
+};
+if(smalltalk.assert(shown)){
+$4=aBlock;
+} else {
+$4=anotherBlock;
+};
+return smalltalk.send($4,"_value_value_",[data,html]);
+};
+})]);
+return self},
+args: ["path", "aBlock", "anotherBlock"],
+source: "trap: path toggle: aBlock ifNotPresent: anotherBlock\x0a    | shown |\x0a    shown := nil.\x0a    self trap: path read: [ :data : html |\x0a        shown = data notNil ifFalse: [\x0a            shown := data notNil.\x0a            shown ifTrue: [ self asJQuery empty; show ].\x0a            (shown ifTrue: [aBlock] ifFalse: [anotherBlock]) value: data value: html.\x0a        ]\x0a    ]",
+messageSends: ["trap:read:", "ifFalse:", "notNil", "ifTrue:", "empty", "asJQuery", "show", "value:value:", "ifTrue:ifFalse:", "="],
+referencedClasses: []
 }),
 smalltalk.TagBrush);
 
@@ -515,16 +579,39 @@ selector: "trapShow:",
 category: '*Trapped-Frontend',
 fn: function (path){
 var self=this;
-var $1;
-smalltalk.send(self,"_trap_read_",[path,(function(brush,model){
-smalltalk.send(brush,"_empty",[]);
-$1=smalltalk.send(brush,"_with_",[model]);
-return $1;
+smalltalk.send(self,"_trapShow_default_",[path,(function(){
 })]);
 return self},
 args: ["path"],
-source: "trapShow: path\x0a\x09self trap: path read: [ :brush :model | brush empty; with: model ]",
-messageSends: ["trap:read:", "empty", "with:"],
+source: "trapShow: path\x0a\x09self trapShow: path default: []",
+messageSends: ["trapShow:default:"],
+referencedClasses: []
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+"_trapShow_default_",
+smalltalk.method({
+selector: "trapShow:default:",
+category: '*Trapped-Frontend',
+fn: function (path,anObject){
+var self=this;
+var $1,$3,$2;
+smalltalk.send(self,"_trap_read_",[path,(function(model,html){
+$1=smalltalk.send(html,"_root",[]);
+smalltalk.send($1,"_empty",[]);
+if(($receiver = model) == nil || $receiver == undefined){
+$3=anObject;
+} else {
+$3=model;
+};
+$2=smalltalk.send($1,"_with_",[$3]);
+return $2;
+})]);
+return self},
+args: ["path", "anObject"],
+source: "trapShow: path default: anObject\x0a\x09self trap: path read: [ :model :html | html root empty; with: (model ifNil: [anObject]) ]",
+messageSends: ["trap:read:", "empty", "root", "with:", "ifNil:"],
 referencedClasses: []
 }),
 smalltalk.TagBrush);
