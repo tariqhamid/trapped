@@ -60,12 +60,6 @@ initialize
     self dispatcher: TrappedDumbDispatcher new
 ! !
 
-!TrappedPlainModel class methodsFor: 'action'!
-
-start
-	self new start
-! !
-
 TrappedPlainModel subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!

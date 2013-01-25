@@ -103,8 +103,13 @@ smalltalk.method({
 selector: "start",
 fn: function (){
 var self=this;
-smalltalk.send(smalltalk.send(self,"_new",[]),"_start",[]);
-return self}
+var $2,$3,$1;
+$2=smalltalk.send(self,"_new",[]);
+smalltalk.send($2,"_start",[]);
+$3=smalltalk.send($2,"_yourself",[]);
+$1=$3;
+return $1;
+}
 }),
 smalltalk.TrappedModelWrapper.klass);
 

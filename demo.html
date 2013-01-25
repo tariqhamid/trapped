@@ -5,13 +5,14 @@
 </head>
 <body>
 <script type="text/javascript">
+    var AppVM;
     loadAmber({
         packages:['Trapped-Backend', 'Trapped-Frontend', 'Trapped-Demo'],
         packageHome:'./',
         ready:function () {
             $(function() {
                 smalltalk.Browser._openOn_(smalltalk.App);
-                smalltalk.App._start();
+                AppVM = smalltalk.App._start();
                 smalltalk.Trapped._start();
             });
         }

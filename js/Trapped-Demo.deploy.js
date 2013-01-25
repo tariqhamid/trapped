@@ -101,17 +101,6 @@ return self}
 smalltalk.TrappedPlainModel);
 
 
-smalltalk.addMethod(
-"_start",
-smalltalk.method({
-selector: "start",
-fn: function (){
-var self=this;
-smalltalk.send(smalltalk.send(self,"_new",[]),"_start",[]);
-return self}
-}),
-smalltalk.TrappedPlainModel.klass);
-
 
 smalltalk.addClass('App', smalltalk.TrappedPlainModel, [], 'Trapped-Demo');
 smalltalk.addMethod(

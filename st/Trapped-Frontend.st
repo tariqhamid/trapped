@@ -63,7 +63,7 @@ watch: path do: aBlock
 !TrappedModelWrapper class methodsFor: 'action'!
 
 start
-	self new start
+	^self new start; yourself
 ! !
 
 Object subclass: #TrappedSingleton
