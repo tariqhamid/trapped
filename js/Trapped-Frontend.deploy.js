@@ -436,6 +436,26 @@ return self}
 smalltalk.TagBrush);
 
 smalltalk.addMethod(
+"_trapIter_tag_do_",
+smalltalk.method({
+selector: "trapIter:tag:do:",
+fn: function (path,aSymbol,aBlock){
+var self=this;
+smalltalk.send(self,"_trap_read_",[path,(function(model,html){
+smalltalk.send(smalltalk.send(html,"_root",[]),"_empty",[]);
+if(($receiver = model) == nil || $receiver == undefined){
+return model;
+} else {
+return smalltalk.send(model,"_withIndexDo_",[(function(item,i){
+return smalltalk.send(smalltalk.send(html,"_perform_",[aSymbol]),"_trap_read_",[[i],aBlock]);
+})]);
+};
+})]);
+return self}
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
 "_trapShow_",
 smalltalk.method({
 selector: "trapShow:",

@@ -9,7 +9,12 @@ renderOn: html
 	html h2 trapShow: #('title').
     html div trap: #('items') toggle: [
         html p with: [ html span trapShow: #(#size). html with: ' item(s).' ].
-		html p trapShow: #()
+		html form with: [ html ul trapIter: #() tag: #li do: [ :each |
+            html input
+                type: 'checkbox';
+                at: 'checked' put: true.
+            html with: each
+        ]]
     ] ifNotPresent: [ html with: 'Loading ...' ]
 ! !
 

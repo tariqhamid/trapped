@@ -15,11 +15,11 @@ You _can_ try it, though it still misses a lot.
 
 What is working:
  - viewmodel -> view update propagation
- - showing simple data in view.
+ - showing simple data in view
+ - iterations in view.
 
 What is missing:
  - optimizations ;-)
- - iterations in view
  - view -> viewmodel change propagation
 
 How can I try it?
@@ -41,7 +41,7 @@ The `App` instance is put into global `AppVM` variable in `demo.html` initializa
 Trapped is pretty light: the view model wraps any object (via `payload:`,
 as seen in `App >> initialize`). The view is subclass of plain `Widget`, but inside it,
 uses of `trapShow:` (which itself uses `trap:read:`), `trap:toggle:` and `trapDescend:` allows you
-to bind data from view model.
+to bind data from view model. You can also iterate arrays in the model using `trapIter:tag:do:`.
 
 To see viewmodel->view update working, try
 

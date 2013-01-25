@@ -7,20 +7,29 @@ selector: "renderOn:",
 category: 'rendering',
 fn: function (html){
 var self=this;
+var $1,$2;
 smalltalk.send(smalltalk.send(html,"_h2",[]),"_trapShow_",[["title"]]);
 smalltalk.send(smalltalk.send(html,"_div",[]),"_trap_toggle_ifNotPresent_",[["items"],(function(){
 smalltalk.send(smalltalk.send(html,"_p",[]),"_with_",[(function(){
 smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[[smalltalk.symbolFor("size")]]);
 return smalltalk.send(html,"_with_",[" item(s)."]);
 })]);
-return smalltalk.send(smalltalk.send(html,"_p",[]),"_trapShow_",[[]]);
+return smalltalk.send(smalltalk.send(html,"_form",[]),"_with_",[(function(){
+return smalltalk.send(smalltalk.send(html,"_ul",[]),"_trapIter_tag_do_",[[],smalltalk.symbolFor("li"),(function(each){
+$1=smalltalk.send(html,"_input",[]);
+smalltalk.send($1,"_type_",["checkbox"]);
+$2=smalltalk.send($1,"_at_put_",["checked",true]);
+$2;
+return smalltalk.send(html,"_with_",[each]);
+})]);
+})]);
 }),(function(){
 return smalltalk.send(html,"_with_",["Loading ..."]);
 })]);
 return self},
 args: ["html"],
-source: "renderOn: html\x0a\x09html h2 trapShow: #('title').\x0a    html div trap: #('items') toggle: [\x0a        html p with: [ html span trapShow: #(#size). html with: ' item(s).' ].\x0a\x09\x09html p trapShow: #()\x0a    ] ifNotPresent: [ html with: 'Loading ...' ]",
-messageSends: ["trapShow:", "h2", "trap:toggle:ifNotPresent:", "with:", "span", "p", "div"],
+source: "renderOn: html\x0a\x09html h2 trapShow: #('title').\x0a    html div trap: #('items') toggle: [\x0a        html p with: [ html span trapShow: #(#size). html with: ' item(s).' ].\x0a\x09\x09html form with: [ html ul trapIter: #() tag: #li do: [ :each |\x0a            html input\x0a                type: 'checkbox';\x0a                at: 'checked' put: true.\x0a            html with: each\x0a        ]]\x0a    ] ifNotPresent: [ html with: 'Loading ...' ]",
+messageSends: ["trapShow:", "h2", "trap:toggle:ifNotPresent:", "with:", "span", "p", "trapIter:tag:do:", "type:", "input", "at:put:", "ul", "form", "div"],
 referencedClasses: []
 }),
 smalltalk.AppView);

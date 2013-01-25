@@ -214,6 +214,15 @@ trap: path toggle: aBlock ifNotPresent: anotherBlock
     ]
 !
 
+trapIter: path tag: aSymbol do: aBlock
+    self trap: path read: [ :model :html |
+        html root empty.
+        model ifNotNil: [ model withIndexDo: [ :item :i |
+            (html perform: aSymbol) trap: {i} read: aBlock
+        ]]
+    ]
+!
+
 trapShow: path
 	self trapShow: path default: []
 !
