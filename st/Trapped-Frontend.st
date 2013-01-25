@@ -198,7 +198,7 @@ trap: path read: aBlock
 !
 
 trap: path toggle: aBlock
-    self trap: path toggle: aBlock ifNotPresent: [ self asJQuery empty; hide ]
+    self trap: path toggle: aBlock ifNotPresent: [ self asJQuery hide ]
 !
 
 trap: path toggle: aBlock ifNotPresent: anotherBlock
@@ -207,7 +207,7 @@ trap: path toggle: aBlock ifNotPresent: anotherBlock
     self trap: path read: [ :data : html |
         shown = data notNil ifFalse: [
             shown := data notNil.
-            shown ifTrue: [ self asJQuery empty; show ].
+            self asJQuery empty; show.
             (shown ifTrue: [aBlock] ifFalse: [anotherBlock]) value: data value: html.
         ]
     ]
@@ -218,6 +218,6 @@ trapShow: path
 !
 
 trapShow: path default: anObject
-	self trap: path read: [ :model :html | html root empty; with: (model ifNil: [anObject]) ]
+	self trap: path read: [ :model | self empty; with: (model ifNil: [anObject]) ]
 ! !
 

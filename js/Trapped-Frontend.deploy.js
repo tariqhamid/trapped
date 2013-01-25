@@ -393,12 +393,8 @@ smalltalk.method({
 selector: "trap:toggle:",
 fn: function (path,aBlock){
 var self=this;
-var $1,$2;
 smalltalk.send(self,"_trap_toggle_ifNotPresent_",[path,aBlock,(function(){
-$1=smalltalk.send(self,"_asJQuery",[]);
-smalltalk.send($1,"_empty",[]);
-$2=smalltalk.send($1,"_hide",[]);
-return $2;
+return smalltalk.send(smalltalk.send(self,"_asJQuery",[]),"_hide",[]);
 })]);
 return self}
 }),
@@ -418,12 +414,10 @@ $1=smalltalk.send(shown,"__eq",[smalltalk.send(data,"_notNil",[])]);
 if(! smalltalk.assert($1)){
 shown=smalltalk.send(data,"_notNil",[]);
 shown;
-if(smalltalk.assert(shown)){
 $2=smalltalk.send(self,"_asJQuery",[]);
 smalltalk.send($2,"_empty",[]);
 $3=smalltalk.send($2,"_show",[]);
 $3;
-};
 if(smalltalk.assert(shown)){
 $4=aBlock;
 } else {
@@ -454,17 +448,16 @@ smalltalk.method({
 selector: "trapShow:default:",
 fn: function (path,anObject){
 var self=this;
-var $1,$3,$2;
-smalltalk.send(self,"_trap_read_",[path,(function(model,html){
-$1=smalltalk.send(html,"_root",[]);
-smalltalk.send($1,"_empty",[]);
+var $2,$1;
+smalltalk.send(self,"_trap_read_",[path,(function(model){
+smalltalk.send(self,"_empty",[]);
 if(($receiver = model) == nil || $receiver == undefined){
-$3=anObject;
+$2=anObject;
 } else {
-$3=model;
+$2=model;
 };
-$2=smalltalk.send($1,"_with_",[$3]);
-return $2;
+$1=smalltalk.send(self,"_with_",[$2]);
+return $1;
 })]);
 return self}
 }),

@@ -521,17 +521,13 @@ selector: "trap:toggle:",
 category: '*Trapped-Frontend',
 fn: function (path,aBlock){
 var self=this;
-var $1,$2;
 smalltalk.send(self,"_trap_toggle_ifNotPresent_",[path,aBlock,(function(){
-$1=smalltalk.send(self,"_asJQuery",[]);
-smalltalk.send($1,"_empty",[]);
-$2=smalltalk.send($1,"_hide",[]);
-return $2;
+return smalltalk.send(smalltalk.send(self,"_asJQuery",[]),"_hide",[]);
 })]);
 return self},
 args: ["path", "aBlock"],
-source: "trap: path toggle: aBlock\x0a    self trap: path toggle: aBlock ifNotPresent: [ self asJQuery empty; hide ]",
-messageSends: ["trap:toggle:ifNotPresent:", "empty", "asJQuery", "hide"],
+source: "trap: path toggle: aBlock\x0a    self trap: path toggle: aBlock ifNotPresent: [ self asJQuery hide ]",
+messageSends: ["trap:toggle:ifNotPresent:", "hide", "asJQuery"],
 referencedClasses: []
 }),
 smalltalk.TagBrush);
@@ -551,12 +547,10 @@ $1=smalltalk.send(shown,"__eq",[smalltalk.send(data,"_notNil",[])]);
 if(! smalltalk.assert($1)){
 shown=smalltalk.send(data,"_notNil",[]);
 shown;
-if(smalltalk.assert(shown)){
 $2=smalltalk.send(self,"_asJQuery",[]);
 smalltalk.send($2,"_empty",[]);
 $3=smalltalk.send($2,"_show",[]);
 $3;
-};
 if(smalltalk.assert(shown)){
 $4=aBlock;
 } else {
@@ -567,8 +561,8 @@ return smalltalk.send($4,"_value_value_",[data,html]);
 })]);
 return self},
 args: ["path", "aBlock", "anotherBlock"],
-source: "trap: path toggle: aBlock ifNotPresent: anotherBlock\x0a    | shown |\x0a    shown := nil.\x0a    self trap: path read: [ :data : html |\x0a        shown = data notNil ifFalse: [\x0a            shown := data notNil.\x0a            shown ifTrue: [ self asJQuery empty; show ].\x0a            (shown ifTrue: [aBlock] ifFalse: [anotherBlock]) value: data value: html.\x0a        ]\x0a    ]",
-messageSends: ["trap:read:", "ifFalse:", "notNil", "ifTrue:", "empty", "asJQuery", "show", "value:value:", "ifTrue:ifFalse:", "="],
+source: "trap: path toggle: aBlock ifNotPresent: anotherBlock\x0a    | shown |\x0a    shown := nil.\x0a    self trap: path read: [ :data : html |\x0a        shown = data notNil ifFalse: [\x0a            shown := data notNil.\x0a            self asJQuery empty; show.\x0a            (shown ifTrue: [aBlock] ifFalse: [anotherBlock]) value: data value: html.\x0a        ]\x0a    ]",
+messageSends: ["trap:read:", "ifFalse:", "notNil", "empty", "asJQuery", "show", "value:value:", "ifTrue:ifFalse:", "="],
 referencedClasses: []
 }),
 smalltalk.TagBrush);
@@ -597,22 +591,21 @@ selector: "trapShow:default:",
 category: '*Trapped-Frontend',
 fn: function (path,anObject){
 var self=this;
-var $1,$3,$2;
-smalltalk.send(self,"_trap_read_",[path,(function(model,html){
-$1=smalltalk.send(html,"_root",[]);
-smalltalk.send($1,"_empty",[]);
+var $2,$1;
+smalltalk.send(self,"_trap_read_",[path,(function(model){
+smalltalk.send(self,"_empty",[]);
 if(($receiver = model) == nil || $receiver == undefined){
-$3=anObject;
+$2=anObject;
 } else {
-$3=model;
+$2=model;
 };
-$2=smalltalk.send($1,"_with_",[$3]);
-return $2;
+$1=smalltalk.send(self,"_with_",[$2]);
+return $1;
 })]);
 return self},
 args: ["path", "anObject"],
-source: "trapShow: path default: anObject\x0a\x09self trap: path read: [ :model :html | html root empty; with: (model ifNil: [anObject]) ]",
-messageSends: ["trap:read:", "empty", "root", "with:", "ifNil:"],
+source: "trapShow: path default: anObject\x0a\x09self trap: path read: [ :model | self empty; with: (model ifNil: [anObject]) ]",
+messageSends: ["trap:read:", "empty", "with:", "ifNil:"],
 referencedClasses: []
 }),
 smalltalk.TagBrush);
