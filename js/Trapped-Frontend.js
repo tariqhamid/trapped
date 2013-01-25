@@ -491,6 +491,7 @@ selector: "trap:read:",
 category: '*Trapped-Frontend',
 fn: function (path,aBlock){
 var self=this;
+var $1;
 smalltalk.send(path,"_trapDescend_",[(function(){
 var actual;
 var model;
@@ -499,6 +500,10 @@ actual;
 model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[smalltalk.send(actual,"_first",[])]);
 model;
 return smalltalk.send(model,"_watch_do_",[smalltalk.send(actual,"_allButFirst",[]),(function(data){
+$1=smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(self,"_asJQuery",[]),"_closest_",["html"]),"_toArray",[]),"_isEmpty",[]);
+if(smalltalk.assert($1)){
+smalltalk.send((smalltalk.TrappedUnwatch || TrappedUnwatch),"_signal",[]);
+};
 return smalltalk.send(actual,"_trapDescend_",[(function(){
 return smalltalk.send(self,"_with_",[(function(html){
 return smalltalk.send(aBlock,"_value_value_",[data,html]);
@@ -508,9 +513,9 @@ return smalltalk.send(aBlock,"_value_value_",[data,html]);
 })]);
 return self},
 args: ["path", "aBlock"],
-source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := Trapped current byName: actual first.\x0a        model watch: actual allButFirst do: [ :data |\x0a        \x09actual trapDescend: [ self with: [ :html | aBlock value: data value: html ] ]\x0a    \x09]\x0a    ]",
-messageSends: ["trapDescend:", "path", "byName:", "first", "current", "watch:do:", "allButFirst", "with:", "value:value:"],
-referencedClasses: ["Trapped"]
+source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := Trapped current byName: actual first.\x0a        model watch: actual allButFirst do: [ :data |\x0a            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ TrappedUnwatch signal ].\x0a        \x09actual trapDescend: [ self with: [ :html | aBlock value: data value: html ] ]\x0a    \x09]\x0a    ]",
+messageSends: ["trapDescend:", "path", "byName:", "first", "current", "watch:do:", "allButFirst", "ifTrue:", "signal", "isEmpty", "toArray", "closest:", "asJQuery", "with:", "value:value:"],
+referencedClasses: ["Trapped", "TrappedUnwatch"]
 }),
 smalltalk.TagBrush);
 

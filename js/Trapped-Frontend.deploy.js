@@ -368,6 +368,7 @@ smalltalk.method({
 selector: "trap:read:",
 fn: function (path,aBlock){
 var self=this;
+var $1;
 smalltalk.send(path,"_trapDescend_",[(function(){
 var actual;
 var model;
@@ -376,6 +377,10 @@ actual;
 model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[smalltalk.send(actual,"_first",[])]);
 model;
 return smalltalk.send(model,"_watch_do_",[smalltalk.send(actual,"_allButFirst",[]),(function(data){
+$1=smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(self,"_asJQuery",[]),"_closest_",["html"]),"_toArray",[]),"_isEmpty",[]);
+if(smalltalk.assert($1)){
+smalltalk.send((smalltalk.TrappedUnwatch || TrappedUnwatch),"_signal",[]);
+};
 return smalltalk.send(actual,"_trapDescend_",[(function(){
 return smalltalk.send(self,"_with_",[(function(html){
 return smalltalk.send(aBlock,"_value_value_",[data,html]);

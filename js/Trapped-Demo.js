@@ -46,6 +46,24 @@ referencedClasses: []
 smalltalk.TrappedDumbDispatcher);
 
 smalltalk.addMethod(
+"_clean",
+smalltalk.method({
+selector: "clean",
+category: 'bookkeeping',
+fn: function (){
+var self=this;
+self["@queue"]=smalltalk.send(self["@queue"],"_select_",[(function(each){
+return smalltalk.send(smalltalk.send(each,"_third",[]),"_notNil",[]);
+})]);
+return self},
+args: [],
+source: "clean\x0a\x09queue := queue select: [ :each | each third notNil ]",
+messageSends: ["select:", "notNil", "third"],
+referencedClasses: []
+}),
+smalltalk.TrappedDumbDispatcher);
+
+smalltalk.addMethod(
 "_do_",
 smalltalk.method({
 selector: "do:",

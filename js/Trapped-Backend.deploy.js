@@ -180,20 +180,34 @@ selector: "run",
 fn: function (){
 var self=this;
 var $1;
+var needsClean;
+needsClean=false;
 smalltalk.send(self,"_do_",[(function(each){
 $1=smalltalk.send(each,"_first",[]);
 if(smalltalk.assert($1)){
+return smalltalk.send((function(){
 return smalltalk.send((function(){
 return smalltalk.send(smalltalk.send(each,"_third",[]),"_value",[]);
 }),"_ensure_",[(function(){
 return smalltalk.send(each,"_at_put_",[(1),false]);
 })]);
+}),"_on_do_",[(smalltalk.TrappedUnwatch || TrappedUnwatch),(function(){
+smalltalk.send(each,"_at_put_",[(3),nil]);
+needsClean=true;
+return needsClean;
+})]);
 };
 })]);
+if(smalltalk.assert(needsClean)){
+smalltalk.send(self,"_clean",[]);
+};
 return self}
 }),
 smalltalk.TrappedDispatcher);
 
+
+
+smalltalk.addClass('TrappedUnwatch', smalltalk.Error, [], 'Trapped-Backend');
 
 
 smalltalk.addMethod(

@@ -85,6 +85,7 @@ These subscription must be three-element arrays
 My subclasses need to provide implementation for:
 	add:
     do:
+    clean
     (optionally) run!
 
 !TrappedDispatcher methodsFor: 'action'!
@@ -109,10 +110,22 @@ dirty: aBoolean
 !
 
 run
+	| needsClean |
+    needsClean := false.
 	self do: [ :each |
-		each first ifTrue: [[ each third value ] ensure: [ each at: 1 put: false ]]
-	]
+		each first ifTrue: [
+            [[ each third value ] ensure: [ each at: 1 put: false ]]
+            on: TrappedUnwatch do: [ each at: 3 put: nil. needsClean := true ]
+        ]
+	].
+    needsClean ifTrue: [ self clean ]
 ! !
+
+Error subclass: #TrappedUnwatch
+	instanceVariableNames: ''
+	package: 'Trapped-Backend'!
+!TrappedUnwatch commentStamp!
+SIgnal me from the watch: block to unwatch it.!
 
 !Object methodsFor: '*Trapped-Backend'!
 

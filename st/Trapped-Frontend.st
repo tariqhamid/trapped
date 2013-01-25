@@ -192,6 +192,7 @@ trap: path read: aBlock
     	actual := Trapped path.
         model := Trapped current byName: actual first.
         model watch: actual allButFirst do: [ :data |
+            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ TrappedUnwatch signal ].
         	actual trapDescend: [ self with: [ :html | aBlock value: data value: html ] ]
     	]
     ]

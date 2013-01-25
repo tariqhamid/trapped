@@ -36,6 +36,19 @@ return self}
 smalltalk.TrappedDumbDispatcher);
 
 smalltalk.addMethod(
+"_clean",
+smalltalk.method({
+selector: "clean",
+fn: function (){
+var self=this;
+self["@queue"]=smalltalk.send(self["@queue"],"_select_",[(function(each){
+return smalltalk.send(smalltalk.send(each,"_third",[]),"_notNil",[]);
+})]);
+return self}
+}),
+smalltalk.TrappedDumbDispatcher);
+
+smalltalk.addMethod(
 "_do_",
 smalltalk.method({
 selector: "do:",

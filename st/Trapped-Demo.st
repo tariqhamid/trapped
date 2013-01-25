@@ -24,6 +24,12 @@ add: aTriplet
     self dirty: aTriplet first
 ! !
 
+!TrappedDumbDispatcher methodsFor: 'bookkeeping'!
+
+clean
+	queue := queue select: [ :each | each third notNil ]
+! !
+
 !TrappedDumbDispatcher methodsFor: 'enumeration'!
 
 do: aBlock

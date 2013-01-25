@@ -181,7 +181,7 @@ smalltalk.Isolator.klass);
 
 
 smalltalk.addClass('TrappedDispatcher', smalltalk.Object, [], 'Trapped-Backend');
-smalltalk.TrappedDispatcher.comment="I am base class for change event dispatchers.\x0aI manage changed path - action block subscriptions.\x0aThese subscription must be three-element arrays\x0a\x09{ dirty. path. block }\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09add:\x0a    do:\x0a    (optionally) run\x0a"
+smalltalk.TrappedDispatcher.comment="I am base class for change event dispatchers.\x0aI manage changed path - action block subscriptions.\x0aThese subscription must be three-element arrays\x0a\x09{ dirty. path. block }\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a"
 smalltalk.addMethod(
 "_changed_",
 smalltalk.method({
@@ -243,24 +243,39 @@ category: 'action',
 fn: function (){
 var self=this;
 var $1;
+var needsClean;
+needsClean=false;
 smalltalk.send(self,"_do_",[(function(each){
 $1=smalltalk.send(each,"_first",[]);
 if(smalltalk.assert($1)){
+return smalltalk.send((function(){
 return smalltalk.send((function(){
 return smalltalk.send(smalltalk.send(each,"_third",[]),"_value",[]);
 }),"_ensure_",[(function(){
 return smalltalk.send(each,"_at_put_",[(1),false]);
 })]);
+}),"_on_do_",[(smalltalk.TrappedUnwatch || TrappedUnwatch),(function(){
+smalltalk.send(each,"_at_put_",[(3),nil]);
+needsClean=true;
+return needsClean;
+})]);
 };
 })]);
+if(smalltalk.assert(needsClean)){
+smalltalk.send(self,"_clean",[]);
+};
 return self},
 args: [],
-source: "run\x0a\x09self do: [ :each |\x0a\x09\x09each first ifTrue: [[ each third value ] ensure: [ each at: 1 put: false ]]\x0a\x09]",
-messageSends: ["do:", "ifTrue:", "ensure:", "at:put:", "value", "third", "first"],
-referencedClasses: []
+source: "run\x0a\x09| needsClean |\x0a    needsClean := false.\x0a\x09self do: [ :each |\x0a\x09\x09each first ifTrue: [\x0a            [[ each third value ] ensure: [ each at: 1 put: false ]]\x0a            on: TrappedUnwatch do: [ each at: 3 put: nil. needsClean := true ]\x0a        ]\x0a\x09].\x0a    needsClean ifTrue: [ self clean ]",
+messageSends: ["do:", "ifTrue:", "on:do:", "at:put:", "ensure:", "value", "third", "first", "clean"],
+referencedClasses: ["TrappedUnwatch"]
 }),
 smalltalk.TrappedDispatcher);
 
+
+
+smalltalk.addClass('TrappedUnwatch', smalltalk.Error, [], 'Trapped-Backend');
+smalltalk.TrappedUnwatch.comment="SIgnal me from the watch: block to unwatch it."
 
 
 smalltalk.addMethod(
