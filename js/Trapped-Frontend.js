@@ -416,11 +416,12 @@ selector: "initialize",
 category: 'initialization',
 fn: function (){
 var self=this;
+smalltalk.send(self,"_initialize",[],smalltalk.TrappedSingleton);
 self["@elements"]=[];
 return self},
 args: [],
-source: "initialize\x0a\x09elements := #().",
-messageSends: [],
+source: "initialize\x0a    super initialize.\x0a\x09elements := #().",
+messageSends: ["initialize"],
 referencedClasses: []
 }),
 smalltalk.TrappedPathStack);

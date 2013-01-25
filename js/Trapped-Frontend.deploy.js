@@ -313,6 +313,7 @@ smalltalk.method({
 selector: "initialize",
 fn: function (){
 var self=this;
+smalltalk.send(self,"_initialize",[],smalltalk.TrappedSingleton);
 self["@elements"]=[];
 return self}
 }),

@@ -169,6 +169,7 @@ with: anArray do: aBlock
 !TrappedPathStack methodsFor: 'initialization'!
 
 initialize
+    super initialize.
 	elements := #().
 ! !
 
