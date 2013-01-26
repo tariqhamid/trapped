@@ -109,6 +109,11 @@ dirty: aBoolean
 	aBoolean ifTrue: [[ self run ] fork]
 !
 
+on: path hook: aBlock
+	self add: { true. path. aBlock }.
+   	self dirty: true
+!
+
 run
 	| needsClean |
     needsClean := false.

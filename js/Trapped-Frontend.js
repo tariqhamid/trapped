@@ -127,14 +127,13 @@ selector: "watch:do:",
 category: 'action',
 fn: function (path,aBlock){
 var self=this;
-smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_add_",[[true,path,(function(){
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_on_hook_",[path,(function(){
 return smalltalk.send(self,"_read_do_",[path,aBlock]);
-})]]);
-smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_dirty_",[true]);
+})]);
 return self},
 args: ["path", "aBlock"],
-source: "watch: path do: aBlock\x0a\x09self dispatcher add: { true. path. [ self read: path do: aBlock ] }.\x0a    self dispatcher dirty: true",
-messageSends: ["add:", "read:do:", "dispatcher", "dirty:"],
+source: "watch: path do: aBlock\x0a\x09self dispatcher on: path hook: [ self read: path do: aBlock ]\x0a",
+messageSends: ["on:hook:", "read:do:", "dispatcher"],
 referencedClasses: []
 }),
 smalltalk.TrappedModelWrapper);

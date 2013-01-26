@@ -174,6 +174,18 @@ return self}
 smalltalk.TrappedDispatcher);
 
 smalltalk.addMethod(
+"_on_hook_",
+smalltalk.method({
+selector: "on:hook:",
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send(self,"_add_",[[true,path,aBlock]]);
+smalltalk.send(self,"_dirty_",[true]);
+return self}
+}),
+smalltalk.TrappedDispatcher);
+
+smalltalk.addMethod(
 "_run",
 smalltalk.method({
 selector: "run",

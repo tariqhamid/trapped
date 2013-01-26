@@ -57,8 +57,7 @@ start
 !
 
 watch: path do: aBlock
-	self dispatcher add: { true. path. [ self read: path do: aBlock ] }.
-    self dispatcher dirty: true
+	self dispatcher on: path hook: [ self read: path do: aBlock ]
 ! !
 
 !TrappedModelWrapper class methodsFor: 'action'!

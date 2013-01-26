@@ -89,10 +89,9 @@ smalltalk.method({
 selector: "watch:do:",
 fn: function (path,aBlock){
 var self=this;
-smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_add_",[[true,path,(function(){
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_on_hook_",[path,(function(){
 return smalltalk.send(self,"_read_do_",[path,aBlock]);
-})]]);
-smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_dirty_",[true]);
+})]);
 return self}
 }),
 smalltalk.TrappedModelWrapper);

@@ -236,6 +236,23 @@ referencedClasses: []
 smalltalk.TrappedDispatcher);
 
 smalltalk.addMethod(
+"_on_hook_",
+smalltalk.method({
+selector: "on:hook:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send(self,"_add_",[[true,path,aBlock]]);
+smalltalk.send(self,"_dirty_",[true]);
+return self},
+args: ["path", "aBlock"],
+source: "on: path hook: aBlock\x0a\x09self add: { true. path. aBlock }.\x0a   \x09self dirty: true",
+messageSends: ["add:", "dirty:"],
+referencedClasses: []
+}),
+smalltalk.TrappedDispatcher);
+
+smalltalk.addMethod(
 "_run",
 smalltalk.method({
 selector: "run",
