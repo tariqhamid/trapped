@@ -43,9 +43,9 @@ My subclasses need to provide implementation for:
     modify:do:
 	(optionally) name
 
-and must initialize:
-	payload
-	dispatcher (with a subclass of TrappedDispatcher)!
+and must issue these call when initializing:
+	model:
+	dispatcher: (with a subclass of TrappedDispatcher)!
 
 !TrappedModelWrapper methodsFor: 'accessing'!
 
@@ -57,17 +57,13 @@ dispatcher: aDispatcher
 	dispatcher := aDispatcher
 !
 
-name
-	^ self class name
-!
-
-payload
-	^payload
-!
-
-payload: anObject
+model: anObject
 	payload := anObject.
     self dispatcher changed: #()
+!
+
+name
+	^ self class name
 ! !
 
 !TrappedModelWrapper methodsFor: 'action'!
@@ -84,6 +80,55 @@ watch: path do: aBlock
 
 start
 	^self new start; yourself
+! !
+
+TrappedModelWrapper subclass: #TrappedMWDirect
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedMWDirect commentStamp!
+I am TrappedModelWrapper that directly manipulate
+the object passed to model:!
+
+!TrappedMWDirect methodsFor: 'action'!
+
+modify: path do: aBlock
+    | newValue eavModel |
+    eavModel := path asEavModel.
+    newValue := aBlock value: (eavModel on: payload).
+    [ eavModel on: payload put: newValue ] ensure: [ self dispatcher changed: path ]
+!
+
+read: path do: aBlock
+    | eavModel |
+    eavModel := path asEavModel.
+    aBlock value: (eavModel on: payload)
+! !
+
+TrappedModelWrapper subclass: #TrappedMWIsolated
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedMWIsolated commentStamp!
+I am TrappedModelWrapper than wrap access
+to an object passed to model: via Isolator.!
+
+!TrappedMWIsolated methodsFor: 'accessing'!
+
+model: anObject
+	super model: (Isolator on: anObject)
+! !
+
+!TrappedMWIsolated methodsFor: 'action'!
+
+modify: path do: aBlock
+    | eavModel |
+    eavModel := ({#root},path) asEavModel.
+    [ payload model: eavModel modify: aBlock ] ensure: [ self dispatcher changed: path ]
+!
+
+read: path do: aBlock
+    | eavModel |
+    eavModel := ({#root},path) asEavModel.
+    payload model: eavModel read: aBlock
 ! !
 
 Object subclass: #TrappedSingleton

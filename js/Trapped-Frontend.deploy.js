@@ -56,6 +56,18 @@ return self}
 smalltalk.TrappedModelWrapper);
 
 smalltalk.addMethod(
+"_model_",
+smalltalk.method({
+selector: "model:",
+fn: function (anObject){
+var self=this;
+self["@payload"]=anObject;
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
+return self}
+}),
+smalltalk.TrappedModelWrapper);
+
+smalltalk.addMethod(
 "_name",
 smalltalk.method({
 selector: "name",
@@ -65,29 +77,6 @@ var $1;
 $1=smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]);
 return $1;
 }
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_payload",
-smalltalk.method({
-selector: "payload",
-fn: function (){
-var self=this;
-return self["@payload"];
-}
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_payload_",
-smalltalk.method({
-selector: "payload:",
-fn: function (anObject){
-var self=this;
-self["@payload"]=anObject;
-smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
-return self}
 }),
 smalltalk.TrappedModelWrapper);
 
@@ -131,6 +120,85 @@ return $1;
 }
 }),
 smalltalk.TrappedModelWrapper.klass);
+
+
+smalltalk.addClass('TrappedMWDirect', smalltalk.TrappedModelWrapper, [], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_modify_do_",
+smalltalk.method({
+selector: "modify:do:",
+fn: function (path,aBlock){
+var self=this;
+var newValue;
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[self["@payload"]])]);
+smalltalk.send((function(){
+return smalltalk.send(eavModel,"_on_put_",[self["@payload"],newValue]);
+}),"_ensure_",[(function(){
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
+})]);
+return self}
+}),
+smalltalk.TrappedMWDirect);
+
+smalltalk.addMethod(
+"_read_do_",
+smalltalk.method({
+selector: "read:do:",
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[self["@payload"]])]);
+return self}
+}),
+smalltalk.TrappedMWDirect);
+
+
+
+smalltalk.addClass('TrappedMWIsolated', smalltalk.TrappedModelWrapper, [], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_model_",
+smalltalk.method({
+selector: "model:",
+fn: function (anObject){
+var self=this;
+smalltalk.send(self,"_model_",[smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[anObject])],smalltalk.TrappedModelWrapper);
+return self}
+}),
+smalltalk.TrappedMWIsolated);
+
+smalltalk.addMethod(
+"_modify_do_",
+smalltalk.method({
+selector: "modify:do:",
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(smalltalk.send([smalltalk.symbolFor("root")],"__comma",[path]),"_asEavModel",[]);
+smalltalk.send((function(){
+return smalltalk.send(self["@payload"],"_model_modify_",[eavModel,aBlock]);
+}),"_ensure_",[(function(){
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
+})]);
+return self}
+}),
+smalltalk.TrappedMWIsolated);
+
+smalltalk.addMethod(
+"_read_do_",
+smalltalk.method({
+selector: "read:do:",
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(smalltalk.send([smalltalk.symbolFor("root")],"__comma",[path]),"_asEavModel",[]);
+smalltalk.send(self["@payload"],"_model_read_",[eavModel,aBlock]);
+return self}
+}),
+smalltalk.TrappedMWIsolated);
+
 
 
 smalltalk.addClass('TrappedSingleton', smalltalk.Object, [], 'Trapped-Frontend');

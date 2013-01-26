@@ -1,4 +1,19 @@
 Smalltalk current createPackage: 'Trapped-Demo' properties: #{}!
+TrappedMWIsolated subclass: #App
+	instanceVariableNames: ''
+	package: 'Trapped-Demo'!
+
+!App methodsFor: 'initialization'!
+
+initialize
+	| obj |
+	super initialize.
+    self dispatcher: TrappedDumbDispatcher new.
+    obj := #{'title' -> 'To-Do List'}.
+    self model: obj.
+    [ obj at: 'items' put: #('hello' 'world'). self dispatcher changed: #() ] valueWithTimeout: 2000
+! !
+
 Widget subclass: #AppView
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
@@ -44,43 +59,5 @@ do: aBlock
 
 initialize
 	queue := OrderedCollection new
-! !
-
-TrappedModelWrapper subclass: #TrappedPlainModel
-	instanceVariableNames: ''
-	package: 'Trapped-Demo'!
-
-!TrappedPlainModel methodsFor: 'action'!
-
-modify: path do: aBlock
-    | newValue eavModel |
-    eavModel := path asEavModel.
-    newValue := aBlock value: (eavModel on: self payload).
-    [ eavModel on: self payload put: newValue ] ensure: [ self dispatcher changed: path ]
-!
-
-read: path do: aBlock
-    | eavModel |
-    eavModel := path asEavModel.
-    aBlock value: (eavModel on: self payload)
-! !
-
-!TrappedPlainModel methodsFor: 'initialization'!
-
-initialize
-	super initialize.
-    self dispatcher: TrappedDumbDispatcher new
-! !
-
-TrappedPlainModel subclass: #App
-	instanceVariableNames: ''
-	package: 'Trapped-Demo'!
-
-!App methodsFor: 'initialization'!
-
-initialize
-	super initialize.
-	self payload: #{'title' -> 'To-Do List'}.
-    [ self payload at: 'items' put: #('hello' 'world'). self payload: self payload ] valueWithTimeout: 2000
 ! !
 

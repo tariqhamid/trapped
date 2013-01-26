@@ -45,7 +45,7 @@ smalltalk.TrappedDumbView);
 
 
 smalltalk.addClass('TrappedModelWrapper', smalltalk.Object, ['dispatcher', 'payload'], 'Trapped-Frontend');
-smalltalk.TrappedModelWrapper.comment="I am base class for model wrappers.\x0aI wrap a model which can be any object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a    modify:do:\x0a\x09(optionally) name\x0a\x0aand must initialize:\x0a\x09payload\x0a\x09dispatcher (with a subclass of TrappedDispatcher)\x0a"
+smalltalk.TrappedModelWrapper.comment="I am base class for model wrappers.\x0aI wrap a model which can be any object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a    modify:do:\x0a\x09(optionally) name\x0a\x0aand must issue these call when initializing:\x0a\x09model:\x0a\x09dispatcher: (with a subclass of TrappedDispatcher)\x0a"
 smalltalk.addMethod(
 "_dispatcher",
 smalltalk.method({
@@ -79,6 +79,23 @@ referencedClasses: []
 smalltalk.TrappedModelWrapper);
 
 smalltalk.addMethod(
+"_model_",
+smalltalk.method({
+selector: "model:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+self["@payload"]=anObject;
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
+return self},
+args: ["anObject"],
+source: "model: anObject\x0a\x09payload := anObject.\x0a    self dispatcher changed: #()",
+messageSends: ["changed:", "dispatcher"],
+referencedClasses: []
+}),
+smalltalk.TrappedModelWrapper);
+
+smalltalk.addMethod(
 "_name",
 smalltalk.method({
 selector: "name",
@@ -92,39 +109,6 @@ return $1;
 args: [],
 source: "name\x0a\x09^ self class name",
 messageSends: ["name", "class"],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_payload",
-smalltalk.method({
-selector: "payload",
-category: 'accessing',
-fn: function (){
-var self=this;
-return self["@payload"];
-},
-args: [],
-source: "payload\x0a\x09^payload",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_payload_",
-smalltalk.method({
-selector: "payload:",
-category: 'accessing',
-fn: function (anObject){
-var self=this;
-self["@payload"]=anObject;
-smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
-return self},
-args: ["anObject"],
-source: "payload: anObject\x0a\x09payload := anObject.\x0a    self dispatcher changed: #()",
-messageSends: ["changed:", "dispatcher"],
 referencedClasses: []
 }),
 smalltalk.TrappedModelWrapper);
@@ -184,6 +168,112 @@ messageSends: ["start", "new", "yourself"],
 referencedClasses: []
 }),
 smalltalk.TrappedModelWrapper.klass);
+
+
+smalltalk.addClass('TrappedMWDirect', smalltalk.TrappedModelWrapper, [], 'Trapped-Frontend');
+smalltalk.TrappedMWDirect.comment="I am TrappedModelWrapper that directly manipulate\x0athe object passed to model:"
+smalltalk.addMethod(
+"_modify_do_",
+smalltalk.method({
+selector: "modify:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+var newValue;
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[self["@payload"]])]);
+smalltalk.send((function(){
+return smalltalk.send(eavModel,"_on_put_",[self["@payload"],newValue]);
+}),"_ensure_",[(function(){
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
+})]);
+return self},
+args: ["path", "aBlock"],
+source: "modify: path do: aBlock\x0a    | newValue eavModel |\x0a    eavModel := path asEavModel.\x0a    newValue := aBlock value: (eavModel on: payload).\x0a    [ eavModel on: payload put: newValue ] ensure: [ self dispatcher changed: path ]\x0a",
+messageSends: ["asEavModel", "value:", "on:", "ensure:", "changed:", "dispatcher", "on:put:"],
+referencedClasses: []
+}),
+smalltalk.TrappedMWDirect);
+
+smalltalk.addMethod(
+"_read_do_",
+smalltalk.method({
+selector: "read:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[self["@payload"]])]);
+return self},
+args: ["path", "aBlock"],
+source: "read: path do: aBlock\x0a    | eavModel |\x0a    eavModel := path asEavModel.\x0a    aBlock value: (eavModel on: payload)\x0a",
+messageSends: ["asEavModel", "value:", "on:"],
+referencedClasses: []
+}),
+smalltalk.TrappedMWDirect);
+
+
+
+smalltalk.addClass('TrappedMWIsolated', smalltalk.TrappedModelWrapper, [], 'Trapped-Frontend');
+smalltalk.TrappedMWIsolated.comment="I am TrappedModelWrapper than wrap access\x0ato an object passed to model: via Isolator."
+smalltalk.addMethod(
+"_model_",
+smalltalk.method({
+selector: "model:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+smalltalk.send(self,"_model_",[smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[anObject])],smalltalk.TrappedModelWrapper);
+return self},
+args: ["anObject"],
+source: "model: anObject\x0a\x09super model: (Isolator on: anObject)",
+messageSends: ["model:", "on:"],
+referencedClasses: ["Isolator"]
+}),
+smalltalk.TrappedMWIsolated);
+
+smalltalk.addMethod(
+"_modify_do_",
+smalltalk.method({
+selector: "modify:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(smalltalk.send([smalltalk.symbolFor("root")],"__comma",[path]),"_asEavModel",[]);
+smalltalk.send((function(){
+return smalltalk.send(self["@payload"],"_model_modify_",[eavModel,aBlock]);
+}),"_ensure_",[(function(){
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
+})]);
+return self},
+args: ["path", "aBlock"],
+source: "modify: path do: aBlock\x0a    | eavModel |\x0a    eavModel := ({#root},path) asEavModel.\x0a    [ payload model: eavModel modify: aBlock ] ensure: [ self dispatcher changed: path ]\x0a",
+messageSends: ["asEavModel", ",", "ensure:", "changed:", "dispatcher", "model:modify:"],
+referencedClasses: []
+}),
+smalltalk.TrappedMWIsolated);
+
+smalltalk.addMethod(
+"_read_do_",
+smalltalk.method({
+selector: "read:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(smalltalk.send([smalltalk.symbolFor("root")],"__comma",[path]),"_asEavModel",[]);
+smalltalk.send(self["@payload"],"_model_read_",[eavModel,aBlock]);
+return self},
+args: ["path", "aBlock"],
+source: "read: path do: aBlock\x0a    | eavModel |\x0a    eavModel := ({#root},path) asEavModel.\x0a    payload model: eavModel read: aBlock\x0a",
+messageSends: ["asEavModel", ",", "model:read:"],
+referencedClasses: []
+}),
+smalltalk.TrappedMWIsolated);
+
 
 
 smalltalk.addClass('TrappedSingleton', smalltalk.Object, [], 'Trapped-Frontend');

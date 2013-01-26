@@ -1,4 +1,31 @@
 smalltalk.addPackage('Trapped-Demo', {});
+smalltalk.addClass('App', smalltalk.TrappedMWIsolated, [], 'Trapped-Demo');
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+category: 'initialization',
+fn: function (){
+var self=this;
+var obj;
+smalltalk.send(self,"_initialize",[],smalltalk.TrappedMWIsolated);
+smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.TrappedDumbDispatcher || TrappedDumbDispatcher),"_new",[])]);
+obj=smalltalk.HashedCollection._fromPairs_([smalltalk.send("title","__minus_gt",["To-Do List"])]);
+smalltalk.send(self,"_model_",[obj]);
+smalltalk.send((function(){
+smalltalk.send(obj,"_at_put_",["items",["hello", "world"]]);
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
+}),"_valueWithTimeout_",[(2000)]);
+return self},
+args: [],
+source: "initialize\x0a\x09| obj |\x0a\x09super initialize.\x0a    self dispatcher: TrappedDumbDispatcher new.\x0a    obj := #{'title' -> 'To-Do List'}.\x0a    self model: obj.\x0a    [ obj at: 'items' put: #('hello' 'world'). self dispatcher changed: #() ] valueWithTimeout: 2000\x0a",
+messageSends: ["initialize", "dispatcher:", "new", "->", "model:", "valueWithTimeout:", "at:put:", "changed:", "dispatcher"],
+referencedClasses: ["TrappedDumbDispatcher"]
+}),
+smalltalk.App);
+
+
+
 smalltalk.addClass('AppView', smalltalk.Widget, [], 'Trapped-Demo');
 smalltalk.addMethod(
 "_renderOn_",
@@ -102,92 +129,6 @@ messageSends: ["new"],
 referencedClasses: ["OrderedCollection"]
 }),
 smalltalk.TrappedDumbDispatcher);
-
-
-
-smalltalk.addClass('TrappedPlainModel', smalltalk.TrappedModelWrapper, [], 'Trapped-Demo');
-smalltalk.addMethod(
-"_initialize",
-smalltalk.method({
-selector: "initialize",
-category: 'initialization',
-fn: function (){
-var self=this;
-smalltalk.send(self,"_initialize",[],smalltalk.TrappedModelWrapper);
-smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.TrappedDumbDispatcher || TrappedDumbDispatcher),"_new",[])]);
-return self},
-args: [],
-source: "initialize\x0a\x09super initialize.\x0a    self dispatcher: TrappedDumbDispatcher new",
-messageSends: ["initialize", "dispatcher:", "new"],
-referencedClasses: ["TrappedDumbDispatcher"]
-}),
-smalltalk.TrappedPlainModel);
-
-smalltalk.addMethod(
-"_modify_do_",
-smalltalk.method({
-selector: "modify:do:",
-category: 'action',
-fn: function (path,aBlock){
-var self=this;
-var newValue;
-var eavModel;
-eavModel=smalltalk.send(path,"_asEavModel",[]);
-newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[smalltalk.send(self,"_payload",[])])]);
-smalltalk.send((function(){
-return smalltalk.send(eavModel,"_on_put_",[smalltalk.send(self,"_payload",[]),newValue]);
-}),"_ensure_",[(function(){
-return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
-})]);
-return self},
-args: ["path", "aBlock"],
-source: "modify: path do: aBlock\x0a    | newValue eavModel |\x0a    eavModel := path asEavModel.\x0a    newValue := aBlock value: (eavModel on: self payload).\x0a    [ eavModel on: self payload put: newValue ] ensure: [ self dispatcher changed: path ]\x0a",
-messageSends: ["asEavModel", "value:", "on:", "payload", "ensure:", "changed:", "dispatcher", "on:put:"],
-referencedClasses: []
-}),
-smalltalk.TrappedPlainModel);
-
-smalltalk.addMethod(
-"_read_do_",
-smalltalk.method({
-selector: "read:do:",
-category: 'action',
-fn: function (path,aBlock){
-var self=this;
-var eavModel;
-eavModel=smalltalk.send(path,"_asEavModel",[]);
-smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[smalltalk.send(self,"_payload",[])])]);
-return self},
-args: ["path", "aBlock"],
-source: "read: path do: aBlock\x0a    | eavModel |\x0a    eavModel := path asEavModel.\x0a    aBlock value: (eavModel on: self payload)\x0a",
-messageSends: ["asEavModel", "value:", "on:", "payload"],
-referencedClasses: []
-}),
-smalltalk.TrappedPlainModel);
-
-
-
-smalltalk.addClass('App', smalltalk.TrappedPlainModel, [], 'Trapped-Demo');
-smalltalk.addMethod(
-"_initialize",
-smalltalk.method({
-selector: "initialize",
-category: 'initialization',
-fn: function (){
-var self=this;
-smalltalk.send(self,"_initialize",[],smalltalk.TrappedPlainModel);
-smalltalk.send(self,"_payload_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("title","__minus_gt",["To-Do List"])])]);
-smalltalk.send((function(){
-smalltalk.send(smalltalk.send(self,"_payload",[]),"_at_put_",["items",["hello", "world"]]);
-return smalltalk.send(self,"_payload_",[smalltalk.send(self,"_payload",[])]);
-}),"_valueWithTimeout_",[(2000)]);
-return self},
-args: [],
-source: "initialize\x0a\x09super initialize.\x0a\x09self payload: #{'title' -> 'To-Do List'}.\x0a    [ self payload at: 'items' put: #('hello' 'world'). self payload: self payload ] valueWithTimeout: 2000\x0a",
-messageSends: ["initialize", "payload:", "->", "valueWithTimeout:", "at:put:", "payload"],
-referencedClasses: []
-}),
-smalltalk.App);
 
 
 

@@ -1,4 +1,26 @@
 smalltalk.addPackage('Trapped-Demo', {});
+smalltalk.addClass('App', smalltalk.TrappedMWIsolated, [], 'Trapped-Demo');
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+fn: function (){
+var self=this;
+var obj;
+smalltalk.send(self,"_initialize",[],smalltalk.TrappedMWIsolated);
+smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.TrappedDumbDispatcher || TrappedDumbDispatcher),"_new",[])]);
+obj=smalltalk.HashedCollection._fromPairs_([smalltalk.send("title","__minus_gt",["To-Do List"])]);
+smalltalk.send(self,"_model_",[obj]);
+smalltalk.send((function(){
+smalltalk.send(obj,"_at_put_",["items",["hello", "world"]]);
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
+}),"_valueWithTimeout_",[(2000)]);
+return self}
+}),
+smalltalk.App);
+
+
+
 smalltalk.addClass('AppView', smalltalk.Widget, [], 'Trapped-Demo');
 smalltalk.addMethod(
 "_renderOn_",
@@ -77,72 +99,6 @@ self["@queue"]=smalltalk.send((smalltalk.OrderedCollection || OrderedCollection)
 return self}
 }),
 smalltalk.TrappedDumbDispatcher);
-
-
-
-smalltalk.addClass('TrappedPlainModel', smalltalk.TrappedModelWrapper, [], 'Trapped-Demo');
-smalltalk.addMethod(
-"_initialize",
-smalltalk.method({
-selector: "initialize",
-fn: function (){
-var self=this;
-smalltalk.send(self,"_initialize",[],smalltalk.TrappedModelWrapper);
-smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.TrappedDumbDispatcher || TrappedDumbDispatcher),"_new",[])]);
-return self}
-}),
-smalltalk.TrappedPlainModel);
-
-smalltalk.addMethod(
-"_modify_do_",
-smalltalk.method({
-selector: "modify:do:",
-fn: function (path,aBlock){
-var self=this;
-var newValue;
-var eavModel;
-eavModel=smalltalk.send(path,"_asEavModel",[]);
-newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[smalltalk.send(self,"_payload",[])])]);
-smalltalk.send((function(){
-return smalltalk.send(eavModel,"_on_put_",[smalltalk.send(self,"_payload",[]),newValue]);
-}),"_ensure_",[(function(){
-return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
-})]);
-return self}
-}),
-smalltalk.TrappedPlainModel);
-
-smalltalk.addMethod(
-"_read_do_",
-smalltalk.method({
-selector: "read:do:",
-fn: function (path,aBlock){
-var self=this;
-var eavModel;
-eavModel=smalltalk.send(path,"_asEavModel",[]);
-smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[smalltalk.send(self,"_payload",[])])]);
-return self}
-}),
-smalltalk.TrappedPlainModel);
-
-
-
-smalltalk.addClass('App', smalltalk.TrappedPlainModel, [], 'Trapped-Demo');
-smalltalk.addMethod(
-"_initialize",
-smalltalk.method({
-selector: "initialize",
-fn: function (){
-var self=this;
-smalltalk.send(self,"_initialize",[],smalltalk.TrappedPlainModel);
-smalltalk.send(self,"_payload_",[smalltalk.HashedCollection._fromPairs_([smalltalk.send("title","__minus_gt",["To-Do List"])])]);
-smalltalk.send((function(){
-smalltalk.send(smalltalk.send(self,"_payload",[]),"_at_put_",["items",["hello", "world"]]);
-return smalltalk.send(self,"_payload_",[smalltalk.send(self,"_payload",[])]);
-}),"_valueWithTimeout_",[(2000)]);
-return self}
-}),
-smalltalk.App);
 
 
 
