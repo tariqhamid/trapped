@@ -216,9 +216,9 @@ selector: "accepts:",
 fn: function (aPath){
 var self=this;
 var $1;
-var lesser;
-lesser=smalltalk.send(smalltalk.send(self["@path"],"_size",[]),"_min_",[smalltalk.send(aPath,"_size",[])]);
-$1=smalltalk.send(smalltalk.send(aPath,"_copyFrom_to_",[(1),lesser]),"__eq",[smalltalk.send(self["@path"],"_copyFrom_to_",[(1),lesser])]);
+$1=smalltalk.send(smalltalk.send(smalltalk.send(aPath,"_size",[]),"__lt_eq",[smalltalk.send(self["@path"],"_size",[])]),"_and_",[(function(){
+return smalltalk.send(aPath,"__eq",[smalltalk.send(self["@path"],"_copyFrom_to_",[(1),smalltalk.send(aPath,"_size",[])])]);
+})]);
 return $1;
 }
 }),

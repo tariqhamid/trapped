@@ -157,9 +157,7 @@ initialize
 !TrappedSubscription methodsFor: 'testing'!
 
 accepts: aPath
-    | lesser |
-    lesser := path size min: aPath size.
-    ^(aPath copyFrom: 1 to: lesser) = (path copyFrom: 1 to: lesser)
+    ^aPath size <= path size and: [aPath = (path copyFrom: 1 to: aPath size)]
 !
 
 isEnabled
