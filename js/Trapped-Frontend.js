@@ -1,4 +1,29 @@
 smalltalk.addPackage('Trapped-Frontend', {});
+smalltalk.addClass('TrappedDispatcher', smalltalk.KeyedPubSubBase, [], 'Trapped-Frontend');
+smalltalk.TrappedDispatcher.comment="I am base class for change event dispatchers.\x0aI manage changed path - action block subscriptions.\x0aThese subscription are instances of TrappedSubscription\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a"
+smalltalk.addMethod(
+"_subscriptionKey_block_",
+smalltalk.method({
+selector: "subscriptionKey:block:",
+category: 'action',
+fn: function (key,aBlock){
+var self=this;
+var $2,$3,$1;
+$2=smalltalk.send((smalltalk.TrappedSubscription || TrappedSubscription),"_new",[]);
+smalltalk.send($2,"_key_block_",[key,aBlock]);
+$3=smalltalk.send($2,"_yourself",[]);
+$1=$3;
+return $1;
+},
+args: ["key", "aBlock"],
+source: "subscriptionKey: key block: aBlock\x0a\x09^TrappedSubscription new key: key block: aBlock; yourself\x0a",
+messageSends: ["key:block:", "new", "yourself"],
+referencedClasses: ["TrappedSubscription"]
+}),
+smalltalk.TrappedDispatcher);
+
+
+
 smalltalk.addClass('TrappedDumbView', smalltalk.Widget, [], 'Trapped-Frontend');
 smalltalk.TrappedDumbView.comment="I just read and show an actual path."
 smalltalk.addMethod(
@@ -20,7 +45,7 @@ smalltalk.TrappedDumbView);
 
 
 smalltalk.addClass('TrappedModelWrapper', smalltalk.Object, ['dispatcher', 'payload'], 'Trapped-Frontend');
-smalltalk.TrappedModelWrapper.comment="I am base class for model wrappers.\x0aI wrap a model which can be any object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a    modify:do:\x0a\x09(optionally) name\x0a\x0aand must initialize:\x0a\x09payload\x0a\x09dispatcher\x0a"
+smalltalk.TrappedModelWrapper.comment="I am base class for model wrappers.\x0aI wrap a model which can be any object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a    modify:do:\x0a\x09(optionally) name\x0a\x0aand must initialize:\x0a\x09payload\x0a\x09dispatcher (with a subclass of TrappedDispatcher)\x0a"
 smalltalk.addMethod(
 "_dispatcher",
 smalltalk.method({
@@ -451,6 +476,29 @@ smalltalk.TrappedPathStack);
 
 
 
+smalltalk.addClass('TrappedSubscription', smalltalk.KeyedSubscriptionBase, [], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_accepts_",
+smalltalk.method({
+selector: "accepts:",
+category: 'testing',
+fn: function (aKey){
+var self=this;
+var $1;
+$1=smalltalk.send(smalltalk.send(smalltalk.send(aKey,"_size",[]),"__lt_eq",[smalltalk.send(self["@key"],"_size",[])]),"_and_",[(function(){
+return smalltalk.send(aKey,"__eq",[smalltalk.send(self["@key"],"_copyFrom_to_",[(1),smalltalk.send(aKey,"_size",[])])]);
+})]);
+return $1;
+},
+args: ["aKey"],
+source: "accepts: aKey\x0a    ^aKey size <= key size and: [aKey = (key copyFrom: 1 to: aKey size)]",
+messageSends: ["and:", "=", "copyFrom:to:", "size", "<="],
+referencedClasses: []
+}),
+smalltalk.TrappedSubscription);
+
+
+
 smalltalk.addMethod(
 "_trapDescend_",
 smalltalk.method({
@@ -501,7 +549,7 @@ model;
 return smalltalk.send(model,"_watch_do_",[smalltalk.send(actual,"_allButFirst",[]),(function(data){
 $1=smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(self,"_asJQuery",[]),"_closest_",["html"]),"_toArray",[]),"_isEmpty",[]);
 if(smalltalk.assert($1)){
-smalltalk.send((smalltalk.TrappedUnwatch || TrappedUnwatch),"_signal",[]);
+smalltalk.send((smalltalk.KeyedPubSubUnsubscribe || KeyedPubSubUnsubscribe),"_signal",[]);
 };
 return smalltalk.send(actual,"_trapDescend_",[(function(){
 return smalltalk.send(self,"_with_",[(function(html){
@@ -512,9 +560,9 @@ return smalltalk.send(aBlock,"_value_value_",[data,html]);
 })]);
 return self},
 args: ["path", "aBlock"],
-source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := Trapped current byName: actual first.\x0a        model watch: actual allButFirst do: [ :data |\x0a            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ TrappedUnwatch signal ].\x0a        \x09actual trapDescend: [ self with: [ :html | aBlock value: data value: html ] ]\x0a    \x09]\x0a    ]",
+source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := Trapped current byName: actual first.\x0a        model watch: actual allButFirst do: [ :data |\x0a            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].\x0a        \x09actual trapDescend: [ self with: [ :html | aBlock value: data value: html ] ]\x0a    \x09]\x0a    ]",
 messageSends: ["trapDescend:", "path", "byName:", "first", "current", "watch:do:", "allButFirst", "ifTrue:", "signal", "isEmpty", "toArray", "closest:", "asJQuery", "with:", "value:value:"],
-referencedClasses: ["Trapped", "TrappedUnwatch"]
+referencedClasses: ["Trapped", "KeyedPubSubUnsubscribe"]
 }),
 smalltalk.TagBrush);
 

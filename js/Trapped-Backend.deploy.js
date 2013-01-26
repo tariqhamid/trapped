@@ -129,18 +129,18 @@ return $1;
 smalltalk.Isolator.klass);
 
 
-smalltalk.addClass('TrappedDispatcher', smalltalk.Object, [], 'Trapped-Backend');
+smalltalk.addClass('KeyedPubSubBase', smalltalk.Object, [], 'Trapped-Backend');
 smalltalk.addMethod(
 "_changed_",
 smalltalk.method({
 selector: "changed:",
-fn: function (path){
+fn: function (key){
 var self=this;
 var $1;
 var needsToRun;
 needsToRun=false;
 smalltalk.send(self,"_do_",[(function(each){
-$1=smalltalk.send(each,"_accepts_",[path]);
+$1=smalltalk.send(each,"_accepts_",[key]);
 if(smalltalk.assert($1)){
 smalltalk.send(each,"_flag",[]);
 needsToRun=true;
@@ -150,7 +150,7 @@ return needsToRun;
 smalltalk.send(self,"_dirty_",[needsToRun]);
 return self}
 }),
-smalltalk.TrappedDispatcher);
+smalltalk.KeyedPubSubBase);
 
 smalltalk.addMethod(
 "_dirty_",
@@ -165,19 +165,19 @@ return smalltalk.send(self,"_run",[]);
 };
 return self}
 }),
-smalltalk.TrappedDispatcher);
+smalltalk.KeyedPubSubBase);
 
 smalltalk.addMethod(
 "_on_hook_",
 smalltalk.method({
 selector: "on:hook:",
-fn: function (path,aBlock){
+fn: function (key,aBlock){
 var self=this;
-smalltalk.send(self,"_add_",[smalltalk.send(smalltalk.send((smalltalk.TrappedSubscription || TrappedSubscription),"_path_action_",[path,aBlock]),"_flag",[])]);
+smalltalk.send(self,"_add_",[smalltalk.send(smalltalk.send(self,"_subscriptionKey_block_",[key,aBlock]),"_flag",[])]);
 smalltalk.send(self,"_dirty_",[true]);
 return self}
 }),
-smalltalk.TrappedDispatcher);
+smalltalk.KeyedPubSubBase);
 
 smalltalk.addMethod(
 "_run",
@@ -204,25 +204,35 @@ smalltalk.send(self,"_clean",[]);
 };
 return self}
 }),
-smalltalk.TrappedDispatcher);
+smalltalk.KeyedPubSubBase);
+
+smalltalk.addMethod(
+"_subscriptionKey_block_",
+smalltalk.method({
+selector: "subscriptionKey:block:",
+fn: function (key,aBlock){
+var self=this;
+smalltalk.send(self,"_subclassReponsibility",[]);
+return self}
+}),
+smalltalk.KeyedPubSubBase);
 
 
 
-smalltalk.addClass('TrappedSubscription', smalltalk.Object, ['path', 'actionBlock', 'flagged'], 'Trapped-Backend');
+smalltalk.addClass('KeyedPubSubUnsubscribe', smalltalk.Error, [], 'Trapped-Backend');
+
+
+smalltalk.addClass('KeyedSubscriptionBase', smalltalk.Object, ['key', 'actionBlock', 'flagged'], 'Trapped-Backend');
 smalltalk.addMethod(
 "_accepts_",
 smalltalk.method({
 selector: "accepts:",
-fn: function (aPath){
+fn: function (aKey){
 var self=this;
-var $1;
-$1=smalltalk.send(smalltalk.send(smalltalk.send(aPath,"_size",[]),"__lt_eq",[smalltalk.send(self["@path"],"_size",[])]),"_and_",[(function(){
-return smalltalk.send(aPath,"__eq",[smalltalk.send(self["@path"],"_copyFrom_to_",[(1),smalltalk.send(aPath,"_size",[])])]);
-})]);
-return $1;
-}
+smalltalk.send(self,"_subclassResponsibility",[]);
+return self}
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
 "_flag",
@@ -233,7 +243,7 @@ var self=this;
 self["@flagged"]=true;
 return self}
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
 "_initialize",
@@ -242,12 +252,12 @@ selector: "initialize",
 fn: function (){
 var self=this;
 smalltalk.send(self,"_initialize",[],smalltalk.Object);
-self["@path"]=nil;
+self["@key"]=nil;
 self["@actionBlock"]=nil;
 self["@flagged"]=false;
 return self}
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
 "_isEnabled",
@@ -260,7 +270,7 @@ $1=smalltalk.send(self["@actionBlock"],"_notNil",[]);
 return $1;
 }
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
 "_isFlagged",
@@ -271,19 +281,19 @@ var self=this;
 return self["@flagged"];
 }
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
-"_path_actionBlock_",
+"_key_block_",
 smalltalk.method({
-selector: "path:actionBlock:",
-fn: function (anArray,aBlock){
+selector: "key:block:",
+fn: function (anObject,aBlock){
 var self=this;
-self["@path"]=anArray;
+self["@key"]=anObject;
 self["@actionBlock"]=aBlock;
 return self}
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
 "_run",
@@ -298,41 +308,14 @@ return smalltalk.send(self["@actionBlock"],"_value",[]);
 self["@flagged"]=false;
 return self["@flagged"];
 })]);
-}),"_on_do_",[(smalltalk.TrappedUnwatch || TrappedUnwatch),(function(){
+}),"_on_do_",[(smalltalk.KeyedPubSubUnsubscribe || KeyedPubSubUnsubscribe),(function(){
 self["@actionBlock"]=nil;
 return self["@actionBlock"];
 })]);
 return self}
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
-
-smalltalk.addMethod(
-"_new",
-smalltalk.method({
-selector: "new",
-fn: function (){
-var self=this;
-smalltalk.send(self,"_shouldNotImplement",[]);
-return self}
-}),
-smalltalk.TrappedSubscription.klass);
-
-smalltalk.addMethod(
-"_path_action_",
-smalltalk.method({
-selector: "path:action:",
-fn: function (anArray,aBlock){
-var self=this;
-var $1;
-$1=smalltalk.send(smalltalk.send(self,"_new",[],smalltalk.Object.klass),"_path_actionBlock_",[anArray,aBlock]);
-return $1;
-}
-}),
-smalltalk.TrappedSubscription.klass);
-
-
-smalltalk.addClass('TrappedUnwatch', smalltalk.Error, [], 'Trapped-Backend');
 
 
 smalltalk.addMethod(

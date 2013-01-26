@@ -1,4 +1,24 @@
 Smalltalk current createPackage: 'Trapped-Frontend' properties: #{}!
+KeyedPubSubBase subclass: #TrappedDispatcher
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedDispatcher commentStamp!
+I am base class for change event dispatchers.
+I manage changed path - action block subscriptions.
+These subscription are instances of TrappedSubscription
+
+My subclasses need to provide implementation for:
+	add:
+    do:
+    clean
+    (optionally) run!
+
+!TrappedDispatcher methodsFor: 'action'!
+
+subscriptionKey: key block: aBlock
+	^TrappedSubscription new key: key block: aBlock; yourself
+! !
+
 Widget subclass: #TrappedDumbView
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
@@ -25,7 +45,7 @@ My subclasses need to provide implementation for:
 
 and must initialize:
 	payload
-	dispatcher!
+	dispatcher (with a subclass of TrappedDispatcher)!
 
 !TrappedModelWrapper methodsFor: 'accessing'!
 
@@ -172,6 +192,16 @@ initialize
 	elements := #().
 ! !
 
+KeyedSubscriptionBase subclass: #TrappedSubscription
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+
+!TrappedSubscription methodsFor: 'testing'!
+
+accepts: aKey
+    ^aKey size <= key size and: [aKey = (key copyFrom: 1 to: aKey size)]
+! !
+
 !Array methodsFor: '*Trapped-Frontend'!
 
 trapDescend: aBlock
@@ -191,7 +221,7 @@ trap: path read: aBlock
     	actual := Trapped path.
         model := Trapped current byName: actual first.
         model watch: actual allButFirst do: [ :data |
-            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ TrappedUnwatch signal ].
+            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
         	actual trapDescend: [ self with: [ :html | aBlock value: data value: html ] ]
     	]
     ]

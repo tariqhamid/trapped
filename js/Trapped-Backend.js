@@ -180,20 +180,19 @@ referencedClasses: []
 smalltalk.Isolator.klass);
 
 
-smalltalk.addClass('TrappedDispatcher', smalltalk.Object, [], 'Trapped-Backend');
-smalltalk.TrappedDispatcher.comment="I am base class for change event dispatchers.\x0aI manage changed path - action block subscriptions.\x0aThese subscription must be three-element arrays\x0a\x09{ dirty. path. block }\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a"
+smalltalk.addClass('KeyedPubSubBase', smalltalk.Object, [], 'Trapped-Backend');
 smalltalk.addMethod(
 "_changed_",
 smalltalk.method({
 selector: "changed:",
 category: 'action',
-fn: function (path){
+fn: function (key){
 var self=this;
 var $1;
 var needsToRun;
 needsToRun=false;
 smalltalk.send(self,"_do_",[(function(each){
-$1=smalltalk.send(each,"_accepts_",[path]);
+$1=smalltalk.send(each,"_accepts_",[key]);
 if(smalltalk.assert($1)){
 smalltalk.send(each,"_flag",[]);
 needsToRun=true;
@@ -202,12 +201,12 @@ return needsToRun;
 })]);
 smalltalk.send(self,"_dirty_",[needsToRun]);
 return self},
-args: ["path"],
-source: "changed: path\x0a\x09| needsToRun |\x0a    needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09(each accepts: path) ifTrue: [\x0a\x09\x09\x09each flag.\x0a            needsToRun := true.\x0a\x09\x09]\x0a\x09].\x0a\x09self dirty: needsToRun",
+args: ["key"],
+source: "changed: key\x0a\x09| needsToRun |\x0a    needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09(each accepts: key) ifTrue: [\x0a\x09\x09\x09each flag.\x0a            needsToRun := true.\x0a\x09\x09]\x0a\x09].\x0a\x09self dirty: needsToRun",
 messageSends: ["do:", "ifTrue:", "flag", "accepts:", "dirty:"],
 referencedClasses: []
 }),
-smalltalk.TrappedDispatcher);
+smalltalk.KeyedPubSubBase);
 
 smalltalk.addMethod(
 "_dirty_",
@@ -227,24 +226,24 @@ source: "dirty: aBoolean\x0a\x09aBoolean ifTrue: [[ self run ] fork]",
 messageSends: ["ifTrue:", "fork", "run"],
 referencedClasses: []
 }),
-smalltalk.TrappedDispatcher);
+smalltalk.KeyedPubSubBase);
 
 smalltalk.addMethod(
 "_on_hook_",
 smalltalk.method({
 selector: "on:hook:",
 category: 'action',
-fn: function (path,aBlock){
+fn: function (key,aBlock){
 var self=this;
-smalltalk.send(self,"_add_",[smalltalk.send(smalltalk.send((smalltalk.TrappedSubscription || TrappedSubscription),"_path_action_",[path,aBlock]),"_flag",[])]);
+smalltalk.send(self,"_add_",[smalltalk.send(smalltalk.send(self,"_subscriptionKey_block_",[key,aBlock]),"_flag",[])]);
 smalltalk.send(self,"_dirty_",[true]);
 return self},
-args: ["path", "aBlock"],
-source: "on: path hook: aBlock\x0a\x09self add: (TrappedSubscription path: path action: aBlock) flag.\x0a   \x09self dirty: true",
-messageSends: ["add:", "flag", "path:action:", "dirty:"],
-referencedClasses: ["TrappedSubscription"]
+args: ["key", "aBlock"],
+source: "on: key hook: aBlock\x0a\x09self add: (self subscriptionKey: key block: aBlock) flag.\x0a   \x09self dirty: true",
+messageSends: ["add:", "flag", "subscriptionKey:block:", "dirty:"],
+referencedClasses: []
 }),
-smalltalk.TrappedDispatcher);
+smalltalk.KeyedPubSubBase);
 
 smalltalk.addMethod(
 "_run",
@@ -276,30 +275,46 @@ source: "run\x0a\x09| needsClean |\x0a    needsClean := false.\x0a\x09self do: [
 messageSends: ["do:", "ifTrue:", "run", "ifFalse:", "isEnabled", "isFlagged", "clean"],
 referencedClasses: []
 }),
-smalltalk.TrappedDispatcher);
+smalltalk.KeyedPubSubBase);
+
+smalltalk.addMethod(
+"_subscriptionKey_block_",
+smalltalk.method({
+selector: "subscriptionKey:block:",
+category: 'action',
+fn: function (key,aBlock){
+var self=this;
+smalltalk.send(self,"_subclassReponsibility",[]);
+return self},
+args: ["key", "aBlock"],
+source: "subscriptionKey: key block: aBlock\x0a    \x22Should return subclass of KeyedSubscriptionBase\x22\x0a    self subclassReponsibility\x0a",
+messageSends: ["subclassReponsibility"],
+referencedClasses: []
+}),
+smalltalk.KeyedPubSubBase);
 
 
 
-smalltalk.addClass('TrappedSubscription', smalltalk.Object, ['path', 'actionBlock', 'flagged'], 'Trapped-Backend');
+smalltalk.addClass('KeyedPubSubUnsubscribe', smalltalk.Error, [], 'Trapped-Backend');
+smalltalk.KeyedPubSubUnsubscribe.comment="SIgnal me from the subscription block to unsubscribe it."
+
+
+smalltalk.addClass('KeyedSubscriptionBase', smalltalk.Object, ['key', 'actionBlock', 'flagged'], 'Trapped-Backend');
 smalltalk.addMethod(
 "_accepts_",
 smalltalk.method({
 selector: "accepts:",
 category: 'testing',
-fn: function (aPath){
+fn: function (aKey){
 var self=this;
-var $1;
-$1=smalltalk.send(smalltalk.send(smalltalk.send(aPath,"_size",[]),"__lt_eq",[smalltalk.send(self["@path"],"_size",[])]),"_and_",[(function(){
-return smalltalk.send(aPath,"__eq",[smalltalk.send(self["@path"],"_copyFrom_to_",[(1),smalltalk.send(aPath,"_size",[])])]);
-})]);
-return $1;
-},
-args: ["aPath"],
-source: "accepts: aPath\x0a    ^aPath size <= path size and: [aPath = (path copyFrom: 1 to: aPath size)]",
-messageSends: ["and:", "=", "copyFrom:to:", "size", "<="],
+smalltalk.send(self,"_subclassResponsibility",[]);
+return self},
+args: ["aKey"],
+source: "accepts: aKey\x0a    \x22Should return true if change for aKey is relevant for this subscription\x22\x0a    self subclassResponsibility",
+messageSends: ["subclassResponsibility"],
 referencedClasses: []
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
 "_flag",
@@ -315,7 +330,7 @@ source: "flag\x0a\x09flagged := true",
 messageSends: [],
 referencedClasses: []
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
 "_initialize",
@@ -325,16 +340,16 @@ category: 'initialization',
 fn: function (){
 var self=this;
 smalltalk.send(self,"_initialize",[],smalltalk.Object);
-self["@path"]=nil;
+self["@key"]=nil;
 self["@actionBlock"]=nil;
 self["@flagged"]=false;
 return self},
 args: [],
-source: "initialize\x0a\x09super initialize.\x0a    path := nil.\x0a    actionBlock := nil.\x0a    flagged := false.",
+source: "initialize\x0a\x09super initialize.\x0a    key := nil.\x0a    actionBlock := nil.\x0a    flagged := false.",
 messageSends: ["initialize"],
 referencedClasses: []
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
 "_isEnabled",
@@ -352,7 +367,7 @@ source: "isEnabled\x0a\x09^actionBlock notNil",
 messageSends: ["notNil"],
 referencedClasses: []
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
 "_isFlagged",
@@ -368,24 +383,24 @@ source: "isFlagged\x0a\x09^flagged",
 messageSends: [],
 referencedClasses: []
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
-"_path_actionBlock_",
+"_key_block_",
 smalltalk.method({
-selector: "path:actionBlock:",
+selector: "key:block:",
 category: 'accessing',
-fn: function (anArray,aBlock){
+fn: function (anObject,aBlock){
 var self=this;
-self["@path"]=anArray;
+self["@key"]=anObject;
 self["@actionBlock"]=aBlock;
 return self},
-args: ["anArray", "aBlock"],
-source: "path: anArray actionBlock: aBlock\x0a\x09path := anArray.\x0a    actionBlock := aBlock",
+args: ["anObject", "aBlock"],
+source: "key: anObject block: aBlock\x0a\x09key := anObject.\x0a    actionBlock := aBlock",
 messageSends: [],
 referencedClasses: []
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
 smalltalk.addMethod(
 "_run",
@@ -401,56 +416,18 @@ return smalltalk.send(self["@actionBlock"],"_value",[]);
 self["@flagged"]=false;
 return self["@flagged"];
 })]);
-}),"_on_do_",[(smalltalk.TrappedUnwatch || TrappedUnwatch),(function(){
+}),"_on_do_",[(smalltalk.KeyedPubSubUnsubscribe || KeyedPubSubUnsubscribe),(function(){
 self["@actionBlock"]=nil;
 return self["@actionBlock"];
 })]);
 return self},
 args: [],
-source: "run\x0a\x09[[ actionBlock value ] ensure: [ flagged := false ]]\x0a    on: TrappedUnwatch do: [ actionBlock := nil ]",
+source: "run\x0a\x09[[ actionBlock value ] ensure: [ flagged := false ]]\x0a    on: KeyedPubSubUnsubscribe do: [ actionBlock := nil ]",
 messageSends: ["on:do:", "ensure:", "value"],
-referencedClasses: ["TrappedUnwatch"]
+referencedClasses: ["KeyedPubSubUnsubscribe"]
 }),
-smalltalk.TrappedSubscription);
+smalltalk.KeyedSubscriptionBase);
 
-
-smalltalk.addMethod(
-"_new",
-smalltalk.method({
-selector: "new",
-category: 'instance creation',
-fn: function (){
-var self=this;
-smalltalk.send(self,"_shouldNotImplement",[]);
-return self},
-args: [],
-source: "new\x0a\x09self shouldNotImplement",
-messageSends: ["shouldNotImplement"],
-referencedClasses: []
-}),
-smalltalk.TrappedSubscription.klass);
-
-smalltalk.addMethod(
-"_path_action_",
-smalltalk.method({
-selector: "path:action:",
-category: 'instance creation',
-fn: function (anArray,aBlock){
-var self=this;
-var $1;
-$1=smalltalk.send(smalltalk.send(self,"_new",[],smalltalk.Object.klass),"_path_actionBlock_",[anArray,aBlock]);
-return $1;
-},
-args: ["anArray", "aBlock"],
-source: "path: anArray action: aBlock\x0a\x09^super new path: anArray actionBlock: aBlock",
-messageSends: ["path:actionBlock:", "new"],
-referencedClasses: []
-}),
-smalltalk.TrappedSubscription.klass);
-
-
-smalltalk.addClass('TrappedUnwatch', smalltalk.Error, [], 'Trapped-Backend');
-smalltalk.TrappedUnwatch.comment="SIgnal me from the watch: block to unwatch it."
 
 
 smalltalk.addMethod(

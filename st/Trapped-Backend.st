@@ -73,28 +73,17 @@ on: anObject
 ^self new root: anObject
 ! !
 
-Object subclass: #TrappedDispatcher
+Object subclass: #KeyedPubSubBase
 	instanceVariableNames: ''
 	package: 'Trapped-Backend'!
-!TrappedDispatcher commentStamp!
-I am base class for change event dispatchers.
-I manage changed path - action block subscriptions.
-These subscription must be three-element arrays
-	{ dirty. path. block }
 
-My subclasses need to provide implementation for:
-	add:
-    do:
-    clean
-    (optionally) run!
+!KeyedPubSubBase methodsFor: 'action'!
 
-!TrappedDispatcher methodsFor: 'action'!
-
-changed: path
+changed: key
 	| needsToRun |
     needsToRun := false.
 	self do: [ :each |
-		(each accepts: path) ifTrue: [
+		(each accepts: key) ifTrue: [
 			each flag.
             needsToRun := true.
 		]
@@ -106,8 +95,8 @@ dirty: aBoolean
 	aBoolean ifTrue: [[ self run ] fork]
 !
 
-on: path hook: aBlock
-	self add: (TrappedSubscription path: path action: aBlock) flag.
+on: key hook: aBlock
+	self add: (self subscriptionKey: key block: aBlock) flag.
    	self dirty: true
 !
 
@@ -121,43 +110,55 @@ run
         ]
 	].
     needsClean ifTrue: [ self clean ]
+!
+
+subscriptionKey: key block: aBlock
+    "Should return subclass of KeyedSubscriptionBase"
+    self subclassReponsibility
 ! !
 
-Object subclass: #TrappedSubscription
-	instanceVariableNames: 'path actionBlock flagged'
+Error subclass: #KeyedPubSubUnsubscribe
+	instanceVariableNames: ''
+	package: 'Trapped-Backend'!
+!KeyedPubSubUnsubscribe commentStamp!
+SIgnal me from the subscription block to unsubscribe it.!
+
+Object subclass: #KeyedSubscriptionBase
+	instanceVariableNames: 'key actionBlock flagged'
 	package: 'Trapped-Backend'!
 
-!TrappedSubscription methodsFor: 'accessing'!
+!KeyedSubscriptionBase methodsFor: 'accessing'!
 
 flag
 	flagged := true
 !
 
-path: anArray actionBlock: aBlock
-	path := anArray.
+key: anObject block: aBlock
+	key := anObject.
     actionBlock := aBlock
 ! !
 
-!TrappedSubscription methodsFor: 'action'!
+!KeyedSubscriptionBase methodsFor: 'action'!
 
 run
 	[[ actionBlock value ] ensure: [ flagged := false ]]
-    on: TrappedUnwatch do: [ actionBlock := nil ]
+    on: KeyedPubSubUnsubscribe do: [ actionBlock := nil ]
 ! !
 
-!TrappedSubscription methodsFor: 'initialization'!
+!KeyedSubscriptionBase methodsFor: 'initialization'!
 
 initialize
 	super initialize.
-    path := nil.
+    key := nil.
     actionBlock := nil.
     flagged := false.
 ! !
 
-!TrappedSubscription methodsFor: 'testing'!
+!KeyedSubscriptionBase methodsFor: 'testing'!
 
-accepts: aPath
-    ^aPath size <= path size and: [aPath = (path copyFrom: 1 to: aPath size)]
+accepts: aKey
+    "Should return true if change for aKey is relevant for this subscription"
+    self subclassResponsibility
 !
 
 isEnabled
@@ -167,22 +168,6 @@ isEnabled
 isFlagged
 	^flagged
 ! !
-
-!TrappedSubscription class methodsFor: 'instance creation'!
-
-new
-	self shouldNotImplement
-!
-
-path: anArray action: aBlock
-	^super new path: anArray actionBlock: aBlock
-! !
-
-Error subclass: #TrappedUnwatch
-	instanceVariableNames: ''
-	package: 'Trapped-Backend'!
-!TrappedUnwatch commentStamp!
-SIgnal me from the watch: block to unwatch it.!
 
 !Object methodsFor: '*Trapped-Backend'!
 
