@@ -42,14 +42,14 @@ smalltalk.addMethod(
 smalltalk.method({
 selector: "add:",
 category: 'accessing',
-fn: function (aTriplet){
+fn: function (aSubscription){
 var self=this;
-smalltalk.send(self["@queue"],"_add_",[aTriplet]);
-smalltalk.send(self,"_dirty_",[smalltalk.send(aTriplet,"_first",[])]);
+smalltalk.send(self["@queue"],"_add_",[aSubscription]);
+smalltalk.send(self,"_dirty_",[smalltalk.send(aSubscription,"_isFlagged",[])]);
 return self},
-args: ["aTriplet"],
-source: "add: aTriplet\x0a\x09queue add: aTriplet.\x0a    self dirty: aTriplet first\x0a\x09",
-messageSends: ["add:", "dirty:", "first"],
+args: ["aSubscription"],
+source: "add: aSubscription\x0a\x09queue add: aSubscription.\x0a    self dirty: aSubscription isFlagged\x0a\x09",
+messageSends: ["add:", "dirty:", "isFlagged"],
 referencedClasses: []
 }),
 smalltalk.TrappedDumbDispatcher);
@@ -62,12 +62,12 @@ category: 'bookkeeping',
 fn: function (){
 var self=this;
 self["@queue"]=smalltalk.send(self["@queue"],"_select_",[(function(each){
-return smalltalk.send(smalltalk.send(each,"_third",[]),"_notNil",[]);
+return smalltalk.send(each,"_isEnabled",[]);
 })]);
 return self},
 args: [],
-source: "clean\x0a\x09queue := queue select: [ :each | each third notNil ]",
-messageSends: ["select:", "notNil", "third"],
+source: "clean\x0a\x09queue := queue select: [ :each | each isEnabled ]",
+messageSends: ["select:", "isEnabled"],
 referencedClasses: []
 }),
 smalltalk.TrappedDumbDispatcher);

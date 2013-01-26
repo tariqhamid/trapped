@@ -24,15 +24,15 @@ TrappedDispatcher subclass: #TrappedDumbDispatcher
 
 !TrappedDumbDispatcher methodsFor: 'accessing'!
 
-add: aTriplet
-	queue add: aTriplet.
-    self dirty: aTriplet first
+add: aSubscription
+	queue add: aSubscription.
+    self dirty: aSubscription isFlagged
 ! !
 
 !TrappedDumbDispatcher methodsFor: 'bookkeeping'!
 
 clean
-	queue := queue select: [ :each | each third notNil ]
+	queue := queue select: [ :each | each isEnabled ]
 ! !
 
 !TrappedDumbDispatcher methodsFor: 'enumeration'!

@@ -193,15 +193,9 @@ var $1;
 var needsToRun;
 needsToRun=false;
 smalltalk.send(self,"_do_",[(function(each){
-var aPath;
-var lesser;
-aPath=smalltalk.send(each,"_second",[]);
-aPath;
-lesser=smalltalk.send(smalltalk.send(aPath,"_size",[]),"_min_",[smalltalk.send(path,"_size",[])]);
-lesser;
-$1=smalltalk.send(smalltalk.send(path,"_copyFrom_to_",[(1),lesser]),"__eq",[smalltalk.send(aPath,"_copyFrom_to_",[(1),lesser])]);
+$1=smalltalk.send(each,"_accepts_",[path]);
 if(smalltalk.assert($1)){
-smalltalk.send(each,"_at_put_",[(1),true]);
+smalltalk.send(each,"_flag",[]);
 needsToRun=true;
 return needsToRun;
 };
@@ -209,8 +203,8 @@ return needsToRun;
 smalltalk.send(self,"_dirty_",[needsToRun]);
 return self},
 args: ["path"],
-source: "changed: path\x0a\x09| needsToRun |\x0a    needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09| aPath lesser |\x0a\x09\x09aPath := each second.\x0a\x09\x09lesser := aPath size min: path size.\x0a\x09\x09(path copyFrom: 1 to: lesser) = (aPath copyFrom: 1 to: lesser) ifTrue: [\x0a\x09\x09\x09each at: 1 put: true.\x0a            needsToRun := true.\x0a\x09\x09]\x0a\x09].\x0a\x09self dirty: needsToRun",
-messageSends: ["do:", "second", "min:", "size", "ifTrue:", "at:put:", "=", "copyFrom:to:", "dirty:"],
+source: "changed: path\x0a\x09| needsToRun |\x0a    needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09(each accepts: path) ifTrue: [\x0a\x09\x09\x09each flag.\x0a            needsToRun := true.\x0a\x09\x09]\x0a\x09].\x0a\x09self dirty: needsToRun",
+messageSends: ["do:", "ifTrue:", "flag", "accepts:", "dirty:"],
 referencedClasses: []
 }),
 smalltalk.TrappedDispatcher);
@@ -242,13 +236,13 @@ selector: "on:hook:",
 category: 'action',
 fn: function (path,aBlock){
 var self=this;
-smalltalk.send(self,"_add_",[[true,path,aBlock]]);
+smalltalk.send(self,"_add_",[smalltalk.send(smalltalk.send((smalltalk.TrappedSubscription || TrappedSubscription),"_path_action_",[path,aBlock]),"_flag",[])]);
 smalltalk.send(self,"_dirty_",[true]);
 return self},
 args: ["path", "aBlock"],
-source: "on: path hook: aBlock\x0a\x09self add: { true. path. aBlock }.\x0a   \x09self dirty: true",
-messageSends: ["add:", "dirty:"],
-referencedClasses: []
+source: "on: path hook: aBlock\x0a\x09self add: (TrappedSubscription path: path action: aBlock) flag.\x0a   \x09self dirty: true",
+messageSends: ["add:", "flag", "path:action:", "dirty:"],
+referencedClasses: ["TrappedSubscription"]
 }),
 smalltalk.TrappedDispatcher);
 
@@ -259,23 +253,18 @@ selector: "run",
 category: 'action',
 fn: function (){
 var self=this;
-var $1;
+var $1,$2;
 var needsClean;
 needsClean=false;
 smalltalk.send(self,"_do_",[(function(each){
-$1=smalltalk.send(each,"_first",[]);
+$1=smalltalk.send(each,"_isFlagged",[]);
 if(smalltalk.assert($1)){
-return smalltalk.send((function(){
-return smalltalk.send((function(){
-return smalltalk.send(smalltalk.send(each,"_third",[]),"_value",[]);
-}),"_ensure_",[(function(){
-return smalltalk.send(each,"_at_put_",[(1),false]);
-})]);
-}),"_on_do_",[(smalltalk.TrappedUnwatch || TrappedUnwatch),(function(){
-smalltalk.send(each,"_at_put_",[(3),nil]);
+smalltalk.send(each,"_run",[]);
+$2=smalltalk.send(each,"_isEnabled",[]);
+if(! smalltalk.assert($2)){
 needsClean=true;
 return needsClean;
-})]);
+};
 };
 })]);
 if(smalltalk.assert(needsClean)){
@@ -283,12 +272,181 @@ smalltalk.send(self,"_clean",[]);
 };
 return self},
 args: [],
-source: "run\x0a\x09| needsClean |\x0a    needsClean := false.\x0a\x09self do: [ :each |\x0a\x09\x09each first ifTrue: [\x0a            [[ each third value ] ensure: [ each at: 1 put: false ]]\x0a            on: TrappedUnwatch do: [ each at: 3 put: nil. needsClean := true ]\x0a        ]\x0a\x09].\x0a    needsClean ifTrue: [ self clean ]",
-messageSends: ["do:", "ifTrue:", "on:do:", "at:put:", "ensure:", "value", "third", "first", "clean"],
-referencedClasses: ["TrappedUnwatch"]
+source: "run\x0a\x09| needsClean |\x0a    needsClean := false.\x0a\x09self do: [ :each |\x0a\x09\x09each isFlagged ifTrue: [\x0a            each run.\x0a            each isEnabled ifFalse: [ needsClean := true ]\x0a        ]\x0a\x09].\x0a    needsClean ifTrue: [ self clean ]",
+messageSends: ["do:", "ifTrue:", "run", "ifFalse:", "isEnabled", "isFlagged", "clean"],
+referencedClasses: []
 }),
 smalltalk.TrappedDispatcher);
 
+
+
+smalltalk.addClass('TrappedSubscription', smalltalk.Object, ['path', 'actionBlock', 'flagged'], 'Trapped-Backend');
+smalltalk.addMethod(
+"_accepts_",
+smalltalk.method({
+selector: "accepts:",
+category: 'testing',
+fn: function (aPath){
+var self=this;
+var $1;
+var lesser;
+lesser=smalltalk.send(smalltalk.send(self["@path"],"_size",[]),"_min_",[smalltalk.send(aPath,"_size",[])]);
+$1=smalltalk.send(smalltalk.send(aPath,"_copyFrom_to_",[(1),lesser]),"__eq",[smalltalk.send(self["@path"],"_copyFrom_to_",[(1),lesser])]);
+return $1;
+},
+args: ["aPath"],
+source: "accepts: aPath\x0a    | lesser |\x0a    lesser := path size min: aPath size.\x0a    ^(aPath copyFrom: 1 to: lesser) = (path copyFrom: 1 to: lesser)",
+messageSends: ["min:", "size", "=", "copyFrom:to:"],
+referencedClasses: []
+}),
+smalltalk.TrappedSubscription);
+
+smalltalk.addMethod(
+"_flag",
+smalltalk.method({
+selector: "flag",
+category: 'accessing',
+fn: function (){
+var self=this;
+self["@flagged"]=true;
+return self},
+args: [],
+source: "flag\x0a\x09flagged := true",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedSubscription);
+
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+category: 'initialization',
+fn: function (){
+var self=this;
+smalltalk.send(self,"_initialize",[],smalltalk.Object);
+self["@path"]=nil;
+self["@actionBlock"]=nil;
+self["@flagged"]=false;
+return self},
+args: [],
+source: "initialize\x0a\x09super initialize.\x0a    path := nil.\x0a    actionBlock := nil.\x0a    flagged := false.",
+messageSends: ["initialize"],
+referencedClasses: []
+}),
+smalltalk.TrappedSubscription);
+
+smalltalk.addMethod(
+"_isEnabled",
+smalltalk.method({
+selector: "isEnabled",
+category: 'testing',
+fn: function (){
+var self=this;
+var $1;
+$1=smalltalk.send(self["@actionBlock"],"_notNil",[]);
+return $1;
+},
+args: [],
+source: "isEnabled\x0a\x09^actionBlock notNil",
+messageSends: ["notNil"],
+referencedClasses: []
+}),
+smalltalk.TrappedSubscription);
+
+smalltalk.addMethod(
+"_isFlagged",
+smalltalk.method({
+selector: "isFlagged",
+category: 'testing',
+fn: function (){
+var self=this;
+return self["@flagged"];
+},
+args: [],
+source: "isFlagged\x0a\x09^flagged",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedSubscription);
+
+smalltalk.addMethod(
+"_path_actionBlock_",
+smalltalk.method({
+selector: "path:actionBlock:",
+category: 'accessing',
+fn: function (anArray,aBlock){
+var self=this;
+self["@path"]=anArray;
+self["@actionBlock"]=aBlock;
+return self},
+args: ["anArray", "aBlock"],
+source: "path: anArray actionBlock: aBlock\x0a\x09path := anArray.\x0a    actionBlock := aBlock",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedSubscription);
+
+smalltalk.addMethod(
+"_run",
+smalltalk.method({
+selector: "run",
+category: 'action',
+fn: function (){
+var self=this;
+smalltalk.send((function(){
+return smalltalk.send((function(){
+return smalltalk.send(self["@actionBlock"],"_value",[]);
+}),"_ensure_",[(function(){
+self["@flagged"]=false;
+return self["@flagged"];
+})]);
+}),"_on_do_",[(smalltalk.TrappedUnwatch || TrappedUnwatch),(function(){
+self["@actionBlock"]=nil;
+return self["@actionBlock"];
+})]);
+return self},
+args: [],
+source: "run\x0a\x09[[ actionBlock value ] ensure: [ flagged := false ]]\x0a    on: TrappedUnwatch do: [ actionBlock := nil ]",
+messageSends: ["on:do:", "ensure:", "value"],
+referencedClasses: ["TrappedUnwatch"]
+}),
+smalltalk.TrappedSubscription);
+
+
+smalltalk.addMethod(
+"_new",
+smalltalk.method({
+selector: "new",
+category: 'instance creation',
+fn: function (){
+var self=this;
+smalltalk.send(self,"_shouldNotImplement",[]);
+return self},
+args: [],
+source: "new\x0a\x09self shouldNotImplement",
+messageSends: ["shouldNotImplement"],
+referencedClasses: []
+}),
+smalltalk.TrappedSubscription.klass);
+
+smalltalk.addMethod(
+"_path_action_",
+smalltalk.method({
+selector: "path:action:",
+category: 'instance creation',
+fn: function (anArray,aBlock){
+var self=this;
+var $1;
+$1=smalltalk.send(smalltalk.send(self,"_new",[],smalltalk.Object.klass),"_path_actionBlock_",[anArray,aBlock]);
+return $1;
+},
+args: ["anArray", "aBlock"],
+source: "path: anArray action: aBlock\x0a\x09^super new path: anArray actionBlock: aBlock",
+messageSends: ["path:actionBlock:", "new"],
+referencedClasses: []
+}),
+smalltalk.TrappedSubscription.klass);
 
 
 smalltalk.addClass('TrappedUnwatch', smalltalk.Error, [], 'Trapped-Backend');

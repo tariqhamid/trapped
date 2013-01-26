@@ -94,11 +94,8 @@ changed: path
 	| needsToRun |
     needsToRun := false.
 	self do: [ :each |
-		| aPath lesser |
-		aPath := each second.
-		lesser := aPath size min: path size.
-		(path copyFrom: 1 to: lesser) = (aPath copyFrom: 1 to: lesser) ifTrue: [
-			each at: 1 put: true.
+		(each accepts: path) ifTrue: [
+			each flag.
             needsToRun := true.
 		]
 	].
@@ -110,7 +107,7 @@ dirty: aBoolean
 !
 
 on: path hook: aBlock
-	self add: { true. path. aBlock }.
+	self add: (TrappedSubscription path: path action: aBlock) flag.
    	self dirty: true
 !
 
@@ -118,12 +115,69 @@ run
 	| needsClean |
     needsClean := false.
 	self do: [ :each |
-		each first ifTrue: [
-            [[ each third value ] ensure: [ each at: 1 put: false ]]
-            on: TrappedUnwatch do: [ each at: 3 put: nil. needsClean := true ]
+		each isFlagged ifTrue: [
+            each run.
+            each isEnabled ifFalse: [ needsClean := true ]
         ]
 	].
     needsClean ifTrue: [ self clean ]
+! !
+
+Object subclass: #TrappedSubscription
+	instanceVariableNames: 'path actionBlock flagged'
+	package: 'Trapped-Backend'!
+
+!TrappedSubscription methodsFor: 'accessing'!
+
+flag
+	flagged := true
+!
+
+path: anArray actionBlock: aBlock
+	path := anArray.
+    actionBlock := aBlock
+! !
+
+!TrappedSubscription methodsFor: 'action'!
+
+run
+	[[ actionBlock value ] ensure: [ flagged := false ]]
+    on: TrappedUnwatch do: [ actionBlock := nil ]
+! !
+
+!TrappedSubscription methodsFor: 'initialization'!
+
+initialize
+	super initialize.
+    path := nil.
+    actionBlock := nil.
+    flagged := false.
+! !
+
+!TrappedSubscription methodsFor: 'testing'!
+
+accepts: aPath
+    | lesser |
+    lesser := path size min: aPath size.
+    ^(aPath copyFrom: 1 to: lesser) = (path copyFrom: 1 to: lesser)
+!
+
+isEnabled
+	^actionBlock notNil
+!
+
+isFlagged
+	^flagged
+! !
+
+!TrappedSubscription class methodsFor: 'instance creation'!
+
+new
+	self shouldNotImplement
+!
+
+path: anArray action: aBlock
+	^super new path: anArray actionBlock: aBlock
 ! !
 
 Error subclass: #TrappedUnwatch

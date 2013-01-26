@@ -36,10 +36,10 @@ smalltalk.addMethod(
 "_add_",
 smalltalk.method({
 selector: "add:",
-fn: function (aTriplet){
+fn: function (aSubscription){
 var self=this;
-smalltalk.send(self["@queue"],"_add_",[aTriplet]);
-smalltalk.send(self,"_dirty_",[smalltalk.send(aTriplet,"_first",[])]);
+smalltalk.send(self["@queue"],"_add_",[aSubscription]);
+smalltalk.send(self,"_dirty_",[smalltalk.send(aSubscription,"_isFlagged",[])]);
 return self}
 }),
 smalltalk.TrappedDumbDispatcher);
@@ -51,7 +51,7 @@ selector: "clean",
 fn: function (){
 var self=this;
 self["@queue"]=smalltalk.send(self["@queue"],"_select_",[(function(each){
-return smalltalk.send(smalltalk.send(each,"_third",[]),"_notNil",[]);
+return smalltalk.send(each,"_isEnabled",[]);
 })]);
 return self}
 }),
