@@ -45,11 +45,10 @@ category: 'accessing',
 fn: function (aSubscription){
 var self=this;
 smalltalk.send(self["@queue"],"_add_",[aSubscription]);
-smalltalk.send(self,"_dirty_",[smalltalk.send(aSubscription,"_isFlagged",[])]);
 return self},
 args: ["aSubscription"],
-source: "add: aSubscription\x0a\x09queue add: aSubscription.\x0a    self dirty: aSubscription isFlagged\x0a\x09",
-messageSends: ["add:", "dirty:", "isFlagged"],
+source: "add: aSubscription\x0a\x09queue add: aSubscription.\x0a",
+messageSends: ["add:"],
 referencedClasses: []
 }),
 smalltalk.TrappedDumbDispatcher);

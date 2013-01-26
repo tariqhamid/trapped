@@ -26,7 +26,6 @@ TrappedDispatcher subclass: #TrappedDumbDispatcher
 
 add: aSubscription
 	queue add: aSubscription.
-    self dirty: aSubscription isFlagged
 ! !
 
 !TrappedDumbDispatcher methodsFor: 'bookkeeping'!

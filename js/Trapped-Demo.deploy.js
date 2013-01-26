@@ -39,7 +39,6 @@ selector: "add:",
 fn: function (aSubscription){
 var self=this;
 smalltalk.send(self["@queue"],"_add_",[aSubscription]);
-smalltalk.send(self,"_dirty_",[smalltalk.send(aSubscription,"_isFlagged",[])]);
 return self}
 }),
 smalltalk.TrappedDumbDispatcher);
