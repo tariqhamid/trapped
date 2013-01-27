@@ -109,17 +109,15 @@ var snap;
 snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
 snap;
 return smalltalk.send(self["@brush"],"_onChange_",[(function(){
-return smalltalk.send(snap,"_do_",[(function(){
-return smalltalk.send(self["@brush"],"_trap_modify_",[[],(function(){
+return smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(){
 return smalltalk.send(smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_",["checked"]),"_notNil",[]);
-})]);
 })]);
 })]);
 })]);
 return self},
 args: ["path"],
-source: "installFor: path\x0a\x09super installFor: path.\x0a    path trapDescend: [ | snap |\x0a        snap := Trapped current snapshot.\x0a\x09    brush onChange: [ snap do: [ brush trap: #() modify: [\x0a            (brush asJQuery attr: 'checked') notNil\x0a        ]]]\x0a    ]",
-messageSends: ["installFor:", "trapDescend:", "snapshot", "current", "onChange:", "do:", "trap:modify:", "notNil", "attr:", "asJQuery"],
+source: "installFor: path\x0a\x09super installFor: path.\x0a    path trapDescend: [ | snap |\x0a        snap := Trapped current snapshot.\x0a\x09    brush onChange: [ snap model modify: snap path allButFirst do: [\x0a            (brush asJQuery attr: 'checked') notNil\x0a        ]]\x0a    ]",
+messageSends: ["installFor:", "trapDescend:", "snapshot", "current", "onChange:", "modify:do:", "allButFirst", "path", "notNil", "attr:", "asJQuery", "model"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedAttrBinder);
@@ -892,27 +890,6 @@ return self},
 args: ["path"],
 source: "trap: path\x0a\x09(Trapped current binder: self) installFor: path",
 messageSends: ["installFor:", "binder:", "current"],
-referencedClasses: ["Trapped"]
-}),
-smalltalk.TagBrush);
-
-smalltalk.addMethod(
-"_trap_modify_",
-smalltalk.method({
-selector: "trap:modify:",
-category: '*Trapped-Frontend',
-fn: function (path,aBlock){
-var self=this;
-smalltalk.send(path,"_trapDescend_",[(function(){
-var snap;
-snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
-snap;
-return smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),aBlock]);
-})]);
-return self},
-args: ["path", "aBlock"],
-source: "trap: path modify: aBlock\x0a\x09path trapDescend: [ | snap |\x0a        snap := Trapped current snapshot.\x0a        snap model modify: snap path allButFirst do: aBlock\x0a    ]",
-messageSends: ["trapDescend:", "snapshot", "current", "modify:do:", "allButFirst", "path", "model"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TagBrush);

@@ -83,10 +83,8 @@ var snap;
 snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
 snap;
 return smalltalk.send(self["@brush"],"_onChange_",[(function(){
-return smalltalk.send(snap,"_do_",[(function(){
-return smalltalk.send(self["@brush"],"_trap_modify_",[[],(function(){
+return smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(){
 return smalltalk.send(smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_",["checked"]),"_notNil",[]);
-})]);
 })]);
 })]);
 })]);
@@ -672,22 +670,6 @@ selector: "trap:",
 fn: function (path){
 var self=this;
 smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_binder_",[self]),"_installFor_",[path]);
-return self}
-}),
-smalltalk.TagBrush);
-
-smalltalk.addMethod(
-"_trap_modify_",
-smalltalk.method({
-selector: "trap:modify:",
-fn: function (path,aBlock){
-var self=this;
-smalltalk.send(path,"_trapDescend_",[(function(){
-var snap;
-snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
-snap;
-return smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),aBlock]);
-})]);
 return self}
 }),
 smalltalk.TagBrush);

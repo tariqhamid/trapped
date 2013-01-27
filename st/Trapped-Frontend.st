@@ -41,9 +41,9 @@ installFor: path
 	super installFor: path.
     path trapDescend: [ | snap |
         snap := Trapped current snapshot.
-	    brush onChange: [ snap do: [ brush trap: #() modify: [
+	    brush onChange: [ snap model modify: snap path allButFirst do: [
             (brush asJQuery attr: 'checked') notNil
-        ]]]
+        ]]
     ]
 !
 
@@ -358,13 +358,6 @@ trapDescend: aBlock
 
 trap: path
 	(Trapped current binder: self) installFor: path
-!
-
-trap: path modify: aBlock
-	path trapDescend: [ | snap |
-        snap := Trapped current snapshot.
-        snap model modify: snap path allButFirst do: aBlock
-    ]
 !
 
 trap: path read: aBlock
