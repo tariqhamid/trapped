@@ -21,23 +21,23 @@ Widget subclass: #AppView
 !AppView methodsFor: 'rendering'!
 
 renderOn: html
-	html h2 trapShow: #('title').
+	html h2 trap: #('title').
     html div trap: #('items') toggle: [
-        html p with: [ html span trapShow: #(#size). html with: ' item(s).' ].
+        html p with: [ html span trap: #(#size). html with: ' item(s).' ].
 		html form with: [ html ul trapIter: #() tag: #li do: [ :each |
             html root empty.
             html input
                 type: 'checkbox';
-                trapBind: #(1).
-            html span trapShow: #(2).
+                trap: #(1).
+            html span trap: #(2).
         ]].
         html p with: '... and again, to see the bidirectional binding:'.
 		html form with: [ html ul trapIter: #() tag: #li do: [ :each |
             html root empty.
             html input
                 type: 'checkbox';
-                trapBind: #(1).
-            html span trapShow: #(2).
+                trap: #(1).
+            html span trap: #(2).
         ]].
     ] ifNotPresent: [ html with: 'Loading ...' ]
 ! !

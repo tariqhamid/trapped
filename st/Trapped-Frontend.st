@@ -16,7 +16,7 @@ installFor: path
 !
 
 showBlock
-	self subclassResponsibility
+	^[ :model | brush empty; with: (model ifNil: [[]]) ]
 ! !
 
 !TrappedBinder methodsFor: 'converting'!
@@ -80,7 +80,7 @@ I just read and show an actual path.!
 !TrappedDumbView methodsFor: 'rendering'!
 
 renderOn: html
-	html root trapShow: #()
+	html root trap: #()
 ! !
 
 Object subclass: #TrappedModelWrapper
@@ -242,7 +242,13 @@ start
 
 binder: aTagBrush
     "Prototype; will select based on tag etc."
-    ^TrappedAttrBinder new attr: 'checked'; brush: aTagBrush; yourself
+    | binder tag |
+    tag := aTagBrush element nodeName.
+    tag = 'INPUT' ifTrue: [
+    	binder := TrappedAttrBinder new attr: 'checked'; yourself
+    ].
+    binder ifNil: [ binder := TrappedBinder new ].
+    ^ binder brush: aTagBrush; yourself
 ! !
 
 !Trapped methodsFor: 'initialization'!
@@ -320,6 +326,10 @@ trapDescend: aBlock
 
 !TagBrush methodsFor: '*Trapped-Frontend'!
 
+trap: path
+	(Trapped current binder: self) installFor: path
+!
+
 trap: path modify: aBlock
 	path trapDescend: [ | actual model |
     	actual := Trapped path.
@@ -355,10 +365,6 @@ trap: path toggle: aBlock ifNotPresent: anotherBlock
     ]
 !
 
-trapBind: path
-	(Trapped current binder: self) installFor: path
-!
-
 trapIter: path tag: aSymbol do: aBlock
     self trap: path read: [ :model :html |
         html root empty.
@@ -366,13 +372,5 @@ trapIter: path tag: aSymbol do: aBlock
             (html perform: aSymbol) trap: {i} read: aBlock
         ]]
     ]
-!
-
-trapShow: path
-	self trapShow: path default: []
-!
-
-trapShow: path default: anObject
-	self trap: path read: [ :model | self empty; with: (model ifNil: [anObject]) ]
 ! !
 

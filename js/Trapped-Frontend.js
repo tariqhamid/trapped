@@ -56,11 +56,23 @@ selector: "showBlock",
 category: 'action',
 fn: function (){
 var self=this;
-smalltalk.send(self,"_subclassResponsibility",[]);
-return self},
+var $3,$2,$1;
+$1=(function(model){
+smalltalk.send(self["@brush"],"_empty",[]);
+if(($receiver = model) == nil || $receiver == undefined){
+$3=(function(){
+});
+} else {
+$3=model;
+};
+$2=smalltalk.send(self["@brush"],"_with_",[$3]);
+return $2;
+});
+return $1;
+},
 args: [],
-source: "showBlock\x0a\x09self subclassResponsibility",
-messageSends: ["subclassResponsibility"],
+source: "showBlock\x0a\x09^[ :model | brush empty; with: (model ifNil: [[]]) ]",
+messageSends: ["empty", "with:", "ifNil:"],
 referencedClasses: []
 }),
 smalltalk.TrappedBinder);
@@ -168,11 +180,11 @@ selector: "renderOn:",
 category: 'rendering',
 fn: function (html){
 var self=this;
-smalltalk.send(smalltalk.send(html,"_root",[]),"_trapShow_",[[]]);
+smalltalk.send(smalltalk.send(html,"_root",[]),"_trap_",[[]]);
 return self},
 args: ["html"],
-source: "renderOn: html\x0a\x09html root trapShow: #()",
-messageSends: ["trapShow:", "root"],
+source: "renderOn: html\x0a\x09html root trap: #()",
+messageSends: ["trap:", "root"],
 referencedClasses: []
 }),
 smalltalk.TrappedDumbView);
@@ -480,18 +492,33 @@ selector: "binder:",
 category: 'binders',
 fn: function (aTagBrush){
 var self=this;
-var $2,$3,$1;
+var $1,$2,$3,$5,$4;
+var binder;
+var tag;
+tag=smalltalk.send(smalltalk.send(aTagBrush,"_element",[]),"_nodeName",[]);
+$1=smalltalk.send(tag,"__eq",["INPUT"]);
+if(smalltalk.assert($1)){
 $2=smalltalk.send((smalltalk.TrappedAttrBinder || TrappedAttrBinder),"_new",[]);
 smalltalk.send($2,"_attr_",["checked"]);
-smalltalk.send($2,"_brush_",[aTagBrush]);
 $3=smalltalk.send($2,"_yourself",[]);
-$1=$3;
-return $1;
+binder=$3;
+binder;
+};
+if(($receiver = binder) == nil || $receiver == undefined){
+binder=smalltalk.send((smalltalk.TrappedBinder || TrappedBinder),"_new",[]);
+binder;
+} else {
+binder;
+};
+smalltalk.send(binder,"_brush_",[aTagBrush]);
+$5=smalltalk.send(binder,"_yourself",[]);
+$4=$5;
+return $4;
 },
 args: ["aTagBrush"],
-source: "binder: aTagBrush\x0a    \x22Prototype; will select based on tag etc.\x22\x0a    ^TrappedAttrBinder new attr: 'checked'; brush: aTagBrush; yourself",
-messageSends: ["attr:", "new", "brush:", "yourself"],
-referencedClasses: ["TrappedAttrBinder"]
+source: "binder: aTagBrush\x0a    \x22Prototype; will select based on tag etc.\x22\x0a    | binder tag |\x0a    tag := aTagBrush element nodeName.\x0a    tag = 'INPUT' ifTrue: [\x0a    \x09binder := TrappedAttrBinder new attr: 'checked'; yourself\x0a    ].\x0a    binder ifNil: [ binder := TrappedBinder new ].\x0a    ^ binder brush: aTagBrush; yourself",
+messageSends: ["nodeName", "element", "ifTrue:", "attr:", "new", "yourself", "=", "ifNil:", "brush:"],
+referencedClasses: ["TrappedAttrBinder", "TrappedBinder"]
 }),
 smalltalk.Trapped);
 
@@ -779,6 +806,22 @@ referencedClasses: ["TrappedPathStack"]
 smalltalk.Array);
 
 smalltalk.addMethod(
+"_trap_",
+smalltalk.method({
+selector: "trap:",
+category: '*Trapped-Frontend',
+fn: function (path){
+var self=this;
+smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_binder_",[self]),"_installFor_",[path]);
+return self},
+args: ["path"],
+source: "trap: path\x0a\x09(Trapped current binder: self) installFor: path",
+messageSends: ["installFor:", "binder:", "current"],
+referencedClasses: ["Trapped"]
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
 "_trap_modify_",
 smalltalk.method({
 selector: "trap:modify:",
@@ -891,22 +934,6 @@ referencedClasses: []
 smalltalk.TagBrush);
 
 smalltalk.addMethod(
-"_trapBind_",
-smalltalk.method({
-selector: "trapBind:",
-category: '*Trapped-Frontend',
-fn: function (path){
-var self=this;
-smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_binder_",[self]),"_installFor_",[path]);
-return self},
-args: ["path"],
-source: "trapBind: path\x0a\x09(Trapped current binder: self) installFor: path",
-messageSends: ["installFor:", "binder:", "current"],
-referencedClasses: ["Trapped"]
-}),
-smalltalk.TagBrush);
-
-smalltalk.addMethod(
 "_trapIter_tag_do_",
 smalltalk.method({
 selector: "trapIter:tag:do:",
@@ -927,49 +954,6 @@ return self},
 args: ["path", "aSymbol", "aBlock"],
 source: "trapIter: path tag: aSymbol do: aBlock\x0a    self trap: path read: [ :model :html |\x0a        html root empty.\x0a        model ifNotNil: [ model withIndexDo: [ :item :i |\x0a            (html perform: aSymbol) trap: {i} read: aBlock\x0a        ]]\x0a    ]",
 messageSends: ["trap:read:", "empty", "root", "ifNotNil:", "withIndexDo:", "perform:"],
-referencedClasses: []
-}),
-smalltalk.TagBrush);
-
-smalltalk.addMethod(
-"_trapShow_",
-smalltalk.method({
-selector: "trapShow:",
-category: '*Trapped-Frontend',
-fn: function (path){
-var self=this;
-smalltalk.send(self,"_trapShow_default_",[path,(function(){
-})]);
-return self},
-args: ["path"],
-source: "trapShow: path\x0a\x09self trapShow: path default: []",
-messageSends: ["trapShow:default:"],
-referencedClasses: []
-}),
-smalltalk.TagBrush);
-
-smalltalk.addMethod(
-"_trapShow_default_",
-smalltalk.method({
-selector: "trapShow:default:",
-category: '*Trapped-Frontend',
-fn: function (path,anObject){
-var self=this;
-var $2,$1;
-smalltalk.send(self,"_trap_read_",[path,(function(model){
-smalltalk.send(self,"_empty",[]);
-if(($receiver = model) == nil || $receiver == undefined){
-$2=anObject;
-} else {
-$2=model;
-};
-$1=smalltalk.send(self,"_with_",[$2]);
-return $1;
-})]);
-return self},
-args: ["path", "anObject"],
-source: "trapShow: path default: anObject\x0a\x09self trap: path read: [ :model | self empty; with: (model ifNil: [anObject]) ]",
-messageSends: ["trap:read:", "empty", "with:", "ifNil:"],
 referencedClasses: []
 }),
 smalltalk.TagBrush);

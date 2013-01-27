@@ -35,10 +35,10 @@ category: 'rendering',
 fn: function (html){
 var self=this;
 var $1,$2,$3,$4;
-smalltalk.send(smalltalk.send(html,"_h2",[]),"_trapShow_",[["title"]]);
+smalltalk.send(smalltalk.send(html,"_h2",[]),"_trap_",[["title"]]);
 smalltalk.send(smalltalk.send(html,"_div",[]),"_trap_toggle_ifNotPresent_",[["items"],(function(){
 smalltalk.send(smalltalk.send(html,"_p",[]),"_with_",[(function(){
-smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[[smalltalk.symbolFor("size")]]);
+smalltalk.send(smalltalk.send(html,"_span",[]),"_trap_",[[smalltalk.symbolFor("size")]]);
 return smalltalk.send(html,"_with_",[" item(s)."]);
 })]);
 smalltalk.send(smalltalk.send(html,"_form",[]),"_with_",[(function(){
@@ -46,9 +46,9 @@ return smalltalk.send(smalltalk.send(html,"_ul",[]),"_trapIter_tag_do_",[[],smal
 smalltalk.send(smalltalk.send(html,"_root",[]),"_empty",[]);
 $1=smalltalk.send(html,"_input",[]);
 smalltalk.send($1,"_type_",["checkbox"]);
-$2=smalltalk.send($1,"_trapBind_",[[(1)]]);
+$2=smalltalk.send($1,"_trap_",[[(1)]]);
 $2;
-return smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[[(2)]]);
+return smalltalk.send(smalltalk.send(html,"_span",[]),"_trap_",[[(2)]]);
 })]);
 })]);
 smalltalk.send(smalltalk.send(html,"_p",[]),"_with_",["... and again, to see the bidirectional binding:"]);
@@ -57,9 +57,9 @@ return smalltalk.send(smalltalk.send(html,"_ul",[]),"_trapIter_tag_do_",[[],smal
 smalltalk.send(smalltalk.send(html,"_root",[]),"_empty",[]);
 $3=smalltalk.send(html,"_input",[]);
 smalltalk.send($3,"_type_",["checkbox"]);
-$4=smalltalk.send($3,"_trapBind_",[[(1)]]);
+$4=smalltalk.send($3,"_trap_",[[(1)]]);
 $4;
-return smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[[(2)]]);
+return smalltalk.send(smalltalk.send(html,"_span",[]),"_trap_",[[(2)]]);
 })]);
 })]);
 }),(function(){
@@ -67,8 +67,8 @@ return smalltalk.send(html,"_with_",["Loading ..."]);
 })]);
 return self},
 args: ["html"],
-source: "renderOn: html\x0a\x09html h2 trapShow: #('title').\x0a    html div trap: #('items') toggle: [\x0a        html p with: [ html span trapShow: #(#size). html with: ' item(s).' ].\x0a\x09\x09html form with: [ html ul trapIter: #() tag: #li do: [ :each |\x0a            html root empty.\x0a            html input\x0a                type: 'checkbox';\x0a                trapBind: #(1).\x0a            html span trapShow: #(2).\x0a        ]].\x0a        html p with: '... and again, to see the bidirectional binding:'.\x0a\x09\x09html form with: [ html ul trapIter: #() tag: #li do: [ :each |\x0a            html root empty.\x0a            html input\x0a                type: 'checkbox';\x0a                trapBind: #(1).\x0a            html span trapShow: #(2).\x0a        ]].\x0a    ] ifNotPresent: [ html with: 'Loading ...' ]",
-messageSends: ["trapShow:", "h2", "trap:toggle:ifNotPresent:", "with:", "span", "p", "trapIter:tag:do:", "empty", "root", "type:", "input", "trapBind:", "ul", "form", "div"],
+source: "renderOn: html\x0a\x09html h2 trap: #('title').\x0a    html div trap: #('items') toggle: [\x0a        html p with: [ html span trap: #(#size). html with: ' item(s).' ].\x0a\x09\x09html form with: [ html ul trapIter: #() tag: #li do: [ :each |\x0a            html root empty.\x0a            html input\x0a                type: 'checkbox';\x0a                trap: #(1).\x0a            html span trap: #(2).\x0a        ]].\x0a        html p with: '... and again, to see the bidirectional binding:'.\x0a\x09\x09html form with: [ html ul trapIter: #() tag: #li do: [ :each |\x0a            html root empty.\x0a            html input\x0a                type: 'checkbox';\x0a                trap: #(1).\x0a            html span trap: #(2).\x0a        ]].\x0a    ] ifNotPresent: [ html with: 'Loading ...' ]",
+messageSends: ["trap:", "h2", "trap:toggle:ifNotPresent:", "with:", "span", "p", "trapIter:tag:do:", "empty", "root", "type:", "input", "ul", "form", "div"],
 referencedClasses: []
 }),
 smalltalk.AppView);

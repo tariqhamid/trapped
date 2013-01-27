@@ -40,8 +40,20 @@ smalltalk.method({
 selector: "showBlock",
 fn: function (){
 var self=this;
-smalltalk.send(self,"_subclassResponsibility",[]);
-return self}
+var $3,$2,$1;
+$1=(function(model){
+smalltalk.send(self["@brush"],"_empty",[]);
+if(($receiver = model) == nil || $receiver == undefined){
+$3=(function(){
+});
+} else {
+$3=model;
+};
+$2=smalltalk.send(self["@brush"],"_with_",[$3]);
+return $2;
+});
+return $1;
+}
 }),
 smalltalk.TrappedBinder);
 
@@ -125,7 +137,7 @@ smalltalk.method({
 selector: "renderOn:",
 fn: function (html){
 var self=this;
-smalltalk.send(smalltalk.send(html,"_root",[]),"_trapShow_",[[]]);
+smalltalk.send(smalltalk.send(html,"_root",[]),"_trap_",[[]]);
 return self}
 }),
 smalltalk.TrappedDumbView);
@@ -354,13 +366,28 @@ smalltalk.method({
 selector: "binder:",
 fn: function (aTagBrush){
 var self=this;
-var $2,$3,$1;
+var $1,$2,$3,$5,$4;
+var binder;
+var tag;
+tag=smalltalk.send(smalltalk.send(aTagBrush,"_element",[]),"_nodeName",[]);
+$1=smalltalk.send(tag,"__eq",["INPUT"]);
+if(smalltalk.assert($1)){
 $2=smalltalk.send((smalltalk.TrappedAttrBinder || TrappedAttrBinder),"_new",[]);
 smalltalk.send($2,"_attr_",["checked"]);
-smalltalk.send($2,"_brush_",[aTagBrush]);
 $3=smalltalk.send($2,"_yourself",[]);
-$1=$3;
-return $1;
+binder=$3;
+binder;
+};
+if(($receiver = binder) == nil || $receiver == undefined){
+binder=smalltalk.send((smalltalk.TrappedBinder || TrappedBinder),"_new",[]);
+binder;
+} else {
+binder;
+};
+smalltalk.send(binder,"_brush_",[aTagBrush]);
+$5=smalltalk.send(binder,"_yourself",[]);
+$4=$5;
+return $4;
 }
 }),
 smalltalk.Trapped);
@@ -584,6 +611,17 @@ return self}
 smalltalk.Array);
 
 smalltalk.addMethod(
+"_trap_",
+smalltalk.method({
+selector: "trap:",
+fn: function (path){
+var self=this;
+smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_binder_",[self]),"_installFor_",[path]);
+return self}
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
 "_trap_modify_",
 smalltalk.method({
 selector: "trap:modify:",
@@ -676,17 +714,6 @@ return self}
 smalltalk.TagBrush);
 
 smalltalk.addMethod(
-"_trapBind_",
-smalltalk.method({
-selector: "trapBind:",
-fn: function (path){
-var self=this;
-smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_binder_",[self]),"_installFor_",[path]);
-return self}
-}),
-smalltalk.TagBrush);
-
-smalltalk.addMethod(
 "_trapIter_tag_do_",
 smalltalk.method({
 selector: "trapIter:tag:do:",
@@ -701,39 +728,6 @@ return smalltalk.send(model,"_withIndexDo_",[(function(item,i){
 return smalltalk.send(smalltalk.send(html,"_perform_",[aSymbol]),"_trap_read_",[[i],aBlock]);
 })]);
 };
-})]);
-return self}
-}),
-smalltalk.TagBrush);
-
-smalltalk.addMethod(
-"_trapShow_",
-smalltalk.method({
-selector: "trapShow:",
-fn: function (path){
-var self=this;
-smalltalk.send(self,"_trapShow_default_",[path,(function(){
-})]);
-return self}
-}),
-smalltalk.TagBrush);
-
-smalltalk.addMethod(
-"_trapShow_default_",
-smalltalk.method({
-selector: "trapShow:default:",
-fn: function (path,anObject){
-var self=this;
-var $2,$1;
-smalltalk.send(self,"_trap_read_",[path,(function(model){
-smalltalk.send(self,"_empty",[]);
-if(($receiver = model) == nil || $receiver == undefined){
-$2=anObject;
-} else {
-$2=model;
-};
-$1=smalltalk.send(self,"_with_",[$2]);
-return $1;
 })]);
 return self}
 }),
