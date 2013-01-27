@@ -79,11 +79,11 @@ fn: function (path){
 var self=this;
 smalltalk.send(self,"_installFor_",[path],smalltalk.TrappedBinder);
 smalltalk.send(path,"_trapDescend_",[(function(){
-var actual;
-actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
-actual;
+var snap;
+snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
+snap;
 return smalltalk.send(self["@brush"],"_onChange_",[(function(){
-return smalltalk.send(actual,"_trapDescend_",[(function(){
+return smalltalk.send(snap,"_do_",[(function(){
 return smalltalk.send(self["@brush"],"_trap_modify_",[[],(function(){
 return smalltalk.send(smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_",["checked"]),"_notNil",[]);
 })]);
@@ -429,6 +429,23 @@ return self}
 smalltalk.Trapped);
 
 smalltalk.addMethod(
+"_snapshot",
+smalltalk.method({
+selector: "snapshot",
+fn: function (){
+var self=this;
+var $1;
+var path;
+var model;
+path=smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_elements",[]);
+model=smalltalk.send(self,"_byName_",[smalltalk.send(path,"_first",[])]);
+$1=smalltalk.send(smalltalk.send((smalltalk.TrappedSnapshot || TrappedSnapshot),"_new",[]),"_path_model_",[path,model]);
+return $1;
+}
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
 "_start",
 smalltalk.method({
 selector: "start",
@@ -500,28 +517,15 @@ return $1;
 }),
 smalltalk.Trapped.klass);
 
-smalltalk.addMethod(
-"_path",
-smalltalk.method({
-selector: "path",
-fn: function (){
-var self=this;
-var $1;
-$1=smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_elements",[]);
-return $1;
-}
-}),
-smalltalk.Trapped.klass);
-
 
 smalltalk.addClass('TrappedPathStack', smalltalk.TrappedSingleton, ['elements'], 'Trapped-Frontend');
 smalltalk.addMethod(
-"_append_",
+"_append_do_",
 smalltalk.method({
-selector: "append:",
-fn: function (anArray){
+selector: "append:do:",
+fn: function (anArray,aBlock){
 var self=this;
-self["@elements"]=smalltalk.send(self["@elements"],"__comma",[anArray]);
+smalltalk.send(self,"_with_do_",[smalltalk.send(self["@elements"],"__comma",[anArray]),aBlock]);
 return self}
 }),
 smalltalk.TrappedPathStack);
@@ -558,7 +562,8 @@ var self=this;
 var old;
 old=self["@elements"];
 smalltalk.send((function(){
-smalltalk.send(self,"_append_",[anArray]);
+self["@elements"]=anArray;
+self["@elements"];
 return smalltalk.send(aBlock,"_value",[]);
 }),"_ensure_",[(function(){
 self["@elements"]=old;
@@ -567,6 +572,56 @@ return self["@elements"];
 return self}
 }),
 smalltalk.TrappedPathStack);
+
+
+
+smalltalk.addClass('TrappedSnapshot', smalltalk.Object, ['path', 'model'], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_do_",
+smalltalk.method({
+selector: "do:",
+fn: function (aBlock){
+var self=this;
+smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_with_do_",[self["@path"],(function(){
+return smalltalk.send(aBlock,"_value_",[self["@model"]]);
+})]);
+return self}
+}),
+smalltalk.TrappedSnapshot);
+
+smalltalk.addMethod(
+"_model",
+smalltalk.method({
+selector: "model",
+fn: function (){
+var self=this;
+return self["@model"];
+}
+}),
+smalltalk.TrappedSnapshot);
+
+smalltalk.addMethod(
+"_path",
+smalltalk.method({
+selector: "path",
+fn: function (){
+var self=this;
+return self["@path"];
+}
+}),
+smalltalk.TrappedSnapshot);
+
+smalltalk.addMethod(
+"_path_model_",
+smalltalk.method({
+selector: "path:model:",
+fn: function (anArray,aTrappedMW){
+var self=this;
+self["@path"]=anArray;
+self["@model"]=aTrappedMW;
+return self}
+}),
+smalltalk.TrappedSnapshot);
 
 
 
@@ -594,7 +649,7 @@ smalltalk.method({
 selector: "trapDescend:",
 fn: function (aBlock){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_with_do_",[self,aBlock]);
+smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_append_do_",[self,aBlock]);
 return self}
 }),
 smalltalk.Array);
@@ -605,7 +660,7 @@ smalltalk.method({
 selector: "trapDescend:",
 fn: function (aBlock){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_with_do_",[self,aBlock]);
+smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_append_do_",[self,aBlock]);
 return self}
 }),
 smalltalk.Array);
@@ -628,13 +683,10 @@ selector: "trap:modify:",
 fn: function (path,aBlock){
 var self=this;
 smalltalk.send(path,"_trapDescend_",[(function(){
-var actual;
-var model;
-actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
-actual;
-model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[smalltalk.send(actual,"_first",[])]);
-model;
-return smalltalk.send(model,"_modify_do_",[smalltalk.send(actual,"_allButFirst",[]),aBlock]);
+var snap;
+snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
+snap;
+return smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),aBlock]);
 })]);
 return self}
 }),
@@ -648,18 +700,15 @@ fn: function (path,aBlock){
 var self=this;
 var $1;
 smalltalk.send(path,"_trapDescend_",[(function(){
-var actual;
-var model;
-actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
-actual;
-model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[smalltalk.send(actual,"_first",[])]);
-model;
-return smalltalk.send(model,"_watch_do_",[smalltalk.send(actual,"_allButFirst",[]),(function(data){
+var snap;
+snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
+snap;
+return smalltalk.send(smalltalk.send(snap,"_model",[]),"_watch_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(data){
 $1=smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(self,"_asJQuery",[]),"_closest_",["html"]),"_toArray",[]),"_isEmpty",[]);
 if(smalltalk.assert($1)){
 smalltalk.send((smalltalk.KeyedPubSubUnsubscribe || KeyedPubSubUnsubscribe),"_signal",[]);
 };
-return smalltalk.send(actual,"_trapDescend_",[(function(){
+return smalltalk.send(snap,"_do_",[(function(){
 return smalltalk.send(self,"_with_",[(function(html){
 return smalltalk.send(aBlock,"_value_value_",[data,html]);
 })]);

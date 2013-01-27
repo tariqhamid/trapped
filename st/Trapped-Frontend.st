@@ -39,9 +39,9 @@ attr: aString
 
 installFor: path
 	super installFor: path.
-    path trapDescend: [ | actual |
-        actual := Trapped path.
-	    brush onChange: [ actual trapDescend: [ brush trap: #() modify: [
+    path trapDescend: [ | snap |
+        snap := Trapped current snapshot.
+	    brush onChange: [ snap do: [ brush trap: #() modify: [
             (brush asJQuery attr: 'checked') notNil
         ]]]
     ]
@@ -258,6 +258,15 @@ initialize
 	registry := #{}.
 ! !
 
+!Trapped methodsFor: 'snapshotting'!
+
+snapshot
+	| path model |
+    path := TrappedPathStack current elements.
+   	model := self byName: path first.
+    ^TrappedSnapshot new path: path model: model
+! !
+
 !Trapped class methodsFor: 'accessing'!
 
 parse: anArray
@@ -266,10 +275,6 @@ parse: anArray
        	<asNum = parseInt(each)>.
         asNum = asNum ifTrue: [ asNum ] ifFalse: [
 			each first = '#' ifTrue: [ each allButFirst asSymbol ] ifFalse: [ each ]]]
-!
-
-path
-	^TrappedPathStack current elements
 ! !
 
 TrappedSingleton subclass: #TrappedPathStack
@@ -284,14 +289,14 @@ elements
 
 !TrappedPathStack methodsFor: 'descending'!
 
-append: anArray
-    elements := elements, anArray
+append: anArray do: aBlock
+    self with: elements, anArray do: aBlock
 !
 
 with: anArray do: aBlock
 	| old |
     old := elements.
-    [ self append: anArray.
+    [ elements := anArray.
 	aBlock value ] ensure: [ elements := old ]
 ! !
 
@@ -300,6 +305,31 @@ with: anArray do: aBlock
 initialize
     super initialize.
 	elements := #().
+! !
+
+Object subclass: #TrappedSnapshot
+	instanceVariableNames: 'path model'
+	package: 'Trapped-Frontend'!
+
+!TrappedSnapshot methodsFor: 'accessing'!
+
+model
+	^model
+!
+
+path
+	^path
+!
+
+path: anArray model: aTrappedMW
+	path := anArray.
+    model := aTrappedMW
+! !
+
+!TrappedSnapshot methodsFor: 'action'!
+
+do: aBlock
+	TrappedPathStack current with: path do: [ aBlock value: model ]
 ! !
 
 KeyedSubscriptionBase subclass: #TrappedSubscription
@@ -315,13 +345,13 @@ accepts: aKey
 !Array methodsFor: '*Trapped-Frontend'!
 
 trapDescend: aBlock
-	TrappedPathStack current with: self do: aBlock
+	TrappedPathStack current append: self do: aBlock
 ! !
 
 !Array methodsFor: '*Trapped-Frontend'!
 
 trapDescend: aBlock
-	TrappedPathStack current with: self do: aBlock
+	TrappedPathStack current append: self do: aBlock
 ! !
 
 !TagBrush methodsFor: '*Trapped-Frontend'!
@@ -331,20 +361,18 @@ trap: path
 !
 
 trap: path modify: aBlock
-	path trapDescend: [ | actual model |
-    	actual := Trapped path.
-        model := Trapped current byName: actual first.
-        model modify: actual allButFirst do: aBlock
+	path trapDescend: [ | snap |
+        snap := Trapped current snapshot.
+        snap model modify: snap path allButFirst do: aBlock
     ]
 !
 
 trap: path read: aBlock
-	path trapDescend: [ | actual model |
-    	actual := Trapped path.
-        model := Trapped current byName: actual first.
-        model watch: actual allButFirst do: [ :data |
+	path trapDescend: [ | snap |
+        snap := Trapped current snapshot.
+        snap model watch: snap path allButFirst do: [ :data |
             (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
-        	actual trapDescend: [ self with: [ :html | aBlock value: data value: html ] ]
+        	snap do: [ self with: [ :html | aBlock value: data value: html ] ]
     	]
     ]
 !
