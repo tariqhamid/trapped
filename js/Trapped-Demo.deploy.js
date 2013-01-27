@@ -12,7 +12,7 @@ smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.TrappedDumbDispatc
 obj=smalltalk.HashedCollection._fromPairs_([smalltalk.send("title","__minus_gt",["To-Do List"])]);
 smalltalk.send(self,"_model_",[obj]);
 smalltalk.send((function(){
-smalltalk.send(obj,"_at_put_",["items",["hello", "world"]]);
+smalltalk.send(obj,"_at_put_",["items",[[true, "hello"], [false, "world"]]]);
 return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
 }),"_valueWithTimeout_",[(2000)]);
 return self}
@@ -28,20 +28,32 @@ smalltalk.method({
 selector: "renderOn:",
 fn: function (html){
 var self=this;
-var $1,$2;
+var $1,$2,$3,$4;
 smalltalk.send(smalltalk.send(html,"_h2",[]),"_trapShow_",[["title"]]);
 smalltalk.send(smalltalk.send(html,"_div",[]),"_trap_toggle_ifNotPresent_",[["items"],(function(){
 smalltalk.send(smalltalk.send(html,"_p",[]),"_with_",[(function(){
 smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[[smalltalk.symbolFor("size")]]);
 return smalltalk.send(html,"_with_",[" item(s)."]);
 })]);
-return smalltalk.send(smalltalk.send(html,"_form",[]),"_with_",[(function(){
+smalltalk.send(smalltalk.send(html,"_form",[]),"_with_",[(function(){
 return smalltalk.send(smalltalk.send(html,"_ul",[]),"_trapIter_tag_do_",[[],smalltalk.symbolFor("li"),(function(each){
+smalltalk.send(smalltalk.send(html,"_root",[]),"_empty",[]);
 $1=smalltalk.send(html,"_input",[]);
 smalltalk.send($1,"_type_",["checkbox"]);
-$2=smalltalk.send($1,"_at_put_",["checked",true]);
+$2=smalltalk.send($1,"_trapBind_",[[(1)]]);
 $2;
-return smalltalk.send(html,"_with_",[each]);
+return smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[[(2)]]);
+})]);
+})]);
+smalltalk.send(smalltalk.send(html,"_p",[]),"_with_",["... and again, to see the bidirectional binding:"]);
+return smalltalk.send(smalltalk.send(html,"_form",[]),"_with_",[(function(){
+return smalltalk.send(smalltalk.send(html,"_ul",[]),"_trapIter_tag_do_",[[],smalltalk.symbolFor("li"),(function(each){
+smalltalk.send(smalltalk.send(html,"_root",[]),"_empty",[]);
+$3=smalltalk.send(html,"_input",[]);
+smalltalk.send($3,"_type_",["checkbox"]);
+$4=smalltalk.send($3,"_trapBind_",[[(1)]]);
+$4;
+return smalltalk.send(smalltalk.send(html,"_span",[]),"_trapShow_",[[(2)]]);
 })]);
 })]);
 }),(function(){

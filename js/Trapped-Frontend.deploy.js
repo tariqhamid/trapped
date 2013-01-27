@@ -1,4 +1,104 @@
 smalltalk.addPackage('Trapped-Frontend', {});
+smalltalk.addClass('TrappedBinder', smalltalk.Object, ['brush'], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_brush_",
+smalltalk.method({
+selector: "brush:",
+fn: function (aTagBrush){
+var self=this;
+self["@brush"]=aTagBrush;
+return self}
+}),
+smalltalk.TrappedBinder);
+
+smalltalk.addMethod(
+"_installFor_",
+smalltalk.method({
+selector: "installFor:",
+fn: function (path){
+var self=this;
+smalltalk.send(self["@brush"],"_trap_read_",[path,smalltalk.send(self,"_showBlock",[])]);
+return self}
+}),
+smalltalk.TrappedBinder);
+
+smalltalk.addMethod(
+"_prim_",
+smalltalk.method({
+selector: "prim:",
+fn: function (anObject){
+var self=this;
+return anObject.valueOf();
+;
+return self}
+}),
+smalltalk.TrappedBinder);
+
+smalltalk.addMethod(
+"_showBlock",
+smalltalk.method({
+selector: "showBlock",
+fn: function (){
+var self=this;
+smalltalk.send(self,"_subclassResponsibility",[]);
+return self}
+}),
+smalltalk.TrappedBinder);
+
+
+
+smalltalk.addClass('TrappedAttrBinder', smalltalk.TrappedBinder, ['attr'], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_attr_",
+smalltalk.method({
+selector: "attr:",
+fn: function (aString){
+var self=this;
+self["@attr"]=aString;
+return self}
+}),
+smalltalk.TrappedAttrBinder);
+
+smalltalk.addMethod(
+"_installFor_",
+smalltalk.method({
+selector: "installFor:",
+fn: function (path){
+var self=this;
+smalltalk.send(self,"_installFor_",[path],smalltalk.TrappedBinder);
+smalltalk.send(path,"_trapDescend_",[(function(){
+var actual;
+actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
+actual;
+return smalltalk.send(self["@brush"],"_onChange_",[(function(){
+return smalltalk.send(actual,"_trapDescend_",[(function(){
+return smalltalk.send(self["@brush"],"_trap_modify_",[[],(function(){
+return smalltalk.send(smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_",["checked"]),"_notNil",[]);
+})]);
+})]);
+})]);
+})]);
+return self}
+}),
+smalltalk.TrappedAttrBinder);
+
+smalltalk.addMethod(
+"_showBlock",
+smalltalk.method({
+selector: "showBlock",
+fn: function (){
+var self=this;
+var $1;
+$1=(function(model){
+return smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_put_",[self["@attr"],smalltalk.send(self,"_prim_",[model])]);
+});
+return $1;
+}
+}),
+smalltalk.TrappedAttrBinder);
+
+
+
 smalltalk.addClass('TrappedDispatcher', smalltalk.KeyedPubSubBase, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_subscriptionKey_block_",
@@ -249,6 +349,23 @@ smalltalk.TrappedSingleton.klass);
 
 smalltalk.addClass('Trapped', smalltalk.TrappedSingleton, ['registry'], 'Trapped-Frontend');
 smalltalk.addMethod(
+"_binder_",
+smalltalk.method({
+selector: "binder:",
+fn: function (aTagBrush){
+var self=this;
+var $2,$3,$1;
+$2=smalltalk.send((smalltalk.TrappedAttrBinder || TrappedAttrBinder),"_new",[]);
+smalltalk.send($2,"_attr_",["checked"]);
+smalltalk.send($2,"_brush_",[aTagBrush]);
+$3=smalltalk.send($2,"_yourself",[]);
+$1=$3;
+return $1;
+}
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
 "_byName_",
 smalltalk.method({
 selector: "byName:",
@@ -467,6 +584,25 @@ return self}
 smalltalk.Array);
 
 smalltalk.addMethod(
+"_trap_modify_",
+smalltalk.method({
+selector: "trap:modify:",
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send(path,"_trapDescend_",[(function(){
+var actual;
+var model;
+actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
+actual;
+model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[smalltalk.send(actual,"_first",[])]);
+model;
+return smalltalk.send(model,"_modify_do_",[smalltalk.send(actual,"_allButFirst",[]),aBlock]);
+})]);
+return self}
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
 "_trap_read_",
 smalltalk.method({
 selector: "trap:read:",
@@ -535,6 +671,17 @@ $4=anotherBlock;
 return smalltalk.send($4,"_value_value_",[data,html]);
 };
 })]);
+return self}
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+"_trapBind_",
+smalltalk.method({
+selector: "trapBind:",
+fn: function (path){
+var self=this;
+smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_binder_",[self]),"_installFor_",[path]);
 return self}
 }),
 smalltalk.TagBrush);

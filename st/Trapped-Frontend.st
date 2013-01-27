@@ -1,4 +1,56 @@
 Smalltalk current createPackage: 'Trapped-Frontend' properties: #{}!
+Object subclass: #TrappedBinder
+	instanceVariableNames: 'brush'
+	package: 'Trapped-Frontend'!
+
+!TrappedBinder methodsFor: 'accessing'!
+
+brush: aTagBrush
+	brush := aTagBrush
+! !
+
+!TrappedBinder methodsFor: 'action'!
+
+installFor: path
+	brush trap: path read: self showBlock
+!
+
+showBlock
+	self subclassResponsibility
+! !
+
+!TrappedBinder methodsFor: 'converting'!
+
+prim: anObject
+	<return anObject.valueOf()>
+! !
+
+TrappedBinder subclass: #TrappedAttrBinder
+	instanceVariableNames: 'attr'
+	package: 'Trapped-Frontend'!
+
+!TrappedAttrBinder methodsFor: 'accessing'!
+
+attr: aString
+	attr := aString
+! !
+
+!TrappedAttrBinder methodsFor: 'action'!
+
+installFor: path
+	super installFor: path.
+    path trapDescend: [ | actual |
+        actual := Trapped path.
+	    brush onChange: [ actual trapDescend: [ brush trap: #() modify: [
+            (brush asJQuery attr: 'checked') notNil
+        ]]]
+    ]
+!
+
+showBlock
+	^[ :model | brush asJQuery attr: attr put: (self prim: model)  ]
+! !
+
 KeyedPubSubBase subclass: #TrappedDispatcher
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
@@ -186,6 +238,13 @@ start
     ]
 ! !
 
+!Trapped methodsFor: 'binders'!
+
+binder: aTagBrush
+    "Prototype; will select based on tag etc."
+    ^TrappedAttrBinder new attr: 'checked'; brush: aTagBrush; yourself
+! !
+
 !Trapped methodsFor: 'initialization'!
 
 initialize
@@ -261,6 +320,14 @@ trapDescend: aBlock
 
 !TagBrush methodsFor: '*Trapped-Frontend'!
 
+trap: path modify: aBlock
+	path trapDescend: [ | actual model |
+    	actual := Trapped path.
+        model := Trapped current byName: actual first.
+        model modify: actual allButFirst do: aBlock
+    ]
+!
+
 trap: path read: aBlock
 	path trapDescend: [ | actual model |
     	actual := Trapped path.
@@ -286,6 +353,10 @@ trap: path toggle: aBlock ifNotPresent: anotherBlock
             (shown ifTrue: [aBlock] ifFalse: [anotherBlock]) value: data value: html.
         ]
     ]
+!
+
+trapBind: path
+	(Trapped current binder: self) installFor: path
 !
 
 trapIter: path tag: aSymbol do: aBlock

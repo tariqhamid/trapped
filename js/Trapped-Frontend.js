@@ -1,4 +1,139 @@
 smalltalk.addPackage('Trapped-Frontend', {});
+smalltalk.addClass('TrappedBinder', smalltalk.Object, ['brush'], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_brush_",
+smalltalk.method({
+selector: "brush:",
+category: 'accessing',
+fn: function (aTagBrush){
+var self=this;
+self["@brush"]=aTagBrush;
+return self},
+args: ["aTagBrush"],
+source: "brush: aTagBrush\x0a\x09brush := aTagBrush",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedBinder);
+
+smalltalk.addMethod(
+"_installFor_",
+smalltalk.method({
+selector: "installFor:",
+category: 'action',
+fn: function (path){
+var self=this;
+smalltalk.send(self["@brush"],"_trap_read_",[path,smalltalk.send(self,"_showBlock",[])]);
+return self},
+args: ["path"],
+source: "installFor: path\x0a\x09brush trap: path read: self showBlock",
+messageSends: ["trap:read:", "showBlock"],
+referencedClasses: []
+}),
+smalltalk.TrappedBinder);
+
+smalltalk.addMethod(
+"_prim_",
+smalltalk.method({
+selector: "prim:",
+category: 'converting',
+fn: function (anObject){
+var self=this;
+return anObject.valueOf();
+;
+return self},
+args: ["anObject"],
+source: "prim: anObject\x0a\x09<return anObject.valueOf()>",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedBinder);
+
+smalltalk.addMethod(
+"_showBlock",
+smalltalk.method({
+selector: "showBlock",
+category: 'action',
+fn: function (){
+var self=this;
+smalltalk.send(self,"_subclassResponsibility",[]);
+return self},
+args: [],
+source: "showBlock\x0a\x09self subclassResponsibility",
+messageSends: ["subclassResponsibility"],
+referencedClasses: []
+}),
+smalltalk.TrappedBinder);
+
+
+
+smalltalk.addClass('TrappedAttrBinder', smalltalk.TrappedBinder, ['attr'], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_attr_",
+smalltalk.method({
+selector: "attr:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+self["@attr"]=aString;
+return self},
+args: ["aString"],
+source: "attr: aString\x0a\x09attr := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedAttrBinder);
+
+smalltalk.addMethod(
+"_installFor_",
+smalltalk.method({
+selector: "installFor:",
+category: 'action',
+fn: function (path){
+var self=this;
+smalltalk.send(self,"_installFor_",[path],smalltalk.TrappedBinder);
+smalltalk.send(path,"_trapDescend_",[(function(){
+var actual;
+actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
+actual;
+return smalltalk.send(self["@brush"],"_onChange_",[(function(){
+return smalltalk.send(actual,"_trapDescend_",[(function(){
+return smalltalk.send(self["@brush"],"_trap_modify_",[[],(function(){
+return smalltalk.send(smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_",["checked"]),"_notNil",[]);
+})]);
+})]);
+})]);
+})]);
+return self},
+args: ["path"],
+source: "installFor: path\x0a\x09super installFor: path.\x0a    path trapDescend: [ | actual |\x0a        actual := Trapped path.\x0a\x09    brush onChange: [ actual trapDescend: [ brush trap: #() modify: [\x0a            (brush asJQuery attr: 'checked') notNil\x0a        ]]]\x0a    ]",
+messageSends: ["installFor:", "trapDescend:", "path", "onChange:", "trap:modify:", "notNil", "attr:", "asJQuery"],
+referencedClasses: ["Trapped"]
+}),
+smalltalk.TrappedAttrBinder);
+
+smalltalk.addMethod(
+"_showBlock",
+smalltalk.method({
+selector: "showBlock",
+category: 'action',
+fn: function (){
+var self=this;
+var $1;
+$1=(function(model){
+return smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_put_",[self["@attr"],smalltalk.send(self,"_prim_",[model])]);
+});
+return $1;
+},
+args: [],
+source: "showBlock\x0a\x09^[ :model | brush asJQuery attr: attr put: (self prim: model)  ]",
+messageSends: ["attr:put:", "prim:", "asJQuery"],
+referencedClasses: []
+}),
+smalltalk.TrappedAttrBinder);
+
+
+
 smalltalk.addClass('TrappedDispatcher', smalltalk.KeyedPubSubBase, [], 'Trapped-Frontend');
 smalltalk.TrappedDispatcher.comment="I am base class for change event dispatchers.\x0aI manage changed path - action block subscriptions.\x0aThese subscription are instances of TrappedSubscription\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a"
 smalltalk.addMethod(
@@ -339,6 +474,28 @@ smalltalk.TrappedSingleton.klass);
 
 smalltalk.addClass('Trapped', smalltalk.TrappedSingleton, ['registry'], 'Trapped-Frontend');
 smalltalk.addMethod(
+"_binder_",
+smalltalk.method({
+selector: "binder:",
+category: 'binders',
+fn: function (aTagBrush){
+var self=this;
+var $2,$3,$1;
+$2=smalltalk.send((smalltalk.TrappedAttrBinder || TrappedAttrBinder),"_new",[]);
+smalltalk.send($2,"_attr_",["checked"]);
+smalltalk.send($2,"_brush_",[aTagBrush]);
+$3=smalltalk.send($2,"_yourself",[]);
+$1=$3;
+return $1;
+},
+args: ["aTagBrush"],
+source: "binder: aTagBrush\x0a    \x22Prototype; will select based on tag etc.\x22\x0a    ^TrappedAttrBinder new attr: 'checked'; brush: aTagBrush; yourself",
+messageSends: ["attr:", "new", "brush:", "yourself"],
+referencedClasses: ["TrappedAttrBinder"]
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
 "_byName_",
 smalltalk.method({
 selector: "byName:",
@@ -622,6 +779,30 @@ referencedClasses: ["TrappedPathStack"]
 smalltalk.Array);
 
 smalltalk.addMethod(
+"_trap_modify_",
+smalltalk.method({
+selector: "trap:modify:",
+category: '*Trapped-Frontend',
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send(path,"_trapDescend_",[(function(){
+var actual;
+var model;
+actual=smalltalk.send((smalltalk.Trapped || Trapped),"_path",[]);
+actual;
+model=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_byName_",[smalltalk.send(actual,"_first",[])]);
+model;
+return smalltalk.send(model,"_modify_do_",[smalltalk.send(actual,"_allButFirst",[]),aBlock]);
+})]);
+return self},
+args: ["path", "aBlock"],
+source: "trap: path modify: aBlock\x0a\x09path trapDescend: [ | actual model |\x0a    \x09actual := Trapped path.\x0a        model := Trapped current byName: actual first.\x0a        model modify: actual allButFirst do: aBlock\x0a    ]",
+messageSends: ["trapDescend:", "path", "byName:", "first", "current", "modify:do:", "allButFirst"],
+referencedClasses: ["Trapped"]
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
 "_trap_read_",
 smalltalk.method({
 selector: "trap:read:",
@@ -706,6 +887,22 @@ args: ["path", "aBlock", "anotherBlock"],
 source: "trap: path toggle: aBlock ifNotPresent: anotherBlock\x0a    | shown |\x0a    shown := nil.\x0a    self trap: path read: [ :data : html |\x0a        shown = data notNil ifFalse: [\x0a            shown := data notNil.\x0a            self asJQuery empty; show.\x0a            (shown ifTrue: [aBlock] ifFalse: [anotherBlock]) value: data value: html.\x0a        ]\x0a    ]",
 messageSends: ["trap:read:", "ifFalse:", "notNil", "empty", "asJQuery", "show", "value:value:", "ifTrue:ifFalse:", "="],
 referencedClasses: []
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+"_trapBind_",
+smalltalk.method({
+selector: "trapBind:",
+category: '*Trapped-Frontend',
+fn: function (path){
+var self=this;
+smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_binder_",[self]),"_installFor_",[path]);
+return self},
+args: ["path"],
+source: "trapBind: path\x0a\x09(Trapped current binder: self) installFor: path",
+messageSends: ["installFor:", "binder:", "current"],
+referencedClasses: ["Trapped"]
 }),
 smalltalk.TagBrush);
 
