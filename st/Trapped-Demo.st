@@ -143,16 +143,15 @@ Widget subclass: #AppView
 !AppView methodsFor: 'rendering'!
 
 renderOn: html
-    | snap |
+    #() trapDescend: [ :snap |
 	html h2 trap: #(#title).
-    snap := Trapped current snapshot.
     html div trap: #(#todos) toggle: [ snap do: [
         html span trap:#(#remaining).
         html with: ' of '.
         html span trap: #(#todos #size).
         html with: ' remaining [ '.
         html a href:''; onClick: [[
-            snap model modify: snap path allButFirst do: [ :model | model archive ].
+            snap modify: [ :model | model archive ].
             false
         ] value "amber GH-314 workaround"]; with: 'archive'.
         html with: ' ]'.
@@ -162,13 +161,13 @@ renderOn: html
             html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').
         ].
         html form onSubmit: [[
-            snap model modify: snap path allButFirst do: [ :model | model addTodo ].
+            snap modify: [ :model | model addTodo ].
             false
         ] value "amber GH-314 workaround"]; with: [
             html input type: 'text'; trap: #(#todoText); at: 'size' put: 30; placeholder: 'add new todo here'.
             html input class: 'btn-primary'; type: 'submit'; value: 'add'.
         ].
-    ]] ifNotPresent: [ html with: 'Loading ...' ]
+    ]] ifNotPresent: [ html with: 'Loading ...' ]]
 ! !
 
 TrappedDispatcher subclass: #TrappedDumbDispatcher

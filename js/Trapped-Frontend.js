@@ -104,21 +104,18 @@ category: 'action',
 fn: function (path){
 var self=this;
 smalltalk.send(self,"_installFor_",[path],smalltalk.TrappedBinder);
-smalltalk.send(path,"_trapDescend_",[(function(){
-var snap;
-snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
-snap;
+smalltalk.send(path,"_trapDescend_",[(function(snap){
 return smalltalk.send(self["@brush"],"_onChange_",[(function(){
-return smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(){
+return smalltalk.send(snap,"_modify_",[(function(){
 return smalltalk.send(smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_",["checked"]),"_notNil",[]);
 })]);
 })]);
 })]);
 return self},
 args: ["path"],
-source: "installFor: path\x0a\x09super installFor: path.\x0a    path trapDescend: [ | snap |\x0a        snap := Trapped current snapshot.\x0a\x09    brush onChange: [ snap model modify: snap path allButFirst do: [\x0a            (brush asJQuery attr: 'checked') notNil\x0a        ]]\x0a    ]",
-messageSends: ["installFor:", "trapDescend:", "snapshot", "current", "onChange:", "modify:do:", "allButFirst", "path", "notNil", "attr:", "asJQuery", "model"],
-referencedClasses: ["Trapped"]
+source: "installFor: path\x0a\x09super installFor: path.\x0a    path trapDescend: [ :snap |\x0a\x09    brush onChange: [ snap modify: [\x0a            (brush asJQuery attr: 'checked') notNil\x0a        ]]\x0a    ]",
+messageSends: ["installFor:", "trapDescend:", "onChange:", "modify:", "notNil", "attr:", "asJQuery"],
+referencedClasses: []
 }),
 smalltalk.TrappedAttrBinder);
 
@@ -539,6 +536,32 @@ referencedClasses: []
 smalltalk.Trapped);
 
 smalltalk.addMethod(
+"_descend_snapshotDo_",
+smalltalk.method({
+selector: "descend:snapshotDo:",
+category: 'action',
+fn: function (anArray,aBlock){
+var self=this;
+var tpsc;
+tpsc=smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]);
+smalltalk.send(tpsc,"_append_do_",[anArray,(function(){
+var path;
+var model;
+path=smalltalk.send(smalltalk.send(tpsc,"_elements",[]),"_copy",[]);
+path;
+model=smalltalk.send(self,"_byName_",[smalltalk.send(path,"_first",[])]);
+model;
+return smalltalk.send(aBlock,"_value_",[smalltalk.send(smalltalk.send((smalltalk.TrappedSnapshot || TrappedSnapshot),"_new",[]),"_path_model_",[path,model])]);
+})]);
+return self},
+args: ["anArray", "aBlock"],
+source: "descend: anArray snapshotDo: aBlock\x0a\x09| tpsc |\x0a    tpsc := TrappedPathStack current.\x0a    tpsc append: anArray do: [\x0a        | path model |\x0a        path := tpsc elements copy.\x0a   \x09    model := self byName: path first.\x0a        aBlock value: (TrappedSnapshot new path: path model: model)\x0a    ]",
+messageSends: ["current", "append:do:", "copy", "elements", "byName:", "first", "value:", "path:model:", "new"],
+referencedClasses: ["TrappedPathStack", "TrappedSnapshot"]
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
 "_initialize",
 smalltalk.method({
 selector: "initialize",
@@ -568,28 +591,6 @@ args: ["aFly", "aString"],
 source: "register: aFly name: aString\x0a\x09registry at: aString put: aFly",
 messageSends: ["at:put:"],
 referencedClasses: []
-}),
-smalltalk.Trapped);
-
-smalltalk.addMethod(
-"_snapshot",
-smalltalk.method({
-selector: "snapshot",
-category: 'snapshotting',
-fn: function (){
-var self=this;
-var $1;
-var path;
-var model;
-path=smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_elements",[]);
-model=smalltalk.send(self,"_byName_",[smalltalk.send(path,"_first",[])]);
-$1=smalltalk.send(smalltalk.send((smalltalk.TrappedSnapshot || TrappedSnapshot),"_new",[]),"_path_model_",[path,model]);
-return $1;
-},
-args: [],
-source: "snapshot\x0a\x09| path model |\x0a    path := TrappedPathStack current elements.\x0a   \x09model := self byName: path first.\x0a    ^TrappedSnapshot new path: path model: model",
-messageSends: ["elements", "current", "byName:", "first", "path:model:", "new"],
-referencedClasses: ["TrappedPathStack", "TrappedSnapshot"]
 }),
 smalltalk.Trapped);
 
@@ -789,6 +790,22 @@ referencedClasses: []
 smalltalk.TrappedSnapshot);
 
 smalltalk.addMethod(
+"_modify_",
+smalltalk.method({
+selector: "modify:",
+category: 'action',
+fn: function (aBlock){
+var self=this;
+smalltalk.send(smalltalk.send(self,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(self,"_path",[]),"_allButFirst",[]),aBlock]);
+return self},
+args: ["aBlock"],
+source: "modify: aBlock\x0a\x09self model modify: self path allButFirst do: aBlock",
+messageSends: ["modify:do:", "allButFirst", "path", "model"],
+referencedClasses: []
+}),
+smalltalk.TrappedSnapshot);
+
+smalltalk.addMethod(
 "_path",
 smalltalk.method({
 selector: "path",
@@ -853,12 +870,12 @@ selector: "trapDescend:",
 category: '*Trapped-Frontend',
 fn: function (aBlock){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_append_do_",[self,aBlock]);
+smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_descend_snapshotDo_",[self,aBlock]);
 return self},
 args: ["aBlock"],
-source: "trapDescend: aBlock\x0a\x09TrappedPathStack current append: self do: aBlock",
-messageSends: ["append:do:", "current"],
-referencedClasses: ["TrappedPathStack"]
+source: "trapDescend: aBlock\x0a\x09Trapped current descend: self snapshotDo: aBlock",
+messageSends: ["descend:snapshotDo:", "current"],
+referencedClasses: ["Trapped"]
 }),
 smalltalk.Array);
 
@@ -869,12 +886,12 @@ selector: "trapDescend:",
 category: '*Trapped-Frontend',
 fn: function (aBlock){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_append_do_",[self,aBlock]);
+smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_descend_snapshotDo_",[self,aBlock]);
 return self},
 args: ["aBlock"],
-source: "trapDescend: aBlock\x0a\x09TrappedPathStack current append: self do: aBlock",
-messageSends: ["append:do:", "current"],
-referencedClasses: ["TrappedPathStack"]
+source: "trapDescend: aBlock\x0a\x09Trapped current descend: self snapshotDo: aBlock",
+messageSends: ["descend:snapshotDo:", "current"],
+referencedClasses: ["Trapped"]
 }),
 smalltalk.Array);
 
@@ -902,10 +919,7 @@ category: '*Trapped-Frontend',
 fn: function (path,aBlock){
 var self=this;
 var $1;
-smalltalk.send(path,"_trapDescend_",[(function(){
-var snap;
-snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
-snap;
+smalltalk.send(path,"_trapDescend_",[(function(snap){
 return smalltalk.send(smalltalk.send(snap,"_model",[]),"_watch_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(data){
 $1=smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(self,"_asJQuery",[]),"_closest_",["html"]),"_toArray",[]),"_isEmpty",[]);
 if(smalltalk.assert($1)){
@@ -920,9 +934,9 @@ return smalltalk.send(aBlock,"_value_value_",[data,html]);
 })]);
 return self},
 args: ["path", "aBlock"],
-source: "trap: path read: aBlock\x0a\x09path trapDescend: [ | snap |\x0a        snap := Trapped current snapshot.\x0a        snap model watch: snap path allButFirst do: [ :data |\x0a            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].\x0a        \x09snap do: [ self with: [ :html | aBlock value: data value: html ] ]\x0a    \x09]\x0a    ]",
-messageSends: ["trapDescend:", "snapshot", "current", "watch:do:", "allButFirst", "path", "ifTrue:", "signal", "isEmpty", "toArray", "closest:", "asJQuery", "do:", "with:", "value:value:", "model"],
-referencedClasses: ["Trapped", "KeyedPubSubUnsubscribe"]
+source: "trap: path read: aBlock\x0a\x09path trapDescend: [ :snap |\x0a        snap model watch: snap path allButFirst do: [ :data |\x0a            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].\x0a        \x09snap do: [ self with: [ :html | aBlock value: data value: html ] ]\x0a    \x09]\x0a    ]",
+messageSends: ["trapDescend:", "watch:do:", "allButFirst", "path", "ifTrue:", "signal", "isEmpty", "toArray", "closest:", "asJQuery", "do:", "with:", "value:value:", "model"],
+referencedClasses: ["KeyedPubSubUnsubscribe"]
 }),
 smalltalk.TagBrush);
 

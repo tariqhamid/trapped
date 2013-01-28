@@ -78,12 +78,9 @@ selector: "installFor:",
 fn: function (path){
 var self=this;
 smalltalk.send(self,"_installFor_",[path],smalltalk.TrappedBinder);
-smalltalk.send(path,"_trapDescend_",[(function(){
-var snap;
-snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
-snap;
+smalltalk.send(path,"_trapDescend_",[(function(snap){
 return smalltalk.send(self["@brush"],"_onChange_",[(function(){
-return smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(){
+return smalltalk.send(snap,"_modify_",[(function(){
 return smalltalk.send(smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_",["checked"]),"_notNil",[]);
 })]);
 })]);
@@ -404,6 +401,27 @@ return $1;
 smalltalk.Trapped);
 
 smalltalk.addMethod(
+"_descend_snapshotDo_",
+smalltalk.method({
+selector: "descend:snapshotDo:",
+fn: function (anArray,aBlock){
+var self=this;
+var tpsc;
+tpsc=smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]);
+smalltalk.send(tpsc,"_append_do_",[anArray,(function(){
+var path;
+var model;
+path=smalltalk.send(smalltalk.send(tpsc,"_elements",[]),"_copy",[]);
+path;
+model=smalltalk.send(self,"_byName_",[smalltalk.send(path,"_first",[])]);
+model;
+return smalltalk.send(aBlock,"_value_",[smalltalk.send(smalltalk.send((smalltalk.TrappedSnapshot || TrappedSnapshot),"_new",[]),"_path_model_",[path,model])]);
+})]);
+return self}
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
 "_initialize",
 smalltalk.method({
 selector: "initialize",
@@ -423,23 +441,6 @@ fn: function (aFly,aString){
 var self=this;
 smalltalk.send(self["@registry"],"_at_put_",[aString,aFly]);
 return self}
-}),
-smalltalk.Trapped);
-
-smalltalk.addMethod(
-"_snapshot",
-smalltalk.method({
-selector: "snapshot",
-fn: function (){
-var self=this;
-var $1;
-var path;
-var model;
-path=smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_elements",[]);
-model=smalltalk.send(self,"_byName_",[smalltalk.send(path,"_first",[])]);
-$1=smalltalk.send(smalltalk.send((smalltalk.TrappedSnapshot || TrappedSnapshot),"_new",[]),"_path_model_",[path,model]);
-return $1;
-}
 }),
 smalltalk.Trapped);
 
@@ -599,6 +600,17 @@ return self["@model"];
 smalltalk.TrappedSnapshot);
 
 smalltalk.addMethod(
+"_modify_",
+smalltalk.method({
+selector: "modify:",
+fn: function (aBlock){
+var self=this;
+smalltalk.send(smalltalk.send(self,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(self,"_path",[]),"_allButFirst",[]),aBlock]);
+return self}
+}),
+smalltalk.TrappedSnapshot);
+
+smalltalk.addMethod(
 "_path",
 smalltalk.method({
 selector: "path",
@@ -647,7 +659,7 @@ smalltalk.method({
 selector: "trapDescend:",
 fn: function (aBlock){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_append_do_",[self,aBlock]);
+smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_descend_snapshotDo_",[self,aBlock]);
 return self}
 }),
 smalltalk.Array);
@@ -658,7 +670,7 @@ smalltalk.method({
 selector: "trapDescend:",
 fn: function (aBlock){
 var self=this;
-smalltalk.send(smalltalk.send((smalltalk.TrappedPathStack || TrappedPathStack),"_current",[]),"_append_do_",[self,aBlock]);
+smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_descend_snapshotDo_",[self,aBlock]);
 return self}
 }),
 smalltalk.Array);
@@ -681,10 +693,7 @@ selector: "trap:read:",
 fn: function (path,aBlock){
 var self=this;
 var $1;
-smalltalk.send(path,"_trapDescend_",[(function(){
-var snap;
-snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
-snap;
+smalltalk.send(path,"_trapDescend_",[(function(snap){
 return smalltalk.send(smalltalk.send(snap,"_model",[]),"_watch_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(data){
 $1=smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send(self,"_asJQuery",[]),"_closest_",["html"]),"_toArray",[]),"_isEmpty",[]);
 if(smalltalk.assert($1)){

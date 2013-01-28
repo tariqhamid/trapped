@@ -137,10 +137,9 @@ selector: "renderOn:",
 fn: function (html){
 var self=this;
 var $1,$2,$3,$4,$5,$6,$7,$9,$10,$11,$12,$8;
-var snap;
+smalltalk.send([],"_trapDescend_",[(function(snap){
 smalltalk.send(smalltalk.send(html,"_h2",[]),"_trap_",[[smalltalk.symbolFor("title")]]);
-snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
-smalltalk.send(smalltalk.send(html,"_div",[]),"_trap_toggle_ifNotPresent_",[[smalltalk.symbolFor("todos")],(function(){
+return smalltalk.send(smalltalk.send(html,"_div",[]),"_trap_toggle_ifNotPresent_",[[smalltalk.symbolFor("todos")],(function(){
 return smalltalk.send(snap,"_do_",[(function(){
 smalltalk.send(smalltalk.send(html,"_span",[]),"_trap_",[[smalltalk.symbolFor("remaining")]]);
 smalltalk.send(html,"_with_",[" of "]);
@@ -150,7 +149,7 @@ $1=smalltalk.send(html,"_a",[]);
 smalltalk.send($1,"_href_",[""]);
 smalltalk.send($1,"_onClick_",[(function(){
 return smalltalk.send((function(){
-smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(model){
+smalltalk.send(snap,"_modify_",[(function(model){
 return smalltalk.send(model,"_archive",[]);
 })]);
 return false;
@@ -175,7 +174,7 @@ return $6;
 $7=smalltalk.send(html,"_form",[]);
 smalltalk.send($7,"_onSubmit_",[(function(){
 return smalltalk.send((function(){
-smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(model){
+smalltalk.send(snap,"_modify_",[(function(model){
 return smalltalk.send(model,"_addTodo",[]);
 })]);
 return false;
@@ -198,6 +197,7 @@ return $8;
 })]);
 }),(function(){
 return smalltalk.send(html,"_with_",["Loading ..."]);
+})]);
 })]);
 return self}
 }),

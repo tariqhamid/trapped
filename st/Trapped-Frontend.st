@@ -39,9 +39,8 @@ attr: aString
 
 installFor: path
 	super installFor: path.
-    path trapDescend: [ | snap |
-        snap := Trapped current snapshot.
-	    brush onChange: [ snap model modify: snap path allButFirst do: [
+    path trapDescend: [ :snap |
+	    brush onChange: [ snap modify: [
             (brush asJQuery attr: 'checked') notNil
         ]]
     ]
@@ -223,6 +222,17 @@ register: aFly name: aString
 
 !Trapped methodsFor: 'action'!
 
+descend: anArray snapshotDo: aBlock
+	| tpsc |
+    tpsc := TrappedPathStack current.
+    tpsc append: anArray do: [
+        | path model |
+        path := tpsc elements copy.
+   	    model := self byName: path first.
+        aBlock value: (TrappedSnapshot new path: path model: model)
+    ]
+!
+
 start
 	'[data-trap]' asJQuery each: [ :index :elem |
     	| trap jq viewName modelName tokens path |
@@ -256,15 +266,6 @@ binder: aTagBrush
 initialize
 	super initialize.
 	registry := #{}.
-! !
-
-!Trapped methodsFor: 'snapshotting'!
-
-snapshot
-	| path model |
-    path := TrappedPathStack current elements.
-   	model := self byName: path first.
-    ^TrappedSnapshot new path: path model: model
 ! !
 
 !Trapped class methodsFor: 'accessing'!
@@ -330,6 +331,10 @@ path: anArray model: aTrappedMW
 
 do: aBlock
 	TrappedPathStack current with: path do: [ aBlock value: model ]
+!
+
+modify: aBlock
+	self model modify: self path allButFirst do: aBlock
 ! !
 
 KeyedSubscriptionBase subclass: #TrappedSubscription
@@ -345,13 +350,13 @@ accepts: aKey
 !Array methodsFor: '*Trapped-Frontend'!
 
 trapDescend: aBlock
-	TrappedPathStack current append: self do: aBlock
+	Trapped current descend: self snapshotDo: aBlock
 ! !
 
 !Array methodsFor: '*Trapped-Frontend'!
 
 trapDescend: aBlock
-	TrappedPathStack current append: self do: aBlock
+	Trapped current descend: self snapshotDo: aBlock
 ! !
 
 !TagBrush methodsFor: '*Trapped-Frontend'!
@@ -361,8 +366,7 @@ trap: path
 !
 
 trap: path read: aBlock
-	path trapDescend: [ | snap |
-        snap := Trapped current snapshot.
+	path trapDescend: [ :snap |
         snap model watch: snap path allButFirst do: [ :data |
             (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
         	snap do: [ self with: [ :html | aBlock value: data value: html ] ]

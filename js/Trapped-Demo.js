@@ -191,10 +191,9 @@ category: 'rendering',
 fn: function (html){
 var self=this;
 var $1,$2,$3,$4,$5,$6,$7,$9,$10,$11,$12,$8;
-var snap;
+smalltalk.send([],"_trapDescend_",[(function(snap){
 smalltalk.send(smalltalk.send(html,"_h2",[]),"_trap_",[[smalltalk.symbolFor("title")]]);
-snap=smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_snapshot",[]);
-smalltalk.send(smalltalk.send(html,"_div",[]),"_trap_toggle_ifNotPresent_",[[smalltalk.symbolFor("todos")],(function(){
+return smalltalk.send(smalltalk.send(html,"_div",[]),"_trap_toggle_ifNotPresent_",[[smalltalk.symbolFor("todos")],(function(){
 return smalltalk.send(snap,"_do_",[(function(){
 smalltalk.send(smalltalk.send(html,"_span",[]),"_trap_",[[smalltalk.symbolFor("remaining")]]);
 smalltalk.send(html,"_with_",[" of "]);
@@ -204,7 +203,7 @@ $1=smalltalk.send(html,"_a",[]);
 smalltalk.send($1,"_href_",[""]);
 smalltalk.send($1,"_onClick_",[(function(){
 return smalltalk.send((function(){
-smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(model){
+smalltalk.send(snap,"_modify_",[(function(model){
 return smalltalk.send(model,"_archive",[]);
 })]);
 return false;
@@ -229,7 +228,7 @@ return $6;
 $7=smalltalk.send(html,"_form",[]);
 smalltalk.send($7,"_onSubmit_",[(function(){
 return smalltalk.send((function(){
-smalltalk.send(smalltalk.send(snap,"_model",[]),"_modify_do_",[smalltalk.send(smalltalk.send(snap,"_path",[]),"_allButFirst",[]),(function(model){
+smalltalk.send(snap,"_modify_",[(function(model){
 return smalltalk.send(model,"_addTodo",[]);
 })]);
 return false;
@@ -253,11 +252,12 @@ return $8;
 }),(function(){
 return smalltalk.send(html,"_with_",["Loading ..."]);
 })]);
+})]);
 return self},
 args: ["html"],
-source: "renderOn: html\x0a    | snap |\x0a\x09html h2 trap: #(#title).\x0a    snap := Trapped current snapshot.\x0a    html div trap: #(#todos) toggle: [ snap do: [\x0a        html span trap:#(#remaining).\x0a        html with: ' of '.\x0a        html span trap: #(#todos #size).\x0a        html with: ' remaining [ '.\x0a        html a href:''; onClick: [[\x0a            snap model modify: snap path allButFirst do: [ :model | model archive ].\x0a            false\x0a        ] value \x22amber GH-314 workaround\x22]; with: 'archive'.\x0a        html with: ' ]'.\x0a        html ul trapIter: #(#todos) tag: #li do: [ :each |\x0a            html root empty.\x0a            html input type: 'checkbox'; trap: #('done').\x0a            html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').\x0a        ].\x0a        html form onSubmit: [[\x0a            snap model modify: snap path allButFirst do: [ :model | model addTodo ].\x0a            false\x0a        ] value \x22amber GH-314 workaround\x22]; with: [\x0a            html input type: 'text'; trap: #(#todoText); at: 'size' put: 30; placeholder: 'add new todo here'.\x0a            html input class: 'btn-primary'; type: 'submit'; value: 'add'.\x0a        ].\x0a    ]] ifNotPresent: [ html with: 'Loading ...' ]",
-messageSends: ["trap:", "h2", "snapshot", "current", "trap:toggle:ifNotPresent:", "do:", "span", "with:", "href:", "a", "onClick:", "value", "modify:do:", "allButFirst", "path", "archive", "model", "trapIter:tag:do:", "empty", "root", "type:", "input", "trap:read:", "class:", ",", "ul", "onSubmit:", "addTodo", "form", "at:put:", "placeholder:", "value:", "div"],
-referencedClasses: ["Trapped"]
+source: "renderOn: html\x0a    #() trapDescend: [ :snap |\x0a\x09html h2 trap: #(#title).\x0a    html div trap: #(#todos) toggle: [ snap do: [\x0a        html span trap:#(#remaining).\x0a        html with: ' of '.\x0a        html span trap: #(#todos #size).\x0a        html with: ' remaining [ '.\x0a        html a href:''; onClick: [[\x0a            snap modify: [ :model | model archive ].\x0a            false\x0a        ] value \x22amber GH-314 workaround\x22]; with: 'archive'.\x0a        html with: ' ]'.\x0a        html ul trapIter: #(#todos) tag: #li do: [ :each |\x0a            html root empty.\x0a            html input type: 'checkbox'; trap: #('done').\x0a            html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').\x0a        ].\x0a        html form onSubmit: [[\x0a            snap modify: [ :model | model addTodo ].\x0a            false\x0a        ] value \x22amber GH-314 workaround\x22]; with: [\x0a            html input type: 'text'; trap: #(#todoText); at: 'size' put: 30; placeholder: 'add new todo here'.\x0a            html input class: 'btn-primary'; type: 'submit'; value: 'add'.\x0a        ].\x0a    ]] ifNotPresent: [ html with: 'Loading ...' ]]",
+messageSends: ["trapDescend:", "trap:", "h2", "trap:toggle:ifNotPresent:", "do:", "span", "with:", "href:", "a", "onClick:", "value", "modify:", "archive", "trapIter:tag:do:", "empty", "root", "type:", "input", "trap:read:", "class:", ",", "ul", "onSubmit:", "addTodo", "form", "at:put:", "placeholder:", "value:", "div"],
+referencedClasses: []
 }),
 smalltalk.AppView);
 
