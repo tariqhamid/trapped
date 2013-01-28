@@ -55,7 +55,7 @@ You can also iterate arrays in the model using `TagBrush >> trapIter:tag:do:`.
 To see viewmodel->view update working, try this in Workspace:
 
 ```smalltalk
-AppVM modify: #(#todos) do: [ :old | old, { 'text'->'try the guts'. 'done'->true } ]
+AppVM modify: #(#todos) do: [ :old | old, { #{'text'->'try the guts'. 'done'->true} } ]
 ```
 
 The number and list of items should update. If you do
@@ -71,6 +71,6 @@ When using `TrappedMWIsolated` wrapper class,  `read:do:` and `modify:do:`
 guard the data by doing deep copies behind the scene.
 
 If you wish to, you can change the raw data you put into `model:` by hand,
-but then be sure to call `AppVM dispatcher changed: #('title')` or similar
+but then be sure to call `AppVM dispatcher changed: #(#title)` or similar
 (you can do `AppVM dispatcher changed: #()` to signal everything in `AppVM` has changed,
 but then everything depending upon it will redraw).
