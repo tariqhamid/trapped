@@ -39,9 +39,7 @@ smalltalk.method({
 selector: "archive",
 fn: function (){
 var self=this;
-smalltalk.send(self,"_todos_",[smalltalk.send(smalltalk.send(self,"_todos",[]),"_reject_",[(function(each){
-return smalltalk.send(each,"_at_",["done"]);
-})])]);
+smalltalk.send(self,"_todos_",[smalltalk.send(self,"_todosNotDone",[])]);
 return self}
 }),
 smalltalk.AppModel);
@@ -53,9 +51,7 @@ selector: "remaining",
 fn: function (){
 var self=this;
 var $1;
-$1=smalltalk.send(smalltalk.send(smalltalk.send(self,"_todos",[]),"_select_",[(function(each){
-return smalltalk.send(each,"_at_",["done"]);
-})]),"_size",[]);
+$1=smalltalk.send(smalltalk.send(self,"_todosNotDone",[]),"_size",[]);
 return $1;
 }
 }),
@@ -124,6 +120,21 @@ fn: function (anArray){
 var self=this;
 self["@todos"]=anArray;
 return self}
+}),
+smalltalk.AppModel);
+
+smalltalk.addMethod(
+"_todosNotDone",
+smalltalk.method({
+selector: "todosNotDone",
+fn: function (){
+var self=this;
+var $1;
+$1=smalltalk.send(smalltalk.send(self,"_todos",[]),"_reject_",[(function(each){
+return smalltalk.send(each,"_at_",["done"]);
+})]);
+return $1;
+}
 }),
 smalltalk.AppModel);
 

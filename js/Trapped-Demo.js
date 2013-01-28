@@ -52,13 +52,11 @@ selector: "archive",
 category: 'action',
 fn: function (){
 var self=this;
-smalltalk.send(self,"_todos_",[smalltalk.send(smalltalk.send(self,"_todos",[]),"_reject_",[(function(each){
-return smalltalk.send(each,"_at_",["done"]);
-})])]);
+smalltalk.send(self,"_todos_",[smalltalk.send(self,"_todosNotDone",[])]);
 return self},
 args: [],
-source: "archive\x0a    self todos: (self todos reject: [ :each | each at: 'done' ])",
-messageSends: ["todos:", "reject:", "at:", "todos"],
+source: "archive\x0a    self todos: self todosNotDone",
+messageSends: ["todos:", "todosNotDone"],
 referencedClasses: []
 }),
 smalltalk.AppModel);
@@ -71,14 +69,12 @@ category: 'accessing',
 fn: function (){
 var self=this;
 var $1;
-$1=smalltalk.send(smalltalk.send(smalltalk.send(self,"_todos",[]),"_select_",[(function(each){
-return smalltalk.send(each,"_at_",["done"]);
-})]),"_size",[]);
+$1=smalltalk.send(smalltalk.send(self,"_todosNotDone",[]),"_size",[]);
 return $1;
 },
 args: [],
-source: "remaining\x0a    ^(self todos select: [ :each | each at: 'done' ]) size",
-messageSends: ["size", "select:", "at:", "todos"],
+source: "remaining\x0a    ^self todosNotDone size",
+messageSends: ["size", "todosNotDone"],
 referencedClasses: []
 }),
 smalltalk.AppModel);
@@ -175,6 +171,26 @@ return self},
 args: ["anArray"],
 source: "todos: anArray\x0a\x09todos := anArray",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.AppModel);
+
+smalltalk.addMethod(
+"_todosNotDone",
+smalltalk.method({
+selector: "todosNotDone",
+category: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=smalltalk.send(smalltalk.send(self,"_todos",[]),"_reject_",[(function(each){
+return smalltalk.send(each,"_at_",["done"]);
+})]);
+return $1;
+},
+args: [],
+source: "todosNotDone\x0a    ^self todos reject: [ :each | each at: 'done' ]",
+messageSends: ["reject:", "at:", "todos"],
 referencedClasses: []
 }),
 smalltalk.AppModel);

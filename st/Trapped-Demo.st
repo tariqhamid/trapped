@@ -78,7 +78,7 @@ function TodoCtrl($scope) {
 !AppModel methodsFor: 'accessing'!
 
 remaining
-    ^(self todos select: [ :each | each at: 'done' ]) size
+    ^self todosNotDone size
 !
 
 title
@@ -103,6 +103,10 @@ todos
 
 todos: anArray
 	todos := anArray
+!
+
+todosNotDone
+    ^self todos reject: [ :each | each at: 'done' ]
 ! !
 
 !AppModel methodsFor: 'action'!
@@ -113,7 +117,7 @@ addTodo
 !
 
 archive
-    self todos: (self todos reject: [ :each | each at: 'done' ])
+    self todos: self todosNotDone
 ! !
 
 Widget subclass: #AppView
