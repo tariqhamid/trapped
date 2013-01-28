@@ -25,17 +25,11 @@ prim: anObject
 	<return anObject.valueOf()>
 ! !
 
-TrappedBinder subclass: #TrappedAttrBinder
-	instanceVariableNames: 'attr'
+TrappedBinder subclass: #TrappedCheckedBinder
+	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
 
-!TrappedAttrBinder methodsFor: 'accessing'!
-
-attr: aString
-	attr := aString
-! !
-
-!TrappedAttrBinder methodsFor: 'action'!
+!TrappedCheckedBinder methodsFor: 'action'!
 
 installFor: path
 	super installFor: path.
@@ -47,7 +41,26 @@ installFor: path
 !
 
 showBlock
-	^[ :model | brush asJQuery attr: attr put: (self prim: model)  ]
+	^[ :model | brush asJQuery attr: 'checked' put: (model ifNotNil: [ self prim: model ] ifNil: [ false ]) ]
+! !
+
+TrappedBinder subclass: #TrappedValBinder
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+
+!TrappedValBinder methodsFor: 'action'!
+
+installFor: path
+	super installFor: path.
+    path trapDescend: [ :snap |
+	    brush onChange: [ snap modify: [
+            brush asJQuery val
+        ]]
+    ]
+!
+
+showBlock
+	^[ :model | brush asJQuery val: (model ifNotNil: [self prim: model] ifNil: [[]]) ]
 ! !
 
 KeyedPubSubBase subclass: #TrappedDispatcher
@@ -255,7 +268,10 @@ binder: aTagBrush
     | binder tag |
     tag := aTagBrush element nodeName.
     tag = 'INPUT' ifTrue: [
-    	binder := TrappedAttrBinder new attr: 'checked'; yourself
+        | type |
+        type := aTagBrush asJQuery attr: 'type'.
+        type = 'checkbox' ifTrue: [ binder := TrappedCheckedBinder new ].
+        type = 'text' ifTrue: [ binder := TrappedValBinder new ]
     ].
     binder ifNil: [ binder := TrappedBinder new ].
     ^ binder brush: aTagBrush; yourself

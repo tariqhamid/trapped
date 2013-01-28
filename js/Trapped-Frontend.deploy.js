@@ -59,18 +59,7 @@ smalltalk.TrappedBinder);
 
 
 
-smalltalk.addClass('TrappedAttrBinder', smalltalk.TrappedBinder, ['attr'], 'Trapped-Frontend');
-smalltalk.addMethod(
-"_attr_",
-smalltalk.method({
-selector: "attr:",
-fn: function (aString){
-var self=this;
-self["@attr"]=aString;
-return self}
-}),
-smalltalk.TrappedAttrBinder);
-
+smalltalk.addClass('TrappedCheckedBinder', smalltalk.TrappedBinder, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_installFor_",
 smalltalk.method({
@@ -87,7 +76,7 @@ return smalltalk.send(smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[
 })]);
 return self}
 }),
-smalltalk.TrappedAttrBinder);
+smalltalk.TrappedCheckedBinder);
 
 smalltalk.addMethod(
 "_showBlock",
@@ -97,12 +86,57 @@ fn: function (){
 var self=this;
 var $1;
 $1=(function(model){
-return smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_put_",[self["@attr"],smalltalk.send(self,"_prim_",[model])]);
+return smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_put_",["checked",smalltalk.send(model,"_ifNotNil_ifNil_",[(function(){
+return smalltalk.send(self,"_prim_",[model]);
+}),(function(){
+return false;
+})])]);
 });
 return $1;
 }
 }),
-smalltalk.TrappedAttrBinder);
+smalltalk.TrappedCheckedBinder);
+
+
+
+smalltalk.addClass('TrappedValBinder', smalltalk.TrappedBinder, [], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_installFor_",
+smalltalk.method({
+selector: "installFor:",
+fn: function (path){
+var self=this;
+smalltalk.send(self,"_installFor_",[path],smalltalk.TrappedBinder);
+smalltalk.send(path,"_trapDescend_",[(function(snap){
+return smalltalk.send(self["@brush"],"_onChange_",[(function(){
+return smalltalk.send(snap,"_modify_",[(function(){
+return smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_val",[]);
+})]);
+})]);
+})]);
+return self}
+}),
+smalltalk.TrappedValBinder);
+
+smalltalk.addMethod(
+"_showBlock",
+smalltalk.method({
+selector: "showBlock",
+fn: function (){
+var self=this;
+var $1;
+$1=(function(model){
+return smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_val_",[smalltalk.send(model,"_ifNotNil_ifNil_",[(function(){
+return smalltalk.send(self,"_prim_",[model]);
+}),(function(){
+return (function(){
+});
+})])]);
+});
+return $1;
+}
+}),
+smalltalk.TrappedValBinder);
 
 
 
@@ -367,11 +401,19 @@ var tag;
 tag=smalltalk.send(smalltalk.send(aTagBrush,"_element",[]),"_nodeName",[]);
 $1=smalltalk.send(tag,"__eq",["INPUT"]);
 if(smalltalk.assert($1)){
-$2=smalltalk.send((smalltalk.TrappedAttrBinder || TrappedAttrBinder),"_new",[]);
-smalltalk.send($2,"_attr_",["checked"]);
-$3=smalltalk.send($2,"_yourself",[]);
-binder=$3;
+var type;
+type=smalltalk.send(smalltalk.send(aTagBrush,"_asJQuery",[]),"_attr_",["type"]);
+type;
+$2=smalltalk.send(type,"__eq",["checkbox"]);
+if(smalltalk.assert($2)){
+binder=smalltalk.send((smalltalk.TrappedCheckedBinder || TrappedCheckedBinder),"_new",[]);
 binder;
+};
+$3=smalltalk.send(type,"__eq",["text"]);
+if(smalltalk.assert($3)){
+binder=smalltalk.send((smalltalk.TrappedValBinder || TrappedValBinder),"_new",[]);
+binder;
+};
 };
 if(($receiver = binder) == nil || $receiver == undefined){
 binder=smalltalk.send((smalltalk.TrappedBinder || TrappedBinder),"_new",[]);

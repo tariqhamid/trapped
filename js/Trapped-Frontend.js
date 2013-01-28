@@ -79,23 +79,7 @@ smalltalk.TrappedBinder);
 
 
 
-smalltalk.addClass('TrappedAttrBinder', smalltalk.TrappedBinder, ['attr'], 'Trapped-Frontend');
-smalltalk.addMethod(
-"_attr_",
-smalltalk.method({
-selector: "attr:",
-category: 'accessing',
-fn: function (aString){
-var self=this;
-self["@attr"]=aString;
-return self},
-args: ["aString"],
-source: "attr: aString\x0a\x09attr := aString",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedAttrBinder);
-
+smalltalk.addClass('TrappedCheckedBinder', smalltalk.TrappedBinder, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 "_installFor_",
 smalltalk.method({
@@ -117,7 +101,7 @@ source: "installFor: path\x0a\x09super installFor: path.\x0a    path trapDescend
 messageSends: ["installFor:", "trapDescend:", "onChange:", "modify:", "notNil", "attr:", "asJQuery"],
 referencedClasses: []
 }),
-smalltalk.TrappedAttrBinder);
+smalltalk.TrappedCheckedBinder);
 
 smalltalk.addMethod(
 "_showBlock",
@@ -128,16 +112,71 @@ fn: function (){
 var self=this;
 var $1;
 $1=(function(model){
-return smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_put_",[self["@attr"],smalltalk.send(self,"_prim_",[model])]);
+return smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_attr_put_",["checked",smalltalk.send(model,"_ifNotNil_ifNil_",[(function(){
+return smalltalk.send(self,"_prim_",[model]);
+}),(function(){
+return false;
+})])]);
 });
 return $1;
 },
 args: [],
-source: "showBlock\x0a\x09^[ :model | brush asJQuery attr: attr put: (self prim: model)  ]",
-messageSends: ["attr:put:", "prim:", "asJQuery"],
+source: "showBlock\x0a\x09^[ :model | brush asJQuery attr: 'checked' put: (model ifNotNil: [ self prim: model ] ifNil: [ false ]) ]",
+messageSends: ["attr:put:", "ifNotNil:ifNil:", "prim:", "asJQuery"],
 referencedClasses: []
 }),
-smalltalk.TrappedAttrBinder);
+smalltalk.TrappedCheckedBinder);
+
+
+
+smalltalk.addClass('TrappedValBinder', smalltalk.TrappedBinder, [], 'Trapped-Frontend');
+smalltalk.addMethod(
+"_installFor_",
+smalltalk.method({
+selector: "installFor:",
+category: 'action',
+fn: function (path){
+var self=this;
+smalltalk.send(self,"_installFor_",[path],smalltalk.TrappedBinder);
+smalltalk.send(path,"_trapDescend_",[(function(snap){
+return smalltalk.send(self["@brush"],"_onChange_",[(function(){
+return smalltalk.send(snap,"_modify_",[(function(){
+return smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_val",[]);
+})]);
+})]);
+})]);
+return self},
+args: ["path"],
+source: "installFor: path\x0a\x09super installFor: path.\x0a    path trapDescend: [ :snap |\x0a\x09    brush onChange: [ snap modify: [\x0a            brush asJQuery val\x0a        ]]\x0a    ]",
+messageSends: ["installFor:", "trapDescend:", "onChange:", "modify:", "val", "asJQuery"],
+referencedClasses: []
+}),
+smalltalk.TrappedValBinder);
+
+smalltalk.addMethod(
+"_showBlock",
+smalltalk.method({
+selector: "showBlock",
+category: 'action',
+fn: function (){
+var self=this;
+var $1;
+$1=(function(model){
+return smalltalk.send(smalltalk.send(self["@brush"],"_asJQuery",[]),"_val_",[smalltalk.send(model,"_ifNotNil_ifNil_",[(function(){
+return smalltalk.send(self,"_prim_",[model]);
+}),(function(){
+return (function(){
+});
+})])]);
+});
+return $1;
+},
+args: [],
+source: "showBlock\x0a\x09^[ :model | brush asJQuery val: (model ifNotNil: [self prim: model] ifNil: [[]]) ]",
+messageSends: ["val:", "ifNotNil:ifNil:", "prim:", "asJQuery"],
+referencedClasses: []
+}),
+smalltalk.TrappedValBinder);
 
 
 
@@ -493,11 +532,19 @@ var tag;
 tag=smalltalk.send(smalltalk.send(aTagBrush,"_element",[]),"_nodeName",[]);
 $1=smalltalk.send(tag,"__eq",["INPUT"]);
 if(smalltalk.assert($1)){
-$2=smalltalk.send((smalltalk.TrappedAttrBinder || TrappedAttrBinder),"_new",[]);
-smalltalk.send($2,"_attr_",["checked"]);
-$3=smalltalk.send($2,"_yourself",[]);
-binder=$3;
+var type;
+type=smalltalk.send(smalltalk.send(aTagBrush,"_asJQuery",[]),"_attr_",["type"]);
+type;
+$2=smalltalk.send(type,"__eq",["checkbox"]);
+if(smalltalk.assert($2)){
+binder=smalltalk.send((smalltalk.TrappedCheckedBinder || TrappedCheckedBinder),"_new",[]);
 binder;
+};
+$3=smalltalk.send(type,"__eq",["text"]);
+if(smalltalk.assert($3)){
+binder=smalltalk.send((smalltalk.TrappedValBinder || TrappedValBinder),"_new",[]);
+binder;
+};
 };
 if(($receiver = binder) == nil || $receiver == undefined){
 binder=smalltalk.send((smalltalk.TrappedBinder || TrappedBinder),"_new",[]);
@@ -511,9 +558,9 @@ $4=$5;
 return $4;
 },
 args: ["aTagBrush"],
-source: "binder: aTagBrush\x0a    \x22Prototype; will select based on tag etc.\x22\x0a    | binder tag |\x0a    tag := aTagBrush element nodeName.\x0a    tag = 'INPUT' ifTrue: [\x0a    \x09binder := TrappedAttrBinder new attr: 'checked'; yourself\x0a    ].\x0a    binder ifNil: [ binder := TrappedBinder new ].\x0a    ^ binder brush: aTagBrush; yourself",
-messageSends: ["nodeName", "element", "ifTrue:", "attr:", "new", "yourself", "=", "ifNil:", "brush:"],
-referencedClasses: ["TrappedAttrBinder", "TrappedBinder"]
+source: "binder: aTagBrush\x0a    \x22Prototype; will select based on tag etc.\x22\x0a    | binder tag |\x0a    tag := aTagBrush element nodeName.\x0a    tag = 'INPUT' ifTrue: [\x0a        | type |\x0a        type := aTagBrush asJQuery attr: 'type'.\x0a        type = 'checkbox' ifTrue: [ binder := TrappedCheckedBinder new ].\x0a        type = 'text' ifTrue: [ binder := TrappedValBinder new ]\x0a    ].\x0a    binder ifNil: [ binder := TrappedBinder new ].\x0a    ^ binder brush: aTagBrush; yourself",
+messageSends: ["nodeName", "element", "ifTrue:", "attr:", "asJQuery", "new", "=", "ifNil:", "brush:", "yourself"],
+referencedClasses: ["TrappedCheckedBinder", "TrappedValBinder", "TrappedBinder"]
 }),
 smalltalk.Trapped);
 
