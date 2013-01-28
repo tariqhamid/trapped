@@ -2,44 +2,173 @@ Smalltalk current createPackage: 'Trapped-Demo' properties: #{}!
 TrappedMWIsolated subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
+!App commentStamp!
+// Code from AngularJS Todo example, http://angularjs.org/#todo-js
+function TodoCtrl($scope) {
+  $scope.todos = [
+    {text:'learn angular', done:true},
+    {text:'build an angular app', done:false}];
+ 
+  $scope.addTodo = function() {
+    $scope.todos.push({text:$scope.todoText, done:false});
+    $scope.todoText = '';
+  };
+ 
+  $scope.remaining = function() {
+    var count = 0;
+    angular.forEach($scope.todos, function(todo) {
+      count += todo.done ? 0 : 1;
+    });
+    return count;
+  };
+ 
+  $scope.archive = function() {
+    var oldTodos = $scope.todos;
+    $scope.todos = [];
+    angular.forEach(oldTodos, function(todo) {
+      if (!!todo.done) $scope.todos.push(todo);
+    });
+  };
+}!
 
 !App methodsFor: 'initialization'!
 
 initialize
-	| obj |
 	super initialize.
     self dispatcher: TrappedDumbDispatcher new.
-    obj := #{'title' -> 'To-Do List'}.
-    self model: obj.
-    [ obj at: 'items' put: #(#(true 'hello') #(false 'world')). self dispatcher changed: #() ] valueWithTimeout: 2000
+    self model: (AppModel new title: 'Todo').
+    [ self modify: #(#todos) do: [{
+        #{'text'->'learn trapped'. 'done'->true}.
+        #{'text'->'build a trapped app'. 'done'->false}
+    }]] valueWithTimeout: 2000
+! !
+
+Object subclass: #AppModel
+	instanceVariableNames: 'title todos todoText'
+	package: 'Trapped-Demo'!
+!AppModel commentStamp!
+// Code from AngularJS Todo example, http://angularjs.org/#todo-js
+function TodoCtrl($scope) {
+  $scope.todos = [
+    {text:'learn angular', done:true},
+    {text:'build an angular app', done:false}];
+ 
+  $scope.addTodo = function() {
+    $scope.todos.push({text:$scope.todoText, done:false});
+    $scope.todoText = '';
+  };
+ 
+  $scope.remaining = function() {
+    var count = 0;
+    angular.forEach($scope.todos, function(todo) {
+      count += todo.done ? 0 : 1;
+    });
+    return count;
+  };
+ 
+  $scope.archive = function() {
+    var oldTodos = $scope.todos;
+    $scope.todos = [];
+    angular.forEach(oldTodos, function(todo) {
+      if (!!todo.done) $scope.todos.push(todo);
+    });
+  };
+}!
+
+!AppModel methodsFor: 'accessing'!
+
+remaining
+    ^(self todos select: [ :each | each at: 'done' ]) size
+!
+
+title
+	^title
+!
+
+title: aString
+	title := aString
+!
+
+todoText
+	^todoText
+!
+
+todoText: aString
+	todoText := aString
+!
+
+todos
+	^todos
+!
+
+todos: anArray
+	todos := anArray
+! !
+
+!AppModel methodsFor: 'action'!
+
+addTodo
+    self todos add: #{'text'->self todoText. 'done'->false}.
+    self todoText: ''
+!
+
+archive
+    self todos: (self todos reject: [ :each | each at: 'done' ])
 ! !
 
 Widget subclass: #AppView
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
+!AppView commentStamp!
+<!!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->
+  <body>
+    <h2>Todo</h2>
+    <div ng-controller="TodoCtrl">
+      <span>{{remaining()}} of {{todos.length}} remaining</span>
+      [ <a href="" ng-click="archive()">archive</a> ]
+      <ul class="unstyled">
+        <li ng-repeat="todo in todos">
+          <input type="checkbox" ng-model="todo.done">
+          <span class="done-{{todo.done}}">{{todo.text}}</span>
+        </li>
+      </ul>
+      <form ng-submit="addTodo()">
+        <input type="text" ng-model="todoText"  size="30"
+               placeholder="add new todo here">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+    </div>
+  </body>!
 
 !AppView methodsFor: 'rendering'!
 
 renderOn: html
-	html h2 trap: #('title').
-    html div trap: #('items') toggle: [
-        html p with: [ html span trap: #(#size). html with: ' item(s).' ].
-		html form with: [ html ul trapIter: #() tag: #li do: [ :each |
+    | snap |
+	html h2 trap: #(#title).
+    snap := Trapped current snapshot.
+    html div trap: #(#todos) toggle: [ snap do: [
+        html span trap:#(#remaining).
+        html with: ' of '.
+        html span trap: #(#todos #size).
+        html with: ' remaining [ '.
+        html a href:''; onClick: [[
+            snap model modify: snap path allButFirst do: [ :model | model archive ].
+            false
+        ] value "amber GH-314 workaround"]; with: 'archive'.
+        html with: ' ]'.
+        html ul trapIter: #(#todos) tag: #li do: [ :each |
             html root empty.
-            html input
-                type: 'checkbox';
-                trap: #(1).
-            html span trap: #(2).
-        ]].
-        html p with: '... and again, to see the bidirectional binding:'.
-		html form with: [ html ul trapIter: #() tag: #li do: [ :each |
-            html root empty.
-            html input
-                type: 'checkbox';
-                trap: #(1).
-            html span trap: #(2).
-        ]].
-    ] ifNotPresent: [ html with: 'Loading ...' ]
+            html input type: 'checkbox'; trap: #('done').
+            html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').
+        ].
+        html form onSubmit: [[
+            snap model modify: snap path allButFirst do: [ :model | model addTodo ].
+            false
+        ] value "amber GH-314 workaround"]; with: [
+            html input type: 'text'; trap: #(#todoText); at: 'size' put: 30; placeholder: 'add new todo here'.
+            html input class: 'btn-primary'; type: 'submit'; value: 'add'.
+        ].
+    ]] ifNotPresent: [ html with: 'Loading ...' ]
 ! !
 
 TrappedDispatcher subclass: #TrappedDumbDispatcher
