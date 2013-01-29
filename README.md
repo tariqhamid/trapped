@@ -46,9 +46,6 @@ The Todo example from AngularJS is ported into the demo page.
 Trapped itself is in `Trapped-Frontend` and `Trapped-Backend` packages.
 The demo page itself is in `demo.html` and its code is in `Trapped-Demo` package,
 in classes `App` (which is wrapping `AppModel`) and `AppView`.
-Other classes in `Trapped-Demo` are just prototype implemenations of Trapped
-building blocks. They may be deleted in the future or move to frontend/backend packages
-when they mature.
 
 `App` is the view model entity (its instance is put
 into global variable `AppEntity` in `demo.html`), that is,
