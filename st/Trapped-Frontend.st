@@ -63,26 +63,6 @@ showBlock
 	^[ :model | brush asJQuery val: (model ifNotNil: [self prim: model] ifNil: [[]]) ]
 ! !
 
-KeyedPubSubBase subclass: #TrappedDispatcher
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
-!TrappedDispatcher commentStamp!
-I am base class for change event dispatchers.
-I manage changed path - action block subscriptions.
-These subscription are instances of TrappedSubscription
-
-My subclasses need to provide implementation for:
-	add:
-    do:
-    clean
-    (optionally) run!
-
-!TrappedDispatcher methodsFor: 'action'!
-
-subscriptionKey: key block: aBlock
-	^TrappedSubscription new key: key block: aBlock; yourself
-! !
-
 Widget subclass: #TrappedDumbView
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
@@ -95,113 +75,13 @@ renderOn: html
 	html root trap: #()
 ! !
 
-Object subclass: #TrappedModelWrapper
-	instanceVariableNames: 'dispatcher payload'
-	package: 'Trapped-Frontend'!
-!TrappedModelWrapper commentStamp!
-I am base class for model wrappers.
-I wrap a model which can be any object.
-
-My subclasses need to provide implementation for:
-	read:do:
-    modify:do:
-	(optionally) name
-
-and must issue these call when initializing:
-	model:
-	dispatcher: (with a subclass of TrappedDispatcher)!
-
-!TrappedModelWrapper methodsFor: 'accessing'!
-
-dispatcher
-	^dispatcher
-!
-
-dispatcher: aDispatcher
-	dispatcher := aDispatcher
-!
-
-model: anObject
-	payload := anObject.
-    self dispatcher changed: #()
-!
-
-name
-	^ self class name
-! !
-
-!TrappedModelWrapper methodsFor: 'action'!
-
-start
-	Trapped current register: self name: self name
-!
-
-watch: path do: aBlock
-	self dispatcher on: path hook: [ self read: path do: aBlock ]
-! !
-
-!TrappedModelWrapper class methodsFor: 'action'!
-
-start
-	^self new start; yourself
-! !
-
-TrappedModelWrapper subclass: #TrappedMWDirect
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
-!TrappedMWDirect commentStamp!
-I am TrappedModelWrapper that directly manipulate
-the object passed to model:!
-
-!TrappedMWDirect methodsFor: 'action'!
-
-modify: path do: aBlock
-    | newValue eavModel |
-    eavModel := path asEavModel.
-    newValue := aBlock value: (eavModel on: payload).
-    [ eavModel on: payload put: newValue ] ensure: [ self dispatcher changed: path ]
-!
-
-read: path do: aBlock
-    | eavModel |
-    eavModel := path asEavModel.
-    aBlock value: (eavModel on: payload)
-! !
-
-TrappedModelWrapper subclass: #TrappedMWIsolated
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
-!TrappedMWIsolated commentStamp!
-I am TrappedModelWrapper than wrap access
-to an object passed to model: via Isolator.!
-
-!TrappedMWIsolated methodsFor: 'accessing'!
-
-model: anObject
-	super model: (Isolator on: anObject)
-! !
-
-!TrappedMWIsolated methodsFor: 'action'!
-
-modify: path do: aBlock
-    | eavModel |
-    eavModel := ({#root},path) asEavModel.
-    [ payload model: eavModel modify: aBlock ] ensure: [ self dispatcher changed: path ]
-!
-
-read: path do: aBlock
-    | eavModel |
-    eavModel := ({#root},path) asEavModel.
-    payload model: eavModel read: aBlock
-! !
-
 Object subclass: #TrappedSingleton
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
 
 !TrappedSingleton methodsFor: 'action'!
 
-start
+start: args
 	^ self subclassResponsibility
 ! !
 
@@ -215,8 +95,8 @@ current
 
 !TrappedSingleton class methodsFor: 'action'!
 
-start
-	self current start
+start: zzz
+	self current perform: #start: withArguments: arguments
 ! !
 
 TrappedSingleton subclass: #Trapped
@@ -229,8 +109,12 @@ byName: aString
 	^ registry at: aString
 !
 
-register: aFly name: aString
-	registry at: aString put: aFly
+register: aListKeyedEntity
+	self register: aListKeyedEntity name: aListKeyedEntity class name
+!
+
+register: aListKeyedEntity name: aString
+	registry at: aString put: aListKeyedEntity
 ! !
 
 !Trapped methodsFor: 'action'!
@@ -246,7 +130,10 @@ descend: anArray snapshotDo: aBlock
     ]
 !
 
-start
+start: zzz
+	| args |
+    <args = [].slice.call(arguments)>.
+    args do: [ :each | self register: each ].
 	'[data-trap]' asJQuery each: [ :index :elem |
     	| trap jq viewName modelName tokens path |
         jq := elem asJQuery.
@@ -351,16 +238,6 @@ do: aBlock
 
 modify: aBlock
 	self model modify: self path allButFirst do: aBlock
-! !
-
-KeyedSubscriptionBase subclass: #TrappedSubscription
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
-
-!TrappedSubscription methodsFor: 'testing'!
-
-accepts: aKey
-    ^aKey size <= key size and: [aKey = (key copyFrom: 1 to: aKey size)]
 ! !
 
 !Array methodsFor: '*Trapped-Frontend'!

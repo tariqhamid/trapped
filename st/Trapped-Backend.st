@@ -76,6 +76,20 @@ on: anObject
 Object subclass: #KeyedPubSubBase
 	instanceVariableNames: ''
 	package: 'Trapped-Backend'!
+!KeyedPubSubBase commentStamp!
+I represent a pub-sub based on a key.
+I manage key-block subscriptions as well as running blocks that are dirty.
+The subscription objects are reponsible of decision if the change is relevant for them.
+Subscription object must be subclasses of KeyedSubscriptionBase.
+
+My subclasses must provide implementation for:
+	subscriptionKey:block: (factory method for creating appropriate subscription object)
+
+as well as bookkeeping of subscriptions:
+	add:
+    do:
+    clean
+    (optionally) run!
 
 !KeyedPubSubBase methodsFor: 'action'!
 
@@ -115,6 +129,53 @@ run
 subscriptionKey: key block: aBlock
     "Should return subclass of KeyedSubscriptionBase"
     self subclassReponsibility
+! !
+
+KeyedPubSubBase subclass: #ListKeyedPubSubBase
+	instanceVariableNames: ''
+	package: 'Trapped-Backend'!
+!ListKeyedPubSubBase commentStamp!
+I am base class list-keyed pub-sub.
+
+My subclasses need to provide implementation for:
+	add:
+    do:
+    clean
+    (optionally) run!
+
+!ListKeyedPubSubBase methodsFor: 'action'!
+
+subscriptionKey: key block: aBlock
+	^ListKeyedSubscription new key: key block: aBlock; yourself
+! !
+
+ListKeyedPubSubBase subclass: #SimpleListKeyedPubSub
+	instanceVariableNames: 'queue'
+	package: 'Trapped-Backend'!
+
+!SimpleListKeyedPubSub methodsFor: 'accessing'!
+
+add: aSubscription
+	queue add: aSubscription.
+! !
+
+!SimpleListKeyedPubSub methodsFor: 'bookkeeping'!
+
+clean
+	queue := queue select: [ :each | each isEnabled ]
+! !
+
+!SimpleListKeyedPubSub methodsFor: 'enumeration'!
+
+do: aBlock
+	queue do: aBlock
+! !
+
+!SimpleListKeyedPubSub methodsFor: 'initialization'!
+
+initialize
+    super initialize.
+	queue := OrderedCollection new
 ! !
 
 Error subclass: #KeyedPubSubUnsubscribe
@@ -167,6 +228,103 @@ isEnabled
 
 isFlagged
 	^flagged
+! !
+
+KeyedSubscriptionBase subclass: #ListKeyedSubscription
+	instanceVariableNames: ''
+	package: 'Trapped-Backend'!
+
+!ListKeyedSubscription methodsFor: 'testing'!
+
+accepts: aKey
+    ^aKey size <= key size and: [aKey = (key copyFrom: 1 to: aKey size)]
+! !
+
+Object subclass: #ListKeyedEntity
+	instanceVariableNames: 'dispatcher payload'
+	package: 'Trapped-Backend'!
+!ListKeyedEntity commentStamp!
+I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,
+that moderate access to the wrapped model object via read;do and modify:do:
+and allow pub-sub via watch:do:.
+This wrapped model can be any smalltalk object.
+
+My subclasses need to provide implementation for:
+	read:do:
+    modify:do:
+
+and must issue these calls when initializing:
+	model: (with a wrapped object)
+	dispatcher: (with a subclass of ListKeyedPubSubBase)!
+
+!ListKeyedEntity methodsFor: 'accessing'!
+
+dispatcher
+	^dispatcher
+!
+
+dispatcher: aDispatcher
+	dispatcher := aDispatcher
+!
+
+model: anObject
+	payload := anObject.
+    self dispatcher changed: #()
+! !
+
+!ListKeyedEntity methodsFor: 'action'!
+
+watch: path do: aBlock
+	self dispatcher on: path hook: [ self read: path do: aBlock ]
+! !
+
+ListKeyedEntity subclass: #ListKeyedDirectEntity
+	instanceVariableNames: ''
+	package: 'Trapped-Backend'!
+!ListKeyedDirectEntity commentStamp!
+I am ListKeyedEntity that directly manipulate
+the wrapped model object.!
+
+!ListKeyedDirectEntity methodsFor: 'action'!
+
+modify: path do: aBlock
+    | newValue eavModel |
+    eavModel := path asEavModel.
+    newValue := aBlock value: (eavModel on: payload).
+    [ eavModel on: payload put: newValue ] ensure: [ self dispatcher changed: path ]
+!
+
+read: path do: aBlock
+    | eavModel |
+    eavModel := path asEavModel.
+    aBlock value: (eavModel on: payload)
+! !
+
+ListKeyedEntity subclass: #ListKeyedIsolatedEntity
+	instanceVariableNames: ''
+	package: 'Trapped-Backend'!
+!ListKeyedIsolatedEntity commentStamp!
+I am ListKeyedEntity that guards access
+to the wrapped model object via Isolator.!
+
+!ListKeyedIsolatedEntity methodsFor: 'accessing'!
+
+model: anObject
+	super model: (Isolator on: anObject)
+! !
+
+!ListKeyedIsolatedEntity methodsFor: 'action'!
+
+modify: path do: aBlock
+    | eavModel |
+    eavModel := ({#root},path) asEavModel.
+    [ payload model: eavModel modify: aBlock ] ensure: [ self dispatcher changed: path ]
+!
+
+read: path do: aBlock
+    | eavModel |
+    eavModel := ({#root},path) asEavModel.
+    payload model: eavModel read: aBlock
 ! !
 
 !Object methodsFor: '*Trapped-Backend'!

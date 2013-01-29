@@ -219,6 +219,75 @@ smalltalk.KeyedPubSubBase);
 
 
 
+smalltalk.addClass('ListKeyedPubSubBase', smalltalk.KeyedPubSubBase, [], 'Trapped-Backend');
+smalltalk.addMethod(
+"_subscriptionKey_block_",
+smalltalk.method({
+selector: "subscriptionKey:block:",
+fn: function (key,aBlock){
+var self=this;
+var $2,$3,$1;
+$2=smalltalk.send((smalltalk.ListKeyedSubscription || ListKeyedSubscription),"_new",[]);
+smalltalk.send($2,"_key_block_",[key,aBlock]);
+$3=smalltalk.send($2,"_yourself",[]);
+$1=$3;
+return $1;
+}
+}),
+smalltalk.ListKeyedPubSubBase);
+
+
+
+smalltalk.addClass('SimpleListKeyedPubSub', smalltalk.ListKeyedPubSubBase, ['queue'], 'Trapped-Backend');
+smalltalk.addMethod(
+"_add_",
+smalltalk.method({
+selector: "add:",
+fn: function (aSubscription){
+var self=this;
+smalltalk.send(self["@queue"],"_add_",[aSubscription]);
+return self}
+}),
+smalltalk.SimpleListKeyedPubSub);
+
+smalltalk.addMethod(
+"_clean",
+smalltalk.method({
+selector: "clean",
+fn: function (){
+var self=this;
+self["@queue"]=smalltalk.send(self["@queue"],"_select_",[(function(each){
+return smalltalk.send(each,"_isEnabled",[]);
+})]);
+return self}
+}),
+smalltalk.SimpleListKeyedPubSub);
+
+smalltalk.addMethod(
+"_do_",
+smalltalk.method({
+selector: "do:",
+fn: function (aBlock){
+var self=this;
+smalltalk.send(self["@queue"],"_do_",[aBlock]);
+return self}
+}),
+smalltalk.SimpleListKeyedPubSub);
+
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+fn: function (){
+var self=this;
+smalltalk.send(self,"_initialize",[],smalltalk.ListKeyedPubSubBase);
+self["@queue"]=smalltalk.send((smalltalk.OrderedCollection || OrderedCollection),"_new",[]);
+return self}
+}),
+smalltalk.SimpleListKeyedPubSub);
+
+
+
 smalltalk.addClass('KeyedPubSubUnsubscribe', smalltalk.Error, [], 'Trapped-Backend');
 
 
@@ -315,6 +384,153 @@ return self["@actionBlock"];
 return self}
 }),
 smalltalk.KeyedSubscriptionBase);
+
+
+
+smalltalk.addClass('ListKeyedSubscription', smalltalk.KeyedSubscriptionBase, [], 'Trapped-Backend');
+smalltalk.addMethod(
+"_accepts_",
+smalltalk.method({
+selector: "accepts:",
+fn: function (aKey){
+var self=this;
+var $1;
+$1=smalltalk.send(smalltalk.send(smalltalk.send(aKey,"_size",[]),"__lt_eq",[smalltalk.send(self["@key"],"_size",[])]),"_and_",[(function(){
+return smalltalk.send(aKey,"__eq",[smalltalk.send(self["@key"],"_copyFrom_to_",[(1),smalltalk.send(aKey,"_size",[])])]);
+})]);
+return $1;
+}
+}),
+smalltalk.ListKeyedSubscription);
+
+
+
+smalltalk.addClass('ListKeyedEntity', smalltalk.Object, ['dispatcher', 'payload'], 'Trapped-Backend');
+smalltalk.addMethod(
+"_dispatcher",
+smalltalk.method({
+selector: "dispatcher",
+fn: function (){
+var self=this;
+return self["@dispatcher"];
+}
+}),
+smalltalk.ListKeyedEntity);
+
+smalltalk.addMethod(
+"_dispatcher_",
+smalltalk.method({
+selector: "dispatcher:",
+fn: function (aDispatcher){
+var self=this;
+self["@dispatcher"]=aDispatcher;
+return self}
+}),
+smalltalk.ListKeyedEntity);
+
+smalltalk.addMethod(
+"_model_",
+smalltalk.method({
+selector: "model:",
+fn: function (anObject){
+var self=this;
+self["@payload"]=anObject;
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
+return self}
+}),
+smalltalk.ListKeyedEntity);
+
+smalltalk.addMethod(
+"_watch_do_",
+smalltalk.method({
+selector: "watch:do:",
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_on_hook_",[path,(function(){
+return smalltalk.send(self,"_read_do_",[path,aBlock]);
+})]);
+return self}
+}),
+smalltalk.ListKeyedEntity);
+
+
+
+smalltalk.addClass('ListKeyedDirectEntity', smalltalk.ListKeyedEntity, [], 'Trapped-Backend');
+smalltalk.addMethod(
+"_modify_do_",
+smalltalk.method({
+selector: "modify:do:",
+fn: function (path,aBlock){
+var self=this;
+var newValue;
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[self["@payload"]])]);
+smalltalk.send((function(){
+return smalltalk.send(eavModel,"_on_put_",[self["@payload"],newValue]);
+}),"_ensure_",[(function(){
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
+})]);
+return self}
+}),
+smalltalk.ListKeyedDirectEntity);
+
+smalltalk.addMethod(
+"_read_do_",
+smalltalk.method({
+selector: "read:do:",
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[self["@payload"]])]);
+return self}
+}),
+smalltalk.ListKeyedDirectEntity);
+
+
+
+smalltalk.addClass('ListKeyedIsolatedEntity', smalltalk.ListKeyedEntity, [], 'Trapped-Backend');
+smalltalk.addMethod(
+"_model_",
+smalltalk.method({
+selector: "model:",
+fn: function (anObject){
+var self=this;
+smalltalk.send(self,"_model_",[smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[anObject])],smalltalk.ListKeyedEntity);
+return self}
+}),
+smalltalk.ListKeyedIsolatedEntity);
+
+smalltalk.addMethod(
+"_modify_do_",
+smalltalk.method({
+selector: "modify:do:",
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(smalltalk.send([smalltalk.symbolFor("root")],"__comma",[path]),"_asEavModel",[]);
+smalltalk.send((function(){
+return smalltalk.send(self["@payload"],"_model_modify_",[eavModel,aBlock]);
+}),"_ensure_",[(function(){
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
+})]);
+return self}
+}),
+smalltalk.ListKeyedIsolatedEntity);
+
+smalltalk.addMethod(
+"_read_do_",
+smalltalk.method({
+selector: "read:do:",
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(smalltalk.send([smalltalk.symbolFor("root")],"__comma",[path]),"_asEavModel",[]);
+smalltalk.send(self["@payload"],"_model_read_",[eavModel,aBlock]);
+return self}
+}),
+smalltalk.ListKeyedIsolatedEntity);
 
 
 

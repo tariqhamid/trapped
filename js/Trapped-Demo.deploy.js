@@ -1,13 +1,13 @@
 smalltalk.addPackage('Trapped-Demo', {});
-smalltalk.addClass('App', smalltalk.TrappedMWIsolated, [], 'Trapped-Demo');
+smalltalk.addClass('App', smalltalk.ListKeyedIsolatedEntity, [], 'Trapped-Demo');
 smalltalk.addMethod(
 "_initialize",
 smalltalk.method({
 selector: "initialize",
 fn: function (){
 var self=this;
-smalltalk.send(self,"_initialize",[],smalltalk.TrappedMWIsolated);
-smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.TrappedDumbDispatcher || TrappedDumbDispatcher),"_new",[])]);
+smalltalk.send(self,"_initialize",[],smalltalk.ListKeyedIsolatedEntity);
+smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.SimpleListKeyedPubSub || SimpleListKeyedPubSub),"_new",[])]);
 smalltalk.send(self,"_model_",[smalltalk.send(smalltalk.send((smalltalk.AppModel || AppModel),"_new",[]),"_title_",["Todo"])]);
 smalltalk.send((function(){
 return smalltalk.send(self,"_modify_do_",[[smalltalk.symbolFor("todos")],(function(){
@@ -213,55 +213,6 @@ return smalltalk.send(html,"_with_",["Loading ..."]);
 return self}
 }),
 smalltalk.AppView);
-
-
-
-smalltalk.addClass('TrappedDumbDispatcher', smalltalk.TrappedDispatcher, ['queue'], 'Trapped-Demo');
-smalltalk.addMethod(
-"_add_",
-smalltalk.method({
-selector: "add:",
-fn: function (aSubscription){
-var self=this;
-smalltalk.send(self["@queue"],"_add_",[aSubscription]);
-return self}
-}),
-smalltalk.TrappedDumbDispatcher);
-
-smalltalk.addMethod(
-"_clean",
-smalltalk.method({
-selector: "clean",
-fn: function (){
-var self=this;
-self["@queue"]=smalltalk.send(self["@queue"],"_select_",[(function(each){
-return smalltalk.send(each,"_isEnabled",[]);
-})]);
-return self}
-}),
-smalltalk.TrappedDumbDispatcher);
-
-smalltalk.addMethod(
-"_do_",
-smalltalk.method({
-selector: "do:",
-fn: function (aBlock){
-var self=this;
-smalltalk.send(self["@queue"],"_do_",[aBlock]);
-return self}
-}),
-smalltalk.TrappedDumbDispatcher);
-
-smalltalk.addMethod(
-"_initialize",
-smalltalk.method({
-selector: "initialize",
-fn: function (){
-var self=this;
-self["@queue"]=smalltalk.send((smalltalk.OrderedCollection || OrderedCollection),"_new",[]);
-return self}
-}),
-smalltalk.TrappedDumbDispatcher);
 
 
 

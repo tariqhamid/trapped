@@ -23,12 +23,23 @@ What is missing:
  - optimizations ;-)
  - view -> viewmodel change propagation everywhere
 
+Enhancements for the future:
+ - better change/update model (implicit, not explicit).
+
 How can I try it?
 ----
+
+**Easy way** (but you cannot save and reload with new code):
+
+Visit http://www.herby.sk/trapped/demo.html.
+
+**Hard way** (but you can save and reload with new code):
 
 Clone this repo, with submodules as well (amber is bundled as submodule).
 Then start the server: `node vendor/amber/server/server.js`. It start on port 4000.
 Visit `http://localhost:4000/demo.html` in your browser. Amber IDE opens.
+
+**Play with it:**
 
 The Todo example from AngularJS is ported into the demo page.
 
@@ -39,14 +50,14 @@ Other classes in `Trapped-Demo` are just prototype implemenations of Trapped
 building blocks. They may be deleted in the future or move to frontend/backend packages
 when they mature.
 
-`App` is the view model wrapper (its instance is put
-into global variable `AppVM` in `demo.html`)
+`App` is the view model entity (its instance is put
+into global variable `AppEntity` in `demo.html`), that is,
+facade and wrapper around the real object,
 and `AppView` is the view. `AppModel` is plain Smalltalk class
 holding data and having some behaviour. Instance of this class
-is wrapper by `App`. It shows any plain object can be used
-for a view model and wrapped by trapped.
+is wrapped by `App`.
 
-The view model wraps any object (via `model:`, as seen in `App >> initialize`).
+The entity wraps any object (via `model:`, as seen in `App >> initialize`).
 The view is subclass of plain `Widget`, but inside it, uses of `trap:`
 (and others of  `trap:xxx:` family) on `TagBrush`
 and `path trapDescend: block` allows you to bind data from view model.
@@ -55,22 +66,22 @@ You can also iterate arrays in the model using `TagBrush >> trapIter:tag:do:`.
 To see viewmodel->view update working, try this in Workspace:
 
 ```smalltalk
-AppVM modify: #(#todos) do: [ :old | old, { #{'text'->'try the guts'. 'done'->true} } ]
+AppEntity modify: #(#todos) do: [ :old | old, { #{'text'->'try the guts'. 'done'->true} } ]
 ```
 
 The number and list of items should update. If you do
 
 ```smalltalk
-AppVM modify: #(#title) do: [ 'My title' ]
+AppEntity modify: #(#title) do: [ 'My title' ]
 ```
 
 The title of the page as well as header should be updated.
 
 The `modify:do:` should be used for update since it changes as well as signals the change.
-When using `TrappedMWIsolated` wrapper class,  `read:do:` and `modify:do:`
+When using `ListKeyedIsolatedEntity` subclass as wrapper entity,  `read:do:` and `modify:do:`
 guard the data by doing deep copies behind the scene.
 
 If you wish to, you can change the raw data you put into `model:` by hand,
-but then be sure to call `AppVM dispatcher changed: #(#title)` or similar
-(you can do `AppVM dispatcher changed: #()` to signal everything in `AppVM` has changed,
+but then be sure to call `AppEntity dispatcher changed: #(#title)` or similar
+(you can do `AppEntity dispatcher changed: #()` to signal everything in `AppVM` has changed,
 but then everything depending upon it will redraw).

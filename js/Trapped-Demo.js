@@ -1,5 +1,5 @@
 smalltalk.addPackage('Trapped-Demo', {});
-smalltalk.addClass('App', smalltalk.TrappedMWIsolated, [], 'Trapped-Demo');
+smalltalk.addClass('App', smalltalk.ListKeyedIsolatedEntity, [], 'Trapped-Demo');
 smalltalk.App.comment="// Code from AngularJS Todo example, http://angularjs.org/#todo-js\x0afunction TodoCtrl($scope) {\x0a  $scope.todos = [\x0a    {text:'learn angular', done:true},\x0a    {text:'build an angular app', done:false}];\x0a \x0a  $scope.addTodo = function() {\x0a    $scope.todos.push({text:$scope.todoText, done:false});\x0a    $scope.todoText = '';\x0a  };\x0a \x0a  $scope.remaining = function() {\x0a    var count = 0;\x0a    angular.forEach($scope.todos, function(todo) {\x0a      count += todo.done ? 0 : 1;\x0a    });\x0a    return count;\x0a  };\x0a \x0a  $scope.archive = function() {\x0a    var oldTodos = $scope.todos;\x0a    $scope.todos = [];\x0a    angular.forEach(oldTodos, function(todo) {\x0a      if (!todo.done) $scope.todos.push(todo);\x0a    });\x0a  };\x0a}"
 smalltalk.addMethod(
 "_initialize",
@@ -8,8 +8,8 @@ selector: "initialize",
 category: 'initialization',
 fn: function (){
 var self=this;
-smalltalk.send(self,"_initialize",[],smalltalk.TrappedMWIsolated);
-smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.TrappedDumbDispatcher || TrappedDumbDispatcher),"_new",[])]);
+smalltalk.send(self,"_initialize",[],smalltalk.ListKeyedIsolatedEntity);
+smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.SimpleListKeyedPubSub || SimpleListKeyedPubSub),"_new",[])]);
 smalltalk.send(self,"_model_",[smalltalk.send(smalltalk.send((smalltalk.AppModel || AppModel),"_new",[]),"_title_",["Todo"])]);
 smalltalk.send((function(){
 return smalltalk.send(self,"_modify_do_",[[smalltalk.symbolFor("todos")],(function(){
@@ -18,9 +18,9 @@ return [smalltalk.HashedCollection._fromPairs_([smalltalk.send("text","__minus_g
 }),"_valueWithTimeout_",[(2000)]);
 return self},
 args: [],
-source: "initialize\x0a\x09super initialize.\x0a    self dispatcher: TrappedDumbDispatcher new.\x0a    self model: (AppModel new title: 'Todo').\x0a    [ self modify: #(#todos) do: [{\x0a        #{'text'->'learn trapped'. 'done'->true}.\x0a        #{'text'->'build a trapped app'. 'done'->false}\x0a    }]] valueWithTimeout: 2000\x0a",
+source: "initialize\x0a\x09super initialize.\x0a    self dispatcher: SimpleListKeyedPubSub new.\x0a    self model: (AppModel new title: 'Todo').\x0a    [ self modify: #(#todos) do: [{\x0a        #{'text'->'learn trapped'. 'done'->true}.\x0a        #{'text'->'build a trapped app'. 'done'->false}\x0a    }]] valueWithTimeout: 2000\x0a",
 messageSends: ["initialize", "dispatcher:", "new", "model:", "title:", "valueWithTimeout:", "modify:do:", "->"],
-referencedClasses: ["TrappedDumbDispatcher", "AppModel"]
+referencedClasses: ["SimpleListKeyedPubSub", "AppModel"]
 }),
 smalltalk.App);
 
@@ -276,75 +276,6 @@ messageSends: ["trapDescend:", "trap:", "h2", "trap:toggle:ifNotPresent:", "do:"
 referencedClasses: []
 }),
 smalltalk.AppView);
-
-
-
-smalltalk.addClass('TrappedDumbDispatcher', smalltalk.TrappedDispatcher, ['queue'], 'Trapped-Demo');
-smalltalk.addMethod(
-"_add_",
-smalltalk.method({
-selector: "add:",
-category: 'accessing',
-fn: function (aSubscription){
-var self=this;
-smalltalk.send(self["@queue"],"_add_",[aSubscription]);
-return self},
-args: ["aSubscription"],
-source: "add: aSubscription\x0a\x09queue add: aSubscription.\x0a",
-messageSends: ["add:"],
-referencedClasses: []
-}),
-smalltalk.TrappedDumbDispatcher);
-
-smalltalk.addMethod(
-"_clean",
-smalltalk.method({
-selector: "clean",
-category: 'bookkeeping',
-fn: function (){
-var self=this;
-self["@queue"]=smalltalk.send(self["@queue"],"_select_",[(function(each){
-return smalltalk.send(each,"_isEnabled",[]);
-})]);
-return self},
-args: [],
-source: "clean\x0a\x09queue := queue select: [ :each | each isEnabled ]",
-messageSends: ["select:", "isEnabled"],
-referencedClasses: []
-}),
-smalltalk.TrappedDumbDispatcher);
-
-smalltalk.addMethod(
-"_do_",
-smalltalk.method({
-selector: "do:",
-category: 'enumeration',
-fn: function (aBlock){
-var self=this;
-smalltalk.send(self["@queue"],"_do_",[aBlock]);
-return self},
-args: ["aBlock"],
-source: "do: aBlock\x0a\x09queue do: aBlock",
-messageSends: ["do:"],
-referencedClasses: []
-}),
-smalltalk.TrappedDumbDispatcher);
-
-smalltalk.addMethod(
-"_initialize",
-smalltalk.method({
-selector: "initialize",
-category: 'initialization',
-fn: function (){
-var self=this;
-self["@queue"]=smalltalk.send((smalltalk.OrderedCollection || OrderedCollection),"_new",[]);
-return self},
-args: [],
-source: "initialize\x0a\x09queue := OrderedCollection new",
-messageSends: ["new"],
-referencedClasses: ["OrderedCollection"]
-}),
-smalltalk.TrappedDumbDispatcher);
 
 
 

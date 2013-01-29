@@ -180,31 +180,6 @@ smalltalk.TrappedValBinder);
 
 
 
-smalltalk.addClass('TrappedDispatcher', smalltalk.KeyedPubSubBase, [], 'Trapped-Frontend');
-smalltalk.TrappedDispatcher.comment="I am base class for change event dispatchers.\x0aI manage changed path - action block subscriptions.\x0aThese subscription are instances of TrappedSubscription\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a"
-smalltalk.addMethod(
-"_subscriptionKey_block_",
-smalltalk.method({
-selector: "subscriptionKey:block:",
-category: 'action',
-fn: function (key,aBlock){
-var self=this;
-var $2,$3,$1;
-$2=smalltalk.send((smalltalk.TrappedSubscription || TrappedSubscription),"_new",[]);
-smalltalk.send($2,"_key_block_",[key,aBlock]);
-$3=smalltalk.send($2,"_yourself",[]);
-$1=$3;
-return $1;
-},
-args: ["key", "aBlock"],
-source: "subscriptionKey: key block: aBlock\x0a\x09^TrappedSubscription new key: key block: aBlock; yourself\x0a",
-messageSends: ["key:block:", "new", "yourself"],
-referencedClasses: ["TrappedSubscription"]
-}),
-smalltalk.TrappedDispatcher);
-
-
-
 smalltalk.addClass('TrappedDumbView', smalltalk.Widget, [], 'Trapped-Frontend');
 smalltalk.TrappedDumbView.comment="I just read and show an actual path."
 smalltalk.addMethod(
@@ -225,252 +200,20 @@ smalltalk.TrappedDumbView);
 
 
 
-smalltalk.addClass('TrappedModelWrapper', smalltalk.Object, ['dispatcher', 'payload'], 'Trapped-Frontend');
-smalltalk.TrappedModelWrapper.comment="I am base class for model wrappers.\x0aI wrap a model which can be any object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a    modify:do:\x0a\x09(optionally) name\x0a\x0aand must issue these call when initializing:\x0a\x09model:\x0a\x09dispatcher: (with a subclass of TrappedDispatcher)\x0a"
-smalltalk.addMethod(
-"_dispatcher",
-smalltalk.method({
-selector: "dispatcher",
-category: 'accessing',
-fn: function (){
-var self=this;
-return self["@dispatcher"];
-},
-args: [],
-source: "dispatcher\x0a\x09^dispatcher",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_dispatcher_",
-smalltalk.method({
-selector: "dispatcher:",
-category: 'accessing',
-fn: function (aDispatcher){
-var self=this;
-self["@dispatcher"]=aDispatcher;
-return self},
-args: ["aDispatcher"],
-source: "dispatcher: aDispatcher\x0a\x09dispatcher := aDispatcher",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_model_",
-smalltalk.method({
-selector: "model:",
-category: 'accessing',
-fn: function (anObject){
-var self=this;
-self["@payload"]=anObject;
-smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
-return self},
-args: ["anObject"],
-source: "model: anObject\x0a\x09payload := anObject.\x0a    self dispatcher changed: #()",
-messageSends: ["changed:", "dispatcher"],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_name",
-smalltalk.method({
-selector: "name",
-category: 'accessing',
-fn: function (){
-var self=this;
-var $1;
-$1=smalltalk.send(smalltalk.send(self,"_class",[]),"_name",[]);
-return $1;
-},
-args: [],
-source: "name\x0a\x09^ self class name",
-messageSends: ["name", "class"],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_start",
-smalltalk.method({
-selector: "start",
-category: 'action',
-fn: function (){
-var self=this;
-smalltalk.send(smalltalk.send((smalltalk.Trapped || Trapped),"_current",[]),"_register_name_",[self,smalltalk.send(self,"_name",[])]);
-return self},
-args: [],
-source: "start\x0a\x09Trapped current register: self name: self name",
-messageSends: ["register:name:", "name", "current"],
-referencedClasses: ["Trapped"]
-}),
-smalltalk.TrappedModelWrapper);
-
-smalltalk.addMethod(
-"_watch_do_",
-smalltalk.method({
-selector: "watch:do:",
-category: 'action',
-fn: function (path,aBlock){
-var self=this;
-smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_on_hook_",[path,(function(){
-return smalltalk.send(self,"_read_do_",[path,aBlock]);
-})]);
-return self},
-args: ["path", "aBlock"],
-source: "watch: path do: aBlock\x0a\x09self dispatcher on: path hook: [ self read: path do: aBlock ]\x0a",
-messageSends: ["on:hook:", "read:do:", "dispatcher"],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper);
-
-
-smalltalk.addMethod(
-"_start",
-smalltalk.method({
-selector: "start",
-category: 'action',
-fn: function (){
-var self=this;
-var $2,$3,$1;
-$2=smalltalk.send(self,"_new",[]);
-smalltalk.send($2,"_start",[]);
-$3=smalltalk.send($2,"_yourself",[]);
-$1=$3;
-return $1;
-},
-args: [],
-source: "start\x0a\x09^self new start; yourself",
-messageSends: ["start", "new", "yourself"],
-referencedClasses: []
-}),
-smalltalk.TrappedModelWrapper.klass);
-
-
-smalltalk.addClass('TrappedMWDirect', smalltalk.TrappedModelWrapper, [], 'Trapped-Frontend');
-smalltalk.TrappedMWDirect.comment="I am TrappedModelWrapper that directly manipulate\x0athe object passed to model:"
-smalltalk.addMethod(
-"_modify_do_",
-smalltalk.method({
-selector: "modify:do:",
-category: 'action',
-fn: function (path,aBlock){
-var self=this;
-var newValue;
-var eavModel;
-eavModel=smalltalk.send(path,"_asEavModel",[]);
-newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[self["@payload"]])]);
-smalltalk.send((function(){
-return smalltalk.send(eavModel,"_on_put_",[self["@payload"],newValue]);
-}),"_ensure_",[(function(){
-return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
-})]);
-return self},
-args: ["path", "aBlock"],
-source: "modify: path do: aBlock\x0a    | newValue eavModel |\x0a    eavModel := path asEavModel.\x0a    newValue := aBlock value: (eavModel on: payload).\x0a    [ eavModel on: payload put: newValue ] ensure: [ self dispatcher changed: path ]\x0a",
-messageSends: ["asEavModel", "value:", "on:", "ensure:", "changed:", "dispatcher", "on:put:"],
-referencedClasses: []
-}),
-smalltalk.TrappedMWDirect);
-
-smalltalk.addMethod(
-"_read_do_",
-smalltalk.method({
-selector: "read:do:",
-category: 'action',
-fn: function (path,aBlock){
-var self=this;
-var eavModel;
-eavModel=smalltalk.send(path,"_asEavModel",[]);
-smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[self["@payload"]])]);
-return self},
-args: ["path", "aBlock"],
-source: "read: path do: aBlock\x0a    | eavModel |\x0a    eavModel := path asEavModel.\x0a    aBlock value: (eavModel on: payload)\x0a",
-messageSends: ["asEavModel", "value:", "on:"],
-referencedClasses: []
-}),
-smalltalk.TrappedMWDirect);
-
-
-
-smalltalk.addClass('TrappedMWIsolated', smalltalk.TrappedModelWrapper, [], 'Trapped-Frontend');
-smalltalk.TrappedMWIsolated.comment="I am TrappedModelWrapper than wrap access\x0ato an object passed to model: via Isolator."
-smalltalk.addMethod(
-"_model_",
-smalltalk.method({
-selector: "model:",
-category: 'accessing',
-fn: function (anObject){
-var self=this;
-smalltalk.send(self,"_model_",[smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[anObject])],smalltalk.TrappedModelWrapper);
-return self},
-args: ["anObject"],
-source: "model: anObject\x0a\x09super model: (Isolator on: anObject)",
-messageSends: ["model:", "on:"],
-referencedClasses: ["Isolator"]
-}),
-smalltalk.TrappedMWIsolated);
-
-smalltalk.addMethod(
-"_modify_do_",
-smalltalk.method({
-selector: "modify:do:",
-category: 'action',
-fn: function (path,aBlock){
-var self=this;
-var eavModel;
-eavModel=smalltalk.send(smalltalk.send([smalltalk.symbolFor("root")],"__comma",[path]),"_asEavModel",[]);
-smalltalk.send((function(){
-return smalltalk.send(self["@payload"],"_model_modify_",[eavModel,aBlock]);
-}),"_ensure_",[(function(){
-return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
-})]);
-return self},
-args: ["path", "aBlock"],
-source: "modify: path do: aBlock\x0a    | eavModel |\x0a    eavModel := ({#root},path) asEavModel.\x0a    [ payload model: eavModel modify: aBlock ] ensure: [ self dispatcher changed: path ]\x0a",
-messageSends: ["asEavModel", ",", "ensure:", "changed:", "dispatcher", "model:modify:"],
-referencedClasses: []
-}),
-smalltalk.TrappedMWIsolated);
-
-smalltalk.addMethod(
-"_read_do_",
-smalltalk.method({
-selector: "read:do:",
-category: 'action',
-fn: function (path,aBlock){
-var self=this;
-var eavModel;
-eavModel=smalltalk.send(smalltalk.send([smalltalk.symbolFor("root")],"__comma",[path]),"_asEavModel",[]);
-smalltalk.send(self["@payload"],"_model_read_",[eavModel,aBlock]);
-return self},
-args: ["path", "aBlock"],
-source: "read: path do: aBlock\x0a    | eavModel |\x0a    eavModel := ({#root},path) asEavModel.\x0a    payload model: eavModel read: aBlock\x0a",
-messageSends: ["asEavModel", ",", "model:read:"],
-referencedClasses: []
-}),
-smalltalk.TrappedMWIsolated);
-
-
-
 smalltalk.addClass('TrappedSingleton', smalltalk.Object, [], 'Trapped-Frontend');
 smalltalk.addMethod(
-"_start",
+"_start_",
 smalltalk.method({
-selector: "start",
+selector: "start:",
 category: 'action',
-fn: function (){
+fn: function (args){
 var self=this;
 var $1;
 $1=smalltalk.send(self,"_subclassResponsibility",[]);
 return $1;
 },
-args: [],
-source: "start\x0a\x09^ self subclassResponsibility",
+args: ["args"],
+source: "start: args\x0a\x09^ self subclassResponsibility",
 messageSends: ["subclassResponsibility"],
 referencedClasses: []
 }),
@@ -502,17 +245,17 @@ referencedClasses: []
 smalltalk.TrappedSingleton.klass);
 
 smalltalk.addMethod(
-"_start",
+"_start_",
 smalltalk.method({
-selector: "start",
+selector: "start:",
 category: 'action',
-fn: function (){
+fn: function (zzz){
 var self=this;
-smalltalk.send(smalltalk.send(self,"_current",[]),"_start",[]);
+smalltalk.send(smalltalk.send(self,"_current",[]),"_perform_withArguments_",[smalltalk.symbolFor("start:"),arguments]);
 return self},
-args: [],
-source: "start\x0a\x09self current start",
-messageSends: ["start", "current"],
+args: ["zzz"],
+source: "start: zzz\x0a\x09self current perform: #start: withArguments: arguments",
+messageSends: ["perform:withArguments:", "current"],
 referencedClasses: []
 }),
 smalltalk.TrappedSingleton.klass);
@@ -626,29 +369,51 @@ referencedClasses: []
 smalltalk.Trapped);
 
 smalltalk.addMethod(
+"_register_",
+smalltalk.method({
+selector: "register:",
+category: 'accessing',
+fn: function (aListKeyedEntity){
+var self=this;
+smalltalk.send(self,"_register_name_",[aListKeyedEntity,smalltalk.send(smalltalk.send(aListKeyedEntity,"_class",[]),"_name",[])]);
+return self},
+args: ["aListKeyedEntity"],
+source: "register: aListKeyedEntity\x0a\x09self register: aListKeyedEntity name: aListKeyedEntity class name",
+messageSends: ["register:name:", "name", "class"],
+referencedClasses: []
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
 "_register_name_",
 smalltalk.method({
 selector: "register:name:",
 category: 'accessing',
-fn: function (aFly,aString){
+fn: function (aListKeyedEntity,aString){
 var self=this;
-smalltalk.send(self["@registry"],"_at_put_",[aString,aFly]);
+smalltalk.send(self["@registry"],"_at_put_",[aString,aListKeyedEntity]);
 return self},
-args: ["aFly", "aString"],
-source: "register: aFly name: aString\x0a\x09registry at: aString put: aFly",
+args: ["aListKeyedEntity", "aString"],
+source: "register: aListKeyedEntity name: aString\x0a\x09registry at: aString put: aListKeyedEntity",
 messageSends: ["at:put:"],
 referencedClasses: []
 }),
 smalltalk.Trapped);
 
 smalltalk.addMethod(
-"_start",
+"_start_",
 smalltalk.method({
-selector: "start",
+selector: "start:",
 category: 'action',
-fn: function (){
+fn: function (zzz){
 var self=this;
 var $1;
+var args;
+args = [].slice.call(arguments);
+;
+smalltalk.send(args,"_do_",[(function(each){
+return smalltalk.send(self,"_register_",[each]);
+})]);
 smalltalk.send(smalltalk.send("[data-trap]","_asJQuery",[]),"_each_",[(function(index,elem){
 var trap;
 var jq;
@@ -682,9 +447,9 @@ return smalltalk.send(smalltalk.send(smalltalk.send(smalltalk.send((smalltalk.Sm
 })]);
 })]);
 return self},
-args: [],
-source: "start\x0a\x09'[data-trap]' asJQuery each: [ :index :elem |\x0a    \x09| trap jq viewName modelName tokens path |\x0a        jq := elem asJQuery.\x0a        trap := jq attr: 'data-trap'.\x0a        tokens := trap tokenize: ':'.\x0a        tokens size = 1 ifTrue: [ tokens := { 'TrappedDumbView' }, tokens ].\x0a        viewName := tokens first.\x0a        tokens := (tokens second tokenize: ' ') select: [ :each | each notEmpty ].\x0a        modelName := tokens first.\x0a        path := Trapped parse: tokens allButFirst.\x0a        { modelName }, path trapDescend: [(Smalltalk current at: viewName) new appendToJQuery: jq].\x0a    ]",
-messageSends: ["each:", "asJQuery", "attr:", "tokenize:", "ifTrue:", ",", "=", "size", "first", "select:", "notEmpty", "second", "parse:", "allButFirst", "trapDescend:", "appendToJQuery:", "new", "at:", "current"],
+args: ["zzz"],
+source: "start: zzz\x0a\x09| args |\x0a    <args = [].slice.call(arguments)>.\x0a    args do: [ :each | self register: each ].\x0a\x09'[data-trap]' asJQuery each: [ :index :elem |\x0a    \x09| trap jq viewName modelName tokens path |\x0a        jq := elem asJQuery.\x0a        trap := jq attr: 'data-trap'.\x0a        tokens := trap tokenize: ':'.\x0a        tokens size = 1 ifTrue: [ tokens := { 'TrappedDumbView' }, tokens ].\x0a        viewName := tokens first.\x0a        tokens := (tokens second tokenize: ' ') select: [ :each | each notEmpty ].\x0a        modelName := tokens first.\x0a        path := Trapped parse: tokens allButFirst.\x0a        { modelName }, path trapDescend: [(Smalltalk current at: viewName) new appendToJQuery: jq].\x0a    ]",
+messageSends: ["do:", "register:", "each:", "asJQuery", "attr:", "tokenize:", "ifTrue:", ",", "=", "size", "first", "select:", "notEmpty", "second", "parse:", "allButFirst", "trapDescend:", "appendToJQuery:", "new", "at:", "current"],
 referencedClasses: ["Trapped", "Smalltalk"]
 }),
 smalltalk.Trapped);
@@ -884,29 +649,6 @@ messageSends: [],
 referencedClasses: []
 }),
 smalltalk.TrappedSnapshot);
-
-
-
-smalltalk.addClass('TrappedSubscription', smalltalk.KeyedSubscriptionBase, [], 'Trapped-Frontend');
-smalltalk.addMethod(
-"_accepts_",
-smalltalk.method({
-selector: "accepts:",
-category: 'testing',
-fn: function (aKey){
-var self=this;
-var $1;
-$1=smalltalk.send(smalltalk.send(smalltalk.send(aKey,"_size",[]),"__lt_eq",[smalltalk.send(self["@key"],"_size",[])]),"_and_",[(function(){
-return smalltalk.send(aKey,"__eq",[smalltalk.send(self["@key"],"_copyFrom_to_",[(1),smalltalk.send(aKey,"_size",[])])]);
-})]);
-return $1;
-},
-args: ["aKey"],
-source: "accepts: aKey\x0a    ^aKey size <= key size and: [aKey = (key copyFrom: 1 to: aKey size)]",
-messageSends: ["and:", "=", "copyFrom:to:", "size", "<="],
-referencedClasses: []
-}),
-smalltalk.TrappedSubscription);
 
 
 

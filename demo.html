@@ -6,15 +6,15 @@
 </head>
 <body>
 <script type="text/javascript">
-    var AppVM;
+    var AppEntity;
     loadAmber({
         packages:['Trapped-Backend', 'Trapped-Frontend', 'Trapped-Demo'],
         packageHome:'./',
         ready:function () {
             $(function() {
                 smalltalk.Browser._openOn_(smalltalk.App);
-                AppVM = smalltalk.App._start();
-                smalltalk.Trapped._start();
+                AppEntity = smalltalk.App._new();
+                smalltalk.Trapped._start_(AppEntity); // any number of args
             });
         }
     });

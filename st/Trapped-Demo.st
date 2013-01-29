@@ -1,5 +1,5 @@
 Smalltalk current createPackage: 'Trapped-Demo' properties: #{}!
-TrappedMWIsolated subclass: #App
+ListKeyedIsolatedEntity subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
 !App commentStamp!
@@ -35,7 +35,7 @@ function TodoCtrl($scope) {
 
 initialize
 	super initialize.
-    self dispatcher: TrappedDumbDispatcher new.
+    self dispatcher: SimpleListKeyedPubSub new.
     self model: (AppModel new title: 'Todo').
     [ self modify: #(#todos) do: [{
         #{'text'->'learn trapped'. 'done'->true}.
@@ -172,33 +172,5 @@ renderOn: html
             html input class: 'btn-primary'; type: 'submit'; value: 'add'.
         ].
     ]] ifNotPresent: [ html with: 'Loading ...' ]]
-! !
-
-TrappedDispatcher subclass: #TrappedDumbDispatcher
-	instanceVariableNames: 'queue'
-	package: 'Trapped-Demo'!
-
-!TrappedDumbDispatcher methodsFor: 'accessing'!
-
-add: aSubscription
-	queue add: aSubscription.
-! !
-
-!TrappedDumbDispatcher methodsFor: 'bookkeeping'!
-
-clean
-	queue := queue select: [ :each | each isEnabled ]
-! !
-
-!TrappedDumbDispatcher methodsFor: 'enumeration'!
-
-do: aBlock
-	queue do: aBlock
-! !
-
-!TrappedDumbDispatcher methodsFor: 'initialization'!
-
-initialize
-	queue := OrderedCollection new
 ! !
 

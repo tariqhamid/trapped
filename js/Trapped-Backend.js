@@ -181,6 +181,7 @@ smalltalk.Isolator.klass);
 
 
 smalltalk.addClass('KeyedPubSubBase', smalltalk.Object, [], 'Trapped-Backend');
+smalltalk.KeyedPubSubBase.comment="I represent a pub-sub based on a key.\x0aI manage key-block subscriptions as well as running blocks that are dirty.\x0aThe subscription objects are reponsible of decision if the change is relevant for them.\x0aSubscription object must be subclasses of KeyedSubscriptionBase.\x0a\x0aMy subclasses must provide implementation for:\x0a\x09subscriptionKey:block: (factory method for creating appropriate subscription object)\x0a\x0aas well as bookkeeping of subscriptions:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a"
 smalltalk.addMethod(
 "_changed_",
 smalltalk.method({
@@ -292,6 +293,101 @@ messageSends: ["subclassReponsibility"],
 referencedClasses: []
 }),
 smalltalk.KeyedPubSubBase);
+
+
+
+smalltalk.addClass('ListKeyedPubSubBase', smalltalk.KeyedPubSubBase, [], 'Trapped-Backend');
+smalltalk.ListKeyedPubSubBase.comment="I am base class list-keyed pub-sub.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a"
+smalltalk.addMethod(
+"_subscriptionKey_block_",
+smalltalk.method({
+selector: "subscriptionKey:block:",
+category: 'action',
+fn: function (key,aBlock){
+var self=this;
+var $2,$3,$1;
+$2=smalltalk.send((smalltalk.ListKeyedSubscription || ListKeyedSubscription),"_new",[]);
+smalltalk.send($2,"_key_block_",[key,aBlock]);
+$3=smalltalk.send($2,"_yourself",[]);
+$1=$3;
+return $1;
+},
+args: ["key", "aBlock"],
+source: "subscriptionKey: key block: aBlock\x0a\x09^ListKeyedSubscription new key: key block: aBlock; yourself\x0a",
+messageSends: ["key:block:", "new", "yourself"],
+referencedClasses: ["ListKeyedSubscription"]
+}),
+smalltalk.ListKeyedPubSubBase);
+
+
+
+smalltalk.addClass('SimpleListKeyedPubSub', smalltalk.ListKeyedPubSubBase, ['queue'], 'Trapped-Backend');
+smalltalk.addMethod(
+"_add_",
+smalltalk.method({
+selector: "add:",
+category: 'accessing',
+fn: function (aSubscription){
+var self=this;
+smalltalk.send(self["@queue"],"_add_",[aSubscription]);
+return self},
+args: ["aSubscription"],
+source: "add: aSubscription\x0a\x09queue add: aSubscription.\x0a",
+messageSends: ["add:"],
+referencedClasses: []
+}),
+smalltalk.SimpleListKeyedPubSub);
+
+smalltalk.addMethod(
+"_clean",
+smalltalk.method({
+selector: "clean",
+category: 'bookkeeping',
+fn: function (){
+var self=this;
+self["@queue"]=smalltalk.send(self["@queue"],"_select_",[(function(each){
+return smalltalk.send(each,"_isEnabled",[]);
+})]);
+return self},
+args: [],
+source: "clean\x0a\x09queue := queue select: [ :each | each isEnabled ]",
+messageSends: ["select:", "isEnabled"],
+referencedClasses: []
+}),
+smalltalk.SimpleListKeyedPubSub);
+
+smalltalk.addMethod(
+"_do_",
+smalltalk.method({
+selector: "do:",
+category: 'enumeration',
+fn: function (aBlock){
+var self=this;
+smalltalk.send(self["@queue"],"_do_",[aBlock]);
+return self},
+args: ["aBlock"],
+source: "do: aBlock\x0a\x09queue do: aBlock",
+messageSends: ["do:"],
+referencedClasses: []
+}),
+smalltalk.SimpleListKeyedPubSub);
+
+smalltalk.addMethod(
+"_initialize",
+smalltalk.method({
+selector: "initialize",
+category: 'initialization',
+fn: function (){
+var self=this;
+smalltalk.send(self,"_initialize",[],smalltalk.ListKeyedPubSubBase);
+self["@queue"]=smalltalk.send((smalltalk.OrderedCollection || OrderedCollection),"_new",[]);
+return self},
+args: [],
+source: "initialize\x0a    super initialize.\x0a\x09queue := OrderedCollection new",
+messageSends: ["initialize", "new"],
+referencedClasses: ["OrderedCollection"]
+}),
+smalltalk.SimpleListKeyedPubSub);
 
 
 
@@ -427,6 +523,206 @@ messageSends: ["on:do:", "ensure:", "value"],
 referencedClasses: ["KeyedPubSubUnsubscribe"]
 }),
 smalltalk.KeyedSubscriptionBase);
+
+
+
+smalltalk.addClass('ListKeyedSubscription', smalltalk.KeyedSubscriptionBase, [], 'Trapped-Backend');
+smalltalk.addMethod(
+"_accepts_",
+smalltalk.method({
+selector: "accepts:",
+category: 'testing',
+fn: function (aKey){
+var self=this;
+var $1;
+$1=smalltalk.send(smalltalk.send(smalltalk.send(aKey,"_size",[]),"__lt_eq",[smalltalk.send(self["@key"],"_size",[])]),"_and_",[(function(){
+return smalltalk.send(aKey,"__eq",[smalltalk.send(self["@key"],"_copyFrom_to_",[(1),smalltalk.send(aKey,"_size",[])])]);
+})]);
+return $1;
+},
+args: ["aKey"],
+source: "accepts: aKey\x0a    ^aKey size <= key size and: [aKey = (key copyFrom: 1 to: aKey size)]",
+messageSends: ["and:", "=", "copyFrom:to:", "size", "<="],
+referencedClasses: []
+}),
+smalltalk.ListKeyedSubscription);
+
+
+
+smalltalk.addClass('ListKeyedEntity', smalltalk.Object, ['dispatcher', 'payload'], 'Trapped-Backend');
+smalltalk.ListKeyedEntity.comment="I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,\x0athat moderate access to the wrapped model object via read;do and modify:do:\x0aand allow pub-sub via watch:do:.\x0aThis wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a    modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x09model: (with a wrapped object)\x0a\x09dispatcher: (with a subclass of ListKeyedPubSubBase)\x0a"
+smalltalk.addMethod(
+"_dispatcher",
+smalltalk.method({
+selector: "dispatcher",
+category: 'accessing',
+fn: function (){
+var self=this;
+return self["@dispatcher"];
+},
+args: [],
+source: "dispatcher\x0a\x09^dispatcher",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.ListKeyedEntity);
+
+smalltalk.addMethod(
+"_dispatcher_",
+smalltalk.method({
+selector: "dispatcher:",
+category: 'accessing',
+fn: function (aDispatcher){
+var self=this;
+self["@dispatcher"]=aDispatcher;
+return self},
+args: ["aDispatcher"],
+source: "dispatcher: aDispatcher\x0a\x09dispatcher := aDispatcher",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.ListKeyedEntity);
+
+smalltalk.addMethod(
+"_model_",
+smalltalk.method({
+selector: "model:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+self["@payload"]=anObject;
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[[]]);
+return self},
+args: ["anObject"],
+source: "model: anObject\x0a\x09payload := anObject.\x0a    self dispatcher changed: #()",
+messageSends: ["changed:", "dispatcher"],
+referencedClasses: []
+}),
+smalltalk.ListKeyedEntity);
+
+smalltalk.addMethod(
+"_watch_do_",
+smalltalk.method({
+selector: "watch:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_on_hook_",[path,(function(){
+return smalltalk.send(self,"_read_do_",[path,aBlock]);
+})]);
+return self},
+args: ["path", "aBlock"],
+source: "watch: path do: aBlock\x0a\x09self dispatcher on: path hook: [ self read: path do: aBlock ]\x0a",
+messageSends: ["on:hook:", "read:do:", "dispatcher"],
+referencedClasses: []
+}),
+smalltalk.ListKeyedEntity);
+
+
+
+smalltalk.addClass('ListKeyedDirectEntity', smalltalk.ListKeyedEntity, [], 'Trapped-Backend');
+smalltalk.ListKeyedDirectEntity.comment="I am ListKeyedEntity that directly manipulate\x0athe wrapped model object."
+smalltalk.addMethod(
+"_modify_do_",
+smalltalk.method({
+selector: "modify:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+var newValue;
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+newValue=smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[self["@payload"]])]);
+smalltalk.send((function(){
+return smalltalk.send(eavModel,"_on_put_",[self["@payload"],newValue]);
+}),"_ensure_",[(function(){
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
+})]);
+return self},
+args: ["path", "aBlock"],
+source: "modify: path do: aBlock\x0a    | newValue eavModel |\x0a    eavModel := path asEavModel.\x0a    newValue := aBlock value: (eavModel on: payload).\x0a    [ eavModel on: payload put: newValue ] ensure: [ self dispatcher changed: path ]\x0a",
+messageSends: ["asEavModel", "value:", "on:", "ensure:", "changed:", "dispatcher", "on:put:"],
+referencedClasses: []
+}),
+smalltalk.ListKeyedDirectEntity);
+
+smalltalk.addMethod(
+"_read_do_",
+smalltalk.method({
+selector: "read:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(path,"_asEavModel",[]);
+smalltalk.send(aBlock,"_value_",[smalltalk.send(eavModel,"_on_",[self["@payload"]])]);
+return self},
+args: ["path", "aBlock"],
+source: "read: path do: aBlock\x0a    | eavModel |\x0a    eavModel := path asEavModel.\x0a    aBlock value: (eavModel on: payload)\x0a",
+messageSends: ["asEavModel", "value:", "on:"],
+referencedClasses: []
+}),
+smalltalk.ListKeyedDirectEntity);
+
+
+
+smalltalk.addClass('ListKeyedIsolatedEntity', smalltalk.ListKeyedEntity, [], 'Trapped-Backend');
+smalltalk.ListKeyedIsolatedEntity.comment="I am ListKeyedEntity that guards access\x0ato the wrapped model object via Isolator."
+smalltalk.addMethod(
+"_model_",
+smalltalk.method({
+selector: "model:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+smalltalk.send(self,"_model_",[smalltalk.send((smalltalk.Isolator || Isolator),"_on_",[anObject])],smalltalk.ListKeyedEntity);
+return self},
+args: ["anObject"],
+source: "model: anObject\x0a\x09super model: (Isolator on: anObject)",
+messageSends: ["model:", "on:"],
+referencedClasses: ["Isolator"]
+}),
+smalltalk.ListKeyedIsolatedEntity);
+
+smalltalk.addMethod(
+"_modify_do_",
+smalltalk.method({
+selector: "modify:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(smalltalk.send([smalltalk.symbolFor("root")],"__comma",[path]),"_asEavModel",[]);
+smalltalk.send((function(){
+return smalltalk.send(self["@payload"],"_model_modify_",[eavModel,aBlock]);
+}),"_ensure_",[(function(){
+return smalltalk.send(smalltalk.send(self,"_dispatcher",[]),"_changed_",[path]);
+})]);
+return self},
+args: ["path", "aBlock"],
+source: "modify: path do: aBlock\x0a    | eavModel |\x0a    eavModel := ({#root},path) asEavModel.\x0a    [ payload model: eavModel modify: aBlock ] ensure: [ self dispatcher changed: path ]\x0a",
+messageSends: ["asEavModel", ",", "ensure:", "changed:", "dispatcher", "model:modify:"],
+referencedClasses: []
+}),
+smalltalk.ListKeyedIsolatedEntity);
+
+smalltalk.addMethod(
+"_read_do_",
+smalltalk.method({
+selector: "read:do:",
+category: 'action',
+fn: function (path,aBlock){
+var self=this;
+var eavModel;
+eavModel=smalltalk.send(smalltalk.send([smalltalk.symbolFor("root")],"__comma",[path]),"_asEavModel",[]);
+smalltalk.send(self["@payload"],"_model_read_",[eavModel,aBlock]);
+return self},
+args: ["path", "aBlock"],
+source: "read: path do: aBlock\x0a    | eavModel |\x0a    eavModel := ({#root},path) asEavModel.\x0a    payload model: eavModel read: aBlock\x0a",
+messageSends: ["asEavModel", ",", "model:read:"],
+referencedClasses: []
+}),
+smalltalk.ListKeyedIsolatedEntity);
 
 
 
