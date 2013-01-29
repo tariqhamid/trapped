@@ -74,7 +74,7 @@ on: anObject
 ! !
 
 Object subclass: #KeyedPubSubBase
-	instanceVariableNames: ''
+	instanceVariableNames: 'factory'
 	package: 'Trapped-Backend'!
 !KeyedPubSubBase commentStamp!
 I represent a pub-sub based on a key.
@@ -83,13 +83,13 @@ The subscription objects are reponsible of decision if the change is relevant fo
 Subscription object must be subclasses of KeyedSubscriptionBase.
 
 My subclasses must provide implementation for:
-	subscriptionKey:block: (factory method for creating appropriate subscription object)
-
-as well as bookkeeping of subscriptions:
 	add:
     do:
     clean
-    (optionally) run!
+    (optionally) run
+
+and issue this call before actual use:
+	subscritionFactory: (setting [:key:block|...] factory that creates appropriate subscription)!
 
 !KeyedPubSubBase methodsFor: 'action'!
 
@@ -110,7 +110,7 @@ dirty: aBoolean
 !
 
 on: key hook: aBlock
-	self add: (self subscriptionKey: key block: aBlock) flag.
+	self add: (factory value: key value: aBlock) flag.
    	self dirty: true
 !
 
@@ -126,52 +126,33 @@ run
     needsClean ifTrue: [ self clean ]
 !
 
-subscriptionKey: key block: aBlock
-    "Should return subclass of KeyedSubscriptionBase"
-    self subclassReponsibility
+subscriptionFactory: aBlock
+    factory := aBlock
 ! !
 
-KeyedPubSubBase subclass: #ListKeyedPubSubBase
-	instanceVariableNames: ''
-	package: 'Trapped-Backend'!
-!ListKeyedPubSubBase commentStamp!
-I am base class list-keyed pub-sub.
-
-My subclasses need to provide implementation for:
-	add:
-    do:
-    clean
-    (optionally) run!
-
-!ListKeyedPubSubBase methodsFor: 'action'!
-
-subscriptionKey: key block: aBlock
-	^ListKeyedSubscription new key: key block: aBlock; yourself
-! !
-
-ListKeyedPubSubBase subclass: #SimpleListKeyedPubSub
+KeyedPubSubBase subclass: #SimpleKeyedPubSub
 	instanceVariableNames: 'queue'
 	package: 'Trapped-Backend'!
 
-!SimpleListKeyedPubSub methodsFor: 'accessing'!
+!SimpleKeyedPubSub methodsFor: 'accessing'!
 
 add: aSubscription
 	queue add: aSubscription.
 ! !
 
-!SimpleListKeyedPubSub methodsFor: 'bookkeeping'!
+!SimpleKeyedPubSub methodsFor: 'bookkeeping'!
 
 clean
 	queue := queue select: [ :each | each isEnabled ]
 ! !
 
-!SimpleListKeyedPubSub methodsFor: 'enumeration'!
+!SimpleKeyedPubSub methodsFor: 'enumeration'!
 
 do: aBlock
 	queue do: aBlock
 ! !
 
-!SimpleListKeyedPubSub methodsFor: 'initialization'!
+!SimpleKeyedPubSub methodsFor: 'initialization'!
 
 initialize
     super initialize.
@@ -255,7 +236,7 @@ My subclasses need to provide implementation for:
 
 and must issue these calls when initializing:
 	model: (with a wrapped object)
-	dispatcher: (with a subclass of ListKeyedPubSubBase)!
+	dispatcher: (with a subclass of KeyedPubSubBase)!
 
 !ListKeyedEntity methodsFor: 'accessing'!
 
@@ -265,6 +246,8 @@ dispatcher
 
 dispatcher: aDispatcher
 	dispatcher := aDispatcher
+        subscriptionFactory: [ :key :block | ListKeyedSubscription new key: key block: block; yourself ];
+        yourself
 !
 
 model: anObject

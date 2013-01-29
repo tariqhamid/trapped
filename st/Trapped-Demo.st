@@ -35,7 +35,7 @@ function TodoCtrl($scope) {
 
 initialize
 	super initialize.
-    self dispatcher: SimpleListKeyedPubSub new.
+    self dispatcher: SimpleKeyedPubSub new.
     self model: (AppModel new title: 'Todo').
     [ self modify: #(#todos) do: [{
         #{'text'->'learn trapped'. 'done'->true}.

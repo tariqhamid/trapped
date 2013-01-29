@@ -129,7 +129,7 @@ return $1;
 smalltalk.Isolator.klass);
 
 
-smalltalk.addClass('KeyedPubSubBase', smalltalk.Object, [], 'Trapped-Backend');
+smalltalk.addClass('KeyedPubSubBase', smalltalk.Object, ['factory'], 'Trapped-Backend');
 smalltalk.addMethod(
 "_changed_",
 smalltalk.method({
@@ -173,7 +173,7 @@ smalltalk.method({
 selector: "on:hook:",
 fn: function (key,aBlock){
 var self=this;
-smalltalk.send(self,"_add_",[smalltalk.send(smalltalk.send(self,"_subscriptionKey_block_",[key,aBlock]),"_flag",[])]);
+smalltalk.send(self,"_add_",[smalltalk.send(smalltalk.send(self["@factory"],"_value_value_",[key,aBlock]),"_flag",[])]);
 smalltalk.send(self,"_dirty_",[true]);
 return self}
 }),
@@ -207,38 +207,19 @@ return self}
 smalltalk.KeyedPubSubBase);
 
 smalltalk.addMethod(
-"_subscriptionKey_block_",
+"_subscriptionFactory_",
 smalltalk.method({
-selector: "subscriptionKey:block:",
-fn: function (key,aBlock){
+selector: "subscriptionFactory:",
+fn: function (aBlock){
 var self=this;
-smalltalk.send(self,"_subclassReponsibility",[]);
+self["@factory"]=aBlock;
 return self}
 }),
 smalltalk.KeyedPubSubBase);
 
 
 
-smalltalk.addClass('ListKeyedPubSubBase', smalltalk.KeyedPubSubBase, [], 'Trapped-Backend');
-smalltalk.addMethod(
-"_subscriptionKey_block_",
-smalltalk.method({
-selector: "subscriptionKey:block:",
-fn: function (key,aBlock){
-var self=this;
-var $2,$3,$1;
-$2=smalltalk.send((smalltalk.ListKeyedSubscription || ListKeyedSubscription),"_new",[]);
-smalltalk.send($2,"_key_block_",[key,aBlock]);
-$3=smalltalk.send($2,"_yourself",[]);
-$1=$3;
-return $1;
-}
-}),
-smalltalk.ListKeyedPubSubBase);
-
-
-
-smalltalk.addClass('SimpleListKeyedPubSub', smalltalk.ListKeyedPubSubBase, ['queue'], 'Trapped-Backend');
+smalltalk.addClass('SimpleKeyedPubSub', smalltalk.KeyedPubSubBase, ['queue'], 'Trapped-Backend');
 smalltalk.addMethod(
 "_add_",
 smalltalk.method({
@@ -248,7 +229,7 @@ var self=this;
 smalltalk.send(self["@queue"],"_add_",[aSubscription]);
 return self}
 }),
-smalltalk.SimpleListKeyedPubSub);
+smalltalk.SimpleKeyedPubSub);
 
 smalltalk.addMethod(
 "_clean",
@@ -261,7 +242,7 @@ return smalltalk.send(each,"_isEnabled",[]);
 })]);
 return self}
 }),
-smalltalk.SimpleListKeyedPubSub);
+smalltalk.SimpleKeyedPubSub);
 
 smalltalk.addMethod(
 "_do_",
@@ -272,7 +253,7 @@ var self=this;
 smalltalk.send(self["@queue"],"_do_",[aBlock]);
 return self}
 }),
-smalltalk.SimpleListKeyedPubSub);
+smalltalk.SimpleKeyedPubSub);
 
 smalltalk.addMethod(
 "_initialize",
@@ -280,11 +261,11 @@ smalltalk.method({
 selector: "initialize",
 fn: function (){
 var self=this;
-smalltalk.send(self,"_initialize",[],smalltalk.ListKeyedPubSubBase);
+smalltalk.send(self,"_initialize",[],smalltalk.KeyedPubSubBase);
 self["@queue"]=smalltalk.send((smalltalk.OrderedCollection || OrderedCollection),"_new",[]);
 return self}
 }),
-smalltalk.SimpleListKeyedPubSub);
+smalltalk.SimpleKeyedPubSub);
 
 
 
@@ -423,7 +404,15 @@ smalltalk.method({
 selector: "dispatcher:",
 fn: function (aDispatcher){
 var self=this;
-self["@dispatcher"]=aDispatcher;
+var $1,$2,$3;
+smalltalk.send(aDispatcher,"_subscriptionFactory_",[(function(key,block){
+$1=smalltalk.send((smalltalk.ListKeyedSubscription || ListKeyedSubscription),"_new",[]);
+smalltalk.send($1,"_key_block_",[key,block]);
+$2=smalltalk.send($1,"_yourself",[]);
+return $2;
+})]);
+$3=smalltalk.send(aDispatcher,"_yourself",[]);
+self["@dispatcher"]=$3;
 return self}
 }),
 smalltalk.ListKeyedEntity);

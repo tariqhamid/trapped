@@ -180,8 +180,8 @@ referencedClasses: []
 smalltalk.Isolator.klass);
 
 
-smalltalk.addClass('KeyedPubSubBase', smalltalk.Object, [], 'Trapped-Backend');
-smalltalk.KeyedPubSubBase.comment="I represent a pub-sub based on a key.\x0aI manage key-block subscriptions as well as running blocks that are dirty.\x0aThe subscription objects are reponsible of decision if the change is relevant for them.\x0aSubscription object must be subclasses of KeyedSubscriptionBase.\x0a\x0aMy subclasses must provide implementation for:\x0a\x09subscriptionKey:block: (factory method for creating appropriate subscription object)\x0a\x0aas well as bookkeeping of subscriptions:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a"
+smalltalk.addClass('KeyedPubSubBase', smalltalk.Object, ['factory'], 'Trapped-Backend');
+smalltalk.KeyedPubSubBase.comment="I represent a pub-sub based on a key.\x0aI manage key-block subscriptions as well as running blocks that are dirty.\x0aThe subscription objects are reponsible of decision if the change is relevant for them.\x0aSubscription object must be subclasses of KeyedSubscriptionBase.\x0a\x0aMy subclasses must provide implementation for:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a\x0aand issue this call before actual use:\x0a\x09subscritionFactory: (setting [:key:block|...] factory that creates appropriate subscription)"
 smalltalk.addMethod(
 "_changed_",
 smalltalk.method({
@@ -236,12 +236,12 @@ selector: "on:hook:",
 category: 'action',
 fn: function (key,aBlock){
 var self=this;
-smalltalk.send(self,"_add_",[smalltalk.send(smalltalk.send(self,"_subscriptionKey_block_",[key,aBlock]),"_flag",[])]);
+smalltalk.send(self,"_add_",[smalltalk.send(smalltalk.send(self["@factory"],"_value_value_",[key,aBlock]),"_flag",[])]);
 smalltalk.send(self,"_dirty_",[true]);
 return self},
 args: ["key", "aBlock"],
-source: "on: key hook: aBlock\x0a\x09self add: (self subscriptionKey: key block: aBlock) flag.\x0a   \x09self dirty: true",
-messageSends: ["add:", "flag", "subscriptionKey:block:", "dirty:"],
+source: "on: key hook: aBlock\x0a\x09self add: (factory value: key value: aBlock) flag.\x0a   \x09self dirty: true",
+messageSends: ["add:", "flag", "value:value:", "dirty:"],
 referencedClasses: []
 }),
 smalltalk.KeyedPubSubBase);
@@ -279,49 +279,24 @@ referencedClasses: []
 smalltalk.KeyedPubSubBase);
 
 smalltalk.addMethod(
-"_subscriptionKey_block_",
+"_subscriptionFactory_",
 smalltalk.method({
-selector: "subscriptionKey:block:",
+selector: "subscriptionFactory:",
 category: 'action',
-fn: function (key,aBlock){
+fn: function (aBlock){
 var self=this;
-smalltalk.send(self,"_subclassReponsibility",[]);
+self["@factory"]=aBlock;
 return self},
-args: ["key", "aBlock"],
-source: "subscriptionKey: key block: aBlock\x0a    \x22Should return subclass of KeyedSubscriptionBase\x22\x0a    self subclassReponsibility\x0a",
-messageSends: ["subclassReponsibility"],
+args: ["aBlock"],
+source: "subscriptionFactory: aBlock\x0a    factory := aBlock",
+messageSends: [],
 referencedClasses: []
 }),
 smalltalk.KeyedPubSubBase);
 
 
 
-smalltalk.addClass('ListKeyedPubSubBase', smalltalk.KeyedPubSubBase, [], 'Trapped-Backend');
-smalltalk.ListKeyedPubSubBase.comment="I am base class list-keyed pub-sub.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a"
-smalltalk.addMethod(
-"_subscriptionKey_block_",
-smalltalk.method({
-selector: "subscriptionKey:block:",
-category: 'action',
-fn: function (key,aBlock){
-var self=this;
-var $2,$3,$1;
-$2=smalltalk.send((smalltalk.ListKeyedSubscription || ListKeyedSubscription),"_new",[]);
-smalltalk.send($2,"_key_block_",[key,aBlock]);
-$3=smalltalk.send($2,"_yourself",[]);
-$1=$3;
-return $1;
-},
-args: ["key", "aBlock"],
-source: "subscriptionKey: key block: aBlock\x0a\x09^ListKeyedSubscription new key: key block: aBlock; yourself\x0a",
-messageSends: ["key:block:", "new", "yourself"],
-referencedClasses: ["ListKeyedSubscription"]
-}),
-smalltalk.ListKeyedPubSubBase);
-
-
-
-smalltalk.addClass('SimpleListKeyedPubSub', smalltalk.ListKeyedPubSubBase, ['queue'], 'Trapped-Backend');
+smalltalk.addClass('SimpleKeyedPubSub', smalltalk.KeyedPubSubBase, ['queue'], 'Trapped-Backend');
 smalltalk.addMethod(
 "_add_",
 smalltalk.method({
@@ -336,7 +311,7 @@ source: "add: aSubscription\x0a\x09queue add: aSubscription.\x0a",
 messageSends: ["add:"],
 referencedClasses: []
 }),
-smalltalk.SimpleListKeyedPubSub);
+smalltalk.SimpleKeyedPubSub);
 
 smalltalk.addMethod(
 "_clean",
@@ -354,7 +329,7 @@ source: "clean\x0a\x09queue := queue select: [ :each | each isEnabled ]",
 messageSends: ["select:", "isEnabled"],
 referencedClasses: []
 }),
-smalltalk.SimpleListKeyedPubSub);
+smalltalk.SimpleKeyedPubSub);
 
 smalltalk.addMethod(
 "_do_",
@@ -370,7 +345,7 @@ source: "do: aBlock\x0a\x09queue do: aBlock",
 messageSends: ["do:"],
 referencedClasses: []
 }),
-smalltalk.SimpleListKeyedPubSub);
+smalltalk.SimpleKeyedPubSub);
 
 smalltalk.addMethod(
 "_initialize",
@@ -379,7 +354,7 @@ selector: "initialize",
 category: 'initialization',
 fn: function (){
 var self=this;
-smalltalk.send(self,"_initialize",[],smalltalk.ListKeyedPubSubBase);
+smalltalk.send(self,"_initialize",[],smalltalk.KeyedPubSubBase);
 self["@queue"]=smalltalk.send((smalltalk.OrderedCollection || OrderedCollection),"_new",[]);
 return self},
 args: [],
@@ -387,7 +362,7 @@ source: "initialize\x0a    super initialize.\x0a\x09queue := OrderedCollection n
 messageSends: ["initialize", "new"],
 referencedClasses: ["OrderedCollection"]
 }),
-smalltalk.SimpleListKeyedPubSub);
+smalltalk.SimpleKeyedPubSub);
 
 
 
@@ -550,7 +525,7 @@ smalltalk.ListKeyedSubscription);
 
 
 smalltalk.addClass('ListKeyedEntity', smalltalk.Object, ['dispatcher', 'payload'], 'Trapped-Backend');
-smalltalk.ListKeyedEntity.comment="I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,\x0athat moderate access to the wrapped model object via read;do and modify:do:\x0aand allow pub-sub via watch:do:.\x0aThis wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a    modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x09model: (with a wrapped object)\x0a\x09dispatcher: (with a subclass of ListKeyedPubSubBase)\x0a"
+smalltalk.ListKeyedEntity.comment="I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,\x0athat moderate access to the wrapped model object via read;do and modify:do:\x0aand allow pub-sub via watch:do:.\x0aThis wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a    modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x09model: (with a wrapped object)\x0a\x09dispatcher: (with a subclass of KeyedPubSubBase)\x0a"
 smalltalk.addMethod(
 "_dispatcher",
 smalltalk.method({
@@ -574,12 +549,20 @@ selector: "dispatcher:",
 category: 'accessing',
 fn: function (aDispatcher){
 var self=this;
-self["@dispatcher"]=aDispatcher;
+var $1,$2,$3;
+smalltalk.send(aDispatcher,"_subscriptionFactory_",[(function(key,block){
+$1=smalltalk.send((smalltalk.ListKeyedSubscription || ListKeyedSubscription),"_new",[]);
+smalltalk.send($1,"_key_block_",[key,block]);
+$2=smalltalk.send($1,"_yourself",[]);
+return $2;
+})]);
+$3=smalltalk.send(aDispatcher,"_yourself",[]);
+self["@dispatcher"]=$3;
 return self},
 args: ["aDispatcher"],
-source: "dispatcher: aDispatcher\x0a\x09dispatcher := aDispatcher",
-messageSends: [],
-referencedClasses: []
+source: "dispatcher: aDispatcher\x0a\x09dispatcher := aDispatcher\x0a        subscriptionFactory: [ :key :block | ListKeyedSubscription new key: key block: block; yourself ];\x0a        yourself",
+messageSends: ["subscriptionFactory:", "key:block:", "new", "yourself"],
+referencedClasses: ["ListKeyedSubscription"]
 }),
 smalltalk.ListKeyedEntity);
 

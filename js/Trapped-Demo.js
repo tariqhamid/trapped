@@ -9,7 +9,7 @@ category: 'initialization',
 fn: function (){
 var self=this;
 smalltalk.send(self,"_initialize",[],smalltalk.ListKeyedIsolatedEntity);
-smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.SimpleListKeyedPubSub || SimpleListKeyedPubSub),"_new",[])]);
+smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.SimpleKeyedPubSub || SimpleKeyedPubSub),"_new",[])]);
 smalltalk.send(self,"_model_",[smalltalk.send(smalltalk.send((smalltalk.AppModel || AppModel),"_new",[]),"_title_",["Todo"])]);
 smalltalk.send((function(){
 return smalltalk.send(self,"_modify_do_",[[smalltalk.symbolFor("todos")],(function(){
@@ -18,9 +18,9 @@ return [smalltalk.HashedCollection._fromPairs_([smalltalk.send("text","__minus_g
 }),"_valueWithTimeout_",[(2000)]);
 return self},
 args: [],
-source: "initialize\x0a\x09super initialize.\x0a    self dispatcher: SimpleListKeyedPubSub new.\x0a    self model: (AppModel new title: 'Todo').\x0a    [ self modify: #(#todos) do: [{\x0a        #{'text'->'learn trapped'. 'done'->true}.\x0a        #{'text'->'build a trapped app'. 'done'->false}\x0a    }]] valueWithTimeout: 2000\x0a",
+source: "initialize\x0a\x09super initialize.\x0a    self dispatcher: SimpleKeyedPubSub new.\x0a    self model: (AppModel new title: 'Todo').\x0a    [ self modify: #(#todos) do: [{\x0a        #{'text'->'learn trapped'. 'done'->true}.\x0a        #{'text'->'build a trapped app'. 'done'->false}\x0a    }]] valueWithTimeout: 2000\x0a",
 messageSends: ["initialize", "dispatcher:", "new", "model:", "title:", "valueWithTimeout:", "modify:do:", "->"],
-referencedClasses: ["SimpleListKeyedPubSub", "AppModel"]
+referencedClasses: ["SimpleKeyedPubSub", "AppModel"]
 }),
 smalltalk.App);
 

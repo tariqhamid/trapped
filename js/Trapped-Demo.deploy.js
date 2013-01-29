@@ -7,7 +7,7 @@ selector: "initialize",
 fn: function (){
 var self=this;
 smalltalk.send(self,"_initialize",[],smalltalk.ListKeyedIsolatedEntity);
-smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.SimpleListKeyedPubSub || SimpleListKeyedPubSub),"_new",[])]);
+smalltalk.send(self,"_dispatcher_",[smalltalk.send((smalltalk.SimpleKeyedPubSub || SimpleKeyedPubSub),"_new",[])]);
 smalltalk.send(self,"_model_",[smalltalk.send(smalltalk.send((smalltalk.AppModel || AppModel),"_new",[]),"_title_",["Todo"])]);
 smalltalk.send((function(){
 return smalltalk.send(self,"_modify_do_",[[smalltalk.symbolFor("todos")],(function(){
