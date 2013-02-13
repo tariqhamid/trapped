@@ -95,8 +95,8 @@ current
 
 !TrappedSingleton class methodsFor: 'action'!
 
-start: zzz
-	self current perform: #start: withArguments: arguments
+start: args
+	self current start: args
 ! !
 
 TrappedSingleton subclass: #Trapped
@@ -130,9 +130,7 @@ descend: anArray snapshotDo: aBlock
     ]
 !
 
-start: zzz
-	| args |
-    <args = [].slice.call(arguments)>.
+start: args
     args do: [ :each | self register: each ].
 	'[data-trap]' asJQuery each: [ :index :elem |
     	| trap jq viewName modelName tokens path |
@@ -176,7 +174,7 @@ initialize
 parse: anArray
 	^anArray collect: [ :each |
     	| asNum |
-       	<asNum = parseInt(each)>.
+       	asNum = each asNumber.
         asNum = asNum ifTrue: [ asNum ] ifFalse: [
 			each first = '#' ifTrue: [ each allButFirst asSymbol ] ifFalse: [ each ]]]
 ! !
@@ -238,12 +236,6 @@ do: aBlock
 
 modify: aBlock
 	self model modify: self path allButFirst do: aBlock
-! !
-
-!Array methodsFor: '*Trapped-Frontend'!
-
-trapDescend: aBlock
-	Trapped current descend: self snapshotDo: aBlock
 ! !
 
 !Array methodsFor: '*Trapped-Frontend'!
