@@ -154,20 +154,20 @@ renderOn: html
         html with: ' of '.
         html span trap: #(#todos #size).
         html with: ' remaining [ '.
-        html a href:''; onClick: [[
+        html a href:''; onClick: [
             snap modify: [ :model | model archive ].
             false
-        ] value "amber GH-314 workaround"]; with: 'archive'.
+        ]; with: 'archive'.
         html with: ' ]'.
         html ul trapIter: #(#todos) tag: #li do: [ :each |
             html root empty.
             html input type: 'checkbox'; trap: #('done').
             html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').
         ].
-        html form onSubmit: [[
+        html form onSubmit: [
             snap modify: [ :model | model addTodo ].
             false
-        ] value "amber GH-314 workaround"]; with: [
+        ]; with: [
             html input type: 'text'; trap: #(#todoText); at: 'size' put: 30; placeholder: 'add new todo here'.
             html input class: 'btn-primary'; type: 'submit'; value: 'add'.
         ].
