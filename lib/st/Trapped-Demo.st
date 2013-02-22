@@ -159,11 +159,11 @@ renderOn: html
             false
         ]; with: 'archive'.
         html with: ' ]'.
-        html ul trapIter: #(#todos) tag: #li do: [ :each |
+        html ul with: [ html trapIter: #(#todos) tag: #li do: [ :each |
             html root empty.
             html input type: 'checkbox'; trap: #('done').
             html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').
-        ].
+        ]].
         html form onSubmit: [
             snap modify: [ :model | model addTodo ].
             false

@@ -179,6 +179,25 @@ parse: anArray
 			each first = '#' ifTrue: [ each allButFirst asSymbol ] ifFalse: [ each ]]]
 ! !
 
+!Trapped class methodsFor: 'private'!
+
+envelope: envelope loop: model before: endjq tag: aSymbol do: aBlock
+   	| envjq |
+    envjq := envelope asJQuery.
+    model withIndexDo: [ :item :i |
+        envelope with: [ :html | (html perform: aSymbol) trap: {i} read: aBlock ].
+        envjq children detach insertBefore: endjq.
+    ].
+    envjq remove
+!
+
+loop: model between: start and: end tag: aSymbol do: aBlock
+    (start asJQuery nextUntil: end element) remove.
+    start with: [ :html | model ifNotNil: [
+    	self envelope: html div loop: model before: end asJQuery tag: aSymbol do: aBlock
+	]]
+! !
+
 TrappedSingleton subclass: #TrappedPathStack
 	instanceVariableNames: 'elements'
 	package: 'Trapped-Frontend'!
@@ -244,6 +263,16 @@ trapDescend: aBlock
 	Trapped current descend: self snapshotDo: aBlock
 ! !
 
+!HTMLCanvas methodsFor: '*Trapped-Frontend'!
+
+trapIter: path tag: aSymbol do: aBlock
+	| start end |
+    self with: [ :html | start := html script. end := html script ].
+    start trap: path read: [ :model |
+    	Trapped loop: model between: start and: end tag: aSymbol do: aBlock.
+    ]
+! !
+
 !TagBrush methodsFor: '*Trapped-Frontend'!
 
 trap: path
@@ -272,15 +301,6 @@ trap: path toggle: aBlock ifNotPresent: anotherBlock
             self asJQuery empty; show.
             (shown ifTrue: [aBlock] ifFalse: [anotherBlock]) value: data value: html.
         ]
-    ]
-!
-
-trapIter: path tag: aSymbol do: aBlock
-    self trap: path read: [ :model :html |
-        html root empty.
-        model ifNotNil: [ model withIndexDo: [ :item :i |
-            (html perform: aSymbol) trap: {i} read: aBlock
-        ]]
     ]
 ! !
 
