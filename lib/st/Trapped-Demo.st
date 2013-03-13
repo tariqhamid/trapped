@@ -1,4 +1,4 @@
-Smalltalk current createPackage: 'Trapped-Demo' properties: #{}!
+Smalltalk current createPackage: 'Trapped-Demo'!
 ListKeyedIsolatedEntity subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!

@@ -1,4 +1,4 @@
-Smalltalk current createPackage: 'Trapped-Frontend' properties: #{}!
+Smalltalk current createPackage: 'Trapped-Frontend'!
 Object subclass: #TrappedBinder
 	instanceVariableNames: 'brush'
 	package: 'Trapped-Frontend'!

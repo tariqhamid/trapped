@@ -1,4 +1,4 @@
-Smalltalk current createPackage: 'Trapped-Backend' properties: #{}!
+Smalltalk current createPackage: 'Trapped-Backend'!
 Object subclass: #EavModel
 	instanceVariableNames: 'getBlock putBlock'
 	package: 'Trapped-Backend'!
