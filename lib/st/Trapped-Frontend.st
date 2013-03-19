@@ -174,7 +174,7 @@ initialize
 parse: anArray
 	^anArray collect: [ :each |
     	| asNum |
-       	asNum = each asNumber.
+       	asNum := each asNumber.
         asNum = asNum ifTrue: [ asNum ] ifFalse: [
 			each first = '#' ifTrue: [ each allButFirst asSymbol ] ifFalse: [ each ]]]
 ! !
