@@ -58,18 +58,18 @@ The entity wraps any object (via `model:`, as seen in `App >> initialize`).
 The view is subclass of plain `Widget`, but inside it, uses of `trap:`
 (and others of  `trap:xxx:` family) on `TagBrush`
 and `path trapDescend: block` allows you to bind data from view model.
-You can also iterate arrays in the model using `TagBrush >> trapIter:tag:do:`.
+You can also iterate arrays in the model using `HTMLCanvas >> trapIter:tag:do:`.
 
 To see viewmodel->view update working, try this in Workspace:
 
 ```smalltalk
-AppEntity modify: #(#todos) do: [ :old | old, { #{'text'->'try the guts'. 'done'->true} } ]
+AppEntity modify: #((todos)) do: [ :old | old, { #{'text'->'try the guts'. 'done'->true} } ]
 ```
 
 The number and list of items should update. If you do
 
 ```smalltalk
-AppEntity modify: #(#title) do: [ 'My title' ]
+AppEntity modify: #((title)) do: [ 'My title' ]
 ```
 
 The title of the page as well as header should be updated.
@@ -79,6 +79,6 @@ When using `ListKeyedIsolatedEntity` subclass as wrapper entity,  `read:do:` and
 guard the data by doing deep copies behind the scene.
 
 If you wish to, you can change the raw data you put into `model:` by hand,
-but then be sure to call `AppEntity dispatcher changed: #(#title)` or similar
-(you can do `AppEntity dispatcher changed: #()` to signal everything in `AppVM` has changed,
+but then be sure to call `AppEntity dispatcher changed: #((title))` or similar
+(you can do `AppEntity dispatcher changed: #()` to signal everything in `AppEntity` has changed,
 but then everything depending upon it will redraw).
