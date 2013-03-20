@@ -300,13 +300,13 @@ model: anObject
 
 modify: path do: aBlock
     | eavModel |
-    eavModel := ({#root},path) asEavModel.
+    eavModel := ({{#root}},path) asEavModel.
     [ payload model: eavModel modify: aBlock ] ensure: [ self dispatcher changed: path ]
 !
 
 read: path do: aBlock
     | eavModel |
-    eavModel := ({#root},path) asEavModel.
+    eavModel := ({{#root}},path) asEavModel.
     payload model: eavModel read: aBlock
 ! !
 
@@ -336,6 +336,16 @@ asEavModel
     ^model
 ! !
 
+!Array methodsFor: '*Trapped-Backend'!
+
+reverseTrapAt: anObject
+	^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]
+!
+
+reverseTrapAt: anObject put: value
+    ^anObject perform: (self first, ':') asSymbol withArguments: { value }
+! !
+
 !String methodsFor: '*Trapped-Backend'!
 
 reverseTrapAt: anObject
@@ -344,16 +354,6 @@ reverseTrapAt: anObject
 
 reverseTrapAt: anObject put: value
 	^anObject at: self put: value
-! !
-
-!Symbol methodsFor: '*Trapped-Backend'!
-
-reverseTrapAt: anObject
-	^[anObject perform: self] on: MessageNotUnderstood do: [^nil]
-!
-
-reverseTrapAt: anObject put: value
-    ^anObject perform: (self, ':') asSymbol withArguments: { value }
 ! !
 
 !Number methodsFor: '*Trapped-Backend'!

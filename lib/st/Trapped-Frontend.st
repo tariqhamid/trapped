@@ -176,7 +176,7 @@ parse: anArray
     	| asNum |
        	asNum := each asNumber.
         asNum = asNum ifTrue: [ asNum ] ifFalse: [
-			each first = '#' ifTrue: [ each allButFirst asSymbol ] ifFalse: [ each ]]]
+			each first = '#' ifTrue: [ { each allButFirst } ] ifFalse: [ each ]]]
 ! !
 
 !Trapped class methodsFor: 'private'!

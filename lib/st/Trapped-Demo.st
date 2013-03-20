@@ -37,7 +37,7 @@ initialize
 	super initialize.
     self dispatcher: SimpleKeyedPubSub new.
     self model: (AppModel new title: 'Todo').
-    [ self modify: #(#todos) do: [{
+    [ self modify: #((todos)) do: [{
         #{'text'->'learn trapped'. 'done'->true}.
         #{'text'->'build a trapped app'. 'done'->false}
     }]] valueWithTimeout: 2000
@@ -148,18 +148,18 @@ Widget subclass: #AppView
 
 renderOn: html
     #() trapDescend: [ :snap |
-	html h2 trap: #(#title).
-    html div trap: #(#todos) toggle: [ snap do: [
-        html span trap:#(#remaining).
+	html h2 trap: #((title)).
+    html div trap: #((todos)) toggle: [ snap do: [
+        html span trap:#((remaining)).
         html with: ' of '.
-        html span trap: #(#todos #size).
+        html span trap: #((todos) (size)).
         html with: ' remaining [ '.
         html a href:''; onClick: [
             snap modify: [ :model | model archive ].
             false
         ]; with: 'archive'.
         html with: ' ]'.
-        html ul with: [ html trapIter: #(#todos) tag: #li do: [ :each |
+        html ul with: [ html trapIter: #((todos)) tag: #li do: [ :each |
             html root empty.
             html input type: 'checkbox'; trap: #('done').
             html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').
@@ -168,7 +168,7 @@ renderOn: html
             snap modify: [ :model | model addTodo ].
             false
         ]; with: [
-            html input type: 'text'; trap: #(#todoText); at: 'size' put: 30; placeholder: 'add new todo here'.
+            html input type: 'text'; trap: #((todoText)); at: 'size' put: 30; placeholder: 'add new todo here'.
             html input class: 'btn-primary'; type: 'submit'; value: 'add'.
         ].
     ]] ifNotPresent: [ html with: 'Loading ...' ]]
