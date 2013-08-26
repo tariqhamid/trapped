@@ -1,23 +1,36 @@
 <html>
 <head>
     <title data-trap="App #title"></title>
-    <script src="vendor/amber/js/amber.js"></script>
+    <script src="/vendor/amber/support/amber.js"></script>
+    <script type='text/javascript' src='/vendor/amber/support/requirejs/require.min.js'></script>
     <link rel="stylesheet" href="demo.css" />
 </head>
 <body>
 <script type="text/javascript">
     var AppEntity;
-    loadAmber({
-        packages:['Trapped-Backend', 'Trapped-Frontend', 'Trapped-Demo'],
-        packageHome:'lib/',
-        ready:function () {
-            $(function() {
-                smalltalk.Browser._openOn_(smalltalk.App);
-                AppEntity = smalltalk.App._new();
-                smalltalk.Trapped._start_([AppEntity]);
-            });
+    require.config({
+        config: {
+            'amber_vm/smalltalk': {
+                defaultNamespace: 'gh_herby_trapped'
+            }
+        },
+        paths: {
+            'gh_herby_trapped': '/lib/js'
         }
     });
+    require(
+            ["amber_vm/smalltalk", "amber_set/full-devel",
+                "gh_herby_trapped/Trapped-Backend", "gh_herby_trapped/Trapped-Frontend", "gh_herby_trapped/Trapped-Demo" ],
+            function (smalltalk) {
+                smalltalk.initialize();
+
+                $(function() {
+                    smalltalk.Browser._openOn_(smalltalk.App);
+                    AppEntity = smalltalk.App._new();
+                    smalltalk.Trapped._start_([AppEntity]);
+                });
+            }
+    );
 </script>
 <div data-trap="AppView: App">
 </div>
