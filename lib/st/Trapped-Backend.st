@@ -221,6 +221,18 @@ accepts: aKey
     ^aKey size <= key size and: [aKey = (key copyFrom: 1 to: aKey size)]
 ! !
 
+KeyedSubscriptionBase subclass: #TwoWayListKeyedSubscription
+	instanceVariableNames: ''
+	package: 'Trapped-Backend'!
+
+!TwoWayListKeyedSubscription methodsFor: 'testing'!
+
+accepts: aKey
+    ^aKey size <= key size
+		ifTrue: [aKey = (key copyFrom: 1 to: aKey size)]
+		ifFalse: [key = (aKey copyFrom: 1 to: key size)]
+! !
+
 Object subclass: #ListKeyedEntity
 	instanceVariableNames: 'dispatcher payload'
 	package: 'Trapped-Backend'!
@@ -246,7 +258,10 @@ dispatcher
 
 dispatcher: aDispatcher
 	dispatcher := aDispatcher
-        subscriptionFactory: [ :key :block | ListKeyedSubscription new key: key block: block; yourself ];
+        subscriptionFactory: [ :key :block |
+			(key notEmpty and: [ key last isNil ])
+				ifTrue: [ TwoWayListKeyedSubscription new key: key allButLast block: block; yourself ]
+				ifFalse: [ ListKeyedSubscription new key: key block: block; yourself ]];
         yourself
 !
 
@@ -320,6 +335,16 @@ reverseTrapAt: anObject put: value
 	self error: 'Trapped cannot put at ', self class name, ' type key.'
 ! !
 
+!Number methodsFor: '*Trapped-Backend'!
+
+reverseTrapAt: anObject
+	^anObject at: self ifAbsent: [nil]
+!
+
+reverseTrapAt: anObject put: value
+	^anObject at: self put: value
+! !
+
 !SequenceableCollection methodsFor: '*Trapped-Backend'!
 
 asEavModel
@@ -336,16 +361,6 @@ asEavModel
     ^model
 ! !
 
-!Array methodsFor: '*Trapped-Backend'!
-
-reverseTrapAt: anObject
-	^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]
-!
-
-reverseTrapAt: anObject put: value
-    ^anObject perform: (self first, ':') asSymbol withArguments: { value }
-! !
-
 !String methodsFor: '*Trapped-Backend'!
 
 reverseTrapAt: anObject
@@ -356,13 +371,13 @@ reverseTrapAt: anObject put: value
 	^anObject at: self put: value
 ! !
 
-!Number methodsFor: '*Trapped-Backend'!
+!Array methodsFor: '*Trapped-Backend'!
 
 reverseTrapAt: anObject
-	^anObject at: self ifAbsent: [nil]
+	^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]
 !
 
 reverseTrapAt: anObject put: value
-	^anObject at: self put: value
+    ^anObject perform: (self first, ':') asSymbol withArguments: { value }
 ! !
 
