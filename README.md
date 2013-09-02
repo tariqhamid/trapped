@@ -36,7 +36,8 @@ Visit http://www.herby.sk/trapped/demo.html.
 **Hard way** (but you can save and reload with new code):
 
 Clone this repo, with submodules as well (amber is bundled as submodule).
-Then start the server: `node vendor/amber/server/server.js`. It start on port 4000.
+Then start the server: `node vendor/amber/bin/amber-cli.js serve`
+from the project root directory. It starts on port 4000.
 Visit `http://localhost:4000/demo.html` in your browser. Amber IDE opens.
 
 **Play with it:**
@@ -75,7 +76,7 @@ AppEntity modify: #((title)) do: [ 'My title' ]
 The title of the page as well as header should be updated.
 
 The `modify:do:` should be used for update since it changes as well as signals the change.
-When using `ListKeyedIsolatedEntity` subclass as wrapper entity,  `read:do:` and `modify:do:`
+When using `ListKeyedIsolatedEntity` class as wrapper entity,  `read:do:` and `modify:do:`
 guard the data by doing deep copies behind the scene.
 
 If you wish to, you can change the raw data you put into `model:` by hand,
