@@ -115,15 +115,15 @@ on: key hook: aBlock
 !
 
 run
-	| needsClean |
-    needsClean := false.
-	self do: [ :each |
-		each isFlagged ifTrue: [
-            each run.
-            each isEnabled ifFalse: [ needsClean := true ]
-        ]
-	].
-    needsClean ifTrue: [ self clean ]
+	[
+		| needsClean |
+	    needsClean := false.
+		self do: [ :each |
+			each isFlagged ifTrue: [ each run ].
+	        each isEnabled ifFalse: [ needsClean := true ]
+		].
+    	needsClean ifTrue: [ self clean ]
+	] on: Error do: [ self dirty: true ]
 !
 
 subscriptionFactory: aBlock
