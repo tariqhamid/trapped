@@ -183,7 +183,7 @@ key: anObject block: aBlock
 !KeyedSubscriptionBase methodsFor: 'action'!
 
 run
-	[[ actionBlock value ] ensure: [ flagged := false ]]
+	[ flagged := false. actionBlock value ]
     on: KeyedPubSubUnsubscribe do: [ actionBlock := nil ]
 ! !
 
