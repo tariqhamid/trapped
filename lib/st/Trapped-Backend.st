@@ -338,7 +338,7 @@ reverseTrapAt: anObject put: value
 !Number methodsFor: '*Trapped-Backend'!
 
 reverseTrapAt: anObject
-	^anObject at: self ifAbsent: [nil]
+	^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]
 !
 
 reverseTrapAt: anObject put: value
@@ -352,7 +352,7 @@ asEavModel
     model := EavModel new.
     model getBlock: [ :anObject |
         self inject: anObject into: [ :soFar :segment |
-            soFar ifNotNil: [ segment reverseTrapAt: soFar ]]].
+            segment reverseTrapAt: soFar ]].
     self isEmpty ifFalse: [
         model putBlock: [ :anObject :value | | penultimate |
             penultimate :=  self allButLast inject: anObject into: [ :soFar :segment |
@@ -364,7 +364,7 @@ asEavModel
 !String methodsFor: '*Trapped-Backend'!
 
 reverseTrapAt: anObject
-	^anObject at: self ifAbsent: [nil]
+	^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]
 !
 
 reverseTrapAt: anObject put: value
