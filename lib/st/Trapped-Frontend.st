@@ -289,15 +289,14 @@ trap: path read: aBlock
 !
 
 trapGuard: anArray contents: aBlock
-    | shown snap |
-    shown := nil.
-	#() trapDescend: [ :aSnap | snap := aSnap ].
-    self trap: anArray read: [ :gdata |
-        shown = gdata ifFalse: [
-            shown := gdata.
-            shown
-				ifTrue: [ snap do: [ self contents: aBlock ]. self asJQuery show ]
-				ifFalse: [ self asJQuery hide ] ]
-    ]
+	#() trapDescend: [ :snap |
+	    | shown |
+    	shown := nil.
+	    self trap: anArray read: [ :gdata |
+    	    shown = gdata ifFalse: [
+        	    shown := gdata.
+            	shown
+					ifTrue: [ snap do: [ self contents: aBlock ]. self asJQuery show ]
+					ifFalse: [ self asJQuery hide ] ] ] ]
 ! !
 
