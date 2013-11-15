@@ -150,7 +150,7 @@ Widget subclass: #AppView
 renderOn: html
     #() trapDescend: [ :snap |
 	html h2 trap: #((title)).
-    html div trap: #((todos)) toggle: [ snap do: [
+    html div guard: #((todos) (notNil)) trap: #() contents: [
         html span trap:#((remaining)).
         html with: ' of '.
         html span trap: #((todos) (size)).
@@ -172,6 +172,8 @@ renderOn: html
             html input type: 'text'; trap: #((todoText)); at: 'size' put: 30; placeholder: 'add new todo here'.
             html input class: 'btn-primary'; type: 'submit'; value: 'add'.
         ].
-    ]] ifNotPresent: [ html with: 'Loading ...' ]]
+    ].
+	html p guard: #((todos) (isNil)) trap: #() contents: 'Loading ...'.
+	]
 ! !
 
