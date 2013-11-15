@@ -275,19 +275,6 @@ trapIter: path tag: aSymbol do: aBlock
 
 !TagBrush methodsFor: '*Trapped-Frontend'!
 
-guard: anArray trap: anotherArray contents: aBlock
-    | shown snap |
-    shown := nil.
-	anotherArray trapDescend: [ :aSnap | snap := aSnap ].
-    self trap: anArray read: [ :gdata |
-        shown = gdata ifFalse: [
-            shown := gdata.
-            shown
-				ifTrue: [ snap do: [ self contents: aBlock ]. self asJQuery show ]
-				ifFalse: [ self asJQuery hide ] ]
-    ]
-!
-
 trap: path
 	(Trapped current binder: self) installFor: path
 !
@@ -298,6 +285,19 @@ trap: path read: aBlock
             (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
         	snap do: [ self with: [ :html | aBlock value: data value: html ] ]
     	]
+    ]
+!
+
+trapGuard: anArray contents: aBlock
+    | shown snap |
+    shown := nil.
+	#() trapDescend: [ :aSnap | snap := aSnap ].
+    self trap: anArray read: [ :gdata |
+        shown = gdata ifFalse: [
+            shown := gdata.
+            shown
+				ifTrue: [ snap do: [ self contents: aBlock ]. self asJQuery show ]
+				ifFalse: [ self asJQuery hide ] ]
     ]
 ! !
 

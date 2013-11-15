@@ -150,7 +150,7 @@ Widget subclass: #AppView
 renderOn: html
     #() trapDescend: [ :snap |
 	html h2 trap: #((title)).
-    html div guard: #((todos) (notNil)) trap: #() contents: [
+    html div trapGuard: #((todos) (notNil)) contents: [
         html span trap:#((remaining)).
         html with: ' of '.
         html span trap: #((todos) (size)).
@@ -173,7 +173,7 @@ renderOn: html
             html input class: 'btn-primary'; type: 'submit'; value: 'add'.
         ].
     ].
-	html p guard: #((todos) (isNil)) trap: #() contents: 'Loading ...'.
+	html p trapGuard: #((todos) (isNil)) contents: 'Loading ...'.
 	]
 ! !
 
