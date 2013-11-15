@@ -297,6 +297,6 @@ trapGuard: anArray contents: aBlock
         	    shown := gdata.
             	shown
 					ifTrue: [ snap do: [ self contents: aBlock ]. self asJQuery show ]
-					ifFalse: [ self asJQuery hide ] ] ] ]
+					ifFalse: [ self asJQuery hide; empty ] ] ] ]
 ! !
 
