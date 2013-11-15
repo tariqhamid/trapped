@@ -293,8 +293,10 @@ trapGuard: anArray contents: aBlock
 	    | shown |
     	shown := nil.
 	    self trap: anArray read: [ :gdata |
-    	    shown = gdata ifFalse: [
-        	    shown := gdata.
+			| sanitized |
+			sanitized := gdata ifNil: [ false ].
+    	    shown = sanitized ifFalse: [
+        	    shown := sanitized.
             	shown
 					ifTrue: [ snap do: [ self contents: aBlock ]. self asJQuery show ]
 					ifFalse: [ self asJQuery hide; empty ] ] ] ]
