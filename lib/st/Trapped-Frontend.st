@@ -295,7 +295,7 @@ trap: path toggle: aBlock
 trap: path toggle: aBlock ifNotPresent: anotherBlock
     | shown |
     shown := nil.
-    self trap: path read: [ :data : html |
+    self trap: path read: [ :data :html |
         shown = data notNil ifFalse: [
             shown := data notNil.
             self asJQuery empty; show.
