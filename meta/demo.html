@@ -1,8 +1,8 @@
 <html>
 <head>
     <title data-trap="App #title"></title>
-    <script src="vendor/amber/support/amber.js"></script>
-    <script type='text/javascript' src='vendor/amber/support/requirejs/require.min.js'></script>
+    <script src="../vendor/amber/support/amber.js"></script>
+    <script type='text/javascript' src='../vendor/amber/support/requirejs/require.min.js'></script>
     <link rel="stylesheet" href="demo.css" />
 </head>
 <body>
@@ -10,8 +10,8 @@
     var AppEntity;
     require.config({
         paths: {
-            'gh_herby_trapped': 'lib/js',
-            'gh_herby_trapped/_source': 'lib/st'
+            'gh_herby_trapped': '../lib/js',
+            'gh_herby_trapped/_source': '../lib/st'
         }
     });
     require(
