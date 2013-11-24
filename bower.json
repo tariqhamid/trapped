@@ -1,0 +1,28 @@
+{
+  "name": "trapped",
+  "version": "0.0.1",
+  "homepage": "https://github.com/herby/trapped",
+  "authors": [
+    "Herbert Vojčík <herby@mailbox.sk>"
+  ],
+  "description": "Bidirectional DOM data-binding for Amber Smalltalk",
+  "keywords": [
+    "amber",
+    "data",
+    "binding",
+    "web",
+    "dom"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "meta",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "amber": "git://github.com/amber-smalltalk/amber.git#master"
+  }
+}

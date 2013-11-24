@@ -1,3 +1,0 @@
-[submodule "vendor/amber"]
-	path = vendor/amber
-	url = https://github.com/herby/amber.git
