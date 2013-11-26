@@ -63,6 +63,122 @@ showBlock
 	^[ :model | brush asJQuery val: (model ifNotNil: [self prim: model] ifNil: [[]]) ]
 ! !
 
+Object subclass: #TrappedDataCarrier
+	instanceVariableNames: 'target model chain'
+	package: 'Trapped-Frontend'!
+
+!TrappedDataCarrier methodsFor: 'accessing'!
+
+chain: aDataChain
+	chain := aDataChain
+!
+
+target
+	^target
+!
+
+target: anObject
+	target := anObject
+!
+
+value
+	^model
+!
+
+value: anObject
+	model := anObject
+! !
+
+!TrappedDataCarrier methodsFor: 'action'!
+
+modifyTarget
+	self target modify: [ self value ]
+!
+
+toTargetContents
+	self target contents: self value
+! !
+
+!TrappedDataCarrier class methodsFor: 'not yet classified'!
+
+on: aDataChain target: anObject
+	^self new
+		chain: aDataChain;
+		target: anObject;
+		yourself
+! !
+
+TrappedDataCarrier subclass: #TrappedDataCarrierToModel
+	instanceVariableNames: 'index'
+	package: 'Trapped-Frontend'!
+
+!TrappedDataCarrierToModel methodsFor: 'not yet classified'!
+
+proceed
+	index := index ifNil: [ chain lastProcessorNo ] ifNotNil: [ index - 1 ].
+	(chain processorNo: index) toModel: self
+! !
+
+TrappedDataCarrier subclass: #TrappedDataCarrierToView
+	instanceVariableNames: 'index'
+	package: 'Trapped-Frontend'!
+
+!TrappedDataCarrierToView methodsFor: 'not yet classified'!
+
+proceed
+	index := index ifNil: [ chain firstProcessorNo ] ifNotNil: [ index + 1 ].
+	(chain processorNo: index) toView: self
+! !
+
+Object subclass: #TrappedDataChain
+	instanceVariableNames: 'processors'
+	package: 'Trapped-Frontend'!
+
+!TrappedDataChain methodsFor: 'accessing'!
+
+firstProcessorNo
+	^1
+!
+
+lastProcessorNo
+	^processors size
+!
+
+processorNo: aNumber
+	^processors at: aNumber
+!
+
+processors: anArray
+	processors := anArray
+! !
+
+!TrappedDataChain methodsFor: 'action'!
+
+forSnapshot: aSnapshot andBrush: aTagBrush
+	| toViewCarrier toModelCarrier |
+	toViewCarrier := TrappedDataCarrierToView on: self target: aTagBrush.
+	toModelCarrier := TrappedDataCarrierToModel on: self target: aSnapshot.
+	processors do: [ :each | each installToView: toViewCarrier toModel: toModelCarrier ]
+! !
+
+!TrappedDataChain class methodsFor: 'instance creation'!
+
+new: anArray
+	^self new
+		processors: { self blackboardReaderWriter }, anArray;
+		yourself
+!
+
+newFromProcessorNames: anArray
+	^self new: (anArray collect: [ :each | TrappedProcessor perform: each ])
+! !
+
+!TrappedDataChain class methodsFor: 'private'!
+
+blackboardReaderWriter
+	^TrappedProcessorBlackboard new
+! !
+
 Widget subclass: #TrappedDumbView
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
@@ -73,6 +189,86 @@ I just read and show an actual path.!
 
 renderOn: html
 	html root trap: #()
+! !
+
+Object subclass: #TrappedProcessor
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessor commentStamp!
+I process data in TrappedDataChain.
+I am stateless flyweight (aka servant)
+and will get all necessary data as arguments in API calls.
+
+My public API is:
+ - installToView:toModel:
+   This gets two TrappedDataCarriers set up without actual data
+   and at the beginning of their chains. It should do one-time
+   installation task needed (install event handlers etc.).
+   To start a chain, do: dataCarrier copy value: data; proceed.
+ - toView:
+   This performs transformation of TrappedDataCarrier on its way from model to view.
+   Should call aDataCarrier proceed to proceed to subsequent step.
+ - toModel:
+   This performs transformation of TrappedDataToken on its way from view to model.
+   Should call aDataCarrier proceed to proceed to subsequent step.!
+
+!TrappedProcessor methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	"by default, proceed"
+	aDataCarrier proceed
+!
+
+toView: aDataCarrier
+	"by default, proceed"
+	aDataCarrier proceed
+! !
+
+!TrappedProcessor methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	"by default, do nothing"
+! !
+
+!TrappedProcessor class methodsFor: 'factory'!
+
+contents
+	^TrappedProcessorContents new
+! !
+
+TrappedProcessor subclass: #TrappedProcessorBlackboard
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorBlackboard commentStamp!
+I am used internally to fetch data from blackboard
+or write it back.!
+
+!TrappedProcessorBlackboard methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	aDataCarrier modifyTarget
+! !
+
+!TrappedProcessorBlackboard methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	| snap |
+	snap := anotherDataCarrier target.
+	snap watch: [ :data |
+		(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
+        snap do: [ aDataCarrier copy value: data; proceed ] ]
+! !
+
+TrappedProcessor subclass: #TrappedProcessorContents
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorContents commentStamp!
+I put data into target via contents: in toView:!
+
+!TrappedProcessorContents methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	aDataCarrier toTargetContents
 ! !
 
 Object subclass: #TrappedSingleton
@@ -255,6 +451,10 @@ do: aBlock
 
 modify: aBlock
 	self model modify: self path allButFirst do: aBlock
+!
+
+watch: aBlock
+	self model watch: self path allButFirst do: aBlock
 ! !
 
 !Array methodsFor: '*Trapped-Frontend'!
@@ -276,12 +476,18 @@ trapIter: path tag: aSymbol do: aBlock
 !TagBrush methodsFor: '*Trapped-Frontend'!
 
 trap: path
-	(Trapped current binder: self) installFor: path
+	self trap: path processors: #(contents)
+!
+
+trap: path processors: anArray
+	path trapDescend: [ :snap |
+		(TrappedDataChain newFromProcessorNames: anArray)
+			forSnapshot: snap andBrush: self ]
 !
 
 trap: path read: aBlock
 	path trapDescend: [ :snap |
-        snap model watch: snap path allButFirst do: [ :data |
+        snap watch: [ :data |
             (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
         	snap do: [ self with: [ :html | aBlock value: data value: html ] ]
     	]
