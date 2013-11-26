@@ -399,16 +399,39 @@ fn: function (anArray){
 var self=this;
 function $TrappedProcessor(){return smalltalk.TrappedProcessor||(typeof TrappedProcessor=="undefined"?nil:TrappedProcessor)}
 return smalltalk.withContext(function($ctx1) { 
-var $1;
+var $2,$3,$1;
 $1=self._new_(_st(anArray)._collect_((function(each){
 return smalltalk.withContext(function($ctx2) {
+$2=_st(each)._isString();
+if(smalltalk.assert($2)){
 return _st($TrappedProcessor())._perform_(each);
+} else {
+var selector,args;
+selector="";
+selector;
+args=[];
+args;
+_st(each)._withIndexDo_((function(element,index){
+return smalltalk.withContext(function($ctx3) {
+$3=_st(index)._odd();
+if(smalltalk.assert($3)){
+selector=_st(selector).__comma(element);
+$ctx3.sendIdx[","]=1;
+return selector;
+} else {
+selector=_st(selector).__comma(":");
+selector;
+return _st(args)._add_(element);
+};
+}, function($ctx3) {$ctx3.fillBlock({element:element,index:index},$ctx2,4)})}));
+return _st($TrappedProcessor())._perform_withArguments_(selector,args);
+};
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})})));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"newFromProcessorSpecs:",{anArray:anArray},smalltalk.TrappedDataChain.klass)})},
 args: ["anArray"],
-source: "newFromProcessorSpecs: anArray\x0a\x09^self new: (anArray collect: [ :each | TrappedProcessor perform: each ])",
-messageSends: ["new:", "collect:", "perform:"],
+source: "newFromProcessorSpecs: anArray\x0a\x09^self new: (anArray collect: [ :each | each isString\x0a\x09\x09ifTrue: [ TrappedProcessor perform: each ]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09| selector args |\x0a\x09\x09\x09selector := ''.\x0a\x09\x09\x09args := #().\x0a\x09\x09\x09each withIndexDo: [ :element :index | index odd\x0a\x09\x09\x09\x09ifTrue: [ selector := selector, element ]\x0a\x09\x09\x09\x09ifFalse: [ selector := selector, ':'. args add: element ] ].\x0a\x09\x09\x09TrappedProcessor perform: selector withArguments: args ] ])",
+messageSends: ["new:", "collect:", "ifTrue:ifFalse:", "isString", "perform:", "withIndexDo:", "odd", ",", "add:", "perform:withArguments:"],
 referencedClasses: ["TrappedProcessor"]
 }),
 smalltalk.TrappedDataChain.klass);
@@ -576,6 +599,25 @@ args: [],
 source: "whenSubmitted\x0a\x09^TrappedProcessorWhenSubmitted new",
 messageSends: ["new"],
 referencedClasses: ["TrappedProcessorWhenSubmitted"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "widget:",
+category: 'factory',
+fn: function (aString){
+var self=this;
+function $TrappedProcessorWidget(){return smalltalk.TrappedProcessorWidget||(typeof TrappedProcessorWidget=="undefined"?nil:TrappedProcessorWidget)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorWidget())._new_(aString);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"widget:",{aString:aString},smalltalk.TrappedProcessor.klass)})},
+args: ["aString"],
+source: "widget: aString\x0a\x09^TrappedProcessorWidget new: aString",
+messageSends: ["new:"],
+referencedClasses: ["TrappedProcessorWidget"]
 }),
 smalltalk.TrappedProcessor.klass);
 
@@ -800,6 +842,104 @@ smalltalk.TrappedProcessorWhenSubmitted);
 
 
 
+smalltalk.addClass('TrappedStoppingProcessor', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.TrappedStoppingProcessor.comment="I do not proceed in toView: nor in toModel:\x0a\x0aI am therefore only interesting for my side-effects from install step.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toModel:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedStoppingProcessor)})},
+args: ["aDataCarrier"],
+source: "toModel: aDataCarrier\x0a\x09\x22stop\x22",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedStoppingProcessor);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedStoppingProcessor)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09\x22stop\x22",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedStoppingProcessor);
+
+
+
+smalltalk.addClass('TrappedProcessorWidget', smalltalk.TrappedStoppingProcessor, ['viewName'], 'Trapped-Frontend');
+smalltalk.TrappedProcessorWidget.comment="When installed, I insert a widget instance of the class specified when creating me.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "installToView:toModel:",
+category: 'installation',
+fn: function (aDataCarrier,anotherDataCarrier){
+var self=this;
+function $Smalltalk(){return smalltalk.Smalltalk||(typeof Smalltalk=="undefined"?nil:Smalltalk)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anotherDataCarrier)._target();
+$ctx1.sendIdx["target"]=1;
+_st($1)._do_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(aDataCarrier)._target())._with_(_st(_st(_st($Smalltalk())._current())._at_(self["@viewName"]))._new());
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier},smalltalk.TrappedProcessorWidget)})},
+args: ["aDataCarrier", "anotherDataCarrier"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09anotherDataCarrier target do: [ aDataCarrier target with: (Smalltalk current at: viewName) new ]",
+messageSends: ["do:", "target", "with:", "new", "at:", "current"],
+referencedClasses: ["Smalltalk"]
+}),
+smalltalk.TrappedProcessorWidget);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "viewName:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@viewName"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"viewName:",{aString:aString},smalltalk.TrappedProcessorWidget)})},
+args: ["aString"],
+source: "viewName: aString\x0a\x09viewName := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorWidget);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:",
+category: 'instance creation',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=self._new();
+_st($2)._viewName_(aString);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:",{aString:aString},smalltalk.TrappedProcessorWidget.klass)})},
+args: ["aString"],
+source: "new: aString\x0a\x09^self new\x0a\x09\x09viewName: aString;\x0a\x09\x09yourself",
+messageSends: ["viewName:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorWidget.klass);
+
+
 smalltalk.addClass('TrappedSingleton', smalltalk.Object, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 smalltalk.method({
@@ -928,6 +1068,39 @@ smalltalk.Trapped);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "injectToJQuery:",
+category: 'action',
+fn: function (aJQuery){
+var self=this;
+function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
+function $HTMLCanvas(){return smalltalk.HTMLCanvas||(typeof HTMLCanvas=="undefined"?nil:HTMLCanvas)}
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(aJQuery)._find_("[data-trap]"))._each_((function(index,elem){
+var jq,parsed;
+return smalltalk.withContext(function($ctx2) {
+jq=_st(elem)._asJQuery();
+jq;
+parsed=_st($Trapped())._parse_(_st(jq)._attr_("data-trap"));
+parsed;
+_st(parsed)._do_((function(rule){
+return smalltalk.withContext(function($ctx3) {
+return _st(_st(_st($HTMLCanvas())._onJQuery_(jq))._root())._trap_processors_(_st(rule)._first(),_st(rule)._at_ifAbsent_((2),(function(){
+return smalltalk.withContext(function($ctx4) {
+return [];
+}, function($ctx4) {$ctx4.fillBlock({},$ctx3,3)})})));
+}, function($ctx3) {$ctx3.fillBlock({rule:rule},$ctx2,2)})}));
+return _st(jq)._removeAttr_("data-trap");
+}, function($ctx2) {$ctx2.fillBlock({index:index,elem:elem,jq:jq,parsed:parsed},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"injectToJQuery:",{aJQuery:aJQuery},smalltalk.Trapped)})},
+args: ["aJQuery"],
+source: "injectToJQuery: aJQuery\x0a\x09(aJQuery find: '[data-trap]') each: [ :index :elem |\x0a\x09\x09| jq parsed |\x0a\x09\x09jq := elem asJQuery.\x0a\x09\x09parsed := Trapped parse: (jq attr: 'data-trap').\x0a\x09\x09parsed do: [ :rule |\x0a\x09\x09\x09(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ].\x0a\x09\x09jq removeAttr: 'data-trap' ]",
+messageSends: ["each:", "find:", "asJQuery", "parse:", "attr:", "do:", "trap:processors:", "root", "onJQuery:", "first", "at:ifAbsent:", "removeAttr:"],
+referencedClasses: ["Trapped", "HTMLCanvas"]
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "register:",
 category: 'accessing',
 fn: function (aListKeyedEntity){
@@ -964,54 +1137,17 @@ selector: "start:",
 category: 'action',
 fn: function (args){
 var self=this;
-function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
-function $Smalltalk(){return smalltalk.Smalltalk||(typeof Smalltalk=="undefined"?nil:Smalltalk)}
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
 _st(args)._do_((function(each){
 return smalltalk.withContext(function($ctx2) {
 return self._register_(each);
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})}));
-$1="[data-trap]"._asJQuery();
-$ctx1.sendIdx["asJQuery"]=1;
-_st($1)._each_((function(index,elem){
-var trap,jq,viewName,modelName,tokens,path;
-return smalltalk.withContext(function($ctx2) {
-jq=_st(elem)._asJQuery();
-jq;
-trap=_st(jq)._attr_("data-trap");
-trap;
-tokens=_st(trap)._tokenize_(":");
-$ctx2.sendIdx["tokenize:"]=1;
-tokens;
-$2=_st(_st(tokens)._size()).__eq((1));
-if(smalltalk.assert($2)){
-tokens=_st(["TrappedDumbView"]).__comma(tokens);
-$ctx2.sendIdx[","]=1;
-tokens;
-};
-viewName=_st(tokens)._first();
-$ctx2.sendIdx["first"]=1;
-viewName;
-tokens=_st(_st(_st(tokens)._second())._tokenize_(" "))._select_((function(each){
-return smalltalk.withContext(function($ctx3) {
-return _st(each)._notEmpty();
-}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx2,4)})}));
-tokens;
-modelName=_st(tokens)._first();
-modelName;
-path=_st($Trapped())._parse_(_st(tokens)._allButFirst());
-path;
-return _st(_st([modelName]).__comma(path))._trapDescend_((function(){
-return smalltalk.withContext(function($ctx3) {
-return _st(_st(_st(_st($Smalltalk())._current())._at_(viewName))._new())._appendToJQuery_(jq);
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,5)})}));
-}, function($ctx2) {$ctx2.fillBlock({index:index,elem:elem,trap:trap,jq:jq,viewName:viewName,modelName:modelName,tokens:tokens,path:path},$ctx1,2)})}));
+self._injectToJQuery_("body"._asJQuery());
 return self}, function($ctx1) {$ctx1.fill(self,"start:",{args:args},smalltalk.Trapped)})},
 args: ["args"],
-source: "start: args\x0a    args do: [ :each | self register: each ].\x0a\x09'[data-trap]' asJQuery each: [ :index :elem |\x0a    \x09| trap jq viewName modelName tokens path |\x0a        jq := elem asJQuery.\x0a        trap := jq attr: 'data-trap'.\x0a        tokens := trap tokenize: ':'.\x0a        tokens size = 1 ifTrue: [ tokens := { 'TrappedDumbView' }, tokens ].\x0a        viewName := tokens first.\x0a        tokens := (tokens second tokenize: ' ') select: [ :each | each notEmpty ].\x0a        modelName := tokens first.\x0a        path := Trapped parse: tokens allButFirst.\x0a        { modelName }, path trapDescend: [(Smalltalk current at: viewName) new appendToJQuery: jq].\x0a    ]",
-messageSends: ["do:", "register:", "each:", "asJQuery", "attr:", "tokenize:", "ifTrue:", "=", "size", ",", "first", "select:", "second", "notEmpty", "parse:", "allButFirst", "trapDescend:", "appendToJQuery:", "new", "at:", "current"],
-referencedClasses: ["Trapped", "Smalltalk"]
+source: "start: args\x0a\x09args do: [ :each | self register: each ].\x0a\x09self injectToJQuery: 'body' asJQuery",
+messageSends: ["do:", "register:", "injectToJQuery:", "asJQuery"],
+referencedClasses: []
 }),
 smalltalk.Trapped);
 
@@ -1074,33 +1210,102 @@ smalltalk.addMethod(
 smalltalk.method({
 selector: "parse:",
 category: 'accessing',
-fn: function (anArray){
+fn: function (aString){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $2,$3,$1;
-$1=_st(anArray)._collect_((function(each){
-var asNum;
+var $2,$3,$4,$5,$7,$6,$8,$9,$10,$1;
+$2=_st(aString)._tokenize_(".");
+$ctx1.sendIdx["tokenize:"]=1;
+$1=_st($2)._collect_((function(rule){
 return smalltalk.withContext(function($ctx2) {
-asNum=_st(each)._asNumber();
+$3=_st(rule)._tokenize_(":");
+$ctx2.sendIdx["tokenize:"]=2;
+return _st($3)._collect_((function(message){
+var result,stack,anArray;
+return smalltalk.withContext(function($ctx3) {
+anArray=_st(message)._tokenize_(" ");
+anArray;
+result=[];
+result;
+stack=[result];
+stack;
+_st(anArray)._do_((function(each){
+var asNum,inner,close;
+return smalltalk.withContext(function($ctx4) {
+close=(0);
+close;
+inner=each;
+inner;
+_st((function(){
+return smalltalk.withContext(function($ctx5) {
+$4=_st(inner)._notEmpty();
+$ctx5.sendIdx["notEmpty"]=1;
+return _st($4)._and_((function(){
+return smalltalk.withContext(function($ctx6) {
+return _st(_st(inner)._first()).__eq("(");
+$ctx6.sendIdx["="]=1;
+}, function($ctx6) {$ctx6.fillBlock({},$ctx5,5)})}));
+$ctx5.sendIdx["and:"]=1;
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,4)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx5) {
+inner=_st(inner)._allButFirst();
+inner;
+$5=stack;
+$7=_st(stack)._last();
+$ctx5.sendIdx["last"]=1;
+$6=_st($7)._add_([]);
+$ctx5.sendIdx["add:"]=2;
+return _st($5)._add_($6);
+$ctx5.sendIdx["add:"]=1;
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,6)})}));
+$ctx4.sendIdx["whileTrue:"]=1;
+_st((function(){
+return smalltalk.withContext(function($ctx5) {
+return _st(_st(inner)._notEmpty())._and_((function(){
+return smalltalk.withContext(function($ctx6) {
+$8=_st(inner)._last();
+$ctx6.sendIdx["last"]=2;
+return _st($8).__eq(")");
+$ctx6.sendIdx["="]=2;
+}, function($ctx6) {$ctx6.fillBlock({},$ctx5,8)})}));
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,7)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx5) {
+inner=_st(inner)._allButLast();
+inner;
+close=_st(close).__plus((1));
+return close;
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,9)})}));
+asNum=_st(_st(inner)._ifEmpty_((function(){
+return smalltalk.withContext(function($ctx5) {
+return "NaN";
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,10)})})))._asNumber();
 asNum;
-$2=_st(asNum).__eq(asNum);
-$ctx2.sendIdx["="]=1;
-if(smalltalk.assert($2)){
-return asNum;
+$9=_st(asNum).__eq(asNum);
+if(smalltalk.assert($9)){
+$10=_st(stack)._last();
+$ctx4.sendIdx["last"]=3;
+_st($10)._add_(asNum);
+$ctx4.sendIdx["add:"]=3;
 } else {
-$3=_st(_st(each)._first()).__eq("#");
-if(smalltalk.assert($3)){
-return [_st(each)._allButFirst()];
-} else {
-return each;
+_st(inner)._ifNotEmpty_((function(){
+return smalltalk.withContext(function($ctx5) {
+return _st(_st(stack)._last())._add_(inner);
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,13)})}));
 };
-};
-}, function($ctx2) {$ctx2.fillBlock({each:each,asNum:asNum},$ctx1,1)})}));
+return _st(close)._timesRepeat_((function(){
+return smalltalk.withContext(function($ctx5) {
+return _st(stack)._removeLast();
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,14)})}));
+}, function($ctx4) {$ctx4.fillBlock({each:each,asNum:asNum,inner:inner,close:close},$ctx3,3)})}));
+return result;
+}, function($ctx3) {$ctx3.fillBlock({message:message,result:result,stack:stack,anArray:anArray},$ctx2,2)})}));
+}, function($ctx2) {$ctx2.fillBlock({rule:rule},$ctx1,1)})}));
+$ctx1.sendIdx["collect:"]=1;
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"parse:",{anArray:anArray},smalltalk.Trapped.klass)})},
-args: ["anArray"],
-source: "parse: anArray\x0a\x09^anArray collect: [ :each |\x0a    \x09| asNum |\x0a       \x09asNum := each asNumber.\x0a        asNum = asNum ifTrue: [ asNum ] ifFalse: [\x0a\x09\x09\x09each first = '#' ifTrue: [ { each allButFirst } ] ifFalse: [ each ]]]",
-messageSends: ["collect:", "asNumber", "ifTrue:ifFalse:", "=", "first", "allButFirst"],
+}, function($ctx1) {$ctx1.fill(self,"parse:",{aString:aString},smalltalk.Trapped.klass)})},
+args: ["aString"],
+source: "parse: aString\x0a\x09^ (aString tokenize: '.') collect: [ :rule |\x0a\x09\x09(rule tokenize: ':') collect: [ :message |\x0a\x09\x09\x09| result stack anArray |\x0a\x09\x09\x09anArray := message tokenize: ' '.\x0a\x09\x09\x09result := #().\x0a\x09\x09\x09stack := { result }.\x0a\x09\x09\x09anArray do: [ :each |\x0a    \x09\x09\x09| asNum inner close |\x0a\x09\x09\x09\x09close := 0.\x0a\x09\x09\x09\x09inner := each.\x0a\x09\x09\x09\x09[ inner notEmpty and: [ inner first = '(' ]] whileTrue: [ inner := inner allButFirst. stack add: (stack last add: #()) ].\x0a\x09\x09\x09\x09[ inner notEmpty and: [ inner last = ')' ]] whileTrue: [ inner := inner allButLast. close := close + 1 ].\x0a\x09\x09       \x09asNum := (inner ifEmpty: [ 'NaN' ]) asNumber.\x0a        \x09\x09asNum = asNum ifTrue: [ stack last add: asNum ] ifFalse: [\x0a\x09\x09\x09\x09\x09inner ifNotEmpty: [ stack last add: inner ] ].\x0a\x09\x09\x09\x09close timesRepeat: [ stack removeLast ] ].\x0a\x09\x09\x09result ] ]",
+messageSends: ["collect:", "tokenize:", "do:", "whileTrue:", "and:", "notEmpty", "=", "first", "allButFirst", "add:", "last", "allButLast", "+", "asNumber", "ifEmpty:", "ifTrue:ifFalse:", "ifNotEmpty:", "timesRepeat:", "removeLast"],
 referencedClasses: []
 }),
 smalltalk.Trapped.klass);

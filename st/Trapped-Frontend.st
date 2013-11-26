@@ -114,7 +114,16 @@ new: anArray
 !
 
 newFromProcessorSpecs: anArray
-	^self new: (anArray collect: [ :each | TrappedProcessor perform: each ])
+	^self new: (anArray collect: [ :each | each isString
+		ifTrue: [ TrappedProcessor perform: each ]
+		ifFalse: [
+			| selector args |
+			selector := ''.
+			args := #().
+			each withIndexDo: [ :element :index | index odd
+				ifTrue: [ selector := selector, element ]
+				ifFalse: [ selector := selector, ':'. args add: element ] ].
+			TrappedProcessor perform: selector withArguments: args ] ])
 ! !
 
 !TrappedDataChain class methodsFor: 'private'!
@@ -194,6 +203,10 @@ whenClicked
 
 whenSubmitted
 	^TrappedProcessorWhenSubmitted new
+!
+
+widget: aString
+	^TrappedProcessorWidget new: aString
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorBlackboard
@@ -295,6 +308,50 @@ installToView: aDataCarrier toModel: anotherDataCarrier
 	aDataCarrier target onSubmit: [ anotherDataCarrier copy value: true; proceed. false ]
 ! !
 
+TrappedProcessor subclass: #TrappedStoppingProcessor
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedStoppingProcessor commentStamp!
+I do not proceed in toView: nor in toModel:
+
+I am therefore only interesting for my side-effects from install step.!
+
+!TrappedStoppingProcessor methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	"stop"
+!
+
+toView: aDataCarrier
+	"stop"
+! !
+
+TrappedStoppingProcessor subclass: #TrappedProcessorWidget
+	instanceVariableNames: 'viewName'
+	package: 'Trapped-Frontend'!
+!TrappedProcessorWidget commentStamp!
+When installed, I insert a widget instance of the class specified when creating me.!
+
+!TrappedProcessorWidget methodsFor: 'accessing'!
+
+viewName: aString
+	viewName := aString
+! !
+
+!TrappedProcessorWidget methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	anotherDataCarrier target do: [ aDataCarrier target with: (Smalltalk current at: viewName) new ]
+! !
+
+!TrappedProcessorWidget class methodsFor: 'instance creation'!
+
+new: aString
+	^self new
+		viewName: aString;
+		yourself
+! !
+
 Object subclass: #TrappedSingleton
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
@@ -350,20 +407,19 @@ descend: anArray snapshotDo: aBlock
     ]
 !
 
+injectToJQuery: aJQuery
+	(aJQuery find: '[data-trap]') each: [ :index :elem |
+		| jq parsed |
+		jq := elem asJQuery.
+		parsed := Trapped parse: (jq attr: 'data-trap').
+		parsed do: [ :rule |
+			(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ].
+		jq removeAttr: 'data-trap' ]
+!
+
 start: args
-    args do: [ :each | self register: each ].
-	'[data-trap]' asJQuery each: [ :index :elem |
-    	| trap jq viewName modelName tokens path |
-        jq := elem asJQuery.
-        trap := jq attr: 'data-trap'.
-        tokens := trap tokenize: ':'.
-        tokens size = 1 ifTrue: [ tokens := { 'TrappedDumbView' }, tokens ].
-        viewName := tokens first.
-        tokens := (tokens second tokenize: ' ') select: [ :each | each notEmpty ].
-        modelName := tokens first.
-        path := Trapped parse: tokens allButFirst.
-        { modelName }, path trapDescend: [(Smalltalk current at: viewName) new appendToJQuery: jq].
-    ]
+	args do: [ :each | self register: each ].
+	self injectToJQuery: 'body' asJQuery
 ! !
 
 !Trapped methodsFor: 'initialization'!
@@ -375,12 +431,24 @@ initialize
 
 !Trapped class methodsFor: 'accessing'!
 
-parse: anArray
-	^anArray collect: [ :each |
-    	| asNum |
-       	asNum := each asNumber.
-        asNum = asNum ifTrue: [ asNum ] ifFalse: [
-			each first = '#' ifTrue: [ { each allButFirst } ] ifFalse: [ each ]]]
+parse: aString
+	^ (aString tokenize: '.') collect: [ :rule |
+		(rule tokenize: ':') collect: [ :message |
+			| result stack anArray |
+			anArray := message tokenize: ' '.
+			result := #().
+			stack := { result }.
+			anArray do: [ :each |
+    			| asNum inner close |
+				close := 0.
+				inner := each.
+				[ inner notEmpty and: [ inner first = '(' ]] whileTrue: [ inner := inner allButFirst. stack add: (stack last add: #()) ].
+				[ inner notEmpty and: [ inner last = ')' ]] whileTrue: [ inner := inner allButLast. close := close + 1 ].
+		       	asNum := (inner ifEmpty: [ 'NaN' ]) asNumber.
+        		asNum = asNum ifTrue: [ stack last add: asNum ] ifFalse: [
+					inner ifNotEmpty: [ stack last add: inner ] ].
+				close timesRepeat: [ stack removeLast ] ].
+			result ] ]
 ! !
 
 !Trapped class methodsFor: 'private'!
