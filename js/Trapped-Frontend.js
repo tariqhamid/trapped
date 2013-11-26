@@ -40,6 +40,25 @@ smalltalk.TrappedDataCarrier);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "modifyTargetByPerforming:",
+category: 'action',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self._target())._modify_((function(m){
+return smalltalk.withContext(function($ctx2) {
+return _st(m)._perform_(aString);
+}, function($ctx2) {$ctx2.fillBlock({m:m},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"modifyTargetByPerforming:",{aString:aString},smalltalk.TrappedDataCarrier)})},
+args: ["aString"],
+source: "modifyTargetByPerforming: aString\x0a\x09self target modify: [ :m | m perform: aString ]",
+messageSends: ["modify:", "target", "perform:"],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "target",
 category: 'accessing',
 fn: function (){
@@ -566,6 +585,25 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "signal:",
+category: 'factory',
+fn: function (aString){
+var self=this;
+function $TrappedProcessorSignal(){return smalltalk.TrappedProcessorSignal||(typeof TrappedProcessorSignal=="undefined"?nil:TrappedProcessorSignal)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorSignal())._new_(aString);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"signal:",{aString:aString},smalltalk.TrappedProcessor.klass)})},
+args: ["aString"],
+source: "signal: aString\x0a\x09^TrappedProcessorSignal new: aString",
+messageSends: ["new:"],
+referencedClasses: ["TrappedProcessorSignal"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "whenClicked",
 category: 'factory',
 fn: function (){
@@ -784,6 +822,78 @@ referencedClasses: []
 }),
 smalltalk.TrappedProcessorInputValue);
 
+
+
+smalltalk.addClass('TrappedProcessorSignal', smalltalk.TrappedProcessor, ['selector'], 'Trapped-Frontend');
+smalltalk.TrappedProcessorSignal.comment="Instead of writing data directly to model,\x0aI instead modify it by sending a message specified when instantiating me.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selector:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@selector"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"selector:",{aString:aString},smalltalk.TrappedProcessorSignal)})},
+args: ["aString"],
+source: "selector: aString\x0a\x09selector := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorSignal);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toModel:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aDataCarrier)._modifyTargetByPerforming_(self["@selector"]);
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorSignal)})},
+args: ["aDataCarrier"],
+source: "toModel: aDataCarrier\x0a\x09aDataCarrier modifyTargetByPerforming: selector",
+messageSends: ["modifyTargetByPerforming:"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorSignal);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorSignal)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09\x22stop\x22",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorSignal);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:",
+category: 'instance creation',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=self._new();
+_st($2)._selector_(aString);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:",{aString:aString},smalltalk.TrappedProcessorSignal.klass)})},
+args: ["aString"],
+source: "new: aString\x0a\x09^self new\x0a\x09\x09selector: aString;\x0a\x09\x09yourself",
+messageSends: ["selector:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorSignal.klass);
 
 
 smalltalk.addClass('TrappedProcessorWhenClicked', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');

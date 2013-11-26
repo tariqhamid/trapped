@@ -148,32 +148,27 @@ Widget subclass: #AppView
 !AppView methodsFor: 'rendering'!
 
 renderOn: html
-    #() trapDescend: [ :snap |
 	html h2 trap: #((title)).
     html div trapGuard: #((todos) (notNil)) contents: [
         html span trap:#((remaining)).
         html with: ' of '.
         html span trap: #((todos) (size)).
         html with: ' remaining [ '.
-        html a href:''; onClick: [
-            snap modify: [ :model | model archive ].
-            false
-        ]; with: 'archive'.
+        html a
+			href:'';
+			trap: #() processors: #((signal archive) whenClicked);
+			with: 'archive'.
         html with: ' ]'.
         html ul with: [ html trapIter: #((todos)) tag: #li do: [ :each |
             html root empty.
             html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).
             html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').
         ]].
-        html form onSubmit: [
-            snap modify: [ :model | model addTodo ].
-            false
-        ]; with: [
+        html form trap: #() processors: #((signal addTodo) whenSubmitted); with: [
             html input type: 'text'; trap: #((todoText)) processors: #(inputValue); at: 'size' put: 30; placeholder: 'add new todo here'.
             html input class: 'btn-primary'; type: 'submit'; value: 'add'.
-        ].
+        ]
     ].
-	html p trapGuard: #((todos) (isNil)) contents: 'Loading ...'.
-	]
+	html p trapGuard: #((todos) (isNil)) contents: 'Loading ...'
 ! !
 

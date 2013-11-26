@@ -31,6 +31,10 @@ modifyTarget
 	self target modify: [ self value ]
 !
 
+modifyTargetByPerforming: aString
+	self target modify: [ :m | m perform: aString ]
+!
+
 toTargetAttr: aString
 	self target asJQuery attr: aString put: (self value ifNotNil: [ :o | o value ] ifNil: [[]])
 !
@@ -197,6 +201,10 @@ inputValue
 	^TrappedProcessorInputValue new
 !
 
+signal: aString
+	^TrappedProcessorSignal new: aString
+!
+
 whenClicked
 	^TrappedProcessorWhenClicked new
 !
@@ -282,6 +290,37 @@ installToView: aDataCarrier toModel: anotherDataCarrier
 	| brush |
 	brush := aDataCarrier target.
 	brush onChange: [ anotherDataCarrier copy value: brush asJQuery val; proceed ]
+! !
+
+TrappedProcessor subclass: #TrappedProcessorSignal
+	instanceVariableNames: 'selector'
+	package: 'Trapped-Frontend'!
+!TrappedProcessorSignal commentStamp!
+Instead of writing data directly to model,
+I instead modify it by sending a message specified when instantiating me.!
+
+!TrappedProcessorSignal methodsFor: 'accessing'!
+
+selector: aString
+	selector := aString
+! !
+
+!TrappedProcessorSignal methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	aDataCarrier modifyTargetByPerforming: selector
+!
+
+toView: aDataCarrier
+	"stop"
+! !
+
+!TrappedProcessorSignal class methodsFor: 'instance creation'!
+
+new: aString
+	^self new
+		selector: aString;
+		yourself
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorWhenClicked
