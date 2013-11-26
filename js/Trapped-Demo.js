@@ -286,8 +286,8 @@ $6=_st(html)._input();
 $ctx5.sendIdx["input"]=1;
 _st($6)._type_("checkbox");
 $ctx5.sendIdx["type:"]=1;
-$7=_st($6)._trap_(["done"]);
-$ctx5.sendIdx["trap:"]=4;
+$7=_st($6)._trap_processors_(["done"],["inputChecked"]);
+$ctx5.sendIdx["trap:processors:"]=1;
 $7;
 $8=_st(html)._span();
 _st($8)._trap_read_(["done"],(function(model){
@@ -296,7 +296,6 @@ return _st(_st(html)._root())._class_("done-".__comma(model));
 $ctx6.sendIdx["class:"]=1;
 }, function($ctx6) {$ctx6.fillBlock({model:model},$ctx5,7)})}));
 $9=_st($8)._trap_(["text"]);
-$ctx5.sendIdx["trap:"]=5;
 return $9;
 }, function($ctx5) {$ctx5.fillBlock({each:each},$ctx4,6)})}));
 }, function($ctx4) {$ctx4.fillBlock({},$ctx3,5)})}));
@@ -316,7 +315,7 @@ $12=_st(html)._input();
 $ctx4.sendIdx["input"]=2;
 _st($12)._type_("text");
 $ctx4.sendIdx["type:"]=2;
-_st($12)._trap_([["todoText"]]);
+_st($12)._trap_processors_([["todoText"]],["inputValue"]);
 _st($12)._at_put_("size",(30));
 $13=_st($12)._placeholder_("add new todo here");
 $13;
@@ -333,8 +332,8 @@ return _st(_st(html)._p())._trapGuard_contents_([["todos"], ["isNil"]],"Loading 
 }, function($ctx2) {$ctx2.fillBlock({snap:snap},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.AppView)})},
 args: ["html"],
-source: "renderOn: html\x0a    #() trapDescend: [ :snap |\x0a\x09html h2 trap: #((title)).\x0a    html div trapGuard: #((todos) (notNil)) contents: [\x0a        html span trap:#((remaining)).\x0a        html with: ' of '.\x0a        html span trap: #((todos) (size)).\x0a        html with: ' remaining [ '.\x0a        html a href:''; onClick: [\x0a            snap modify: [ :model | model archive ].\x0a            false\x0a        ]; with: 'archive'.\x0a        html with: ' ]'.\x0a        html ul with: [ html trapIter: #((todos)) tag: #li do: [ :each |\x0a            html root empty.\x0a            html input type: 'checkbox'; trap: #('done').\x0a            html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').\x0a        ]].\x0a        html form onSubmit: [\x0a            snap modify: [ :model | model addTodo ].\x0a            false\x0a        ]; with: [\x0a            html input type: 'text'; trap: #((todoText)); at: 'size' put: 30; placeholder: 'add new todo here'.\x0a            html input class: 'btn-primary'; type: 'submit'; value: 'add'.\x0a        ].\x0a    ].\x0a\x09html p trapGuard: #((todos) (isNil)) contents: 'Loading ...'.\x0a\x09]",
-messageSends: ["trapDescend:", "trap:", "h2", "trapGuard:contents:", "div", "span", "with:", "href:", "a", "onClick:", "modify:", "archive", "ul", "trapIter:tag:do:", "empty", "root", "type:", "input", "trap:read:", "class:", ",", "onSubmit:", "form", "addTodo", "at:put:", "placeholder:", "value:", "p"],
+source: "renderOn: html\x0a    #() trapDescend: [ :snap |\x0a\x09html h2 trap: #((title)).\x0a    html div trapGuard: #((todos) (notNil)) contents: [\x0a        html span trap:#((remaining)).\x0a        html with: ' of '.\x0a        html span trap: #((todos) (size)).\x0a        html with: ' remaining [ '.\x0a        html a href:''; onClick: [\x0a            snap modify: [ :model | model archive ].\x0a            false\x0a        ]; with: 'archive'.\x0a        html with: ' ]'.\x0a        html ul with: [ html trapIter: #((todos)) tag: #li do: [ :each |\x0a            html root empty.\x0a            html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).\x0a            html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').\x0a        ]].\x0a        html form onSubmit: [\x0a            snap modify: [ :model | model addTodo ].\x0a            false\x0a        ]; with: [\x0a            html input type: 'text'; trap: #((todoText)) processors: #(inputValue); at: 'size' put: 30; placeholder: 'add new todo here'.\x0a            html input class: 'btn-primary'; type: 'submit'; value: 'add'.\x0a        ].\x0a    ].\x0a\x09html p trapGuard: #((todos) (isNil)) contents: 'Loading ...'.\x0a\x09]",
+messageSends: ["trapDescend:", "trap:", "h2", "trapGuard:contents:", "div", "span", "with:", "href:", "a", "onClick:", "modify:", "archive", "ul", "trapIter:tag:do:", "empty", "root", "type:", "input", "trap:processors:", "trap:read:", "class:", ",", "onSubmit:", "form", "addTodo", "at:put:", "placeholder:", "value:", "p"],
 referencedClasses: []
 }),
 smalltalk.AppView);

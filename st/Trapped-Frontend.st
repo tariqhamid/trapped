@@ -1,68 +1,4 @@
 Smalltalk current createPackage: 'Trapped-Frontend'!
-Object subclass: #TrappedBinder
-	instanceVariableNames: 'brush'
-	package: 'Trapped-Frontend'!
-
-!TrappedBinder methodsFor: 'accessing'!
-
-brush: aTagBrush
-	brush := aTagBrush
-! !
-
-!TrappedBinder methodsFor: 'action'!
-
-installFor: path
-	brush trap: path read: self showBlock
-!
-
-showBlock
-	^[ :model | brush empty; with: (model ifNil: [[]]) ]
-! !
-
-!TrappedBinder methodsFor: 'converting'!
-
-prim: anObject
-	<return anObject.valueOf()>
-! !
-
-TrappedBinder subclass: #TrappedCheckedBinder
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
-
-!TrappedCheckedBinder methodsFor: 'action'!
-
-installFor: path
-	super installFor: path.
-    path trapDescend: [ :snap |
-	    brush onChange: [ snap modify: [
-            (brush asJQuery attr: 'checked') notNil
-        ]]
-    ]
-!
-
-showBlock
-	^[ :model | brush asJQuery attr: 'checked' put: (model ifNotNil: [ self prim: model ] ifNil: [ false ]) ]
-! !
-
-TrappedBinder subclass: #TrappedValBinder
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
-
-!TrappedValBinder methodsFor: 'action'!
-
-installFor: path
-	super installFor: path.
-    path trapDescend: [ :snap |
-	    brush onChange: [ snap modify: [
-            brush asJQuery val
-        ]]
-    ]
-!
-
-showBlock
-	^[ :model | brush asJQuery val: (model ifNotNil: [self prim: model] ifNil: [[]]) ]
-! !
-
 Object subclass: #TrappedDataCarrier
 	instanceVariableNames: 'target model chain'
 	package: 'Trapped-Frontend'!
@@ -95,8 +31,16 @@ modifyTarget
 	self target modify: [ self value ]
 !
 
+toTargetAttr: aString
+	self target asJQuery attr: aString put: (self value ifNotNil: [ :o | o value ] ifNil: [[]])
+!
+
 toTargetContents
 	self target contents: self value
+!
+
+toTargetValue
+	self target asJQuery val: (self value ifNotNil: [ :o | o value ] ifNil: [[]])
 ! !
 
 !TrappedDataCarrier class methodsFor: 'not yet classified'!
@@ -234,6 +178,14 @@ installToView: aDataCarrier toModel: anotherDataCarrier
 
 contents
 	^TrappedProcessorContents new
+!
+
+inputChecked
+	^TrappedProcessorInputChecked new
+!
+
+inputValue
+	^TrappedProcessorInputValue new
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorBlackboard
@@ -269,6 +221,46 @@ I put data into target via contents: in toView:!
 
 toView: aDataCarrier
 	aDataCarrier toTargetContents
+! !
+
+TrappedProcessor subclass: #TrappedProcessorInputChecked
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorInputChecked commentStamp!
+I bind to checkbox checked attribute.!
+
+!TrappedProcessorInputChecked methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	aDataCarrier toTargetAttr: 'checked'
+! !
+
+!TrappedProcessorInputChecked methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	| brush |
+	brush := aDataCarrier target.
+	brush onChange: [ anotherDataCarrier copy value: (brush asJQuery attr: 'checked') notNil; proceed ]
+! !
+
+TrappedProcessor subclass: #TrappedProcessorInputValue
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorInputValue commentStamp!
+I bind to input value.!
+
+!TrappedProcessorInputValue methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	aDataCarrier toTargetValue
+! !
+
+!TrappedProcessorInputValue methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	| brush |
+	brush := aDataCarrier target.
+	brush onChange: [ anotherDataCarrier copy value: brush asJQuery val; proceed ]
 ! !
 
 Object subclass: #TrappedSingleton
@@ -340,22 +332,6 @@ start: args
         path := Trapped parse: tokens allButFirst.
         { modelName }, path trapDescend: [(Smalltalk current at: viewName) new appendToJQuery: jq].
     ]
-! !
-
-!Trapped methodsFor: 'binders'!
-
-binder: aTagBrush
-    "Prototype; will select based on tag etc."
-    | binder tag |
-    tag := aTagBrush element nodeName.
-    tag = 'INPUT' ifTrue: [
-        | type |
-        type := aTagBrush asJQuery attr: 'type'.
-        type = 'checkbox' ifTrue: [ binder := TrappedCheckedBinder new ].
-        type = 'text' ifTrue: [ binder := TrappedValBinder new ]
-    ].
-    binder ifNil: [ binder := TrappedBinder new ].
-    ^ binder brush: aTagBrush; yourself
 ! !
 
 !Trapped methodsFor: 'initialization'!

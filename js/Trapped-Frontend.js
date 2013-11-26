@@ -2,203 +2,6 @@ define("gh_herby_trapped/Trapped-Frontend", ["amber_vm/smalltalk", "amber_vm/nil
 smalltalk.addPackage('Trapped-Frontend');
 smalltalk.packages["Trapped-Frontend"].transport = {"type":"amd","amdNamespace":"gh_herby_trapped"};
 
-smalltalk.addClass('TrappedBinder', smalltalk.Object, ['brush'], 'Trapped-Frontend');
-smalltalk.addMethod(
-smalltalk.method({
-selector: "brush:",
-category: 'accessing',
-fn: function (aTagBrush){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-self["@brush"]=aTagBrush;
-return self}, function($ctx1) {$ctx1.fill(self,"brush:",{aTagBrush:aTagBrush},smalltalk.TrappedBinder)})},
-args: ["aTagBrush"],
-source: "brush: aTagBrush\x0a\x09brush := aTagBrush",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedBinder);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "installFor:",
-category: 'action',
-fn: function (path){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-_st(self["@brush"])._trap_read_(path,self._showBlock());
-return self}, function($ctx1) {$ctx1.fill(self,"installFor:",{path:path},smalltalk.TrappedBinder)})},
-args: ["path"],
-source: "installFor: path\x0a\x09brush trap: path read: self showBlock",
-messageSends: ["trap:read:", "showBlock"],
-referencedClasses: []
-}),
-smalltalk.TrappedBinder);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "prim:",
-category: 'converting',
-fn: function (anObject){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return anObject.valueOf();
-return self}, function($ctx1) {$ctx1.fill(self,"prim:",{anObject:anObject},smalltalk.TrappedBinder)})},
-args: ["anObject"],
-source: "prim: anObject\x0a\x09<return anObject.valueOf()>",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedBinder);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "showBlock",
-category: 'action',
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $2,$4,$5,$3,$1;
-$1=(function(model){
-return smalltalk.withContext(function($ctx2) {
-$2=self["@brush"];
-_st($2)._empty();
-$4=$2;
-if(($receiver = model) == nil || $receiver == null){
-$5=(function(){
-return smalltalk.withContext(function($ctx3) {
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)})});
-} else {
-$5=model;
-};
-$3=_st($4)._with_($5);
-return $3;
-}, function($ctx2) {$ctx2.fillBlock({model:model},$ctx1,1)})});
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"showBlock",{},smalltalk.TrappedBinder)})},
-args: [],
-source: "showBlock\x0a\x09^[ :model | brush empty; with: (model ifNil: [[]]) ]",
-messageSends: ["empty", "with:", "ifNil:"],
-referencedClasses: []
-}),
-smalltalk.TrappedBinder);
-
-
-
-smalltalk.addClass('TrappedCheckedBinder', smalltalk.TrappedBinder, [], 'Trapped-Frontend');
-smalltalk.addMethod(
-smalltalk.method({
-selector: "installFor:",
-category: 'action',
-fn: function (path){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-smalltalk.TrappedCheckedBinder.superclass.fn.prototype._installFor_.apply(_st(self), [path]);
-_st(path)._trapDescend_((function(snap){
-return smalltalk.withContext(function($ctx2) {
-return _st(self["@brush"])._onChange_((function(){
-return smalltalk.withContext(function($ctx3) {
-return _st(snap)._modify_((function(){
-return smalltalk.withContext(function($ctx4) {
-return _st(_st(_st(self["@brush"])._asJQuery())._attr_("checked"))._notNil();
-}, function($ctx4) {$ctx4.fillBlock({},$ctx3,3)})}));
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)})}));
-}, function($ctx2) {$ctx2.fillBlock({snap:snap},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"installFor:",{path:path},smalltalk.TrappedCheckedBinder)})},
-args: ["path"],
-source: "installFor: path\x0a\x09super installFor: path.\x0a    path trapDescend: [ :snap |\x0a\x09    brush onChange: [ snap modify: [\x0a            (brush asJQuery attr: 'checked') notNil\x0a        ]]\x0a    ]",
-messageSends: ["installFor:", "trapDescend:", "onChange:", "modify:", "notNil", "attr:", "asJQuery"],
-referencedClasses: []
-}),
-smalltalk.TrappedCheckedBinder);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "showBlock",
-category: 'action',
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $2,$3,$1;
-$1=(function(model){
-return smalltalk.withContext(function($ctx2) {
-$2=_st(self["@brush"])._asJQuery();
-if(($receiver = model) == nil || $receiver == null){
-$3=false;
-} else {
-$3=self._prim_(model);
-};
-return _st($2)._attr_put_("checked",$3);
-}, function($ctx2) {$ctx2.fillBlock({model:model},$ctx1,1)})});
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"showBlock",{},smalltalk.TrappedCheckedBinder)})},
-args: [],
-source: "showBlock\x0a\x09^[ :model | brush asJQuery attr: 'checked' put: (model ifNotNil: [ self prim: model ] ifNil: [ false ]) ]",
-messageSends: ["attr:put:", "asJQuery", "ifNotNil:ifNil:", "prim:"],
-referencedClasses: []
-}),
-smalltalk.TrappedCheckedBinder);
-
-
-
-smalltalk.addClass('TrappedValBinder', smalltalk.TrappedBinder, [], 'Trapped-Frontend');
-smalltalk.addMethod(
-smalltalk.method({
-selector: "installFor:",
-category: 'action',
-fn: function (path){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-smalltalk.TrappedValBinder.superclass.fn.prototype._installFor_.apply(_st(self), [path]);
-_st(path)._trapDescend_((function(snap){
-return smalltalk.withContext(function($ctx2) {
-return _st(self["@brush"])._onChange_((function(){
-return smalltalk.withContext(function($ctx3) {
-return _st(snap)._modify_((function(){
-return smalltalk.withContext(function($ctx4) {
-return _st(_st(self["@brush"])._asJQuery())._val();
-}, function($ctx4) {$ctx4.fillBlock({},$ctx3,3)})}));
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)})}));
-}, function($ctx2) {$ctx2.fillBlock({snap:snap},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"installFor:",{path:path},smalltalk.TrappedValBinder)})},
-args: ["path"],
-source: "installFor: path\x0a\x09super installFor: path.\x0a    path trapDescend: [ :snap |\x0a\x09    brush onChange: [ snap modify: [\x0a            brush asJQuery val\x0a        ]]\x0a    ]",
-messageSends: ["installFor:", "trapDescend:", "onChange:", "modify:", "val", "asJQuery"],
-referencedClasses: []
-}),
-smalltalk.TrappedValBinder);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "showBlock",
-category: 'action',
-fn: function (){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $2,$3,$1;
-$1=(function(model){
-return smalltalk.withContext(function($ctx2) {
-$2=_st(self["@brush"])._asJQuery();
-if(($receiver = model) == nil || $receiver == null){
-$3=(function(){
-return smalltalk.withContext(function($ctx3) {
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,4)})});
-} else {
-$3=self._prim_(model);
-};
-return _st($2)._val_($3);
-}, function($ctx2) {$ctx2.fillBlock({model:model},$ctx1,1)})});
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"showBlock",{},smalltalk.TrappedValBinder)})},
-args: [],
-source: "showBlock\x0a\x09^[ :model | brush asJQuery val: (model ifNotNil: [self prim: model] ifNil: [[]]) ]",
-messageSends: ["val:", "asJQuery", "ifNotNil:ifNil:", "prim:"],
-referencedClasses: []
-}),
-smalltalk.TrappedValBinder);
-
-
-
 smalltalk.addClass('TrappedDataCarrier', smalltalk.Object, ['target', 'model', 'chain'], 'Trapped-Frontend');
 smalltalk.addMethod(
 smalltalk.method({
@@ -271,6 +74,35 @@ smalltalk.TrappedDataCarrier);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "toTargetAttr:",
+category: 'action',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$3,$2;
+$1=_st(self._target())._asJQuery();
+$3=self._value();
+$ctx1.sendIdx["value"]=1;
+if(($receiver = $3) == nil || $receiver == null){
+$2=(function(){
+return smalltalk.withContext(function($ctx2) {
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,3)})});
+} else {
+var o;
+o=$receiver;
+$2=_st(o)._value();
+};
+_st($1)._attr_put_(aString,$2);
+return self}, function($ctx1) {$ctx1.fill(self,"toTargetAttr:",{aString:aString},smalltalk.TrappedDataCarrier)})},
+args: ["aString"],
+source: "toTargetAttr: aString\x0a\x09self target asJQuery attr: aString put: (self value ifNotNil: [ :o | o value ] ifNil: [[]])",
+messageSends: ["attr:put:", "asJQuery", "target", "ifNotNil:ifNil:", "value"],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "toTargetContents",
 category: 'action',
 fn: function (){
@@ -281,6 +113,35 @@ return self}, function($ctx1) {$ctx1.fill(self,"toTargetContents",{},smalltalk.T
 args: [],
 source: "toTargetContents\x0a\x09self target contents: self value",
 messageSends: ["contents:", "target", "value"],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toTargetValue",
+category: 'action',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$3,$2;
+$1=_st(self._target())._asJQuery();
+$3=self._value();
+$ctx1.sendIdx["value"]=1;
+if(($receiver = $3) == nil || $receiver == null){
+$2=(function(){
+return smalltalk.withContext(function($ctx2) {
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,3)})});
+} else {
+var o;
+o=$receiver;
+$2=_st(o)._value();
+};
+_st($1)._val_($2);
+return self}, function($ctx1) {$ctx1.fill(self,"toTargetValue",{},smalltalk.TrappedDataCarrier)})},
+args: [],
+source: "toTargetValue\x0a\x09self target asJQuery val: (self value ifNotNil: [ :o | o value ] ifNil: [[]])",
+messageSends: ["val:", "asJQuery", "target", "ifNotNil:ifNil:", "value"],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);
@@ -642,6 +503,44 @@ referencedClasses: ["TrappedProcessorContents"]
 }),
 smalltalk.TrappedProcessor.klass);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "inputChecked",
+category: 'factory',
+fn: function (){
+var self=this;
+function $TrappedProcessorInputChecked(){return smalltalk.TrappedProcessorInputChecked||(typeof TrappedProcessorInputChecked=="undefined"?nil:TrappedProcessorInputChecked)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorInputChecked())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"inputChecked",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "inputChecked\x0a\x09^TrappedProcessorInputChecked new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorInputChecked"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "inputValue",
+category: 'factory',
+fn: function (){
+var self=this;
+function $TrappedProcessorInputValue(){return smalltalk.TrappedProcessorInputValue||(typeof TrappedProcessorInputValue=="undefined"?nil:TrappedProcessorInputValue)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorInputValue())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"inputValue",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "inputValue\x0a\x09^TrappedProcessorInputValue new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorInputValue"]
+}),
+smalltalk.TrappedProcessor.klass);
+
 
 smalltalk.addClass('TrappedProcessorBlackboard', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
 smalltalk.TrappedProcessorBlackboard.comment="I am used internally to fetch data from blackboard\x0aor write it back.";
@@ -717,6 +616,96 @@ smalltalk.TrappedProcessorContents);
 
 
 
+smalltalk.addClass('TrappedProcessorInputChecked', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.TrappedProcessorInputChecked.comment="I bind to checkbox checked attribute.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "installToView:toModel:",
+category: 'installation',
+fn: function (aDataCarrier,anotherDataCarrier){
+var self=this;
+var brush;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+brush=_st(aDataCarrier)._target();
+_st(brush)._onChange_((function(){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(anotherDataCarrier)._copy();
+_st($1)._value_(_st(_st(_st(brush)._asJQuery())._attr_("checked"))._notNil());
+$2=_st($1)._proceed();
+return $2;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier,brush:brush},smalltalk.TrappedProcessorInputChecked)})},
+args: ["aDataCarrier", "anotherDataCarrier"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| brush |\x0a\x09brush := aDataCarrier target.\x0a\x09brush onChange: [ anotherDataCarrier copy value: (brush asJQuery attr: 'checked') notNil; proceed ]",
+messageSends: ["target", "onChange:", "value:", "copy", "notNil", "attr:", "asJQuery", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorInputChecked);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aDataCarrier)._toTargetAttr_("checked");
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorInputChecked)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier toTargetAttr: 'checked'",
+messageSends: ["toTargetAttr:"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorInputChecked);
+
+
+
+smalltalk.addClass('TrappedProcessorInputValue', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.TrappedProcessorInputValue.comment="I bind to input value.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "installToView:toModel:",
+category: 'installation',
+fn: function (aDataCarrier,anotherDataCarrier){
+var self=this;
+var brush;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+brush=_st(aDataCarrier)._target();
+_st(brush)._onChange_((function(){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(anotherDataCarrier)._copy();
+_st($1)._value_(_st(_st(brush)._asJQuery())._val());
+$2=_st($1)._proceed();
+return $2;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier,brush:brush},smalltalk.TrappedProcessorInputValue)})},
+args: ["aDataCarrier", "anotherDataCarrier"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| brush |\x0a\x09brush := aDataCarrier target.\x0a\x09brush onChange: [ anotherDataCarrier copy value: brush asJQuery val; proceed ]",
+messageSends: ["target", "onChange:", "value:", "copy", "val", "asJQuery", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorInputValue);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aDataCarrier)._toTargetValue();
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorInputValue)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier toTargetValue",
+messageSends: ["toTargetValue"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorInputValue);
+
+
+
 smalltalk.addClass('TrappedSingleton', smalltalk.Object, [], 'Trapped-Frontend');
 smalltalk.addMethod(
 smalltalk.method({
@@ -780,59 +769,6 @@ smalltalk.TrappedSingleton.klass);
 
 
 smalltalk.addClass('Trapped', smalltalk.TrappedSingleton, ['registry'], 'Trapped-Frontend');
-smalltalk.addMethod(
-smalltalk.method({
-selector: "binder:",
-category: 'binders',
-fn: function (aTagBrush){
-var self=this;
-var binder,tag;
-function $TrappedCheckedBinder(){return smalltalk.TrappedCheckedBinder||(typeof TrappedCheckedBinder=="undefined"?nil:TrappedCheckedBinder)}
-function $TrappedValBinder(){return smalltalk.TrappedValBinder||(typeof TrappedValBinder=="undefined"?nil:TrappedValBinder)}
-function $TrappedBinder(){return smalltalk.TrappedBinder||(typeof TrappedBinder=="undefined"?nil:TrappedBinder)}
-return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3,$4,$6,$7,$5;
-tag=_st(_st(aTagBrush)._element())._nodeName();
-$1=_st(tag).__eq("INPUT");
-$ctx1.sendIdx["="]=1;
-if(smalltalk.assert($1)){
-var type;
-type=_st(_st(aTagBrush)._asJQuery())._attr_("type");
-type;
-$2=_st(type).__eq("checkbox");
-$ctx1.sendIdx["="]=2;
-if(smalltalk.assert($2)){
-binder=_st($TrappedCheckedBinder())._new();
-$ctx1.sendIdx["new"]=1;
-binder;
-};
-$3=_st(type).__eq("text");
-if(smalltalk.assert($3)){
-binder=_st($TrappedValBinder())._new();
-$ctx1.sendIdx["new"]=2;
-binder;
-};
-};
-$4=binder;
-if(($receiver = $4) == nil || $receiver == null){
-binder=_st($TrappedBinder())._new();
-binder;
-} else {
-$4;
-};
-$6=binder;
-_st($6)._brush_(aTagBrush);
-$7=_st($6)._yourself();
-$5=$7;
-return $5;
-}, function($ctx1) {$ctx1.fill(self,"binder:",{aTagBrush:aTagBrush,binder:binder,tag:tag},smalltalk.Trapped)})},
-args: ["aTagBrush"],
-source: "binder: aTagBrush\x0a    \x22Prototype; will select based on tag etc.\x22\x0a    | binder tag |\x0a    tag := aTagBrush element nodeName.\x0a    tag = 'INPUT' ifTrue: [\x0a        | type |\x0a        type := aTagBrush asJQuery attr: 'type'.\x0a        type = 'checkbox' ifTrue: [ binder := TrappedCheckedBinder new ].\x0a        type = 'text' ifTrue: [ binder := TrappedValBinder new ]\x0a    ].\x0a    binder ifNil: [ binder := TrappedBinder new ].\x0a    ^ binder brush: aTagBrush; yourself",
-messageSends: ["nodeName", "element", "ifTrue:", "=", "attr:", "asJQuery", "new", "ifNil:", "brush:", "yourself"],
-referencedClasses: ["TrappedCheckedBinder", "TrappedValBinder", "TrappedBinder"]
-}),
-smalltalk.Trapped);
-
 smalltalk.addMethod(
 smalltalk.method({
 selector: "byName:",

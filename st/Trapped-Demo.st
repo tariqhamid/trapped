@@ -162,14 +162,14 @@ renderOn: html
         html with: ' ]'.
         html ul with: [ html trapIter: #((todos)) tag: #li do: [ :each |
             html root empty.
-            html input type: 'checkbox'; trap: #('done').
+            html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).
             html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').
         ]].
         html form onSubmit: [
             snap modify: [ :model | model addTodo ].
             false
         ]; with: [
-            html input type: 'text'; trap: #((todoText)); at: 'size' put: 30; placeholder: 'add new todo here'.
+            html input type: 'text'; trap: #((todoText)) processors: #(inputValue); at: 'size' put: 30; placeholder: 'add new todo here'.
             html input class: 'btn-primary'; type: 'submit'; value: 'add'.
         ].
     ].
