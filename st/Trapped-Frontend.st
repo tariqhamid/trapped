@@ -113,7 +113,7 @@ new: anArray
 		yourself
 !
 
-newFromProcessorNames: anArray
+newFromProcessorSpecs: anArray
 	^self new: (anArray collect: [ :each | TrappedProcessor perform: each ])
 ! !
 
@@ -186,6 +186,14 @@ inputChecked
 
 inputValue
 	^TrappedProcessorInputValue new
+!
+
+whenClicked
+	^TrappedProcessorWhenClicked new
+!
+
+whenSubmitted
+	^TrappedProcessorWhenSubmitted new
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorBlackboard
@@ -261,6 +269,30 @@ installToView: aDataCarrier toModel: anotherDataCarrier
 	| brush |
 	brush := aDataCarrier target.
 	brush onChange: [ anotherDataCarrier copy value: brush asJQuery val; proceed ]
+! !
+
+TrappedProcessor subclass: #TrappedProcessorWhenClicked
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorWhenClicked commentStamp!
+I bind to an element and send true to blackboard when clicked.!
+
+!TrappedProcessorWhenClicked methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	aDataCarrier target onClick: [ anotherDataCarrier copy value: true; proceed. false ]
+! !
+
+TrappedProcessor subclass: #TrappedProcessorWhenSubmitted
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorWhenSubmitted commentStamp!
+I bind to a form and send true to blackboard when submitted.!
+
+!TrappedProcessorWhenSubmitted methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	aDataCarrier target onSubmit: [ anotherDataCarrier copy value: true; proceed. false ]
 ! !
 
 Object subclass: #TrappedSingleton
@@ -457,7 +489,7 @@ trap: path
 
 trap: path processors: anArray
 	path trapDescend: [ :snap |
-		(TrappedDataChain newFromProcessorNames: anArray)
+		(TrappedDataChain newFromProcessorSpecs: anArray)
 			forSnapshot: snap andBrush: self ]
 !
 

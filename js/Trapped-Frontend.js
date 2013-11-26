@@ -393,7 +393,7 @@ smalltalk.TrappedDataChain.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "newFromProcessorNames:",
+selector: "newFromProcessorSpecs:",
 category: 'instance creation',
 fn: function (anArray){
 var self=this;
@@ -405,9 +405,9 @@ return smalltalk.withContext(function($ctx2) {
 return _st($TrappedProcessor())._perform_(each);
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})})));
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"newFromProcessorNames:",{anArray:anArray},smalltalk.TrappedDataChain.klass)})},
+}, function($ctx1) {$ctx1.fill(self,"newFromProcessorSpecs:",{anArray:anArray},smalltalk.TrappedDataChain.klass)})},
 args: ["anArray"],
-source: "newFromProcessorNames: anArray\x0a\x09^self new: (anArray collect: [ :each | TrappedProcessor perform: each ])",
+source: "newFromProcessorSpecs: anArray\x0a\x09^self new: (anArray collect: [ :each | TrappedProcessor perform: each ])",
 messageSends: ["new:", "collect:", "perform:"],
 referencedClasses: ["TrappedProcessor"]
 }),
@@ -538,6 +538,44 @@ args: [],
 source: "inputValue\x0a\x09^TrappedProcessorInputValue new",
 messageSends: ["new"],
 referencedClasses: ["TrappedProcessorInputValue"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "whenClicked",
+category: 'factory',
+fn: function (){
+var self=this;
+function $TrappedProcessorWhenClicked(){return smalltalk.TrappedProcessorWhenClicked||(typeof TrappedProcessorWhenClicked=="undefined"?nil:TrappedProcessorWhenClicked)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorWhenClicked())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"whenClicked",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "whenClicked\x0a\x09^TrappedProcessorWhenClicked new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorWhenClicked"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "whenSubmitted",
+category: 'factory',
+fn: function (){
+var self=this;
+function $TrappedProcessorWhenSubmitted(){return smalltalk.TrappedProcessorWhenSubmitted||(typeof TrappedProcessorWhenSubmitted=="undefined"?nil:TrappedProcessorWhenSubmitted)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorWhenSubmitted())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"whenSubmitted",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "whenSubmitted\x0a\x09^TrappedProcessorWhenSubmitted new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorWhenSubmitted"]
 }),
 smalltalk.TrappedProcessor.klass);
 
@@ -703,6 +741,62 @@ messageSends: ["toTargetValue"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorInputValue);
+
+
+
+smalltalk.addClass('TrappedProcessorWhenClicked', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.TrappedProcessorWhenClicked.comment="I bind to an element and send true to blackboard when clicked.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "installToView:toModel:",
+category: 'installation',
+fn: function (aDataCarrier,anotherDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+_st(_st(aDataCarrier)._target())._onClick_((function(){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(anotherDataCarrier)._copy();
+_st($1)._value_(true);
+$2=_st($1)._proceed();
+$2;
+return false;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier},smalltalk.TrappedProcessorWhenClicked)})},
+args: ["aDataCarrier", "anotherDataCarrier"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09aDataCarrier target onClick: [ anotherDataCarrier copy value: true; proceed. false ]",
+messageSends: ["onClick:", "target", "value:", "copy", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorWhenClicked);
+
+
+
+smalltalk.addClass('TrappedProcessorWhenSubmitted', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.TrappedProcessorWhenSubmitted.comment="I bind to a form and send true to blackboard when submitted.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "installToView:toModel:",
+category: 'installation',
+fn: function (aDataCarrier,anotherDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+_st(_st(aDataCarrier)._target())._onSubmit_((function(){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(anotherDataCarrier)._copy();
+_st($1)._value_(true);
+$2=_st($1)._proceed();
+$2;
+return false;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier},smalltalk.TrappedProcessorWhenSubmitted)})},
+args: ["aDataCarrier", "anotherDataCarrier"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09aDataCarrier target onSubmit: [ anotherDataCarrier copy value: true; proceed. false ]",
+messageSends: ["onSubmit:", "target", "value:", "copy", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorWhenSubmitted);
 
 
 
@@ -1272,12 +1366,12 @@ function $TrappedDataChain(){return smalltalk.TrappedDataChain||(typeof TrappedD
 return smalltalk.withContext(function($ctx1) { 
 _st(path)._trapDescend_((function(snap){
 return smalltalk.withContext(function($ctx2) {
-return _st(_st($TrappedDataChain())._newFromProcessorNames_(anArray))._forSnapshot_andBrush_(snap,self);
+return _st(_st($TrappedDataChain())._newFromProcessorSpecs_(anArray))._forSnapshot_andBrush_(snap,self);
 }, function($ctx2) {$ctx2.fillBlock({snap:snap},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"trap:processors:",{path:path,anArray:anArray},smalltalk.TagBrush)})},
 args: ["path", "anArray"],
-source: "trap: path processors: anArray\x0a\x09path trapDescend: [ :snap |\x0a\x09\x09(TrappedDataChain newFromProcessorNames: anArray)\x0a\x09\x09\x09forSnapshot: snap andBrush: self ]",
-messageSends: ["trapDescend:", "forSnapshot:andBrush:", "newFromProcessorNames:"],
+source: "trap: path processors: anArray\x0a\x09path trapDescend: [ :snap |\x0a\x09\x09(TrappedDataChain newFromProcessorSpecs: anArray)\x0a\x09\x09\x09forSnapshot: snap andBrush: self ]",
+messageSends: ["trapDescend:", "forSnapshot:andBrush:", "newFromProcessorSpecs:"],
 referencedClasses: ["TrappedDataChain"]
 }),
 smalltalk.TagBrush);
