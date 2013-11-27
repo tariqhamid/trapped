@@ -5,8 +5,8 @@ Object subclass: #TrappedDataCarrier
 
 !TrappedDataCarrier methodsFor: 'accessing'!
 
-chain: aDataChain
-	chain := aDataChain
+chain: aProcessingChain
+	chain := aProcessingChain
 !
 
 target
@@ -47,11 +47,18 @@ toTargetValue
 	self target asJQuery val: (self value ifNotNil: [ :o | o value ] ifNil: [[]])
 ! !
 
+!TrappedDataCarrier methodsFor: 'initialization'!
+
+initialize
+	super initialize.
+	model := true
+! !
+
 !TrappedDataCarrier class methodsFor: 'not yet classified'!
 
-on: aDataChain target: anObject
+on: aProcessingChain target: anObject
 	^self new
-		chain: aDataChain;
+		chain: aProcessingChain;
 		target: anObject;
 		yourself
 ! !
@@ -78,11 +85,11 @@ proceed
 	(chain processorNo: index) toView: self
 ! !
 
-Object subclass: #TrappedDataChain
+Object subclass: #TrappedProcessingChain
 	instanceVariableNames: 'processors'
 	package: 'Trapped-Frontend'!
 
-!TrappedDataChain methodsFor: 'accessing'!
+!TrappedProcessingChain methodsFor: 'accessing'!
 
 firstProcessorNo
 	^1
@@ -100,20 +107,24 @@ processors: anArray
 	processors := anArray
 ! !
 
-!TrappedDataChain methodsFor: 'action'!
+!TrappedProcessingChain methodsFor: 'action'!
 
 forSnapshot: aSnapshot andBrush: aTagBrush
 	| toViewCarrier toModelCarrier |
 	toViewCarrier := TrappedDataCarrierToView on: self target: aTagBrush.
 	toModelCarrier := TrappedDataCarrierToModel on: self target: aSnapshot.
-	processors do: [ :each | each installToView: toViewCarrier toModel: toModelCarrier ]
+	processors do: [ :each | each installToView: toViewCarrier toModel: toModelCarrier ].
+	toViewCarrier value = true ifTrue: [ toViewCarrier copy proceed ]
 ! !
 
-!TrappedDataChain class methodsFor: 'instance creation'!
+!TrappedProcessingChain class methodsFor: 'instance creation'!
 
 new: anArray
+	(anArray detect: [ :each | each isExpectingModelData ] ifNone: [ nil ])
+		ifNil: [ anArray add: self dataTerminator ]
+		ifNotNil: [ anArray addFirst: self blackboardReaderWriter ].
 	^self new
-		processors: { self blackboardReaderWriter }, anArray;
+		processors: anArray;
 		yourself
 !
 
@@ -130,29 +141,21 @@ newFromProcessorSpecs: anArray
 			TrappedProcessor perform: selector withArguments: args ] ])
 ! !
 
-!TrappedDataChain class methodsFor: 'private'!
+!TrappedProcessingChain class methodsFor: 'private'!
 
 blackboardReaderWriter
 	^TrappedProcessorBlackboard new
-! !
+!
 
-Widget subclass: #TrappedDumbView
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
-!TrappedDumbView commentStamp!
-I just read and show an actual path.!
-
-!TrappedDumbView methodsFor: 'rendering'!
-
-renderOn: html
-	html root trap: #()
+dataTerminator
+	^TrappedProcessorTerminator new
 ! !
 
 Object subclass: #TrappedProcessor
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
 !TrappedProcessor commentStamp!
-I process data in TrappedDataChain.
+I am a processing step in TrappedProcessingChain.
 I am stateless flyweight (aka servant)
 and will get all necessary data as arguments in API calls.
 
@@ -166,7 +169,7 @@ My public API is:
    This performs transformation of TrappedDataCarrier on its way from model to view.
    Should call aDataCarrier proceed to proceed to subsequent step.
  - toModel:
-   This performs transformation of TrappedDataToken on its way from view to model.
+   This performs transformation of TrappedDataCarrier on its way from view to model.
    Should call aDataCarrier proceed to proceed to subsequent step.!
 
 !TrappedProcessor methodsFor: 'data transformation'!
@@ -185,6 +188,12 @@ toView: aDataCarrier
 
 installToView: aDataCarrier toModel: anotherDataCarrier
 	"by default, do nothing"
+! !
+
+!TrappedProcessor methodsFor: 'testing'!
+
+isExpectingModelData
+	^false
 ! !
 
 !TrappedProcessor class methodsFor: 'factory'!
@@ -217,30 +226,25 @@ widget: aString
 	^TrappedProcessorWidget new: aString
 ! !
 
-TrappedProcessor subclass: #TrappedProcessorBlackboard
+TrappedProcessor subclass: #TrappedDataExpectingProcessor
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
-!TrappedProcessorBlackboard commentStamp!
-I am used internally to fetch data from blackboard
-or write it back.!
+!TrappedDataExpectingProcessor commentStamp!
+I answer true to isExpectingModelData and serve as a base class
+for processor that present / change model data.
 
-!TrappedProcessorBlackboard methodsFor: 'data transformation'!
+When at least one of my instances is present in the chain,
+automatic databinding processor is added at the beginning
+(the data-binding scenario); otherwise, the chain
+is run immediately with true as data (run-once scenario).!
 
-toModel: aDataCarrier
-	aDataCarrier modifyTarget
+!TrappedDataExpectingProcessor methodsFor: 'testing'!
+
+isExpectingModelData
+	^true
 ! !
 
-!TrappedProcessorBlackboard methodsFor: 'installation'!
-
-installToView: aDataCarrier toModel: anotherDataCarrier
-	| snap |
-	snap := anotherDataCarrier target.
-	snap watch: [ :data |
-		(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
-        snap do: [ aDataCarrier copy value: data; proceed ] ]
-! !
-
-TrappedProcessor subclass: #TrappedProcessorContents
+TrappedDataExpectingProcessor subclass: #TrappedProcessorContents
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
 !TrappedProcessorContents commentStamp!
@@ -252,7 +256,7 @@ toView: aDataCarrier
 	aDataCarrier toTargetContents
 ! !
 
-TrappedProcessor subclass: #TrappedProcessorInputChecked
+TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
 !TrappedProcessorInputChecked commentStamp!
@@ -272,7 +276,7 @@ installToView: aDataCarrier toModel: anotherDataCarrier
 	brush onChange: [ anotherDataCarrier copy value: (brush asJQuery attr: 'checked') notNil; proceed ]
 ! !
 
-TrappedProcessor subclass: #TrappedProcessorInputValue
+TrappedDataExpectingProcessor subclass: #TrappedProcessorInputValue
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
 !TrappedProcessorInputValue commentStamp!
@@ -290,6 +294,34 @@ installToView: aDataCarrier toModel: anotherDataCarrier
 	| brush |
 	brush := aDataCarrier target.
 	brush onChange: [ anotherDataCarrier copy value: brush asJQuery val; proceed ]
+! !
+
+TrappedProcessor subclass: #TrappedProcessorBlackboard
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorBlackboard commentStamp!
+I am used internally to fetch data from blackboard
+or write it back.
+
+I am added to the beginning of the chain
+when the chain contains at least one element
+that isExpectingModelData (see TrappedDataExpectingProcessor).!
+
+!TrappedProcessorBlackboard methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	aDataCarrier modifyTarget
+! !
+
+!TrappedProcessorBlackboard methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	| snap |
+	snap := anotherDataCarrier target.
+	snap watch: [ :data |
+		(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
+        snap do: [ aDataCarrier copy value: data; proceed ] ].
+	aDataCarrier value: false
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorSignal
@@ -323,6 +355,21 @@ new: aString
 		yourself
 ! !
 
+TrappedProcessor subclass: #TrappedProcessorTerminator
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorTerminator commentStamp!
+I do not proceed in toView:.
+
+I am added automatically to end of chain when it does not contain
+any element that isExpectingModelData (see TrappedDataExpectingProcessor).!
+
+!TrappedProcessorTerminator methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	"stop"
+! !
+
 TrappedProcessor subclass: #TrappedProcessorWhenClicked
 	instanceVariableNames: ''
 	package: 'Trapped-Frontend'!
@@ -332,7 +379,7 @@ I bind to an element and send true to blackboard when clicked.!
 !TrappedProcessorWhenClicked methodsFor: 'installation'!
 
 installToView: aDataCarrier toModel: anotherDataCarrier
-	aDataCarrier target onClick: [ anotherDataCarrier copy value: true; proceed. false ]
+	aDataCarrier target onClick: [ anotherDataCarrier copy proceed. false ]
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorWhenSubmitted
@@ -344,32 +391,14 @@ I bind to a form and send true to blackboard when submitted.!
 !TrappedProcessorWhenSubmitted methodsFor: 'installation'!
 
 installToView: aDataCarrier toModel: anotherDataCarrier
-	aDataCarrier target onSubmit: [ anotherDataCarrier copy value: true; proceed. false ]
+	aDataCarrier target onSubmit: [ anotherDataCarrier copy proceed. false ]
 ! !
 
-TrappedProcessor subclass: #TrappedStoppingProcessor
-	instanceVariableNames: ''
-	package: 'Trapped-Frontend'!
-!TrappedStoppingProcessor commentStamp!
-I do not proceed in toView: nor in toModel:
-
-I am therefore only interesting for my side-effects from install step.!
-
-!TrappedStoppingProcessor methodsFor: 'data transformation'!
-
-toModel: aDataCarrier
-	"stop"
-!
-
-toView: aDataCarrier
-	"stop"
-! !
-
-TrappedStoppingProcessor subclass: #TrappedProcessorWidget
+TrappedProcessor subclass: #TrappedProcessorWidget
 	instanceVariableNames: 'viewName'
 	package: 'Trapped-Frontend'!
 !TrappedProcessorWidget commentStamp!
-When installed, I insert a widget instance of the class specified when creating me.!
+I insert a widget instance of the class specified when creating me.!
 
 !TrappedProcessorWidget methodsFor: 'accessing'!
 
@@ -596,7 +625,7 @@ trap: path
 
 trap: path processors: anArray
 	path trapDescend: [ :snap |
-		(TrappedDataChain newFromProcessorSpecs: anArray)
+		(TrappedProcessingChain newFromProcessorSpecs: anArray)
 			forSnapshot: snap andBrush: self ]
 !
 

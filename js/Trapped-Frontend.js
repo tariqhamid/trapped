@@ -1,4 +1,4 @@
-define("gh_herby_trapped/Trapped-Frontend", ["amber_vm/smalltalk", "amber_vm/nil", "amber_vm/_st", "amber_core/Kernel-Objects", "amber_core/Canvas", "amber_core/Kernel-Collections"], function(smalltalk,nil,_st){
+define("gh_herby_trapped/Trapped-Frontend", ["amber_vm/smalltalk", "amber_vm/nil", "amber_vm/_st", "amber_core/Kernel-Objects", "amber_core/Kernel-Collections", "amber_core/Canvas"], function(smalltalk,nil,_st){
 smalltalk.addPackage('Trapped-Frontend');
 smalltalk.packages["Trapped-Frontend"].transport = {"type":"amd","amdNamespace":"gh_herby_trapped"};
 
@@ -7,14 +7,31 @@ smalltalk.addMethod(
 smalltalk.method({
 selector: "chain:",
 category: 'accessing',
-fn: function (aDataChain){
+fn: function (aProcessingChain){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-self["@chain"]=aDataChain;
-return self}, function($ctx1) {$ctx1.fill(self,"chain:",{aDataChain:aDataChain},smalltalk.TrappedDataCarrier)})},
-args: ["aDataChain"],
-source: "chain: aDataChain\x0a\x09chain := aDataChain",
+self["@chain"]=aProcessingChain;
+return self}, function($ctx1) {$ctx1.fill(self,"chain:",{aProcessingChain:aProcessingChain},smalltalk.TrappedDataCarrier)})},
+args: ["aProcessingChain"],
+source: "chain: aProcessingChain\x0a\x09chain := aProcessingChain",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "initialize",
+category: 'initialization',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+smalltalk.TrappedDataCarrier.superclass.fn.prototype._initialize.apply(_st(self), []);
+self["@model"]=true;
+return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.TrappedDataCarrier)})},
+args: [],
+source: "initialize\x0a\x09super initialize.\x0a\x09model := true",
+messageSends: ["initialize"],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);
@@ -204,19 +221,19 @@ smalltalk.addMethod(
 smalltalk.method({
 selector: "on:target:",
 category: 'not yet classified',
-fn: function (aDataChain,anObject){
+fn: function (aProcessingChain,anObject){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $2,$3,$1;
 $2=self._new();
-_st($2)._chain_(aDataChain);
+_st($2)._chain_(aProcessingChain);
 _st($2)._target_(anObject);
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"on:target:",{aDataChain:aDataChain,anObject:anObject},smalltalk.TrappedDataCarrier.klass)})},
-args: ["aDataChain", "anObject"],
-source: "on: aDataChain target: anObject\x0a\x09^self new\x0a\x09\x09chain: aDataChain;\x0a\x09\x09target: anObject;\x0a\x09\x09yourself",
+}, function($ctx1) {$ctx1.fill(self,"on:target:",{aProcessingChain:aProcessingChain,anObject:anObject},smalltalk.TrappedDataCarrier.klass)})},
+args: ["aProcessingChain", "anObject"],
+source: "on: aProcessingChain target: anObject\x0a\x09^self new\x0a\x09\x09chain: aProcessingChain;\x0a\x09\x09target: anObject;\x0a\x09\x09yourself",
 messageSends: ["chain:", "new", "target:", "yourself"],
 referencedClasses: []
 }),
@@ -275,7 +292,7 @@ smalltalk.TrappedDataCarrierToView);
 
 
 
-smalltalk.addClass('TrappedDataChain', smalltalk.Object, ['processors'], 'Trapped-Frontend');
+smalltalk.addClass('TrappedProcessingChain', smalltalk.Object, ['processors'], 'Trapped-Frontend');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "firstProcessorNo",
@@ -284,13 +301,13 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 return (1);
-}, function($ctx1) {$ctx1.fill(self,"firstProcessorNo",{},smalltalk.TrappedDataChain)})},
+}, function($ctx1) {$ctx1.fill(self,"firstProcessorNo",{},smalltalk.TrappedProcessingChain)})},
 args: [],
 source: "firstProcessorNo\x0a\x09^1",
 messageSends: [],
 referencedClasses: []
 }),
-smalltalk.TrappedDataChain);
+smalltalk.TrappedProcessingChain);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -302,6 +319,7 @@ var toViewCarrier,toModelCarrier;
 function $TrappedDataCarrierToView(){return smalltalk.TrappedDataCarrierToView||(typeof TrappedDataCarrierToView=="undefined"?nil:TrappedDataCarrierToView)}
 function $TrappedDataCarrierToModel(){return smalltalk.TrappedDataCarrierToModel||(typeof TrappedDataCarrierToModel=="undefined"?nil:TrappedDataCarrierToModel)}
 return smalltalk.withContext(function($ctx1) { 
+var $1;
 toViewCarrier=_st($TrappedDataCarrierToView())._on_target_(self,aTagBrush);
 $ctx1.sendIdx["on:target:"]=1;
 toModelCarrier=_st($TrappedDataCarrierToModel())._on_target_(self,aSnapshot);
@@ -309,13 +327,17 @@ _st(self["@processors"])._do_((function(each){
 return smalltalk.withContext(function($ctx2) {
 return _st(each)._installToView_toModel_(toViewCarrier,toModelCarrier);
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"forSnapshot:andBrush:",{aSnapshot:aSnapshot,aTagBrush:aTagBrush,toViewCarrier:toViewCarrier,toModelCarrier:toModelCarrier},smalltalk.TrappedDataChain)})},
+$1=_st(_st(toViewCarrier)._value()).__eq(true);
+if(smalltalk.assert($1)){
+_st(_st(toViewCarrier)._copy())._proceed();
+};
+return self}, function($ctx1) {$ctx1.fill(self,"forSnapshot:andBrush:",{aSnapshot:aSnapshot,aTagBrush:aTagBrush,toViewCarrier:toViewCarrier,toModelCarrier:toModelCarrier},smalltalk.TrappedProcessingChain)})},
 args: ["aSnapshot", "aTagBrush"],
-source: "forSnapshot: aSnapshot andBrush: aTagBrush\x0a\x09| toViewCarrier toModelCarrier |\x0a\x09toViewCarrier := TrappedDataCarrierToView on: self target: aTagBrush.\x0a\x09toModelCarrier := TrappedDataCarrierToModel on: self target: aSnapshot.\x0a\x09processors do: [ :each | each installToView: toViewCarrier toModel: toModelCarrier ]",
-messageSends: ["on:target:", "do:", "installToView:toModel:"],
+source: "forSnapshot: aSnapshot andBrush: aTagBrush\x0a\x09| toViewCarrier toModelCarrier |\x0a\x09toViewCarrier := TrappedDataCarrierToView on: self target: aTagBrush.\x0a\x09toModelCarrier := TrappedDataCarrierToModel on: self target: aSnapshot.\x0a\x09processors do: [ :each | each installToView: toViewCarrier toModel: toModelCarrier ].\x0a\x09toViewCarrier value = true ifTrue: [ toViewCarrier copy proceed ]",
+messageSends: ["on:target:", "do:", "installToView:toModel:", "ifTrue:", "=", "value", "proceed", "copy"],
 referencedClasses: ["TrappedDataCarrierToView", "TrappedDataCarrierToModel"]
 }),
-smalltalk.TrappedDataChain);
+smalltalk.TrappedProcessingChain);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -327,13 +349,13 @@ return smalltalk.withContext(function($ctx1) {
 var $1;
 $1=_st(self["@processors"])._size();
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"lastProcessorNo",{},smalltalk.TrappedDataChain)})},
+}, function($ctx1) {$ctx1.fill(self,"lastProcessorNo",{},smalltalk.TrappedProcessingChain)})},
 args: [],
 source: "lastProcessorNo\x0a\x09^processors size",
 messageSends: ["size"],
 referencedClasses: []
 }),
-smalltalk.TrappedDataChain);
+smalltalk.TrappedProcessingChain);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -345,13 +367,13 @@ return smalltalk.withContext(function($ctx1) {
 var $1;
 $1=_st(self["@processors"])._at_(aNumber);
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"processorNo:",{aNumber:aNumber},smalltalk.TrappedDataChain)})},
+}, function($ctx1) {$ctx1.fill(self,"processorNo:",{aNumber:aNumber},smalltalk.TrappedProcessingChain)})},
 args: ["aNumber"],
 source: "processorNo: aNumber\x0a\x09^processors at: aNumber",
 messageSends: ["at:"],
 referencedClasses: []
 }),
-smalltalk.TrappedDataChain);
+smalltalk.TrappedProcessingChain);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -361,13 +383,13 @@ fn: function (anArray){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 self["@processors"]=anArray;
-return self}, function($ctx1) {$ctx1.fill(self,"processors:",{anArray:anArray},smalltalk.TrappedDataChain)})},
+return self}, function($ctx1) {$ctx1.fill(self,"processors:",{anArray:anArray},smalltalk.TrappedProcessingChain)})},
 args: ["anArray"],
 source: "processors: anArray\x0a\x09processors := anArray",
 messageSends: [],
 referencedClasses: []
 }),
-smalltalk.TrappedDataChain);
+smalltalk.TrappedProcessingChain);
 
 
 smalltalk.addMethod(
@@ -381,13 +403,32 @@ return smalltalk.withContext(function($ctx1) {
 var $1;
 $1=_st($TrappedProcessorBlackboard())._new();
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"blackboardReaderWriter",{},smalltalk.TrappedDataChain.klass)})},
+}, function($ctx1) {$ctx1.fill(self,"blackboardReaderWriter",{},smalltalk.TrappedProcessingChain.klass)})},
 args: [],
 source: "blackboardReaderWriter\x0a\x09^TrappedProcessorBlackboard new",
 messageSends: ["new"],
 referencedClasses: ["TrappedProcessorBlackboard"]
 }),
-smalltalk.TrappedDataChain.klass);
+smalltalk.TrappedProcessingChain.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "dataTerminator",
+category: 'private',
+fn: function (){
+var self=this;
+function $TrappedProcessorTerminator(){return smalltalk.TrappedProcessorTerminator||(typeof TrappedProcessorTerminator=="undefined"?nil:TrappedProcessorTerminator)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorTerminator())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"dataTerminator",{},smalltalk.TrappedProcessingChain.klass)})},
+args: [],
+source: "dataTerminator\x0a\x09^TrappedProcessorTerminator new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorTerminator"]
+}),
+smalltalk.TrappedProcessingChain.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -396,19 +437,31 @@ category: 'instance creation',
 fn: function (anArray){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $2,$3,$1;
-$2=self._new();
-_st($2)._processors_(_st([self._blackboardReaderWriter()]).__comma(anArray));
-$3=_st($2)._yourself();
-$1=$3;
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"new:",{anArray:anArray},smalltalk.TrappedDataChain.klass)})},
+var $1,$3,$4,$2;
+$1=_st(anArray)._detect_ifNone_((function(each){
+return smalltalk.withContext(function($ctx2) {
+return _st(each)._isExpectingModelData();
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})}),(function(){
+return smalltalk.withContext(function($ctx2) {
+return nil;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)})}));
+if(($receiver = $1) == nil || $receiver == null){
+_st(anArray)._add_(self._dataTerminator());
+} else {
+_st(anArray)._addFirst_(self._blackboardReaderWriter());
+};
+$3=self._new();
+_st($3)._processors_(anArray);
+$4=_st($3)._yourself();
+$2=$4;
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"new:",{anArray:anArray},smalltalk.TrappedProcessingChain.klass)})},
 args: ["anArray"],
-source: "new: anArray\x0a\x09^self new\x0a\x09\x09processors: { self blackboardReaderWriter }, anArray;\x0a\x09\x09yourself",
-messageSends: ["processors:", "new", ",", "blackboardReaderWriter", "yourself"],
+source: "new: anArray\x0a\x09(anArray detect: [ :each | each isExpectingModelData ] ifNone: [ nil ])\x0a\x09\x09ifNil: [ anArray add: self dataTerminator ]\x0a\x09\x09ifNotNil: [ anArray addFirst: self blackboardReaderWriter ].\x0a\x09^self new\x0a\x09\x09processors: anArray;\x0a\x09\x09yourself",
+messageSends: ["ifNil:ifNotNil:", "detect:ifNone:", "isExpectingModelData", "add:", "dataTerminator", "addFirst:", "blackboardReaderWriter", "processors:", "new", "yourself"],
 referencedClasses: []
 }),
-smalltalk.TrappedDataChain.klass);
+smalltalk.TrappedProcessingChain.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -450,37 +503,17 @@ return _st($TrappedProcessor())._perform_withArguments_(selector,args);
 };
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,2)})})));
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"newFromProcessorSpecs:",{anArray:anArray},smalltalk.TrappedDataChain.klass)})},
+}, function($ctx1) {$ctx1.fill(self,"newFromProcessorSpecs:",{anArray:anArray},smalltalk.TrappedProcessingChain.klass)})},
 args: ["anArray"],
 source: "newFromProcessorSpecs: anArray\x0a\x09^self new: ((anArray ifEmpty: [ #(contents) ]) collect: [ :each | each isString\x0a\x09\x09ifTrue: [ TrappedProcessor perform: each ]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09| selector args |\x0a\x09\x09\x09selector := ''.\x0a\x09\x09\x09args := #().\x0a\x09\x09\x09each withIndexDo: [ :element :index | index odd\x0a\x09\x09\x09\x09ifTrue: [ selector := selector, element ]\x0a\x09\x09\x09\x09ifFalse: [ selector := selector, ':'. args add: element ] ].\x0a\x09\x09\x09TrappedProcessor perform: selector withArguments: args ] ])",
 messageSends: ["new:", "collect:", "ifEmpty:", "ifTrue:ifFalse:", "isString", "perform:", "withIndexDo:", "odd", ",", "add:", "perform:withArguments:"],
 referencedClasses: ["TrappedProcessor"]
 }),
-smalltalk.TrappedDataChain.klass);
-
-
-smalltalk.addClass('TrappedDumbView', smalltalk.Widget, [], 'Trapped-Frontend');
-smalltalk.TrappedDumbView.comment="I just read and show an actual path.";
-smalltalk.addMethod(
-smalltalk.method({
-selector: "renderOn:",
-category: 'rendering',
-fn: function (html){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-_st(_st(html)._root())._trap_([]);
-return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.TrappedDumbView)})},
-args: ["html"],
-source: "renderOn: html\x0a\x09html root trap: #()",
-messageSends: ["trap:", "root"],
-referencedClasses: []
-}),
-smalltalk.TrappedDumbView);
-
+smalltalk.TrappedProcessingChain.klass);
 
 
 smalltalk.addClass('TrappedProcessor', smalltalk.Object, [], 'Trapped-Frontend');
-smalltalk.TrappedProcessor.comment="I process data in TrappedDataChain.\x0aI am stateless flyweight (aka servant)\x0aand will get all necessary data as arguments in API calls.\x0a\x0aMy public API is:\x0a - installToView:toModel:\x0a   This gets two TrappedDataCarriers set up without actual data\x0a   and at the beginning of their chains. It should do one-time\x0a   installation task needed (install event handlers etc.).\x0a   To start a chain, do: dataCarrier copy value: data; proceed.\x0a - toView:\x0a   This performs transformation of TrappedDataCarrier on its way from model to view.\x0a   Should call aDataCarrier proceed to proceed to subsequent step.\x0a - toModel:\x0a   This performs transformation of TrappedDataToken on its way from view to model.\x0a   Should call aDataCarrier proceed to proceed to subsequent step.\x0a";
+smalltalk.TrappedProcessor.comment="I am a processing step in TrappedProcessingChain.\x0aI am stateless flyweight (aka servant)\x0aand will get all necessary data as arguments in API calls.\x0a\x0aMy public API is:\x0a - installToView:toModel:\x0a   This gets two TrappedDataCarriers set up without actual data\x0a   and at the beginning of their chains. It should do one-time\x0a   installation task needed (install event handlers etc.).\x0a   To start a chain, do: dataCarrier copy value: data; proceed.\x0a - toView:\x0a   This performs transformation of TrappedDataCarrier on its way from model to view.\x0a   Should call aDataCarrier proceed to proceed to subsequent step.\x0a - toModel:\x0a   This performs transformation of TrappedDataCarrier on its way from view to model.\x0a   Should call aDataCarrier proceed to proceed to subsequent step.\x0a";
 smalltalk.addMethod(
 smalltalk.method({
 selector: "installToView:toModel:",
@@ -491,6 +524,22 @@ return smalltalk.withContext(function($ctx1) {
 return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier},smalltalk.TrappedProcessor)})},
 args: ["aDataCarrier", "anotherDataCarrier"],
 source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09\x22by default, do nothing\x22",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessor);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "isExpectingModelData",
+category: 'testing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return false;
+}, function($ctx1) {$ctx1.fill(self,"isExpectingModelData",{},smalltalk.TrappedProcessor)})},
+args: [],
+source: "isExpectingModelData\x0a\x09^false",
 messageSends: [],
 referencedClasses: []
 }),
@@ -663,61 +712,27 @@ referencedClasses: ["TrappedProcessorWidget"]
 smalltalk.TrappedProcessor.klass);
 
 
-smalltalk.addClass('TrappedProcessorBlackboard', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
-smalltalk.TrappedProcessorBlackboard.comment="I am used internally to fetch data from blackboard\x0aor write it back.";
+smalltalk.addClass('TrappedDataExpectingProcessor', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.TrappedDataExpectingProcessor.comment="I answer true to isExpectingModelData and serve as a base class\x0afor processor that present / change model data.\x0a\x0aWhen at least one of my instances is present in the chain,\x0aautomatic databinding processor is added at the beginning\x0a(the data-binding scenario); otherwise, the chain\x0ais run immediately with true as data (run-once scenario).";
 smalltalk.addMethod(
 smalltalk.method({
-selector: "installToView:toModel:",
-category: 'installation',
-fn: function (aDataCarrier,anotherDataCarrier){
-var self=this;
-var snap;
-function $KeyedPubSubUnsubscribe(){return smalltalk.KeyedPubSubUnsubscribe||(typeof KeyedPubSubUnsubscribe=="undefined"?nil:KeyedPubSubUnsubscribe)}
-return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3;
-snap=_st(anotherDataCarrier)._target();
-$ctx1.sendIdx["target"]=1;
-_st(snap)._watch_((function(data){
-return smalltalk.withContext(function($ctx2) {
-$1=_st(_st(_st(_st(_st(aDataCarrier)._target())._asJQuery())._closest_("html"))._toArray())._isEmpty();
-if(smalltalk.assert($1)){
-_st($KeyedPubSubUnsubscribe())._signal();
-};
-return _st(snap)._do_((function(){
-return smalltalk.withContext(function($ctx3) {
-$2=_st(aDataCarrier)._copy();
-_st($2)._value_(data);
-$3=_st($2)._proceed();
-return $3;
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)})}));
-}, function($ctx2) {$ctx2.fillBlock({data:data},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier,snap:snap},smalltalk.TrappedProcessorBlackboard)})},
-args: ["aDataCarrier", "anotherDataCarrier"],
-source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| snap |\x0a\x09snap := anotherDataCarrier target.\x0a\x09snap watch: [ :data |\x0a\x09\x09(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].\x0a        snap do: [ aDataCarrier copy value: data; proceed ] ]",
-messageSends: ["target", "watch:", "ifTrue:", "isEmpty", "toArray", "closest:", "asJQuery", "signal", "do:", "value:", "copy", "proceed"],
-referencedClasses: ["KeyedPubSubUnsubscribe"]
-}),
-smalltalk.TrappedProcessorBlackboard);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "toModel:",
-category: 'data transformation',
-fn: function (aDataCarrier){
+selector: "isExpectingModelData",
+category: 'testing',
+fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-_st(aDataCarrier)._modifyTarget();
-return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorBlackboard)})},
-args: ["aDataCarrier"],
-source: "toModel: aDataCarrier\x0a\x09aDataCarrier modifyTarget",
-messageSends: ["modifyTarget"],
+return true;
+}, function($ctx1) {$ctx1.fill(self,"isExpectingModelData",{},smalltalk.TrappedDataExpectingProcessor)})},
+args: [],
+source: "isExpectingModelData\x0a\x09^true",
+messageSends: [],
 referencedClasses: []
 }),
-smalltalk.TrappedProcessorBlackboard);
+smalltalk.TrappedDataExpectingProcessor);
 
 
 
-smalltalk.addClass('TrappedProcessorContents', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.addClass('TrappedProcessorContents', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Frontend');
 smalltalk.TrappedProcessorContents.comment="I put data into target via contents: in toView:";
 smalltalk.addMethod(
 smalltalk.method({
@@ -737,7 +752,7 @@ smalltalk.TrappedProcessorContents);
 
 
 
-smalltalk.addClass('TrappedProcessorInputChecked', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.addClass('TrappedProcessorInputChecked', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Frontend');
 smalltalk.TrappedProcessorInputChecked.comment="I bind to checkbox checked attribute.";
 smalltalk.addMethod(
 smalltalk.method({
@@ -782,7 +797,7 @@ smalltalk.TrappedProcessorInputChecked);
 
 
 
-smalltalk.addClass('TrappedProcessorInputValue', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.addClass('TrappedProcessorInputValue', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Frontend');
 smalltalk.TrappedProcessorInputValue.comment="I bind to input value.";
 smalltalk.addMethod(
 smalltalk.method({
@@ -824,6 +839,62 @@ messageSends: ["toTargetValue"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorInputValue);
+
+
+
+smalltalk.addClass('TrappedProcessorBlackboard', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.TrappedProcessorBlackboard.comment="I am used internally to fetch data from blackboard\x0aor write it back.\x0a\x0aI am added to the beginning of the chain\x0awhen the chain contains at least one element\x0athat isExpectingModelData (see TrappedDataExpectingProcessor).";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "installToView:toModel:",
+category: 'installation',
+fn: function (aDataCarrier,anotherDataCarrier){
+var self=this;
+var snap;
+function $KeyedPubSubUnsubscribe(){return smalltalk.KeyedPubSubUnsubscribe||(typeof KeyedPubSubUnsubscribe=="undefined"?nil:KeyedPubSubUnsubscribe)}
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3;
+snap=_st(anotherDataCarrier)._target();
+$ctx1.sendIdx["target"]=1;
+_st(snap)._watch_((function(data){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(_st(_st(_st(_st(aDataCarrier)._target())._asJQuery())._closest_("html"))._toArray())._isEmpty();
+if(smalltalk.assert($1)){
+_st($KeyedPubSubUnsubscribe())._signal();
+};
+return _st(snap)._do_((function(){
+return smalltalk.withContext(function($ctx3) {
+$2=_st(aDataCarrier)._copy();
+_st($2)._value_(data);
+$ctx3.sendIdx["value:"]=1;
+$3=_st($2)._proceed();
+return $3;
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)})}));
+}, function($ctx2) {$ctx2.fillBlock({data:data},$ctx1,1)})}));
+_st(aDataCarrier)._value_(false);
+return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier,snap:snap},smalltalk.TrappedProcessorBlackboard)})},
+args: ["aDataCarrier", "anotherDataCarrier"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| snap |\x0a\x09snap := anotherDataCarrier target.\x0a\x09snap watch: [ :data |\x0a\x09\x09(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].\x0a        snap do: [ aDataCarrier copy value: data; proceed ] ].\x0a\x09aDataCarrier value: false",
+messageSends: ["target", "watch:", "ifTrue:", "isEmpty", "toArray", "closest:", "asJQuery", "signal", "do:", "value:", "copy", "proceed"],
+referencedClasses: ["KeyedPubSubUnsubscribe"]
+}),
+smalltalk.TrappedProcessorBlackboard);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toModel:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aDataCarrier)._modifyTarget();
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorBlackboard)})},
+args: ["aDataCarrier"],
+source: "toModel: aDataCarrier\x0a\x09aDataCarrier modifyTarget",
+messageSends: ["modifyTarget"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorBlackboard);
 
 
 
@@ -899,6 +970,25 @@ referencedClasses: []
 smalltalk.TrappedProcessorSignal.klass);
 
 
+smalltalk.addClass('TrappedProcessorTerminator', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.TrappedProcessorTerminator.comment="I do not proceed in toView:.\x0a\x0aI am added automatically to end of chain when it does not contain\x0aany element that isExpectingModelData (see TrappedDataExpectingProcessor).";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorTerminator)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09\x22stop\x22",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorTerminator);
+
+
+
 smalltalk.addClass('TrappedProcessorWhenClicked', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
 smalltalk.TrappedProcessorWhenClicked.comment="I bind to an element and send true to blackboard when clicked.";
 smalltalk.addMethod(
@@ -908,19 +998,15 @@ category: 'installation',
 fn: function (aDataCarrier,anotherDataCarrier){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
 _st(_st(aDataCarrier)._target())._onClick_((function(){
 return smalltalk.withContext(function($ctx2) {
-$1=_st(anotherDataCarrier)._copy();
-_st($1)._value_(true);
-$2=_st($1)._proceed();
-$2;
+_st(_st(anotherDataCarrier)._copy())._proceed();
 return false;
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier},smalltalk.TrappedProcessorWhenClicked)})},
 args: ["aDataCarrier", "anotherDataCarrier"],
-source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09aDataCarrier target onClick: [ anotherDataCarrier copy value: true; proceed. false ]",
-messageSends: ["onClick:", "target", "value:", "copy", "proceed"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09aDataCarrier target onClick: [ anotherDataCarrier copy proceed. false ]",
+messageSends: ["onClick:", "target", "proceed", "copy"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorWhenClicked);
@@ -936,61 +1022,23 @@ category: 'installation',
 fn: function (aDataCarrier,anotherDataCarrier){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
 _st(_st(aDataCarrier)._target())._onSubmit_((function(){
 return smalltalk.withContext(function($ctx2) {
-$1=_st(anotherDataCarrier)._copy();
-_st($1)._value_(true);
-$2=_st($1)._proceed();
-$2;
+_st(_st(anotherDataCarrier)._copy())._proceed();
 return false;
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier},smalltalk.TrappedProcessorWhenSubmitted)})},
 args: ["aDataCarrier", "anotherDataCarrier"],
-source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09aDataCarrier target onSubmit: [ anotherDataCarrier copy value: true; proceed. false ]",
-messageSends: ["onSubmit:", "target", "value:", "copy", "proceed"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09aDataCarrier target onSubmit: [ anotherDataCarrier copy proceed. false ]",
+messageSends: ["onSubmit:", "target", "proceed", "copy"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorWhenSubmitted);
 
 
 
-smalltalk.addClass('TrappedStoppingProcessor', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
-smalltalk.TrappedStoppingProcessor.comment="I do not proceed in toView: nor in toModel:\x0a\x0aI am therefore only interesting for my side-effects from install step.";
-smalltalk.addMethod(
-smalltalk.method({
-selector: "toModel:",
-category: 'data transformation',
-fn: function (aDataCarrier){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedStoppingProcessor)})},
-args: ["aDataCarrier"],
-source: "toModel: aDataCarrier\x0a\x09\x22stop\x22",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedStoppingProcessor);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "toView:",
-category: 'data transformation',
-fn: function (aDataCarrier){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedStoppingProcessor)})},
-args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09\x22stop\x22",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.TrappedStoppingProcessor);
-
-
-
-smalltalk.addClass('TrappedProcessorWidget', smalltalk.TrappedStoppingProcessor, ['viewName'], 'Trapped-Frontend');
-smalltalk.TrappedProcessorWidget.comment="When installed, I insert a widget instance of the class specified when creating me.";
+smalltalk.addClass('TrappedProcessorWidget', smalltalk.TrappedProcessor, ['viewName'], 'Trapped-Frontend');
+smalltalk.TrappedProcessorWidget.comment="I insert a widget instance of the class specified when creating me.";
 smalltalk.addMethod(
 smalltalk.method({
 selector: "installToView:toModel:",
@@ -1680,17 +1728,17 @@ selector: "trap:processors:",
 category: '*Trapped-Frontend',
 fn: function (path,anArray){
 var self=this;
-function $TrappedDataChain(){return smalltalk.TrappedDataChain||(typeof TrappedDataChain=="undefined"?nil:TrappedDataChain)}
+function $TrappedProcessingChain(){return smalltalk.TrappedProcessingChain||(typeof TrappedProcessingChain=="undefined"?nil:TrappedProcessingChain)}
 return smalltalk.withContext(function($ctx1) { 
 _st(path)._trapDescend_((function(snap){
 return smalltalk.withContext(function($ctx2) {
-return _st(_st($TrappedDataChain())._newFromProcessorSpecs_(anArray))._forSnapshot_andBrush_(snap,self);
+return _st(_st($TrappedProcessingChain())._newFromProcessorSpecs_(anArray))._forSnapshot_andBrush_(snap,self);
 }, function($ctx2) {$ctx2.fillBlock({snap:snap},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"trap:processors:",{path:path,anArray:anArray},smalltalk.TagBrush)})},
 args: ["path", "anArray"],
-source: "trap: path processors: anArray\x0a\x09path trapDescend: [ :snap |\x0a\x09\x09(TrappedDataChain newFromProcessorSpecs: anArray)\x0a\x09\x09\x09forSnapshot: snap andBrush: self ]",
+source: "trap: path processors: anArray\x0a\x09path trapDescend: [ :snap |\x0a\x09\x09(TrappedProcessingChain newFromProcessorSpecs: anArray)\x0a\x09\x09\x09forSnapshot: snap andBrush: self ]",
 messageSends: ["trapDescend:", "forSnapshot:andBrush:", "newFromProcessorSpecs:"],
-referencedClasses: ["TrappedDataChain"]
+referencedClasses: ["TrappedProcessingChain"]
 }),
 smalltalk.TagBrush);
 
