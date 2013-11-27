@@ -1512,7 +1512,7 @@ category: 'accessing',
 fn: function (aString){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $2,$3,$4,$5,$7,$6,$8,$9,$10,$1;
+var $2,$3,$4,$5,$6,$8,$7,$9,$10,$11,$12,$13,$14,$1;
 $2=_st(aString)._tokenize_(".");
 $ctx1.sendIdx["tokenize:"]=1;
 $1=_st($2)._collect_((function(rule){
@@ -1541,32 +1541,38 @@ $4=_st(inner)._notEmpty();
 $ctx5.sendIdx["notEmpty"]=1;
 return _st($4)._and_((function(){
 return smalltalk.withContext(function($ctx6) {
-return _st(_st(inner)._first()).__eq("(");
+$5=_st(inner)._first();
+$ctx6.sendIdx["first"]=1;
+return _st($5).__eq("(");
 $ctx6.sendIdx["="]=1;
 }, function($ctx6) {$ctx6.fillBlock({},$ctx5,5)})}));
 $ctx5.sendIdx["and:"]=1;
 }, function($ctx5) {$ctx5.fillBlock({},$ctx4,4)})}))._whileTrue_((function(){
 return smalltalk.withContext(function($ctx5) {
 inner=_st(inner)._allButFirst();
+$ctx5.sendIdx["allButFirst"]=1;
 inner;
-$5=stack;
-$7=_st(stack)._last();
+$6=stack;
+$8=_st(stack)._last();
 $ctx5.sendIdx["last"]=1;
-$6=_st($7)._add_([]);
+$7=_st($8)._add_([]);
 $ctx5.sendIdx["add:"]=2;
-return _st($5)._add_($6);
+return _st($6)._add_($7);
 $ctx5.sendIdx["add:"]=1;
 }, function($ctx5) {$ctx5.fillBlock({},$ctx4,6)})}));
 $ctx4.sendIdx["whileTrue:"]=1;
 _st((function(){
 return smalltalk.withContext(function($ctx5) {
-return _st(_st(inner)._notEmpty())._and_((function(){
+$9=_st(inner)._notEmpty();
+$ctx5.sendIdx["notEmpty"]=2;
+return _st($9)._and_((function(){
 return smalltalk.withContext(function($ctx6) {
-$8=_st(inner)._last();
+$10=_st(inner)._last();
 $ctx6.sendIdx["last"]=2;
-return _st($8).__eq(")");
+return _st($10).__eq(")");
 $ctx6.sendIdx["="]=2;
 }, function($ctx6) {$ctx6.fillBlock({},$ctx5,8)})}));
+$ctx5.sendIdx["and:"]=2;
 }, function($ctx5) {$ctx5.fillBlock({},$ctx4,7)})}))._whileTrue_((function(){
 return smalltalk.withContext(function($ctx5) {
 inner=_st(inner)._allButLast();
@@ -1574,27 +1580,41 @@ inner;
 close=_st(close).__plus((1));
 return close;
 }, function($ctx5) {$ctx5.fillBlock({},$ctx4,9)})}));
+$11=_st(_st(inner)._notEmpty())._and_((function(){
+return smalltalk.withContext(function($ctx5) {
+return _st(_st(inner)._first()).__eq("#");
+$ctx5.sendIdx["="]=3;
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,10)})}));
+if(smalltalk.assert($11)){
+inner=[_st(inner)._allButFirst()];
+inner;
+};
+$12=_st(inner)._isString();
+if(smalltalk.assert($12)){
 asNum=_st(_st(inner)._ifEmpty_((function(){
 return smalltalk.withContext(function($ctx5) {
 return "NaN";
-}, function($ctx5) {$ctx5.fillBlock({},$ctx4,10)})})))._asNumber();
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,13)})})))._asNumber();
+} else {
+asNum=inner;
+};
 asNum;
-$9=_st(asNum).__eq(asNum);
-if(smalltalk.assert($9)){
-$10=_st(stack)._last();
+$13=_st(asNum).__eq(asNum);
+if(smalltalk.assert($13)){
+$14=_st(stack)._last();
 $ctx4.sendIdx["last"]=3;
-_st($10)._add_(asNum);
+_st($14)._add_(asNum);
 $ctx4.sendIdx["add:"]=3;
 } else {
 _st(inner)._ifNotEmpty_((function(){
 return smalltalk.withContext(function($ctx5) {
 return _st(_st(stack)._last())._add_(inner);
-}, function($ctx5) {$ctx5.fillBlock({},$ctx4,13)})}));
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,17)})}));
 };
 return _st(close)._timesRepeat_((function(){
 return smalltalk.withContext(function($ctx5) {
 return _st(stack)._removeLast();
-}, function($ctx5) {$ctx5.fillBlock({},$ctx4,14)})}));
+}, function($ctx5) {$ctx5.fillBlock({},$ctx4,18)})}));
 }, function($ctx4) {$ctx4.fillBlock({each:each,asNum:asNum,inner:inner,close:close},$ctx3,3)})}));
 return result;
 }, function($ctx3) {$ctx3.fillBlock({message:message,result:result,stack:stack,anArray:anArray},$ctx2,2)})}));
@@ -1603,8 +1623,8 @@ $ctx1.sendIdx["collect:"]=1;
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"parse:",{aString:aString},smalltalk.Trapped.klass)})},
 args: ["aString"],
-source: "parse: aString\x0a\x09^ (aString tokenize: '.') collect: [ :rule |\x0a\x09\x09(rule tokenize: ':') collect: [ :message |\x0a\x09\x09\x09| result stack anArray |\x0a\x09\x09\x09anArray := message tokenize: ' '.\x0a\x09\x09\x09result := #().\x0a\x09\x09\x09stack := { result }.\x0a\x09\x09\x09anArray do: [ :each |\x0a    \x09\x09\x09| asNum inner close |\x0a\x09\x09\x09\x09close := 0.\x0a\x09\x09\x09\x09inner := each.\x0a\x09\x09\x09\x09[ inner notEmpty and: [ inner first = '(' ]] whileTrue: [ inner := inner allButFirst. stack add: (stack last add: #()) ].\x0a\x09\x09\x09\x09[ inner notEmpty and: [ inner last = ')' ]] whileTrue: [ inner := inner allButLast. close := close + 1 ].\x0a\x09\x09       \x09asNum := (inner ifEmpty: [ 'NaN' ]) asNumber.\x0a        \x09\x09asNum = asNum ifTrue: [ stack last add: asNum ] ifFalse: [\x0a\x09\x09\x09\x09\x09inner ifNotEmpty: [ stack last add: inner ] ].\x0a\x09\x09\x09\x09close timesRepeat: [ stack removeLast ] ].\x0a\x09\x09\x09result ] ]",
-messageSends: ["collect:", "tokenize:", "do:", "whileTrue:", "and:", "notEmpty", "=", "first", "allButFirst", "add:", "last", "allButLast", "+", "asNumber", "ifEmpty:", "ifTrue:ifFalse:", "ifNotEmpty:", "timesRepeat:", "removeLast"],
+source: "parse: aString\x0a\x09^ (aString tokenize: '.') collect: [ :rule |\x0a\x09\x09(rule tokenize: ':') collect: [ :message |\x0a\x09\x09\x09| result stack anArray |\x0a\x09\x09\x09anArray := message tokenize: ' '.\x0a\x09\x09\x09result := #().\x0a\x09\x09\x09stack := { result }.\x0a\x09\x09\x09anArray do: [ :each |\x0a    \x09\x09\x09| asNum inner close |\x0a\x09\x09\x09\x09close := 0.\x0a\x09\x09\x09\x09inner := each.\x0a\x09\x09\x09\x09[ inner notEmpty and: [ inner first = '(' ]] whileTrue: [ inner := inner allButFirst. stack add: (stack last add: #()) ].\x0a\x09\x09\x09\x09[ inner notEmpty and: [ inner last = ')' ]] whileTrue: [ inner := inner allButLast. close := close + 1 ].\x0a\x09\x09\x09\x09(inner notEmpty and: [ inner first = '#' ]) ifTrue: [ inner := { inner allButFirst } ].\x0a\x09\x09       \x09asNum := inner isString ifTrue: [ (inner ifEmpty: [ 'NaN' ]) asNumber ] ifFalse: [ inner ].\x0a        \x09\x09asNum = asNum ifTrue: [ stack last add: asNum ] ifFalse: [\x0a\x09\x09\x09\x09\x09inner ifNotEmpty: [ stack last add: inner ] ].\x0a\x09\x09\x09\x09close timesRepeat: [ stack removeLast ] ].\x0a\x09\x09\x09result ] ]",
+messageSends: ["collect:", "tokenize:", "do:", "whileTrue:", "and:", "notEmpty", "=", "first", "allButFirst", "add:", "last", "allButLast", "+", "ifTrue:", "ifTrue:ifFalse:", "isString", "asNumber", "ifEmpty:", "ifNotEmpty:", "timesRepeat:", "removeLast"],
 referencedClasses: []
 }),
 smalltalk.Trapped.klass);
