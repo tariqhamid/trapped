@@ -1252,10 +1252,10 @@ _st(args)._do_((function(each){
 return smalltalk.withContext(function($ctx2) {
 return self._register_(each);
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})}));
-self._injectToJQuery_("body"._asJQuery());
+self._injectToJQuery_("html"._asJQuery());
 return self}, function($ctx1) {$ctx1.fill(self,"start:",{args:args},smalltalk.Trapped)})},
 args: ["args"],
-source: "start: args\x0a\x09args do: [ :each | self register: each ].\x0a\x09self injectToJQuery: 'body' asJQuery",
+source: "start: args\x0a\x09args do: [ :each | self register: each ].\x0a\x09self injectToJQuery: 'html' asJQuery",
 messageSends: ["do:", "register:", "injectToJQuery:", "asJQuery"],
 referencedClasses: []
 }),

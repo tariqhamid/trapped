@@ -458,7 +458,7 @@ injectToJQuery: aJQuery
 
 start: args
 	args do: [ :each | self register: each ].
-	self injectToJQuery: 'body' asJQuery
+	self injectToJQuery: 'html' asJQuery
 ! !
 
 !Trapped methodsFor: 'initialization'!
