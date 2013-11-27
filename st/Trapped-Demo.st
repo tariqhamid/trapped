@@ -149,7 +149,37 @@ Widget subclass: #AppView
 
 renderOn: html
 	html h2 trap: #((title)).
-    html div trapGuard: #((todos) (notNil)) contents: [
+    html div trapGuard: #((todos) (notNil)) contents: TemporaryWidget new.
+	html p trapGuard: #((todos) (isNil)) contents: TemporaryWidget2 new
+! !
+
+Widget subclass: #TemporaryWidget
+	instanceVariableNames: ''
+	package: 'Trapped-Demo'!
+!TemporaryWidget commentStamp!
+<!!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->
+  <body>
+    <h2>Todo</h2>
+    <div ng-controller="TodoCtrl">
+      <span>{{remaining()}} of {{todos.length}} remaining</span>
+      [ <a href="" ng-click="archive()">archive</a> ]
+      <ul class="unstyled">
+        <li ng-repeat="todo in todos">
+          <input type="checkbox" ng-model="todo.done">
+          <span class="done-{{todo.done}}">{{todo.text}}</span>
+        </li>
+      </ul>
+      <form ng-submit="addTodo()">
+        <input type="text" ng-model="todoText"  size="30"
+               placeholder="add new todo here">
+        <input class="btn-primary" type="submit" value="add">
+      </form>
+    </div>
+  </body>!
+
+!TemporaryWidget methodsFor: 'rendering'!
+
+renderOn: html
         html span trap:#((remaining)).
         html with: ' of '.
         html span trap: #((todos) (size)).
@@ -168,7 +198,15 @@ renderOn: html
             html input type: 'text'; trap: #((todoText)) processors: #(inputValue); at: 'size' put: 30; placeholder: 'add new todo here'.
             html input class: 'btn-primary'; type: 'submit'; value: 'add'.
         ]
-    ].
-	html p trapGuard: #((todos) (isNil)) contents: 'Loading ...'
+! !
+
+Widget subclass: #TemporaryWidget2
+	instanceVariableNames: ''
+	package: 'Trapped-Demo'!
+
+!TemporaryWidget2 methodsFor: 'rendering'!
+
+renderOn: html
+	html root contents: 'Loading ...'
 ! !
 
