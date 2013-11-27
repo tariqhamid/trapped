@@ -29,7 +29,10 @@
             }
     );
 </script>
-<div data-trap="App: (widget AppView)">
+<div>
+    <h2 data-trap="App (title)"></h2>
+    <div data-trap="App: (guard ((todos) (notNil))) (widget TemporaryWidget)"></div>
+    <p data-trap="App: (guard ((todos) (isNil))) (widget TemporaryWidget2)"></p>
 </div>
 </body>
 </html>

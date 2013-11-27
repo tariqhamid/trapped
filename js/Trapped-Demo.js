@@ -231,29 +231,6 @@ smalltalk.AppModel);
 
 
 
-smalltalk.addClass('AppView', smalltalk.Widget, [], 'Trapped-Demo');
-smalltalk.AppView.comment="<!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->\x0a  <body>\x0a    <h2>Todo</h2>\x0a    <div ng-controller=\x22TodoCtrl\x22>\x0a      <span>{{remaining()}} of {{todos.length}} remaining</span>\x0a      [ <a href=\x22\x22 ng-click=\x22archive()\x22>archive</a> ]\x0a      <ul class=\x22unstyled\x22>\x0a        <li ng-repeat=\x22todo in todos\x22>\x0a          <input type=\x22checkbox\x22 ng-model=\x22todo.done\x22>\x0a          <span class=\x22done-{{todo.done}}\x22>{{todo.text}}</span>\x0a        </li>\x0a      </ul>\x0a      <form ng-submit=\x22addTodo()\x22>\x0a        <input type=\x22text\x22 ng-model=\x22todoText\x22  size=\x2230\x22\x0a               placeholder=\x22add new todo here\x22>\x0a        <input class=\x22btn-primary\x22 type=\x22submit\x22 value=\x22add\x22>\x0a      </form>\x0a    </div>\x0a  </body>";
-smalltalk.addMethod(
-smalltalk.method({
-selector: "renderOn:",
-category: 'rendering',
-fn: function (html){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-_st(_st(html)._h2())._trap_([["title"]]);
-_st(_st(html)._div())._trap_processors_([],[["guard", [["todos"], ["notNil"]]], ["widget", "TemporaryWidget"]]);
-$ctx1.sendIdx["trap:processors:"]=1;
-_st(_st(html)._p())._trap_processors_([],[["guard", [["todos"], ["isNil"]]], ["widget", "TemporaryWidget2"]]);
-return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.AppView)})},
-args: ["html"],
-source: "renderOn: html\x0a\x09html h2 trap: #((title)).\x0a    html div trap: #() processors: #((guard ((todos) (notNil))) (widget TemporaryWidget)).\x0a\x09html p trap: #() processors: #((guard ((todos) (isNil))) (widget TemporaryWidget2))",
-messageSends: ["trap:", "h2", "trap:processors:", "div", "p"],
-referencedClasses: []
-}),
-smalltalk.AppView);
-
-
-
 smalltalk.addClass('TemporaryWidget', smalltalk.Widget, [], 'Trapped-Demo');
 smalltalk.TemporaryWidget.comment="<!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->\x0a  <body>\x0a    <h2>Todo</h2>\x0a    <div ng-controller=\x22TodoCtrl\x22>\x0a      <span>{{remaining()}} of {{todos.length}} remaining</span>\x0a      [ <a href=\x22\x22 ng-click=\x22archive()\x22>archive</a> ]\x0a      <ul class=\x22unstyled\x22>\x0a        <li ng-repeat=\x22todo in todos\x22>\x0a          <input type=\x22checkbox\x22 ng-model=\x22todo.done\x22>\x0a          <span class=\x22done-{{todo.done}}\x22>{{todo.text}}</span>\x0a        </li>\x0a      </ul>\x0a      <form ng-submit=\x22addTodo()\x22>\x0a        <input type=\x22text\x22 ng-model=\x22todoText\x22  size=\x2230\x22\x0a               placeholder=\x22add new todo here\x22>\x0a        <input class=\x22btn-primary\x22 type=\x22submit\x22 value=\x22add\x22>\x0a      </form>\x0a    </div>\x0a  </body>";
 smalltalk.addMethod(

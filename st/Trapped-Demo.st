@@ -121,38 +121,6 @@ archive
     self todos: self todosNotDone
 ! !
 
-Widget subclass: #AppView
-	instanceVariableNames: ''
-	package: 'Trapped-Demo'!
-!AppView commentStamp!
-<!!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->
-  <body>
-    <h2>Todo</h2>
-    <div ng-controller="TodoCtrl">
-      <span>{{remaining()}} of {{todos.length}} remaining</span>
-      [ <a href="" ng-click="archive()">archive</a> ]
-      <ul class="unstyled">
-        <li ng-repeat="todo in todos">
-          <input type="checkbox" ng-model="todo.done">
-          <span class="done-{{todo.done}}">{{todo.text}}</span>
-        </li>
-      </ul>
-      <form ng-submit="addTodo()">
-        <input type="text" ng-model="todoText"  size="30"
-               placeholder="add new todo here">
-        <input class="btn-primary" type="submit" value="add">
-      </form>
-    </div>
-  </body>!
-
-!AppView methodsFor: 'rendering'!
-
-renderOn: html
-	html h2 trap: #((title)).
-    html div trap: #() processors: #((guard ((todos) (notNil))) (widget TemporaryWidget)).
-	html p trap: #() processors: #((guard ((todos) (isNil))) (widget TemporaryWidget2))
-! !
-
 Widget subclass: #TemporaryWidget
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
