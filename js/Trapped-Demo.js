@@ -239,23 +239,16 @@ selector: "renderOn:",
 category: 'rendering',
 fn: function (html){
 var self=this;
-function $TemporaryWidget(){return smalltalk.TemporaryWidget||(typeof TemporaryWidget=="undefined"?nil:TemporaryWidget)}
-function $TemporaryWidget2(){return smalltalk.TemporaryWidget2||(typeof TemporaryWidget2=="undefined"?nil:TemporaryWidget2)}
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3;
 _st(_st(html)._h2())._trap_([["title"]]);
-$1=_st(html)._div();
-$2=[["todos"], ["notNil"]];
-$3=_st($TemporaryWidget())._new();
-$ctx1.sendIdx["new"]=1;
-_st($1)._trapGuard_contents_($2,$3);
-$ctx1.sendIdx["trapGuard:contents:"]=1;
-_st(_st(html)._p())._trapGuard_contents_([["todos"], ["isNil"]],_st($TemporaryWidget2())._new());
+_st(_st(html)._div())._trap_processors_([],[["guard", [["todos"], ["notNil"]]], ["widget", "TemporaryWidget"]]);
+$ctx1.sendIdx["trap:processors:"]=1;
+_st(_st(html)._p())._trap_processors_([],[["guard", [["todos"], ["isNil"]]], ["widget", "TemporaryWidget2"]]);
 return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.AppView)})},
 args: ["html"],
-source: "renderOn: html\x0a\x09html h2 trap: #((title)).\x0a    html div trapGuard: #((todos) (notNil)) contents: TemporaryWidget new.\x0a\x09html p trapGuard: #((todos) (isNil)) contents: TemporaryWidget2 new",
-messageSends: ["trap:", "h2", "trapGuard:contents:", "div", "new", "p"],
-referencedClasses: ["TemporaryWidget", "TemporaryWidget2"]
+source: "renderOn: html\x0a\x09html h2 trap: #((title)).\x0a    html div trap: #() processors: #((guard ((todos) (notNil))) (widget TemporaryWidget)).\x0a\x09html p trap: #() processors: #((guard ((todos) (isNil))) (widget TemporaryWidget2))",
+messageSends: ["trap:", "h2", "trap:processors:", "div", "p"],
+referencedClasses: []
 }),
 smalltalk.AppView);
 

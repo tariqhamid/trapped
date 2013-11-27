@@ -202,6 +202,10 @@ contents
 	^TrappedProcessorContents new
 !
 
+guard: aString
+	^TrappedProcessorGuard new: aString
+!
+
 inputChecked
 	^TrappedProcessorInputChecked new
 !
@@ -322,6 +326,44 @@ installToView: aDataCarrier toModel: anotherDataCarrier
 		(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
         snap do: [ aDataCarrier copy value: data; proceed ] ].
 	aDataCarrier value: false
+! !
+
+TrappedProcessor subclass: #TrappedProcessorGuard
+	instanceVariableNames: 'guardPath'
+	package: 'Trapped-Frontend'!
+!TrappedProcessorGuard commentStamp!
+I am used to guard contants of the brush I am installed on.
+
+I observe guard expression in the model,
+and when it changes to nil or false, I delete the brush contents;
+on the other hand, when it changes to non-nil and non-false,
+I run the rest on the chain, which should be one-time
+that sets up the contents,!
+
+!TrappedProcessorGuard methodsFor: 'accessing'!
+
+guardPath: anArray
+	guardPath := anArray
+! !
+
+!TrappedProcessorGuard methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	"stop"
+!
+
+toView: aDataCarrier
+	| frozen |
+	frozen := aDataCarrier copy.
+	frozen target trapGuard: guardPath contents: [ frozen copy proceed ]
+! !
+
+!TrappedProcessorGuard class methodsFor: 'instance creation'!
+
+new: anArray
+	^ self new
+		guardPath: anArray;
+		yourself
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorSignal

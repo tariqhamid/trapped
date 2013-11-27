@@ -149,8 +149,8 @@ Widget subclass: #AppView
 
 renderOn: html
 	html h2 trap: #((title)).
-    html div trapGuard: #((todos) (notNil)) contents: TemporaryWidget new.
-	html p trapGuard: #((todos) (isNil)) contents: TemporaryWidget2 new
+    html div trap: #() processors: #((guard ((todos) (notNil))) (widget TemporaryWidget)).
+	html p trap: #() processors: #((guard ((todos) (isNil))) (widget TemporaryWidget2))
 ! !
 
 Widget subclass: #TemporaryWidget

@@ -599,6 +599,25 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "guard:",
+category: 'factory',
+fn: function (aString){
+var self=this;
+function $TrappedProcessorGuard(){return smalltalk.TrappedProcessorGuard||(typeof TrappedProcessorGuard=="undefined"?nil:TrappedProcessorGuard)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorGuard())._new_(aString);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"guard:",{aString:aString},smalltalk.TrappedProcessor.klass)})},
+args: ["aString"],
+source: "guard: aString\x0a\x09^TrappedProcessorGuard new: aString",
+messageSends: ["new:"],
+referencedClasses: ["TrappedProcessorGuard"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "inputChecked",
 category: 'factory',
 fn: function (){
@@ -896,6 +915,84 @@ referencedClasses: []
 }),
 smalltalk.TrappedProcessorBlackboard);
 
+
+
+smalltalk.addClass('TrappedProcessorGuard', smalltalk.TrappedProcessor, ['guardPath'], 'Trapped-Frontend');
+smalltalk.TrappedProcessorGuard.comment="I am used to guard contants of the brush I am installed on.\x0a\x0aI observe guard expression in the model,\x0aand when it changes to nil or false, I delete the brush contents;\x0aon the other hand, when it changes to non-nil and non-false,\x0aI run the rest on the chain, which should be one-time\x0athat sets up the contents,";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "guardPath:",
+category: 'accessing',
+fn: function (anArray){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@guardPath"]=anArray;
+return self}, function($ctx1) {$ctx1.fill(self,"guardPath:",{anArray:anArray},smalltalk.TrappedProcessorGuard)})},
+args: ["anArray"],
+source: "guardPath: anArray\x0a\x09guardPath := anArray",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorGuard);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toModel:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorGuard)})},
+args: ["aDataCarrier"],
+source: "toModel: aDataCarrier\x0a\x09\x22stop\x22",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorGuard);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+var frozen;
+return smalltalk.withContext(function($ctx1) { 
+frozen=_st(aDataCarrier)._copy();
+$ctx1.sendIdx["copy"]=1;
+_st(_st(frozen)._target())._trapGuard_contents_(self["@guardPath"],(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(frozen)._copy())._proceed();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen},smalltalk.TrappedProcessorGuard)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09| frozen |\x0a\x09frozen := aDataCarrier copy.\x0a\x09frozen target trapGuard: guardPath contents: [ frozen copy proceed ]",
+messageSends: ["copy", "trapGuard:contents:", "target", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorGuard);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:",
+category: 'instance creation',
+fn: function (anArray){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=self._new();
+_st($2)._guardPath_(anArray);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:",{anArray:anArray},smalltalk.TrappedProcessorGuard.klass)})},
+args: ["anArray"],
+source: "new: anArray\x0a\x09^ self new\x0a\x09\x09guardPath: anArray;\x0a\x09\x09yourself",
+messageSends: ["guardPath:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorGuard.klass);
 
 
 smalltalk.addClass('TrappedProcessorSignal', smalltalk.TrappedProcessor, ['selector'], 'Trapped-Frontend');
