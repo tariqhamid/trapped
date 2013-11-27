@@ -202,8 +202,8 @@ contents
 	^TrappedProcessorContents new
 !
 
-guard: aString
-	^TrappedProcessorGuard new: aString
+guardProc: aString
+	^TrappedProcessorGuardProc new: aString
 !
 
 inputChecked
@@ -344,11 +344,44 @@ toView: aDataCarrier
 	Trapped current injectToJQuery: aDataCarrier target asJQuery children
 ! !
 
-TrappedProcessor subclass: #TrappedProcessorGuard
+TrappedProcessor subclass: #TrappedProcessorGuardBase
 	instanceVariableNames: 'guardPath'
 	package: 'Trapped-Frontend'!
-!TrappedProcessorGuard commentStamp!
-I am used to guard contants of the brush I am installed on.
+!TrappedProcessorGuardBase commentStamp!
+I serve as base class for brush-guarding processors.
+
+I cover instantiation and subclasses have to provide
+implementation of toVIew: that react appropriately to guard releasing.!
+
+!TrappedProcessorGuardBase methodsFor: 'accessing'!
+
+guardPath: anArray
+	guardPath := anArray
+! !
+
+!TrappedProcessorGuardBase methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	"stop"
+!
+
+toView: aDataCarrier
+	self subclassResponsibility
+! !
+
+!TrappedProcessorGuardBase class methodsFor: 'instance creation'!
+
+new: anArray
+	^ self new
+		guardPath: anArray;
+		yourself
+! !
+
+TrappedProcessorGuardBase subclass: #TrappedProcessorGuardProc
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorGuardProc commentStamp!
+I am used to guard contents filling process of the brush I am installed on.
 
 I observe guard expression in the model,
 and when it changes to nil or false, I delete the brush contents;
@@ -356,30 +389,12 @@ on the other hand, when it changes to non-nil and non-false,
 I run the rest on the chain, which should be one-time
 that sets up the contents,!
 
-!TrappedProcessorGuard methodsFor: 'accessing'!
-
-guardPath: anArray
-	guardPath := anArray
-! !
-
-!TrappedProcessorGuard methodsFor: 'data transformation'!
-
-toModel: aDataCarrier
-	"stop"
-!
+!TrappedProcessorGuardProc methodsFor: 'data transformation'!
 
 toView: aDataCarrier
 	| frozen |
 	frozen := aDataCarrier copy.
 	frozen target trapGuard: guardPath contents: [ frozen copy proceed ]
-! !
-
-!TrappedProcessorGuard class methodsFor: 'instance creation'!
-
-new: anArray
-	^ self new
-		guardPath: anArray;
-		yourself
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorSignal

@@ -599,20 +599,20 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "guard:",
+selector: "guardProc:",
 category: 'factory',
 fn: function (aString){
 var self=this;
-function $TrappedProcessorGuard(){return smalltalk.TrappedProcessorGuard||(typeof TrappedProcessorGuard=="undefined"?nil:TrappedProcessorGuard)}
+function $TrappedProcessorGuardProc(){return smalltalk.TrappedProcessorGuardProc||(typeof TrappedProcessorGuardProc=="undefined"?nil:TrappedProcessorGuardProc)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st($TrappedProcessorGuard())._new_(aString);
+$1=_st($TrappedProcessorGuardProc())._new_(aString);
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"guard:",{aString:aString},smalltalk.TrappedProcessor.klass)})},
+}, function($ctx1) {$ctx1.fill(self,"guardProc:",{aString:aString},smalltalk.TrappedProcessor.klass)})},
 args: ["aString"],
-source: "guard: aString\x0a\x09^TrappedProcessorGuard new: aString",
+source: "guardProc: aString\x0a\x09^TrappedProcessorGuardProc new: aString",
 messageSends: ["new:"],
-referencedClasses: ["TrappedProcessorGuard"]
+referencedClasses: ["TrappedProcessorGuardProc"]
 }),
 smalltalk.TrappedProcessor.klass);
 
@@ -957,8 +957,8 @@ smalltalk.TrappedProcessorDescend);
 
 
 
-smalltalk.addClass('TrappedProcessorGuard', smalltalk.TrappedProcessor, ['guardPath'], 'Trapped-Frontend');
-smalltalk.TrappedProcessorGuard.comment="I am used to guard contants of the brush I am installed on.\x0a\x0aI observe guard expression in the model,\x0aand when it changes to nil or false, I delete the brush contents;\x0aon the other hand, when it changes to non-nil and non-false,\x0aI run the rest on the chain, which should be one-time\x0athat sets up the contents,";
+smalltalk.addClass('TrappedProcessorGuardBase', smalltalk.TrappedProcessor, ['guardPath'], 'Trapped-Frontend');
+smalltalk.TrappedProcessorGuardBase.comment="I serve as base class for brush-guarding processors.\x0a\x0aI cover instantiation and subclasses have to provide\x0aimplementation of toVIew: that react appropriately to guard releasing.";
 smalltalk.addMethod(
 smalltalk.method({
 selector: "guardPath:",
@@ -967,13 +967,13 @@ fn: function (anArray){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 self["@guardPath"]=anArray;
-return self}, function($ctx1) {$ctx1.fill(self,"guardPath:",{anArray:anArray},smalltalk.TrappedProcessorGuard)})},
+return self}, function($ctx1) {$ctx1.fill(self,"guardPath:",{anArray:anArray},smalltalk.TrappedProcessorGuardBase)})},
 args: ["anArray"],
 source: "guardPath: anArray\x0a\x09guardPath := anArray",
 messageSends: [],
 referencedClasses: []
 }),
-smalltalk.TrappedProcessorGuard);
+smalltalk.TrappedProcessorGuardBase);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -982,13 +982,13 @@ category: 'data transformation',
 fn: function (aDataCarrier){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorGuard)})},
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorGuardBase)})},
 args: ["aDataCarrier"],
 source: "toModel: aDataCarrier\x0a\x09\x22stop\x22",
 messageSends: [],
 referencedClasses: []
 }),
-smalltalk.TrappedProcessorGuard);
+smalltalk.TrappedProcessorGuardBase);
 
 smalltalk.addMethod(
 smalltalk.method({
@@ -996,21 +996,15 @@ selector: "toView:",
 category: 'data transformation',
 fn: function (aDataCarrier){
 var self=this;
-var frozen;
 return smalltalk.withContext(function($ctx1) { 
-frozen=_st(aDataCarrier)._copy();
-$ctx1.sendIdx["copy"]=1;
-_st(_st(frozen)._target())._trapGuard_contents_(self["@guardPath"],(function(){
-return smalltalk.withContext(function($ctx2) {
-return _st(_st(frozen)._copy())._proceed();
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen},smalltalk.TrappedProcessorGuard)})},
+self._subclassResponsibility();
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorGuardBase)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| frozen |\x0a\x09frozen := aDataCarrier copy.\x0a\x09frozen target trapGuard: guardPath contents: [ frozen copy proceed ]",
-messageSends: ["copy", "trapGuard:contents:", "target", "proceed"],
+source: "toView: aDataCarrier\x0a\x09self subclassResponsibility",
+messageSends: ["subclassResponsibility"],
 referencedClasses: []
 }),
-smalltalk.TrappedProcessorGuard);
+smalltalk.TrappedProcessorGuardBase);
 
 
 smalltalk.addMethod(
@@ -1026,13 +1020,39 @@ _st($2)._guardPath_(anArray);
 $3=_st($2)._yourself();
 $1=$3;
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"new:",{anArray:anArray},smalltalk.TrappedProcessorGuard.klass)})},
+}, function($ctx1) {$ctx1.fill(self,"new:",{anArray:anArray},smalltalk.TrappedProcessorGuardBase.klass)})},
 args: ["anArray"],
 source: "new: anArray\x0a\x09^ self new\x0a\x09\x09guardPath: anArray;\x0a\x09\x09yourself",
 messageSends: ["guardPath:", "new", "yourself"],
 referencedClasses: []
 }),
-smalltalk.TrappedProcessorGuard.klass);
+smalltalk.TrappedProcessorGuardBase.klass);
+
+
+smalltalk.addClass('TrappedProcessorGuardProc', smalltalk.TrappedProcessorGuardBase, [], 'Trapped-Frontend');
+smalltalk.TrappedProcessorGuardProc.comment="I am used to guard contents filling process of the brush I am installed on.\x0a\x0aI observe guard expression in the model,\x0aand when it changes to nil or false, I delete the brush contents;\x0aon the other hand, when it changes to non-nil and non-false,\x0aI run the rest on the chain, which should be one-time\x0athat sets up the contents,";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+var frozen;
+return smalltalk.withContext(function($ctx1) { 
+frozen=_st(aDataCarrier)._copy();
+$ctx1.sendIdx["copy"]=1;
+_st(_st(frozen)._target())._trapGuard_contents_(self["@guardPath"],(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(frozen)._copy())._proceed();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen},smalltalk.TrappedProcessorGuardProc)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09| frozen |\x0a\x09frozen := aDataCarrier copy.\x0a\x09frozen target trapGuard: guardPath contents: [ frozen copy proceed ]",
+messageSends: ["copy", "trapGuard:contents:", "target", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorGuardProc);
+
 
 
 smalltalk.addClass('TrappedProcessorSignal', smalltalk.TrappedProcessor, ['selector'], 'Trapped-Frontend');
