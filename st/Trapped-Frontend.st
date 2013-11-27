@@ -406,10 +406,10 @@ viewName: aString
 	viewName := aString
 ! !
 
-!TrappedProcessorWidget methodsFor: 'installation'!
+!TrappedProcessorWidget methodsFor: 'data transformation'!
 
-installToView: aDataCarrier toModel: anotherDataCarrier
-	anotherDataCarrier target do: [ aDataCarrier target with: (Smalltalk current at: viewName) new ]
+toView: aDataCarrier
+	aDataCarrier target with: (Smalltalk current at: viewName) new
 ! !
 
 !TrappedProcessorWidget class methodsFor: 'instance creation'!

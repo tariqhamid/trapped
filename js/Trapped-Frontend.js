@@ -1041,23 +1041,17 @@ smalltalk.addClass('TrappedProcessorWidget', smalltalk.TrappedProcessor, ['viewN
 smalltalk.TrappedProcessorWidget.comment="I insert a widget instance of the class specified when creating me.";
 smalltalk.addMethod(
 smalltalk.method({
-selector: "installToView:toModel:",
-category: 'installation',
-fn: function (aDataCarrier,anotherDataCarrier){
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
 var self=this;
 function $Smalltalk(){return smalltalk.Smalltalk||(typeof Smalltalk=="undefined"?nil:Smalltalk)}
 return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(anotherDataCarrier)._target();
-$ctx1.sendIdx["target"]=1;
-_st($1)._do_((function(){
-return smalltalk.withContext(function($ctx2) {
-return _st(_st(aDataCarrier)._target())._with_(_st(_st(_st($Smalltalk())._current())._at_(self["@viewName"]))._new());
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier},smalltalk.TrappedProcessorWidget)})},
-args: ["aDataCarrier", "anotherDataCarrier"],
-source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09anotherDataCarrier target do: [ aDataCarrier target with: (Smalltalk current at: viewName) new ]",
-messageSends: ["do:", "target", "with:", "new", "at:", "current"],
+_st(_st(aDataCarrier)._target())._with_(_st(_st(_st($Smalltalk())._current())._at_(self["@viewName"]))._new());
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorWidget)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier target with: (Smalltalk current at: viewName) new",
+messageSends: ["with:", "target", "new", "at:", "current"],
 referencedClasses: ["Smalltalk"]
 }),
 smalltalk.TrappedProcessorWidget);
