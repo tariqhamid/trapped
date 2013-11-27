@@ -419,7 +419,10 @@ var self=this;
 function $TrappedProcessor(){return smalltalk.TrappedProcessor||(typeof TrappedProcessor=="undefined"?nil:TrappedProcessor)}
 return smalltalk.withContext(function($ctx1) { 
 var $2,$3,$1;
-$1=self._new_(_st(anArray)._collect_((function(each){
+$1=self._new_(_st(_st(anArray)._ifEmpty_((function(){
+return smalltalk.withContext(function($ctx2) {
+return ["contents"];
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})})))._collect_((function(each){
 return smalltalk.withContext(function($ctx2) {
 $2=_st(each)._isString();
 if(smalltalk.assert($2)){
@@ -442,15 +445,15 @@ selector=_st(selector).__comma(":");
 selector;
 return _st(args)._add_(element);
 };
-}, function($ctx3) {$ctx3.fillBlock({element:element,index:index},$ctx2,4)})}));
+}, function($ctx3) {$ctx3.fillBlock({element:element,index:index},$ctx2,5)})}));
 return _st($TrappedProcessor())._perform_withArguments_(selector,args);
 };
-}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})})));
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,2)})})));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"newFromProcessorSpecs:",{anArray:anArray},smalltalk.TrappedDataChain.klass)})},
 args: ["anArray"],
-source: "newFromProcessorSpecs: anArray\x0a\x09^self new: (anArray collect: [ :each | each isString\x0a\x09\x09ifTrue: [ TrappedProcessor perform: each ]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09| selector args |\x0a\x09\x09\x09selector := ''.\x0a\x09\x09\x09args := #().\x0a\x09\x09\x09each withIndexDo: [ :element :index | index odd\x0a\x09\x09\x09\x09ifTrue: [ selector := selector, element ]\x0a\x09\x09\x09\x09ifFalse: [ selector := selector, ':'. args add: element ] ].\x0a\x09\x09\x09TrappedProcessor perform: selector withArguments: args ] ])",
-messageSends: ["new:", "collect:", "ifTrue:ifFalse:", "isString", "perform:", "withIndexDo:", "odd", ",", "add:", "perform:withArguments:"],
+source: "newFromProcessorSpecs: anArray\x0a\x09^self new: ((anArray ifEmpty: [ #(contents) ]) collect: [ :each | each isString\x0a\x09\x09ifTrue: [ TrappedProcessor perform: each ]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09| selector args |\x0a\x09\x09\x09selector := ''.\x0a\x09\x09\x09args := #().\x0a\x09\x09\x09each withIndexDo: [ :element :index | index odd\x0a\x09\x09\x09\x09ifTrue: [ selector := selector, element ]\x0a\x09\x09\x09\x09ifFalse: [ selector := selector, ':'. args add: element ] ].\x0a\x09\x09\x09TrappedProcessor perform: selector withArguments: args ] ])",
+messageSends: ["new:", "collect:", "ifEmpty:", "ifTrue:ifFalse:", "isString", "perform:", "withIndexDo:", "odd", ",", "add:", "perform:withArguments:"],
 referencedClasses: ["TrappedProcessor"]
 }),
 smalltalk.TrappedDataChain.klass);
@@ -1662,10 +1665,10 @@ category: '*Trapped-Frontend',
 fn: function (path){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-self._trap_processors_(path,["contents"]);
+self._trap_processors_(path,[]);
 return self}, function($ctx1) {$ctx1.fill(self,"trap:",{path:path},smalltalk.TagBrush)})},
 args: ["path"],
-source: "trap: path\x0a\x09self trap: path processors: #(contents)",
+source: "trap: path\x0a\x09self trap: path processors: #()",
 messageSends: ["trap:processors:"],
 referencedClasses: []
 }),

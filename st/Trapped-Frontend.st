@@ -118,7 +118,7 @@ new: anArray
 !
 
 newFromProcessorSpecs: anArray
-	^self new: (anArray collect: [ :each | each isString
+	^self new: ((anArray ifEmpty: [ #(contents) ]) collect: [ :each | each isString
 		ifTrue: [ TrappedProcessor perform: each ]
 		ifFalse: [
 			| selector args |
@@ -591,7 +591,7 @@ trapIter: path tag: aSymbol do: aBlock
 !TagBrush methodsFor: '*Trapped-Frontend'!
 
 trap: path
-	self trap: path processors: #(contents)
+	self trap: path processors: #()
 !
 
 trap: path processors: anArray
