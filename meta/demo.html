@@ -1,6 +1,6 @@
-<html>
+<html data-trap="App: (path)">
 <head>
-    <title data-trap="App (title)"></title>
+    <title data-trap="(title)"></title>
     <script src="../bower_components/amber/support/amber.js"></script>
     <script type='text/javascript' src='../bower_components/amber/support/requirejs/require.min.js'></script>
     <link rel="stylesheet" href="demo.css" />
@@ -29,10 +29,8 @@
             }
     );
 </script>
-<div>
-    <h2 data-trap="App (title)"></h2>
-    <div data-trap="App: (guard ((todos) (notNil))) (widget TemporaryWidget)"></div>
-    <p data-trap="App: (guard ((todos) (isNil))) (widget TemporaryWidget2)"></p>
-</div>
+    <h2 data-trap="(title)"></h2>
+    <div data-trap=": (guard ((todos) (notNil))) (widget TemporaryWidget)"></div>
+    <p data-trap=": (guard ((todos) (isNil))) (widget TemporaryWidget2)"></p>
 </body>
 </html>

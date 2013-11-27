@@ -214,6 +214,10 @@ inputValue
 	^TrappedProcessorInputValue new
 !
 
+path
+	^TrappedProcessorDescend new
+!
+
 signal: aString
 	^TrappedProcessorSignal new: aString
 !
@@ -326,6 +330,18 @@ installToView: aDataCarrier toModel: anotherDataCarrier
 		(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
         snap do: [ aDataCarrier copy value: data; proceed ] ].
 	aDataCarrier value: false
+! !
+
+TrappedProcessor subclass: #TrappedProcessorDescend
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorDescend commentStamp!
+I intepret data-trap in descendants of my brush.!
+
+!TrappedProcessorDescend methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	Trapped current injectToJQuery: aDataCarrier target asJQuery children
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorGuard
@@ -518,13 +534,17 @@ descend: anArray snapshotDo: aBlock
 !
 
 injectToJQuery: aJQuery
-	(aJQuery find: '[data-trap]') each: [ :index :elem |
-		| jq parsed |
+	aJQuery each: [ :index :elem |
+		| jq |
 		jq := elem asJQuery.
-		parsed := Trapped parse: (jq attr: 'data-trap').
-		parsed do: [ :rule |
-			(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ].
-		jq removeAttr: 'data-trap' ]
+		(jq is: '[data-trap]')
+			ifTrue: [
+				| parsed |
+				parsed := Trapped parse: (jq attr: 'data-trap').
+				jq removeAttr: 'data-trap'.
+				parsed do: [ :rule |
+					(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ]
+			ifFalse: [ self injectToJQuery: jq children ] ]
 !
 
 start: args

@@ -656,6 +656,25 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "path",
+category: 'factory',
+fn: function (){
+var self=this;
+function $TrappedProcessorDescend(){return smalltalk.TrappedProcessorDescend||(typeof TrappedProcessorDescend=="undefined"?nil:TrappedProcessorDescend)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorDescend())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"path",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "path\x0a\x09^TrappedProcessorDescend new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorDescend"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "signal:",
 category: 'factory',
 fn: function (aString){
@@ -914,6 +933,27 @@ messageSends: ["modifyTarget"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorBlackboard);
+
+
+
+smalltalk.addClass('TrappedProcessorDescend', smalltalk.TrappedProcessor, [], 'Trapped-Frontend');
+smalltalk.TrappedProcessorDescend.comment="I intepret data-trap in descendants of my brush.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
+return smalltalk.withContext(function($ctx1) { 
+_st(_st($Trapped())._current())._injectToJQuery_(_st(_st(_st(aDataCarrier)._target())._asJQuery())._children());
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorDescend)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09Trapped current injectToJQuery: aDataCarrier target asJQuery children",
+messageSends: ["injectToJQuery:", "current", "children", "asJQuery", "target"],
+referencedClasses: ["Trapped"]
+}),
+smalltalk.TrappedProcessorDescend);
 
 
 
@@ -1327,26 +1367,33 @@ var self=this;
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 function $HTMLCanvas(){return smalltalk.HTMLCanvas||(typeof HTMLCanvas=="undefined"?nil:HTMLCanvas)}
 return smalltalk.withContext(function($ctx1) { 
-_st(_st(aJQuery)._find_("[data-trap]"))._each_((function(index,elem){
-var jq,parsed;
+var $1;
+_st(aJQuery)._each_((function(index,elem){
+var jq;
 return smalltalk.withContext(function($ctx2) {
 jq=_st(elem)._asJQuery();
 jq;
+$1=_st(jq)._is_("[data-trap]");
+if(smalltalk.assert($1)){
+var parsed;
 parsed=_st($Trapped())._parse_(_st(jq)._attr_("data-trap"));
 parsed;
-_st(parsed)._do_((function(rule){
+_st(jq)._removeAttr_("data-trap");
+return _st(parsed)._do_((function(rule){
 return smalltalk.withContext(function($ctx3) {
 return _st(_st(_st($HTMLCanvas())._onJQuery_(jq))._root())._trap_processors_(_st(rule)._first(),_st(rule)._at_ifAbsent_((2),(function(){
 return smalltalk.withContext(function($ctx4) {
 return [];
-}, function($ctx4) {$ctx4.fillBlock({},$ctx3,3)})})));
-}, function($ctx3) {$ctx3.fillBlock({rule:rule},$ctx2,2)})}));
-return _st(jq)._removeAttr_("data-trap");
-}, function($ctx2) {$ctx2.fillBlock({index:index,elem:elem,jq:jq,parsed:parsed},$ctx1,1)})}));
+}, function($ctx4) {$ctx4.fillBlock({},$ctx3,4)})})));
+}, function($ctx3) {$ctx3.fillBlock({rule:rule},$ctx2,3)})}));
+} else {
+return self._injectToJQuery_(_st(jq)._children());
+};
+}, function($ctx2) {$ctx2.fillBlock({index:index,elem:elem,jq:jq},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"injectToJQuery:",{aJQuery:aJQuery},smalltalk.Trapped)})},
 args: ["aJQuery"],
-source: "injectToJQuery: aJQuery\x0a\x09(aJQuery find: '[data-trap]') each: [ :index :elem |\x0a\x09\x09| jq parsed |\x0a\x09\x09jq := elem asJQuery.\x0a\x09\x09parsed := Trapped parse: (jq attr: 'data-trap').\x0a\x09\x09parsed do: [ :rule |\x0a\x09\x09\x09(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ].\x0a\x09\x09jq removeAttr: 'data-trap' ]",
-messageSends: ["each:", "find:", "asJQuery", "parse:", "attr:", "do:", "trap:processors:", "root", "onJQuery:", "first", "at:ifAbsent:", "removeAttr:"],
+source: "injectToJQuery: aJQuery\x0a\x09aJQuery each: [ :index :elem |\x0a\x09\x09| jq |\x0a\x09\x09jq := elem asJQuery.\x0a\x09\x09(jq is: '[data-trap]')\x0a\x09\x09\x09ifTrue: [\x0a\x09\x09\x09\x09| parsed |\x0a\x09\x09\x09\x09parsed := Trapped parse: (jq attr: 'data-trap').\x0a\x09\x09\x09\x09jq removeAttr: 'data-trap'.\x0a\x09\x09\x09\x09parsed do: [ :rule |\x0a\x09\x09\x09\x09\x09(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ]\x0a\x09\x09\x09ifFalse: [ self injectToJQuery: jq children ] ]",
+messageSends: ["each:", "asJQuery", "ifTrue:ifFalse:", "is:", "parse:", "attr:", "removeAttr:", "do:", "trap:processors:", "root", "onJQuery:", "first", "at:ifAbsent:", "injectToJQuery:", "children"],
 referencedClasses: ["Trapped", "HTMLCanvas"]
 }),
 smalltalk.Trapped);
