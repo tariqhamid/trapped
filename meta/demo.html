@@ -2,11 +2,13 @@
 <head>
     <title data-trap="#title"></title>
     <style>
-        [data-trap] { display: none }
+        [data-trap] {
+            display: none
+        }
     </style>
     <script src="../bower_components/amber/support/amber.js"></script>
     <script type='text/javascript' src='../bower_components/amber/support/requirejs/require.min.js'></script>
-    <link rel="stylesheet" href="demo.css" />
+    <link rel="stylesheet" href="demo.css"/>
 </head>
 <body>
 <script type="text/javascript">
@@ -24,7 +26,7 @@
                 smalltalk.defaultAmdNamespace = 'gh_herby_trapped';
                 smalltalk.initialize();
 
-                $(function() {
+                $(function () {
                     smalltalk.Browser._openOn_(smalltalk.App);
                     AppEntity = smalltalk.App._new();
                     smalltalk.Trapped._start_([AppEntity]);
@@ -33,13 +35,14 @@
     );
 </script>
 <h2 data-trap="#title"></h2>
+
 <div data-trap=": (guardContents (#todos #notNil))">
-    <span data-trap="#remaining" ></span> of <span data-trap="#todos #size"></span> remaning
+    <span data-trap="#remaining"></span> of <span data-trap="#todos #size"></span> remaning
     [ <a href="" data-trap=": (signal archive) whenClicked">archive</a> ]
     <ul data-trap="#todos: (widget TodoItemsWidget)"></ul>
     <form data-trap=": (signal addTodo) whenSubmitted">
-        <input type="text" data-trap="#todoText: inputValue" size="30" placeholder="add new todo here" />
-        <input type="submit" class="btn-primary" value="add" />
+        <input type="text" data-trap="#todoText: inputValue" size="30" placeholder="add new todo here"/>
+        <input type="submit" class="btn-primary" value="add"/>
     </form>
 </div>
 <p data-trap=": (guardContents (#todos #isNil))">Loading ...</p>
