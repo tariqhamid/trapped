@@ -415,11 +415,7 @@ trapDescend: aBlock
 !HTMLCanvas methodsFor: '*Trapped-Frontend'!
 
 trapIter: path tag: aSymbol do: aBlock
-	| start end |
-    self with: [ :html | start := html script. end := html script ].
-    start trap: path read: [ :model |
-    	Trapped loop: model between: start and: end tag: aSymbol do: aBlock.
-    ]
+    self with: [ :html | html noscript trapIter: path tag: aSymbol after: aBlock ]
 ! !
 
 !TagBrush methodsFor: '*Trapped-Frontend'!
@@ -455,5 +451,13 @@ trapGuard: anArray contents: aBlock
             	shown
 					ifTrue: [ snap do: [ self contents: aBlock ]. self asJQuery show ]
 					ifFalse: [ self asJQuery hide; empty ] ] ] ]
+!
+
+trapIter: path tag: aSymbol after: aBlock
+	| end |
+	end := TagBrush fromJQuery: ('<noscript />' asJQuery insertAfter: self asJQuery) canvas: canvas.
+    self trap: path read: [ :model |
+    	Trapped loop: model between: self and: end tag: aSymbol do: aBlock.
+    ]
 ! !
 
