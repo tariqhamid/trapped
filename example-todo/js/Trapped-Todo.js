@@ -1,8 +1,8 @@
-define("gh_herby_trapped/Trapped-Demo", ["amber_vm/smalltalk", "amber_vm/nil", "amber_vm/_st", "gh_herby_trapped/Trapped-Backend", "amber_core/Kernel-Objects", "amber_core/Canvas", "gh_herby_trapped/Trapped-Frontend"], function(smalltalk,nil,_st){
-smalltalk.addPackage('Trapped-Demo');
-smalltalk.packages["Trapped-Demo"].transport = {"type":"amd","amdNamespace":"gh_herby_trapped"};
+define("gh_herby_trapped_todo/Trapped-Todo", ["amber_vm/smalltalk", "amber_vm/nil", "amber_vm/_st", "gh_herby_trapped/Trapped-Backend", "amber_core/Kernel-Objects", "amber_core/Canvas", "gh_herby_trapped/Trapped-Frontend"], function(smalltalk,nil,_st){
+smalltalk.addPackage('Trapped-Todo');
+smalltalk.packages["Trapped-Todo"].transport = {"type":"amd","amdNamespace":"gh_herby_trapped_todo"};
 
-smalltalk.addClass('App', smalltalk.ListKeyedIsolatedEntity, [], 'Trapped-Demo');
+smalltalk.addClass('App', smalltalk.ListKeyedIsolatedEntity, [], 'Trapped-Todo');
 smalltalk.App.comment="// Code from AngularJS Todo example, http://angularjs.org/#todo-js\x0afunction TodoCtrl($scope) {\x0a  $scope.todos = [\x0a    {text:'learn angular', done:true},\x0a    {text:'build an angular app', done:false}];\x0a \x0a  $scope.addTodo = function() {\x0a    $scope.todos.push({text:$scope.todoText, done:false});\x0a    $scope.todoText = '';\x0a  };\x0a \x0a  $scope.remaining = function() {\x0a    var count = 0;\x0a    angular.forEach($scope.todos, function(todo) {\x0a      count += todo.done ? 0 : 1;\x0a    });\x0a    return count;\x0a  };\x0a \x0a  $scope.archive = function() {\x0a    var oldTodos = $scope.todos;\x0a    $scope.todos = [];\x0a    angular.forEach(oldTodos, function(todo) {\x0a      if (!todo.done) $scope.todos.push(todo);\x0a    });\x0a  };\x0a}";
 smalltalk.addMethod(
 smalltalk.method({
@@ -48,7 +48,7 @@ smalltalk.App);
 
 
 
-smalltalk.addClass('AppModel', smalltalk.Object, ['title', 'todos', 'todoText'], 'Trapped-Demo');
+smalltalk.addClass('AppModel', smalltalk.Object, ['title', 'todos', 'todoText'], 'Trapped-Todo');
 smalltalk.AppModel.comment="// Code from AngularJS Todo example, http://angularjs.org/#todo-js\x0afunction TodoCtrl($scope) {\x0a  $scope.todos = [\x0a    {text:'learn angular', done:true},\x0a    {text:'build an angular app', done:false}];\x0a \x0a  $scope.addTodo = function() {\x0a    $scope.todos.push({text:$scope.todoText, done:false});\x0a    $scope.todoText = '';\x0a  };\x0a \x0a  $scope.remaining = function() {\x0a    var count = 0;\x0a    angular.forEach($scope.todos, function(todo) {\x0a      count += todo.done ? 0 : 1;\x0a    });\x0a    return count;\x0a  };\x0a \x0a  $scope.archive = function() {\x0a    var oldTodos = $scope.todos;\x0a    $scope.todos = [];\x0a    angular.forEach(oldTodos, function(todo) {\x0a      if (!todo.done) $scope.todos.push(todo);\x0a    });\x0a  };\x0a}";
 smalltalk.addMethod(
 smalltalk.method({
@@ -231,7 +231,7 @@ smalltalk.AppModel);
 
 
 
-smalltalk.addClass('TodoItemWidget', smalltalk.Widget, [], 'Trapped-Demo');
+smalltalk.addClass('TodoItemWidget', smalltalk.Widget, [], 'Trapped-Todo');
 smalltalk.TodoItemWidget.comment="<!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->\x0a  <body>\x0a    <h2>Todo</h2>\x0a    <div ng-controller=\x22TodoCtrl\x22>\x0a      <span>{{remaining()}} of {{todos.length}} remaining</span>\x0a      [ <a href=\x22\x22 ng-click=\x22archive()\x22>archive</a> ]\x0a      <ul class=\x22unstyled\x22>\x0a        <li ng-repeat=\x22todo in todos\x22>\x0a          <input type=\x22checkbox\x22 ng-model=\x22todo.done\x22>\x0a          <span class=\x22done-{{todo.done}}\x22>{{todo.text}}</span>\x0a        </li>\x0a      </ul>\x0a      <form ng-submit=\x22addTodo()\x22>\x0a        <input type=\x22text\x22 ng-model=\x22todoText\x22  size=\x2230\x22\x0a               placeholder=\x22add new todo here\x22>\x0a        <input class=\x22btn-primary\x22 type=\x22submit\x22 value=\x22add\x22>\x0a      </form>\x0a    </div>\x0a  </body>";
 smalltalk.addMethod(
 smalltalk.method({
@@ -265,10 +265,10 @@ smalltalk.TodoItemWidget);
 smalltalk.addMethod(
 smalltalk.method({
 selector: "classDoneXxx",
-category: '*Trapped-Demo',
+category: '*Trapped-Todo',
 fn: function (){
 var self=this;
-return smalltalk.withContext(function($ctx1) { 
+return smalltalk.withContext(function($ctx1) {
 var $1;
 $1=self._dataToView_((function(carrier){
 return smalltalk.withContext(function($ctx2) {

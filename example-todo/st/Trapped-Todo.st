@@ -1,7 +1,7 @@
-Smalltalk current createPackage: 'Trapped-Demo'!
+Smalltalk current createPackage: 'Trapped-Todo'!
 ListKeyedIsolatedEntity subclass: #App
 	instanceVariableNames: ''
-	package: 'Trapped-Demo'!
+	package: 'Trapped-Todo'!
 !App commentStamp!
 // Code from AngularJS Todo example, http://angularjs.org/#todo-js
 function TodoCtrl($scope) {
@@ -46,7 +46,7 @@ initialize
 
 Object subclass: #AppModel
 	instanceVariableNames: 'title todos todoText'
-	package: 'Trapped-Demo'!
+	package: 'Trapped-Todo'!
 !AppModel commentStamp!
 // Code from AngularJS Todo example, http://angularjs.org/#todo-js
 function TodoCtrl($scope) {
@@ -123,7 +123,7 @@ archive
 
 Widget subclass: #TodoItemWidget
 	instanceVariableNames: ''
-	package: 'Trapped-Demo'!
+	package: 'Trapped-Todo'!
 !TodoItemWidget commentStamp!
 <!!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->
   <body>
@@ -155,7 +155,7 @@ renderOn: html
 			trap: #('text') ]
 ! !
 
-!TrappedProcessor class methodsFor: '*Trapped-Demo'!
+!TrappedProcessor class methodsFor: '*Trapped-Todo'!
 
 classDoneXxx
 	^self dataToView: [ :carrier | carrier target class: 'done-', carrier value ]
