@@ -98,9 +98,9 @@ forSnapshot: aSnapshot andBrush: aTagBrush
 !TrappedProcessingChain class methodsFor: 'instance creation'!
 
 new: anArray
-	(anArray detect: [ :each | each isExpectingModelData ] ifNone: [ nil ])
-		ifNil: [ anArray add: self dataTerminator ]
-		ifNotNil: [ anArray addFirst: self blackboardReaderWriter ].
+	(anArray anySatisfy: [ :each | each isExpectingModelData ])
+		ifFalse: [ anArray add: self dataTerminator ]
+		ifTrue: [ anArray addFirst: self blackboardReaderWriter ].
 	^self new
 		processors: anArray;
 		yourself

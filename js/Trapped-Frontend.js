@@ -326,17 +326,14 @@ fn: function (anArray){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1,$3,$4,$2;
-$1=_st(anArray)._detect_ifNone_((function(each){
+$1=_st(anArray)._anySatisfy_((function(each){
 return smalltalk.withContext(function($ctx2) {
 return _st(each)._isExpectingModelData();
-}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})}),(function(){
-return smalltalk.withContext(function($ctx2) {
-return nil;
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)})}));
-if(($receiver = $1) == nil || $receiver == null){
-_st(anArray)._add_(self._dataTerminator());
-} else {
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})}));
+if(smalltalk.assert($1)){
 _st(anArray)._addFirst_(self._blackboardReaderWriter());
+} else {
+_st(anArray)._add_(self._dataTerminator());
 };
 $3=self._new();
 _st($3)._processors_(anArray);
@@ -345,8 +342,8 @@ $2=$4;
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"new:",{anArray:anArray},smalltalk.TrappedProcessingChain.klass)})},
 args: ["anArray"],
-source: "new: anArray\x0a\x09(anArray detect: [ :each | each isExpectingModelData ] ifNone: [ nil ])\x0a\x09\x09ifNil: [ anArray add: self dataTerminator ]\x0a\x09\x09ifNotNil: [ anArray addFirst: self blackboardReaderWriter ].\x0a\x09^self new\x0a\x09\x09processors: anArray;\x0a\x09\x09yourself",
-messageSends: ["ifNil:ifNotNil:", "detect:ifNone:", "isExpectingModelData", "add:", "dataTerminator", "addFirst:", "blackboardReaderWriter", "processors:", "new", "yourself"],
+source: "new: anArray\x0a\x09(anArray anySatisfy: [ :each | each isExpectingModelData ])\x0a\x09\x09ifFalse: [ anArray add: self dataTerminator ]\x0a\x09\x09ifTrue: [ anArray addFirst: self blackboardReaderWriter ].\x0a\x09^self new\x0a\x09\x09processors: anArray;\x0a\x09\x09yourself",
+messageSends: ["ifFalse:ifTrue:", "anySatisfy:", "isExpectingModelData", "add:", "dataTerminator", "addFirst:", "blackboardReaderWriter", "processors:", "new", "yourself"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessingChain.klass);
