@@ -1,34 +1,4 @@
 Smalltalk current createPackage: 'Trapped-Processors'!
-TrappedProcessor subclass: #TrappedDataExpectingProcessor
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedDataExpectingProcessor commentStamp!
-I answer true to isExpectingModelData and serve as a base class
-for processor that present / change model data.
-
-When at least one of my instances is present in the chain,
-automatic databinding processor is added at the beginning
-(the data-binding scenario); otherwise, the chain
-is run immediately with true as data (run-once scenario).!
-
-!TrappedDataExpectingProcessor methodsFor: 'testing'!
-
-isExpectingModelData
-	^true
-! !
-
-TrappedDataExpectingProcessor subclass: #TrappedProcessorContents
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedProcessorContents commentStamp!
-I put data into target via contents: in toView:!
-
-!TrappedProcessorContents methodsFor: 'data transformation'!
-
-toView: aDataCarrier
-	aDataCarrier toTargetContents
-! !
-
 TrappedDataExpectingProcessor subclass: #TrappedProcessorDataAdhoc
 	instanceVariableNames: 'toViewBlock'
 	package: 'Trapped-Processors'!
@@ -53,74 +23,6 @@ newToView: aBlock
 	^self new
 		toViewBlock: aBlock;
 		yourself
-! !
-
-TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedProcessorInputChecked commentStamp!
-I bind to checkbox checked attribute.!
-
-!TrappedProcessorInputChecked methodsFor: 'data transformation'!
-
-toView: aDataCarrier
-	aDataCarrier toTargetAttr: 'checked'
-! !
-
-!TrappedProcessorInputChecked methodsFor: 'installation'!
-
-installToView: aDataCarrier toModel: anotherDataCarrier
-	| brush |
-	brush := aDataCarrier target.
-	brush onChange: [ anotherDataCarrier copy value: (brush asJQuery attr: 'checked') notNil; proceed ]
-! !
-
-TrappedDataExpectingProcessor subclass: #TrappedProcessorInputValue
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedProcessorInputValue commentStamp!
-I bind to input value.!
-
-!TrappedProcessorInputValue methodsFor: 'data transformation'!
-
-toView: aDataCarrier
-	aDataCarrier toTargetValue
-! !
-
-!TrappedProcessorInputValue methodsFor: 'installation'!
-
-installToView: aDataCarrier toModel: anotherDataCarrier
-	| brush |
-	brush := aDataCarrier target.
-	brush onChange: [ anotherDataCarrier copy value: brush asJQuery val; proceed ]
-! !
-
-TrappedProcessor subclass: #TrappedProcessorBlackboard
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedProcessorBlackboard commentStamp!
-I am used internally to fetch data from blackboard
-or write it back.
-
-I am added to the beginning of the chain
-when the chain contains at least one element
-that isExpectingModelData (see TrappedDataExpectingProcessor).!
-
-!TrappedProcessorBlackboard methodsFor: 'data transformation'!
-
-toModel: aDataCarrier
-	aDataCarrier modifyTarget
-! !
-
-!TrappedProcessorBlackboard methodsFor: 'installation'!
-
-installToView: aDataCarrier toModel: anotherDataCarrier
-	| snap |
-	snap := anotherDataCarrier target.
-	snap watch: [ :data |
-		(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
-        snap do: [ aDataCarrier copy value: data; proceed ] ].
-	aDataCarrier value: false
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorDescend
@@ -209,6 +111,46 @@ toView: aDataCarrier
 	| frozen |
 	frozen := aDataCarrier copy.
 	frozen target trapGuard: guardPath contents: [ frozen copy proceed ]
+! !
+
+TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorInputChecked commentStamp!
+I bind to checkbox checked attribute.!
+
+!TrappedProcessorInputChecked methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	aDataCarrier toTargetAttr: 'checked'
+! !
+
+!TrappedProcessorInputChecked methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	| brush |
+	brush := aDataCarrier target.
+	brush onChange: [ anotherDataCarrier copy value: (brush asJQuery attr: 'checked') notNil; proceed ]
+! !
+
+TrappedDataExpectingProcessor subclass: #TrappedProcessorInputValue
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorInputValue commentStamp!
+I bind to input value.!
+
+!TrappedProcessorInputValue methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	aDataCarrier toTargetValue
+! !
+
+!TrappedProcessorInputValue methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	| brush |
+	brush := aDataCarrier target.
+	brush onChange: [ anotherDataCarrier copy value: brush asJQuery val; proceed ]
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorLoopBase
@@ -313,21 +255,6 @@ new: aString
 		yourself
 ! !
 
-TrappedProcessor subclass: #TrappedProcessorTerminator
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedProcessorTerminator commentStamp!
-I do not proceed in toView:.
-
-I am added automatically to end of chain when it does not contain
-any element that isExpectingModelData (see TrappedDataExpectingProcessor).!
-
-!TrappedProcessorTerminator methodsFor: 'data transformation'!
-
-toView: aDataCarrier
-	"stop"
-! !
-
 TrappedProcessor subclass: #TrappedProcessorWhenClicked
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
@@ -398,5 +325,55 @@ toTargetContents
 
 toTargetValue
 	self target asJQuery val: (self value ifNotNil: [ :o | o value ] ifNil: [[]])
+! !
+
+!TrappedProcessor class methodsFor: '*Trapped-Processors'!
+
+dataToView: aBlock
+	^TrappedProcessorDataAdhoc newToView: aBlock
+!
+
+guardContents: anArray
+	^TrappedProcessorGuardContents new: anArray
+!
+
+guardProc: anArray
+	^TrappedProcessorGuardProc new: anArray
+!
+
+inputChecked
+	^TrappedProcessorInputChecked new
+!
+
+inputValue
+	^TrappedProcessorInputValue new
+!
+
+loopContents
+	^TrappedProcessorLoopContents new
+!
+
+loopProc
+	^TrappedProcessorLoopProc new
+!
+
+path
+	^TrappedProcessorDescend new
+!
+
+signal: aString
+	^TrappedProcessorSignal new: aString
+!
+
+whenClicked
+	^TrappedProcessorWhenClicked new
+!
+
+whenSubmitted
+	^TrappedProcessorWhenSubmitted new
+!
+
+widget: aString
+	^TrappedProcessorWidget new: aString
 ! !
 

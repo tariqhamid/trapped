@@ -178,54 +178,79 @@ isExpectingModelData
 
 contents
 	^TrappedProcessorContents new
-!
+! !
 
-dataToView: aBlock
-	^TrappedProcessorDataAdhoc newToView: aBlock
-!
+TrappedProcessor subclass: #TrappedDataExpectingProcessor
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedDataExpectingProcessor commentStamp!
+I answer true to isExpectingModelData and serve as a base class
+for processor that present / change model data.
 
-guardContents: anArray
-	^TrappedProcessorGuardContents new: anArray
-!
+When at least one of my instances is present in the chain,
+automatic databinding processor is added at the beginning
+(the data-binding scenario); otherwise, the chain
+is run immediately with true as data (run-once scenario).!
 
-guardProc: anArray
-	^TrappedProcessorGuardProc new: anArray
-!
+!TrappedDataExpectingProcessor methodsFor: 'testing'!
 
-inputChecked
-	^TrappedProcessorInputChecked new
-!
+isExpectingModelData
+	^true
+! !
 
-inputValue
-	^TrappedProcessorInputValue new
-!
+TrappedDataExpectingProcessor subclass: #TrappedProcessorContents
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorContents commentStamp!
+I put data into target via contents: in toView:!
 
-loopContents
-	^TrappedProcessorLoopContents new
-!
+!TrappedProcessorContents methodsFor: 'data transformation'!
 
-loopProc
-	^TrappedProcessorLoopProc new
-!
+toView: aDataCarrier
+	aDataCarrier toTargetContents
+! !
 
-path
-	^TrappedProcessorDescend new
-!
+TrappedProcessor subclass: #TrappedProcessorBlackboard
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorBlackboard commentStamp!
+I am used internally to fetch data from blackboard
+or write it back.
 
-signal: aString
-	^TrappedProcessorSignal new: aString
-!
+I am added to the beginning of the chain
+when the chain contains at least one element
+that isExpectingModelData (see TrappedDataExpectingProcessor).!
 
-whenClicked
-	^TrappedProcessorWhenClicked new
-!
+!TrappedProcessorBlackboard methodsFor: 'data transformation'!
 
-whenSubmitted
-	^TrappedProcessorWhenSubmitted new
-!
+toModel: aDataCarrier
+	aDataCarrier modifyTarget
+! !
 
-widget: aString
-	^TrappedProcessorWidget new: aString
+!TrappedProcessorBlackboard methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	| snap |
+	snap := anotherDataCarrier target.
+	snap watch: [ :data |
+		(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
+        snap do: [ aDataCarrier copy value: data; proceed ] ].
+	aDataCarrier value: false
+! !
+
+TrappedProcessor subclass: #TrappedProcessorTerminator
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorTerminator commentStamp!
+I do not proceed in toView:.
+
+I am added automatically to end of chain when it does not contain
+any element that isExpectingModelData (see TrappedDataExpectingProcessor).!
+
+!TrappedProcessorTerminator methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	"stop"
 ! !
 
 Object subclass: #TrappedSingleton
