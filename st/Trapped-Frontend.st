@@ -200,6 +200,10 @@ inputValue
 	^TrappedProcessorInputValue new
 !
 
+loopContents
+	^TrappedProcessorLoopContents new
+!
+
 loopProc
 	^TrappedProcessorLoopProc new
 !

@@ -579,6 +579,25 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "loopContents",
+category: 'factory',
+fn: function (){
+var self=this;
+function $TrappedProcessorLoopContents(){return smalltalk.TrappedProcessorLoopContents||(typeof TrappedProcessorLoopContents=="undefined"?nil:TrappedProcessorLoopContents)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorLoopContents())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"loopContents",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "loopContents\x0a\x09^TrappedProcessorLoopContents new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorLoopContents"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "loopProc",
 category: 'factory',
 fn: function (){

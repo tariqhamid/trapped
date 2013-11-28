@@ -40,7 +40,12 @@
 <div data-trap=": (guardContents (#todos #notNil))">
     <span data-trap="#remaining"></span> of <span data-trap="#todos #size"></span> remaning
     [ <a href="" data-trap=": (signal archive) whenClicked">archive</a> ]
-    <ul><noscript data-trap="#todos: loopProc (widget TodoItemWidget)"></noscript></ul>
+    <ul><ins data-trap="#todos: loopContents">
+        <li>
+            <input type="checkbox" data-trap="done: inputChecked" />
+            <span data-trap="done: classDoneXxx. text" ></span>
+        </li>
+    </ins></ul>
     <form data-trap=": (signal addTodo) whenSubmitted">
         <input type="text" data-trap="#todoText: inputValue" size="30" placeholder="add new todo here"/>
         <input type="submit" class="btn-primary" value="add"/>

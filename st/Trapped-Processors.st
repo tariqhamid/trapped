@@ -230,6 +230,34 @@ toView: aDataCarrier
 	self subclassResponsibility
 ! !
 
+TrappedProcessorLoopBase subclass: #TrappedProcessorLoopContents
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorLoopContents commentStamp!
+I am used to loop over data and repeat the contents
+of the brush I am installed on.
+
+I save the brush contents, then I observe the data in the model,
+and when it changes, I loop over it
+and restore the contents from remembered state
+and interpret all contained data-trap attributes inside
+for each element, putting the result _after_ my brush.
+
+My brush itself should be as least visible as possible,
+as it only serve as a position flag (use for example
+noscript, ins or del).!
+
+!TrappedProcessorLoopContents methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	| frozen contents |
+	frozen := aDataCarrier copy.
+	contents := frozen target asJQuery contents detach.
+	frozen target trapIter: #() after: [ :html |
+		html root asJQuery append: contents clone.
+		Trapped current injectToJQuery: html root asJQuery ]
+! !
+
 TrappedProcessorLoopBase subclass: #TrappedProcessorLoopProc
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!

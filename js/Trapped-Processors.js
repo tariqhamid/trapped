@@ -437,6 +437,44 @@ smalltalk.TrappedProcessorLoopBase);
 
 
 
+smalltalk.addClass('TrappedProcessorLoopContents', smalltalk.TrappedProcessorLoopBase, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorLoopContents.comment="I am used to loop over data and repeat the contents\x0aof the brush I am installed on.\x0a\x0aI save the brush contents, then I observe the data in the model,\x0aand when it changes, I loop over it\x0aand restore the contents from remembered state\x0aand interpret all contained data-trap attributes inside\x0afor each element, putting the result _after_ my brush.\x0a\x0aMy brush itself should be as least visible as possible,\x0aas it only serve as a position flag (use for example\x0anoscript, ins or del).";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+var frozen,contents;
+function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
+return smalltalk.withContext(function($ctx1) { 
+var $3,$2,$1,$5,$4;
+frozen=_st(aDataCarrier)._copy();
+$3=_st(frozen)._target();
+$ctx1.sendIdx["target"]=1;
+$2=_st($3)._asJQuery();
+$ctx1.sendIdx["asJQuery"]=1;
+$1=_st($2)._contents();
+contents=_st($1)._detach();
+_st(_st(frozen)._target())._trapIter_after_([],(function(html){
+return smalltalk.withContext(function($ctx2) {
+$5=_st(html)._root();
+$ctx2.sendIdx["root"]=1;
+$4=_st($5)._asJQuery();
+$ctx2.sendIdx["asJQuery"]=2;
+_st($4)._append_(_st(contents)._clone());
+return _st(_st($Trapped())._current())._injectToJQuery_(_st(_st(html)._root())._asJQuery());
+}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents},smalltalk.TrappedProcessorLoopContents)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen target asJQuery contents detach.\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09html root asJQuery append: contents clone.\x0a\x09\x09Trapped current injectToJQuery: html root asJQuery ]",
+messageSends: ["copy", "detach", "contents", "asJQuery", "target", "trapIter:after:", "append:", "root", "clone", "injectToJQuery:", "current"],
+referencedClasses: ["Trapped"]
+}),
+smalltalk.TrappedProcessorLoopContents);
+
+
+
 smalltalk.addClass('TrappedProcessorLoopProc', smalltalk.TrappedProcessorLoopBase, [], 'Trapped-Processors');
 smalltalk.TrappedProcessorLoopProc.comment="I am used to loop over data and repeat the contents filling process\x0aof the brush I am installed on.\x0a\x0aI observe the data in the model,\x0aand when it changes, I loop over it\x0aand run the rest of the processing chain\x0afor each element, putting the result _after_ my brush.\x0a\x0aMy brush itself should be as least visible as possible,\x0aas it only serve as a position flag (use for example\x0anoscript, ins or del).";
 smalltalk.addMethod(
