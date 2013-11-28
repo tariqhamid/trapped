@@ -231,8 +231,8 @@ smalltalk.AppModel);
 
 
 
-smalltalk.addClass('TemporaryWidget', smalltalk.Widget, [], 'Trapped-Demo');
-smalltalk.TemporaryWidget.comment="<!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->\x0a  <body>\x0a    <h2>Todo</h2>\x0a    <div ng-controller=\x22TodoCtrl\x22>\x0a      <span>{{remaining()}} of {{todos.length}} remaining</span>\x0a      [ <a href=\x22\x22 ng-click=\x22archive()\x22>archive</a> ]\x0a      <ul class=\x22unstyled\x22>\x0a        <li ng-repeat=\x22todo in todos\x22>\x0a          <input type=\x22checkbox\x22 ng-model=\x22todo.done\x22>\x0a          <span class=\x22done-{{todo.done}}\x22>{{todo.text}}</span>\x0a        </li>\x0a      </ul>\x0a      <form ng-submit=\x22addTodo()\x22>\x0a        <input type=\x22text\x22 ng-model=\x22todoText\x22  size=\x2230\x22\x0a               placeholder=\x22add new todo here\x22>\x0a        <input class=\x22btn-primary\x22 type=\x22submit\x22 value=\x22add\x22>\x0a      </form>\x0a    </div>\x0a  </body>";
+smalltalk.addClass('TodoItemsWidget', smalltalk.Widget, [], 'Trapped-Demo');
+smalltalk.TodoItemsWidget.comment="<!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->\x0a  <body>\x0a    <h2>Todo</h2>\x0a    <div ng-controller=\x22TodoCtrl\x22>\x0a      <span>{{remaining()}} of {{todos.length}} remaining</span>\x0a      [ <a href=\x22\x22 ng-click=\x22archive()\x22>archive</a> ]\x0a      <ul class=\x22unstyled\x22>\x0a        <li ng-repeat=\x22todo in todos\x22>\x0a          <input type=\x22checkbox\x22 ng-model=\x22todo.done\x22>\x0a          <span class=\x22done-{{todo.done}}\x22>{{todo.text}}</span>\x0a        </li>\x0a      </ul>\x0a      <form ng-submit=\x22addTodo()\x22>\x0a        <input type=\x22text\x22 ng-model=\x22todoText\x22  size=\x2230\x22\x0a               placeholder=\x22add new todo here\x22>\x0a        <input class=\x22btn-primary\x22 type=\x22submit\x22 value=\x22add\x22>\x0a      </form>\x0a    </div>\x0a  </body>";
 smalltalk.addMethod(
 smalltalk.method({
 selector: "renderOn:",
@@ -240,97 +240,31 @@ category: 'rendering',
 fn: function (html){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$12,$13,$14,$15,$11;
-$1=_st(html)._span();
-$ctx1.sendIdx["span"]=1;
-_st($1)._trap_([["remaining"]]);
-$ctx1.sendIdx["trap:"]=1;
-_st(html)._with_(" of ");
-$ctx1.sendIdx["with:"]=1;
-$2=_st(html)._span();
-$ctx1.sendIdx["span"]=2;
-_st($2)._trap_([["todos"], ["size"]]);
-$ctx1.sendIdx["trap:"]=2;
-_st(html)._with_(" remaining [ ");
-$ctx1.sendIdx["with:"]=2;
-$3=_st(html)._a();
-_st($3)._href_("");
-_st($3)._trap_processors_([],[["signal", "archive"], "whenClicked"]);
-$ctx1.sendIdx["trap:processors:"]=1;
-$4=_st($3)._with_("archive");
-$ctx1.sendIdx["with:"]=3;
-_st(html)._with_(" ]");
-$ctx1.sendIdx["with:"]=4;
-_st(_st(html)._ul())._with_((function(){
+var $1,$2,$3,$4,$5;
+_st(html)._trapIter_tag_do_([],"li",(function(each){
 return smalltalk.withContext(function($ctx2) {
-return _st(html)._trapIter_tag_do_([["todos"]],"li",(function(each){
+$1=_st(html)._root();
+$ctx2.sendIdx["root"]=1;
+_st($1)._empty();
+$2=_st(html)._input();
+_st($2)._type_("checkbox");
+$3=_st($2)._trap_processors_(["done"],["inputChecked"]);
+$3;
+$4=_st(html)._span();
+_st($4)._trap_read_(["done"],(function(model){
 return smalltalk.withContext(function($ctx3) {
-$5=_st(html)._root();
-$ctx3.sendIdx["root"]=1;
-_st($5)._empty();
-$6=_st(html)._input();
-$ctx3.sendIdx["input"]=1;
-_st($6)._type_("checkbox");
-$ctx3.sendIdx["type:"]=1;
-$7=_st($6)._trap_processors_(["done"],["inputChecked"]);
-$ctx3.sendIdx["trap:processors:"]=2;
-$7;
-$8=_st(html)._span();
-_st($8)._trap_read_(["done"],(function(model){
-return smalltalk.withContext(function($ctx4) {
 return _st(_st(html)._root())._class_("done-".__comma(model));
-$ctx4.sendIdx["class:"]=1;
-}, function($ctx4) {$ctx4.fillBlock({model:model},$ctx3,3)})}));
-$9=_st($8)._trap_(["text"]);
-return $9;
-}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx2,2)})}));
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
-$ctx1.sendIdx["with:"]=5;
-$10=_st(html)._form();
-_st($10)._trap_processors_([],[["signal", "addTodo"], "whenSubmitted"]);
-$ctx1.sendIdx["trap:processors:"]=3;
-$11=_st($10)._with_((function(){
-return smalltalk.withContext(function($ctx2) {
-$12=_st(html)._input();
-$ctx2.sendIdx["input"]=2;
-_st($12)._type_("text");
-$ctx2.sendIdx["type:"]=2;
-_st($12)._trap_processors_([["todoText"]],["inputValue"]);
-_st($12)._at_put_("size",(30));
-$13=_st($12)._placeholder_("add new todo here");
-$13;
-$14=_st(html)._input();
-_st($14)._class_("btn-primary");
-_st($14)._type_("submit");
-$15=_st($14)._value_("add");
-return $15;
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,4)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.TemporaryWidget)})},
+}, function($ctx3) {$ctx3.fillBlock({model:model},$ctx2,2)})}));
+$5=_st($4)._trap_(["text"]);
+return $5;
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.TodoItemsWidget)})},
 args: ["html"],
-source: "renderOn: html\x0a        html span trap:#((remaining)).\x0a        html with: ' of '.\x0a        html span trap: #((todos) (size)).\x0a        html with: ' remaining [ '.\x0a        html a\x0a\x09\x09\x09href:'';\x0a\x09\x09\x09trap: #() processors: #((signal archive) whenClicked);\x0a\x09\x09\x09with: 'archive'.\x0a        html with: ' ]'.\x0a        html ul with: [ html trapIter: #((todos)) tag: #li do: [ :each |\x0a            html root empty.\x0a            html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).\x0a            html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').\x0a        ]].\x0a        html form trap: #() processors: #((signal addTodo) whenSubmitted); with: [\x0a            html input type: 'text'; trap: #((todoText)) processors: #(inputValue); at: 'size' put: 30; placeholder: 'add new todo here'.\x0a            html input class: 'btn-primary'; type: 'submit'; value: 'add'.\x0a        ]",
-messageSends: ["trap:", "span", "with:", "href:", "a", "trap:processors:", "ul", "trapIter:tag:do:", "empty", "root", "type:", "input", "trap:read:", "class:", ",", "form", "at:put:", "placeholder:", "value:"],
+source: "renderOn: html\x0a\x09html trapIter: #() tag: #li do: [ :each |\x0a\x09\x09html root empty.\x0a\x09\x09html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).\x0a\x09\x09html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').\x0a\x09]",
+messageSends: ["trapIter:tag:do:", "empty", "root", "type:", "input", "trap:processors:", "trap:read:", "span", "class:", ",", "trap:"],
 referencedClasses: []
 }),
-smalltalk.TemporaryWidget);
-
-
-
-smalltalk.addClass('TemporaryWidget2', smalltalk.Widget, [], 'Trapped-Demo');
-smalltalk.addMethod(
-smalltalk.method({
-selector: "renderOn:",
-category: 'rendering',
-fn: function (html){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-_st(_st(html)._root())._contents_("Loading ...");
-return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.TemporaryWidget2)})},
-args: ["html"],
-source: "renderOn: html\x0a\x09html root contents: 'Loading ...'",
-messageSends: ["contents:", "root"],
-referencedClasses: []
-}),
-smalltalk.TemporaryWidget2);
+smalltalk.TodoItemsWidget);
 
 
 });

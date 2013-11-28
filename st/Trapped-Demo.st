@@ -121,10 +121,10 @@ archive
     self todos: self todosNotDone
 ! !
 
-Widget subclass: #TemporaryWidget
+Widget subclass: #TodoItemsWidget
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
-!TemporaryWidget commentStamp!
+!TodoItemsWidget commentStamp!
 <!!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->
   <body>
     <h2>Todo</h2>
@@ -145,36 +145,13 @@ Widget subclass: #TemporaryWidget
     </div>
   </body>!
 
-!TemporaryWidget methodsFor: 'rendering'!
+!TodoItemsWidget methodsFor: 'rendering'!
 
 renderOn: html
-        html span trap:#((remaining)).
-        html with: ' of '.
-        html span trap: #((todos) (size)).
-        html with: ' remaining [ '.
-        html a
-			href:'';
-			trap: #() processors: #((signal archive) whenClicked);
-			with: 'archive'.
-        html with: ' ]'.
-        html ul with: [ html trapIter: #((todos)) tag: #li do: [ :each |
-            html root empty.
-            html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).
-            html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').
-        ]].
-        html form trap: #() processors: #((signal addTodo) whenSubmitted); with: [
-            html input type: 'text'; trap: #((todoText)) processors: #(inputValue); at: 'size' put: 30; placeholder: 'add new todo here'.
-            html input class: 'btn-primary'; type: 'submit'; value: 'add'.
-        ]
-! !
-
-Widget subclass: #TemporaryWidget2
-	instanceVariableNames: ''
-	package: 'Trapped-Demo'!
-
-!TemporaryWidget2 methodsFor: 'rendering'!
-
-renderOn: html
-	html root contents: 'Loading ...'
+	html trapIter: #() tag: #li do: [ :each |
+		html root empty.
+		html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).
+		html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').
+	]
 ! !
 

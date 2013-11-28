@@ -599,18 +599,37 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "guardContents:",
+category: 'factory',
+fn: function (anArray){
+var self=this;
+function $TrappedProcessorGuardContents(){return smalltalk.TrappedProcessorGuardContents||(typeof TrappedProcessorGuardContents=="undefined"?nil:TrappedProcessorGuardContents)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorGuardContents())._new_(anArray);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"guardContents:",{anArray:anArray},smalltalk.TrappedProcessor.klass)})},
+args: ["anArray"],
+source: "guardContents: anArray\x0a\x09^TrappedProcessorGuardContents new: anArray",
+messageSends: ["new:"],
+referencedClasses: ["TrappedProcessorGuardContents"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "guardProc:",
 category: 'factory',
-fn: function (aString){
+fn: function (anArray){
 var self=this;
 function $TrappedProcessorGuardProc(){return smalltalk.TrappedProcessorGuardProc||(typeof TrappedProcessorGuardProc=="undefined"?nil:TrappedProcessorGuardProc)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st($TrappedProcessorGuardProc())._new_(aString);
+$1=_st($TrappedProcessorGuardProc())._new_(anArray);
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"guardProc:",{aString:aString},smalltalk.TrappedProcessor.klass)})},
-args: ["aString"],
-source: "guardProc: aString\x0a\x09^TrappedProcessorGuardProc new: aString",
+}, function($ctx1) {$ctx1.fill(self,"guardProc:",{anArray:anArray},smalltalk.TrappedProcessor.klass)})},
+args: ["anArray"],
+source: "guardProc: anArray\x0a\x09^TrappedProcessorGuardProc new: anArray",
 messageSends: ["new:"],
 referencedClasses: ["TrappedProcessorGuardProc"]
 }),
@@ -1029,6 +1048,44 @@ referencedClasses: []
 smalltalk.TrappedProcessorGuardBase.klass);
 
 
+smalltalk.addClass('TrappedProcessorGuardContents', smalltalk.TrappedProcessorGuardBase, [], 'Trapped-Frontend');
+smalltalk.TrappedProcessorGuardContents.comment="I am used to guard contents of the brush I am installed on.\x0a\x0aI save the brush contents, then I observe guard expression in the model,\x0aand when it changes to nil or false, I delete the brush contents;\x0aon the other hand, when it changes to non-nil and non-false,\x0aI restore it from remembered state and interpret all contained\x0adata-trap attributes inside.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+var frozen,contents;
+function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
+return smalltalk.withContext(function($ctx1) { 
+var $3,$2,$1,$5,$4;
+frozen=_st(aDataCarrier)._copy();
+$3=_st(frozen)._target();
+$ctx1.sendIdx["target"]=1;
+$2=_st($3)._asJQuery();
+$ctx1.sendIdx["asJQuery"]=1;
+$1=_st($2)._contents();
+contents=_st($1)._detach();
+_st(_st(frozen)._target())._trapGuard_contents_(self["@guardPath"],(function(html){
+return smalltalk.withContext(function($ctx2) {
+$5=_st(html)._root();
+$ctx2.sendIdx["root"]=1;
+$4=_st($5)._asJQuery();
+$ctx2.sendIdx["asJQuery"]=2;
+_st($4)._append_(contents);
+return _st(_st($Trapped())._current())._injectToJQuery_(_st(_st(html)._root())._asJQuery());
+}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents},smalltalk.TrappedProcessorGuardContents)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen target asJQuery contents detach.\x0a\x09frozen target trapGuard: guardPath contents: [ :html |\x0a\x09\x09html root asJQuery append: contents.\x0a\x09\x09Trapped current injectToJQuery: html root asJQuery ]",
+messageSends: ["copy", "detach", "contents", "asJQuery", "target", "trapGuard:contents:", "append:", "root", "injectToJQuery:", "current"],
+referencedClasses: ["Trapped"]
+}),
+smalltalk.TrappedProcessorGuardContents);
+
+
+
 smalltalk.addClass('TrappedProcessorGuardProc', smalltalk.TrappedProcessorGuardBase, [], 'Trapped-Frontend');
 smalltalk.TrappedProcessorGuardProc.comment="I am used to guard contents filling process of the brush I am installed on.\x0a\x0aI observe guard expression in the model,\x0aand when it changes to nil or false, I delete the brush contents;\x0aon the other hand, when it changes to non-nil and non-false,\x0aI run the rest on the chain, which should be one-time\x0athat sets up the contents,";
 smalltalk.addMethod(
@@ -1399,21 +1456,20 @@ var parsed;
 parsed=_st($Trapped())._parse_(_st(jq)._attr_("data-trap"));
 parsed;
 _st(jq)._removeAttr_("data-trap");
-return _st(parsed)._do_((function(rule){
+_st(parsed)._do_((function(rule){
 return smalltalk.withContext(function($ctx3) {
 return _st(_st(_st($HTMLCanvas())._onJQuery_(jq))._root())._trap_processors_(_st(rule)._first(),_st(rule)._at_ifAbsent_((2),(function(){
 return smalltalk.withContext(function($ctx4) {
 return [];
 }, function($ctx4) {$ctx4.fillBlock({},$ctx3,4)})})));
 }, function($ctx3) {$ctx3.fillBlock({rule:rule},$ctx2,3)})}));
-} else {
-return self._injectToJQuery_(_st(jq)._children());
 };
+return self._injectToJQuery_(_st(jq)._children());
 }, function($ctx2) {$ctx2.fillBlock({index:index,elem:elem,jq:jq},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"injectToJQuery:",{aJQuery:aJQuery},smalltalk.Trapped)})},
 args: ["aJQuery"],
-source: "injectToJQuery: aJQuery\x0a\x09aJQuery each: [ :index :elem |\x0a\x09\x09| jq |\x0a\x09\x09jq := elem asJQuery.\x0a\x09\x09(jq is: '[data-trap]')\x0a\x09\x09\x09ifTrue: [\x0a\x09\x09\x09\x09| parsed |\x0a\x09\x09\x09\x09parsed := Trapped parse: (jq attr: 'data-trap').\x0a\x09\x09\x09\x09jq removeAttr: 'data-trap'.\x0a\x09\x09\x09\x09parsed do: [ :rule |\x0a\x09\x09\x09\x09\x09(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ]\x0a\x09\x09\x09ifFalse: [ self injectToJQuery: jq children ] ]",
-messageSends: ["each:", "asJQuery", "ifTrue:ifFalse:", "is:", "parse:", "attr:", "removeAttr:", "do:", "trap:processors:", "root", "onJQuery:", "first", "at:ifAbsent:", "injectToJQuery:", "children"],
+source: "injectToJQuery: aJQuery\x0a\x09aJQuery each: [ :index :elem |\x0a\x09\x09| jq |\x0a\x09\x09jq := elem asJQuery.\x0a\x09\x09(jq is: '[data-trap]')\x0a\x09\x09\x09ifTrue: [\x0a\x09\x09\x09\x09| parsed |\x0a\x09\x09\x09\x09parsed := Trapped parse: (jq attr: 'data-trap').\x0a\x09\x09\x09\x09jq removeAttr: 'data-trap'.\x0a\x09\x09\x09\x09parsed do: [ :rule |\x0a\x09\x09\x09\x09\x09(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].\x0a\x09\x09\x09self injectToJQuery: jq children ]",
+messageSends: ["each:", "asJQuery", "ifTrue:", "is:", "parse:", "attr:", "removeAttr:", "do:", "trap:processors:", "root", "onJQuery:", "first", "at:ifAbsent:", "injectToJQuery:", "children"],
 referencedClasses: ["Trapped", "HTMLCanvas"]
 }),
 smalltalk.Trapped);

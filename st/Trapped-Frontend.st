@@ -202,8 +202,12 @@ contents
 	^TrappedProcessorContents new
 !
 
-guardProc: aString
-	^TrappedProcessorGuardProc new: aString
+guardContents: anArray
+	^TrappedProcessorGuardContents new: anArray
+!
+
+guardProc: anArray
+	^TrappedProcessorGuardProc new: anArray
 !
 
 inputChecked
@@ -375,6 +379,29 @@ new: anArray
 	^ self new
 		guardPath: anArray;
 		yourself
+! !
+
+TrappedProcessorGuardBase subclass: #TrappedProcessorGuardContents
+	instanceVariableNames: ''
+	package: 'Trapped-Frontend'!
+!TrappedProcessorGuardContents commentStamp!
+I am used to guard contents of the brush I am installed on.
+
+I save the brush contents, then I observe guard expression in the model,
+and when it changes to nil or false, I delete the brush contents;
+on the other hand, when it changes to non-nil and non-false,
+I restore it from remembered state and interpret all contained
+data-trap attributes inside.!
+
+!TrappedProcessorGuardContents methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	| frozen contents |
+	frozen := aDataCarrier copy.
+	contents := frozen target asJQuery contents detach.
+	frozen target trapGuard: guardPath contents: [ :html |
+		html root asJQuery append: contents.
+		Trapped current injectToJQuery: html root asJQuery ]
 ! !
 
 TrappedProcessorGuardBase subclass: #TrappedProcessorGuardProc
@@ -558,8 +585,8 @@ injectToJQuery: aJQuery
 				parsed := Trapped parse: (jq attr: 'data-trap').
 				jq removeAttr: 'data-trap'.
 				parsed do: [ :rule |
-					(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ]
-			ifFalse: [ self injectToJQuery: jq children ] ]
+					(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].
+			self injectToJQuery: jq children ]
 !
 
 start: args

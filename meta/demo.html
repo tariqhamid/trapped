@@ -1,6 +1,9 @@
 <html data-trap="App: path">
 <head>
     <title data-trap="#title"></title>
+    <style>
+        [data-trap] { display: none }
+    </style>
     <script src="../bower_components/amber/support/amber.js"></script>
     <script type='text/javascript' src='../bower_components/amber/support/requirejs/require.min.js'></script>
     <link rel="stylesheet" href="demo.css" />
@@ -30,7 +33,15 @@
     );
 </script>
 <h2 data-trap="#title"></h2>
-<div data-trap=": (guardProc (#todos #notNil)) (widget TemporaryWidget)"></div>
-<p data-trap=": (guardProc (#todos #isNil)) (widget TemporaryWidget2)"></p>
+<div data-trap=": (guardContents (#todos #notNil))">
+    <span data-trap="#remaining" ></span> of <span data-trap="#todos #size"></span> remaning
+    [ <a href="" data-trap=": (signal archive) whenClicked">archive</a> ]
+    <ul data-trap="#todos: (widget TodoItemsWidget)"></ul>
+    <form data-trap=": (signal addTodo) whenSubmitted">
+        <input type="text" data-trap="#todoText: inputValue" size="30" placeholder="add new todo here" />
+        <input type="submit" class="btn-primary" value="add" />
+    </form>
+</div>
+<p data-trap=": (guardContents (#todos #isNil))">Loading ...</p>
 </body>
 </html>
