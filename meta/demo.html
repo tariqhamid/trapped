@@ -1,3 +1,4 @@
+<!doctype html>
 <html data-trap="App: path">
 <head>
     <title data-trap="#title"></title>
@@ -39,7 +40,7 @@
 <div data-trap=": (guardContents (#todos #notNil))">
     <span data-trap="#remaining"></span> of <span data-trap="#todos #size"></span> remaning
     [ <a href="" data-trap=": (signal archive) whenClicked">archive</a> ]
-    <ul data-trap="#todos: (widget TodoItemsWidget)"></ul>
+    <ul><noscript data-trap="#todos: loopProc (widget TodoItemWidget)"></noscript></ul>
     <form data-trap=": (signal addTodo) whenSubmitted">
         <input type="text" data-trap="#todoText: inputValue" size="30" placeholder="add new todo here"/>
         <input type="submit" class="btn-primary" value="add"/>

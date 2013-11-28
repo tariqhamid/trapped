@@ -200,6 +200,10 @@ inputValue
 	^TrappedProcessorInputValue new
 !
 
+loopProc
+	^TrappedProcessorLoopProc new
+!
+
 path
 	^TrappedProcessorDescend new
 !

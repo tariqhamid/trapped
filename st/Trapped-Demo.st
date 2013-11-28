@@ -121,10 +121,10 @@ archive
     self todos: self todosNotDone
 ! !
 
-Widget subclass: #TodoItemsWidget
+Widget subclass: #TodoItemWidget
 	instanceVariableNames: ''
 	package: 'Trapped-Demo'!
-!TodoItemsWidget commentStamp!
+!TodoItemWidget commentStamp!
 <!!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->
   <body>
     <h2>Todo</h2>
@@ -145,16 +145,14 @@ Widget subclass: #TodoItemsWidget
     </div>
   </body>!
 
-!TodoItemsWidget methodsFor: 'rendering'!
+!TodoItemWidget methodsFor: 'rendering'!
 
 renderOn: html
-	html trapIter: #() tag: #li do: [ :each |
-		html root empty.
+	html li with: [
 		html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).
 		html span
 			trap: #('done') processors: #(classDoneXxx);
-			trap: #('text')
-	]
+			trap: #('text') ]
 ! !
 
 !TrappedProcessor class methodsFor: '*Trapped-Demo'!

@@ -402,6 +402,71 @@ smalltalk.TrappedProcessorGuardProc);
 
 
 
+smalltalk.addClass('TrappedProcessorLoopBase', smalltalk.TrappedProcessor, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorLoopBase.comment="I serve as base class for looping processors.\x0a\x0aI cover instantiation and subclasses have to provide\x0aimplementation of toVIew: that loops appropriately.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toModel:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorLoopBase)})},
+args: ["aDataCarrier"],
+source: "toModel: aDataCarrier\x0a\x09\x22stop\x22",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorLoopBase);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self._subclassResponsibility();
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorLoopBase)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09self subclassResponsibility",
+messageSends: ["subclassResponsibility"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorLoopBase);
+
+
+
+smalltalk.addClass('TrappedProcessorLoopProc', smalltalk.TrappedProcessorLoopBase, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorLoopProc.comment="I am used to loop over data and repeat the contents filling process\x0aof the brush I am installed on.\x0a\x0aI observe the data in the model,\x0aand when it changes, I loop over it\x0aand run the rest of the processing chain\x0afor each element, putting the result _after_ my brush.\x0a\x0aMy brush itself should be as least visible as possible,\x0aas it only serve as a position flag (use for example\x0anoscript, ins or del).";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+var frozen;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+frozen=_st(aDataCarrier)._copy();
+$ctx1.sendIdx["copy"]=1;
+_st(_st(frozen)._target())._trapIter_after_([],(function(html){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(frozen)._copy();
+_st($1)._target_(_st(html)._root());
+$2=_st($1)._proceed();
+return $2;
+}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen},smalltalk.TrappedProcessorLoopProc)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09| frozen |\x0a\x09frozen := aDataCarrier copy.\x0a\x09frozen target trapIter: #() after: [ :html | frozen copy target: html root; proceed ]",
+messageSends: ["copy", "trapIter:after:", "target", "target:", "root", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorLoopProc);
+
+
+
 smalltalk.addClass('TrappedProcessorSignal', smalltalk.TrappedProcessor, ['selector'], 'Trapped-Processors');
 smalltalk.TrappedProcessorSignal.comment="Instead of writing data directly to model,\x0aI instead modify it by sending a message specified when instantiating me.";
 smalltalk.addMethod(

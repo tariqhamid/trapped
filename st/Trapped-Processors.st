@@ -211,6 +211,49 @@ toView: aDataCarrier
 	frozen target trapGuard: guardPath contents: [ frozen copy proceed ]
 ! !
 
+TrappedProcessor subclass: #TrappedProcessorLoopBase
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorLoopBase commentStamp!
+I serve as base class for looping processors.
+
+I cover instantiation and subclasses have to provide
+implementation of toVIew: that loops appropriately.!
+
+!TrappedProcessorLoopBase methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	"stop"
+!
+
+toView: aDataCarrier
+	self subclassResponsibility
+! !
+
+TrappedProcessorLoopBase subclass: #TrappedProcessorLoopProc
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorLoopProc commentStamp!
+I am used to loop over data and repeat the contents filling process
+of the brush I am installed on.
+
+I observe the data in the model,
+and when it changes, I loop over it
+and run the rest of the processing chain
+for each element, putting the result _after_ my brush.
+
+My brush itself should be as least visible as possible,
+as it only serve as a position flag (use for example
+noscript, ins or del).!
+
+!TrappedProcessorLoopProc methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	| frozen |
+	frozen := aDataCarrier copy.
+	frozen target trapIter: #() after: [ :html | frozen copy target: html root; proceed ]
+! !
+
 TrappedProcessor subclass: #TrappedProcessorSignal
 	instanceVariableNames: 'selector'
 	package: 'Trapped-Processors'!
