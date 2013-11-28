@@ -42,6 +42,63 @@ smalltalk.TrappedProcessorContents);
 
 
 
+smalltalk.addClass('TrappedProcessorDataAdhoc', smalltalk.TrappedDataExpectingProcessor, ['toViewBlock'], 'Trapped-Processors');
+smalltalk.TrappedProcessorDataAdhoc.comment="I put data into target via contents: in toView:";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self["@toViewBlock"])._value_(aDataCarrier);
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorDataAdhoc)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09toViewBlock value: aDataCarrier",
+messageSends: ["value:"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorDataAdhoc);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toViewBlock:",
+category: 'accessing',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@toViewBlock"]=aBlock;
+return self}, function($ctx1) {$ctx1.fill(self,"toViewBlock:",{aBlock:aBlock},smalltalk.TrappedProcessorDataAdhoc)})},
+args: ["aBlock"],
+source: "toViewBlock: aBlock\x0a\x09toViewBlock := aBlock",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorDataAdhoc);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "newToView:",
+category: 'instance creation',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=self._new();
+_st($2)._toViewBlock_(aBlock);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"newToView:",{aBlock:aBlock},smalltalk.TrappedProcessorDataAdhoc.klass)})},
+args: ["aBlock"],
+source: "newToView: aBlock\x0a\x09^self new\x0a\x09\x09toViewBlock: aBlock;\x0a\x09\x09yourself",
+messageSends: ["toViewBlock:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorDataAdhoc.klass);
+
+
 smalltalk.addClass('TrappedProcessorInputChecked', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Processors');
 smalltalk.TrappedProcessorInputChecked.comment="I bind to checkbox checked attribute.";
 smalltalk.addMethod(

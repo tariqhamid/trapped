@@ -151,7 +151,15 @@ renderOn: html
 	html trapIter: #() tag: #li do: [ :each |
 		html root empty.
 		html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).
-		html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').
+		html span
+			trap: #('done') processors: #(classDoneXxx);
+			trap: #('text')
 	]
+! !
+
+!TrappedProcessor class methodsFor: '*Trapped-Demo'!
+
+classDoneXxx
+	^self dataToView: [ :carrier | carrier target class: 'done-', carrier value ]
 ! !
 

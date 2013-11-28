@@ -1,4 +1,4 @@
-define("gh_herby_trapped/Trapped-Demo", ["amber_vm/smalltalk", "amber_vm/nil", "amber_vm/_st", "gh_herby_trapped/Trapped-Backend", "amber_core/Kernel-Objects", "amber_core/Canvas"], function(smalltalk,nil,_st){
+define("gh_herby_trapped/Trapped-Demo", ["amber_vm/smalltalk", "amber_vm/nil", "amber_vm/_st", "gh_herby_trapped/Trapped-Backend", "amber_core/Kernel-Objects", "amber_core/Canvas", "gh_herby_trapped/Trapped-Frontend"], function(smalltalk,nil,_st){
 smalltalk.addPackage('Trapped-Demo');
 smalltalk.packages["Trapped-Demo"].transport = {"type":"amd","amdNamespace":"gh_herby_trapped"};
 
@@ -240,31 +240,48 @@ category: 'rendering',
 fn: function (html){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3,$4,$5;
+var $1,$2,$3,$4;
 _st(html)._trapIter_tag_do_([],"li",(function(each){
 return smalltalk.withContext(function($ctx2) {
-$1=_st(html)._root();
-$ctx2.sendIdx["root"]=1;
-_st($1)._empty();
-$2=_st(html)._input();
-_st($2)._type_("checkbox");
-$3=_st($2)._trap_processors_(["done"],["inputChecked"]);
-$3;
-$4=_st(html)._span();
-_st($4)._trap_read_(["done"],(function(model){
-return smalltalk.withContext(function($ctx3) {
-return _st(_st(html)._root())._class_("done-".__comma(model));
-}, function($ctx3) {$ctx3.fillBlock({model:model},$ctx2,2)})}));
-$5=_st($4)._trap_(["text"]);
-return $5;
+_st(_st(html)._root())._empty();
+$1=_st(html)._input();
+_st($1)._type_("checkbox");
+$2=_st($1)._trap_processors_(["done"],["inputChecked"]);
+$ctx2.sendIdx["trap:processors:"]=1;
+$2;
+$3=_st(html)._span();
+_st($3)._trap_processors_(["done"],["classDoneXxx"]);
+$4=_st($3)._trap_(["text"]);
+return $4;
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.TodoItemsWidget)})},
 args: ["html"],
-source: "renderOn: html\x0a\x09html trapIter: #() tag: #li do: [ :each |\x0a\x09\x09html root empty.\x0a\x09\x09html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).\x0a\x09\x09html span trap: #('done') read: [ :model | html root class: 'done-', model ]; trap: #('text').\x0a\x09]",
-messageSends: ["trapIter:tag:do:", "empty", "root", "type:", "input", "trap:processors:", "trap:read:", "span", "class:", ",", "trap:"],
+source: "renderOn: html\x0a\x09html trapIter: #() tag: #li do: [ :each |\x0a\x09\x09html root empty.\x0a\x09\x09html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).\x0a\x09\x09html span\x0a\x09\x09\x09trap: #('done') processors: #(classDoneXxx);\x0a\x09\x09\x09trap: #('text')\x0a\x09]",
+messageSends: ["trapIter:tag:do:", "empty", "root", "type:", "input", "trap:processors:", "span", "trap:"],
 referencedClasses: []
 }),
 smalltalk.TodoItemsWidget);
 
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "classDoneXxx",
+category: '*Trapped-Demo',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self._dataToView_((function(carrier){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(carrier)._target())._class_("done-".__comma(_st(carrier)._value()));
+}, function($ctx2) {$ctx2.fillBlock({carrier:carrier},$ctx1,1)})}));
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"classDoneXxx",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "classDoneXxx\x0a\x09^self dataToView: [ :carrier | carrier target class: 'done-', carrier value ]",
+messageSends: ["dataToView:", "class:", "target", ",", "value"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessor.klass);
 
 });

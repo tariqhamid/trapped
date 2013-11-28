@@ -29,6 +29,32 @@ toView: aDataCarrier
 	aDataCarrier toTargetContents
 ! !
 
+TrappedDataExpectingProcessor subclass: #TrappedProcessorDataAdhoc
+	instanceVariableNames: 'toViewBlock'
+	package: 'Trapped-Processors'!
+!TrappedProcessorDataAdhoc commentStamp!
+I put data into target via contents: in toView:!
+
+!TrappedProcessorDataAdhoc methodsFor: 'accessing'!
+
+toViewBlock: aBlock
+	toViewBlock := aBlock
+! !
+
+!TrappedProcessorDataAdhoc methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	toViewBlock value: aDataCarrier
+! !
+
+!TrappedProcessorDataAdhoc class methodsFor: 'instance creation'!
+
+newToView: aBlock
+	^self new
+		toViewBlock: aBlock;
+		yourself
+! !
+
 TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!

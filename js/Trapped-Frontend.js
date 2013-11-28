@@ -487,6 +487,25 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "dataToView:",
+category: 'factory',
+fn: function (aBlock){
+var self=this;
+function $TrappedProcessorDataAdhoc(){return smalltalk.TrappedProcessorDataAdhoc||(typeof TrappedProcessorDataAdhoc=="undefined"?nil:TrappedProcessorDataAdhoc)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorDataAdhoc())._newToView_(aBlock);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"dataToView:",{aBlock:aBlock},smalltalk.TrappedProcessor.klass)})},
+args: ["aBlock"],
+source: "dataToView: aBlock\x0a\x09^TrappedProcessorDataAdhoc newToView: aBlock",
+messageSends: ["newToView:"],
+referencedClasses: ["TrappedProcessorDataAdhoc"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "guardContents:",
 category: 'factory',
 fn: function (anArray){

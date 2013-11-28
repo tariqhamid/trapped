@@ -180,6 +180,10 @@ contents
 	^TrappedProcessorContents new
 !
 
+dataToView: aBlock
+	^TrappedProcessorDataAdhoc newToView: aBlock
+!
+
 guardContents: anArray
 	^TrappedProcessorGuardContents new: anArray
 !
