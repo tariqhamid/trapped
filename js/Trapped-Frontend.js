@@ -490,35 +490,35 @@ smalltalk.Trapped);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "envelope:loop:before:tag:do:",
+selector: "envelope:loop:before:do:",
 category: 'private',
-fn: function (envelope,model,endjq,aSymbol,aBlock){
+fn: function (envelope,model,endjq,aBlock){
 var self=this;
 var envjq;
 return smalltalk.withContext(function($ctx1) { 
 envjq=_st(envelope)._asJQuery();
 _st(model)._withIndexDo_((function(item,i){
 return smalltalk.withContext(function($ctx2) {
-_st(envelope)._with_((function(html){
+_st([i])._trapDescend_((function(){
 return smalltalk.withContext(function($ctx3) {
-return _st(_st(html)._perform_(aSymbol))._trap_read_([i],aBlock);
-}, function($ctx3) {$ctx3.fillBlock({html:html},$ctx2,2)})}));
+return _st(envelope)._with_(aBlock);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)})}));
 return _st(_st(_st(envjq)._children())._detach())._insertBefore_(endjq);
 }, function($ctx2) {$ctx2.fillBlock({item:item,i:i},$ctx1,1)})}));
 _st(envjq)._remove();
-return self}, function($ctx1) {$ctx1.fill(self,"envelope:loop:before:tag:do:",{envelope:envelope,model:model,endjq:endjq,aSymbol:aSymbol,aBlock:aBlock,envjq:envjq},smalltalk.Trapped.klass)})},
-args: ["envelope", "model", "endjq", "aSymbol", "aBlock"],
-source: "envelope: envelope loop: model before: endjq tag: aSymbol do: aBlock\x0a   \x09| envjq |\x0a    envjq := envelope asJQuery.\x0a    model withIndexDo: [ :item :i |\x0a        envelope with: [ :html | (html perform: aSymbol) trap: {i} read: aBlock ].\x0a        envjq children detach insertBefore: endjq.\x0a    ].\x0a    envjq remove",
-messageSends: ["asJQuery", "withIndexDo:", "with:", "trap:read:", "perform:", "insertBefore:", "detach", "children", "remove"],
+return self}, function($ctx1) {$ctx1.fill(self,"envelope:loop:before:do:",{envelope:envelope,model:model,endjq:endjq,aBlock:aBlock,envjq:envjq},smalltalk.Trapped.klass)})},
+args: ["envelope", "model", "endjq", "aBlock"],
+source: "envelope: envelope loop: model before: endjq do: aBlock\x0a   \x09| envjq |\x0a    envjq := envelope asJQuery.\x0a    model withIndexDo: [ :item :i |\x0a        {i} trapDescend: [ envelope with: aBlock ].\x0a        envjq children detach insertBefore: endjq.\x0a    ].\x0a    envjq remove",
+messageSends: ["asJQuery", "withIndexDo:", "trapDescend:", "with:", "insertBefore:", "detach", "children", "remove"],
 referencedClasses: []
 }),
 smalltalk.Trapped.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "loop:between:and:tag:do:",
+selector: "loop:between:and:do:",
 category: 'private',
-fn: function (model,start,end,aSymbol,aBlock){
+fn: function (model,start,end,aBlock){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $2,$1;
@@ -531,13 +531,13 @@ return smalltalk.withContext(function($ctx2) {
 if(($receiver = model) == nil || $receiver == null){
 return model;
 } else {
-return self._envelope_loop_before_tag_do_(_st(html)._div(),model,_st(end)._asJQuery(),aSymbol,aBlock);
+return self._envelope_loop_before_do_(_st(html)._div(),model,_st(end)._asJQuery(),aBlock);
 };
 }, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"loop:between:and:tag:do:",{model:model,start:start,end:end,aSymbol:aSymbol,aBlock:aBlock},smalltalk.Trapped.klass)})},
-args: ["model", "start", "end", "aSymbol", "aBlock"],
-source: "loop: model between: start and: end tag: aSymbol do: aBlock\x0a    (start asJQuery nextUntil: end element) remove.\x0a    start with: [ :html | model ifNotNil: [\x0a    \x09self envelope: html div loop: model before: end asJQuery tag: aSymbol do: aBlock\x0a\x09]]",
-messageSends: ["remove", "nextUntil:", "asJQuery", "element", "with:", "ifNotNil:", "envelope:loop:before:tag:do:", "div"],
+return self}, function($ctx1) {$ctx1.fill(self,"loop:between:and:do:",{model:model,start:start,end:end,aBlock:aBlock},smalltalk.Trapped.klass)})},
+args: ["model", "start", "end", "aBlock"],
+source: "loop: model between: start and: end do: aBlock\x0a    (start asJQuery nextUntil: end element) remove.\x0a    start with: [ :html | model ifNotNil: [\x0a    \x09self envelope: html div loop: model before: end asJQuery do: aBlock\x0a\x09]]",
+messageSends: ["remove", "nextUntil:", "asJQuery", "element", "with:", "ifNotNil:", "envelope:loop:before:do:", "div"],
 referencedClasses: []
 }),
 smalltalk.Trapped.klass);
@@ -769,19 +769,19 @@ smalltalk.Array);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "trapIter:tag:do:",
+selector: "trapIter:do:",
 category: '*Trapped-Frontend',
-fn: function (path,aSymbol,aBlock){
+fn: function (path,aBlock){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 self._with_((function(html){
 return smalltalk.withContext(function($ctx2) {
-return _st(_st(html)._noscript())._trapIter_tag_after_(path,aSymbol,aBlock);
+return _st(_st(html)._noscript())._trapIter_after_(path,aBlock);
 }, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"trapIter:tag:do:",{path:path,aSymbol:aSymbol,aBlock:aBlock},smalltalk.HTMLCanvas)})},
-args: ["path", "aSymbol", "aBlock"],
-source: "trapIter: path tag: aSymbol do: aBlock\x0a    self with: [ :html | html noscript trapIter: path tag: aSymbol after: aBlock ]",
-messageSends: ["with:", "trapIter:tag:after:", "noscript"],
+return self}, function($ctx1) {$ctx1.fill(self,"trapIter:do:",{path:path,aBlock:aBlock},smalltalk.HTMLCanvas)})},
+args: ["path", "aBlock"],
+source: "trapIter: path do: aBlock\x0a    self with: [ :html | html noscript trapIter: path after: aBlock ]",
+messageSends: ["with:", "trapIter:after:", "noscript"],
 referencedClasses: []
 }),
 smalltalk.HTMLCanvas);
@@ -891,9 +891,9 @@ smalltalk.TagBrush);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "trapIter:tag:after:",
+selector: "trapIter:after:",
 category: '*Trapped-Frontend',
-fn: function (path,aSymbol,aBlock){
+fn: function (path,aBlock){
 var self=this;
 var end;
 function $TagBrush(){return smalltalk.TagBrush||(typeof TagBrush=="undefined"?nil:TagBrush)}
@@ -906,12 +906,12 @@ $1=_st($2)._insertAfter_(self._asJQuery());
 end=_st($TagBrush())._fromJQuery_canvas_($1,self["@canvas"]);
 self._trap_read_(path,(function(model){
 return smalltalk.withContext(function($ctx2) {
-return _st($Trapped())._loop_between_and_tag_do_(model,self,end,aSymbol,aBlock);
+return _st($Trapped())._loop_between_and_do_(model,self,end,aBlock);
 }, function($ctx2) {$ctx2.fillBlock({model:model},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"trapIter:tag:after:",{path:path,aSymbol:aSymbol,aBlock:aBlock,end:end},smalltalk.TagBrush)})},
-args: ["path", "aSymbol", "aBlock"],
-source: "trapIter: path tag: aSymbol after: aBlock\x0a\x09| end |\x0a\x09end := TagBrush fromJQuery: ('<noscript />' asJQuery insertAfter: self asJQuery) canvas: canvas.\x0a    self trap: path read: [ :model |\x0a    \x09Trapped loop: model between: self and: end tag: aSymbol do: aBlock.\x0a    ]",
-messageSends: ["fromJQuery:canvas:", "insertAfter:", "asJQuery", "trap:read:", "loop:between:and:tag:do:"],
+return self}, function($ctx1) {$ctx1.fill(self,"trapIter:after:",{path:path,aBlock:aBlock,end:end},smalltalk.TagBrush)})},
+args: ["path", "aBlock"],
+source: "trapIter: path after: aBlock\x0a\x09| end |\x0a\x09end := TagBrush fromJQuery: ('<noscript />' asJQuery insertAfter: self asJQuery) canvas: canvas.\x0a    self trap: path read: [ :model |\x0a    \x09Trapped loop: model between: self and: end do: aBlock.\x0a    ]",
+messageSends: ["fromJQuery:canvas:", "insertAfter:", "asJQuery", "trap:read:", "loop:between:and:do:"],
 referencedClasses: ["TagBrush", "Trapped"]
 }),
 smalltalk.TagBrush);
