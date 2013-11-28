@@ -773,26 +773,16 @@ selector: "trapIter:tag:do:",
 category: '*Trapped-Frontend',
 fn: function (path,aSymbol,aBlock){
 var self=this;
-var start,end;
-function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 return smalltalk.withContext(function($ctx1) { 
 self._with_((function(html){
 return smalltalk.withContext(function($ctx2) {
-start=_st(html)._script();
-$ctx2.sendIdx["script"]=1;
-start;
-end=_st(html)._script();
-return end;
+return _st(_st(html)._noscript())._trapIter_tag_after_(path,aSymbol,aBlock);
 }, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
-_st(start)._trap_read_(path,(function(model){
-return smalltalk.withContext(function($ctx2) {
-return _st($Trapped())._loop_between_and_tag_do_(model,start,end,aSymbol,aBlock);
-}, function($ctx2) {$ctx2.fillBlock({model:model},$ctx1,2)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"trapIter:tag:do:",{path:path,aSymbol:aSymbol,aBlock:aBlock,start:start,end:end},smalltalk.HTMLCanvas)})},
+return self}, function($ctx1) {$ctx1.fill(self,"trapIter:tag:do:",{path:path,aSymbol:aSymbol,aBlock:aBlock},smalltalk.HTMLCanvas)})},
 args: ["path", "aSymbol", "aBlock"],
-source: "trapIter: path tag: aSymbol do: aBlock\x0a\x09| start end |\x0a    self with: [ :html | start := html script. end := html script ].\x0a    start trap: path read: [ :model |\x0a    \x09Trapped loop: model between: start and: end tag: aSymbol do: aBlock.\x0a    ]",
-messageSends: ["with:", "script", "trap:read:", "loop:between:and:tag:do:"],
-referencedClasses: ["Trapped"]
+source: "trapIter: path tag: aSymbol do: aBlock\x0a    self with: [ :html | html noscript trapIter: path tag: aSymbol after: aBlock ]",
+messageSends: ["with:", "trapIter:tag:after:", "noscript"],
+referencedClasses: []
 }),
 smalltalk.HTMLCanvas);
 
@@ -896,6 +886,33 @@ args: ["anArray", "aBlock"],
 source: "trapGuard: anArray contents: aBlock\x0a\x09#() trapDescend: [ :snap |\x0a\x09    | shown |\x0a    \x09shown := nil.\x0a\x09    self trap: anArray read: [ :gdata |\x0a\x09\x09\x09| sanitized |\x0a\x09\x09\x09sanitized := gdata ifNil: [ false ].\x0a    \x09    shown = sanitized ifFalse: [\x0a        \x09    shown := sanitized.\x0a            \x09shown\x0a\x09\x09\x09\x09\x09ifTrue: [ snap do: [ self contents: aBlock ]. self asJQuery show ]\x0a\x09\x09\x09\x09\x09ifFalse: [ self asJQuery hide; empty ] ] ] ]",
 messageSends: ["trapDescend:", "trap:read:", "ifNil:", "ifFalse:", "=", "ifTrue:ifFalse:", "do:", "contents:", "show", "asJQuery", "hide", "empty"],
 referencedClasses: []
+}),
+smalltalk.TagBrush);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "trapIter:tag:after:",
+category: '*Trapped-Frontend',
+fn: function (path,aSymbol,aBlock){
+var self=this;
+var end;
+function $TagBrush(){return smalltalk.TagBrush||(typeof TagBrush=="undefined"?nil:TagBrush)}
+function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
+return smalltalk.withContext(function($ctx1) { 
+var $2,$1;
+$2="<noscript />"._asJQuery();
+$ctx1.sendIdx["asJQuery"]=1;
+$1=_st($2)._insertAfter_(self._asJQuery());
+end=_st($TagBrush())._fromJQuery_canvas_($1,self["@canvas"]);
+self._trap_read_(path,(function(model){
+return smalltalk.withContext(function($ctx2) {
+return _st($Trapped())._loop_between_and_tag_do_(model,self,end,aSymbol,aBlock);
+}, function($ctx2) {$ctx2.fillBlock({model:model},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"trapIter:tag:after:",{path:path,aSymbol:aSymbol,aBlock:aBlock,end:end},smalltalk.TagBrush)})},
+args: ["path", "aSymbol", "aBlock"],
+source: "trapIter: path tag: aSymbol after: aBlock\x0a\x09| end |\x0a\x09end := TagBrush fromJQuery: ('<noscript />' asJQuery insertAfter: self asJQuery) canvas: canvas.\x0a    self trap: path read: [ :model |\x0a    \x09Trapped loop: model between: self and: end tag: aSymbol do: aBlock.\x0a    ]",
+messageSends: ["fromJQuery:canvas:", "insertAfter:", "asJQuery", "trap:read:", "loop:between:and:tag:do:"],
+referencedClasses: ["TagBrush", "Trapped"]
 }),
 smalltalk.TagBrush);
 
