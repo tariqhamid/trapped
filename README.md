@@ -59,7 +59,8 @@ The entity wraps any object (via `model:`, as seen in `App >> initialize`).
 The view is subclass of plain `Widget`, but inside it, uses of `trap:`
 (and others of  `trap:xxx:` family) on `TagBrush`
 and `path trapDescend: block` allows you to bind data from view model.
-You can also iterate arrays in the model using `HTMLCanvas >> trapIter:tag:do:`.
+You can also iterate arrays in the model using `HTMLCanvas >> trapIter:do:`
+or `TagBrush >> trapIter:after:`.
 
 To see viewmodel->view update working, try this in Workspace:
 

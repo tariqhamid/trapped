@@ -326,20 +326,20 @@ parse: aString
 
 !Trapped class methodsFor: 'private'!
 
-envelope: envelope loop: model before: endjq tag: aSymbol do: aBlock
+envelope: envelope loop: model before: endjq do: aBlock
    	| envjq |
     envjq := envelope asJQuery.
     model withIndexDo: [ :item :i |
-        envelope with: [ :html | (html perform: aSymbol) trap: {i} read: aBlock ].
+        {i} trapDescend: [ envelope with: aBlock ].
         envjq children detach insertBefore: endjq.
     ].
     envjq remove
 !
 
-loop: model between: start and: end tag: aSymbol do: aBlock
+loop: model between: start and: end do: aBlock
     (start asJQuery nextUntil: end element) remove.
     start with: [ :html | model ifNotNil: [
-    	self envelope: html div loop: model before: end asJQuery tag: aSymbol do: aBlock
+    	self envelope: html div loop: model before: end asJQuery do: aBlock
 	]]
 ! !
 
@@ -414,8 +414,8 @@ trapDescend: aBlock
 
 !HTMLCanvas methodsFor: '*Trapped-Frontend'!
 
-trapIter: path tag: aSymbol do: aBlock
-    self with: [ :html | html noscript trapIter: path tag: aSymbol after: aBlock ]
+trapIter: path do: aBlock
+    self with: [ :html | html noscript trapIter: path after: aBlock ]
 ! !
 
 !TagBrush methodsFor: '*Trapped-Frontend'!
@@ -453,11 +453,11 @@ trapGuard: anArray contents: aBlock
 					ifFalse: [ self asJQuery hide; empty ] ] ] ]
 !
 
-trapIter: path tag: aSymbol after: aBlock
+trapIter: path after: aBlock
 	| end |
 	end := TagBrush fromJQuery: ('<noscript />' asJQuery insertAfter: self asJQuery) canvas: canvas.
     self trap: path read: [ :model |
-    	Trapped loop: model between: self and: end tag: aSymbol do: aBlock.
+    	Trapped loop: model between: self and: end do: aBlock.
     ]
 ! !
 
