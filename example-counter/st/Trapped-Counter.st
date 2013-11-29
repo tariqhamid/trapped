@@ -75,6 +75,10 @@ function TodoCtrl($scope) {
 
 value
 	^value
+!
+
+value: aNumber
+	value := aNumber
 ! !
 
 !AppModel methodsFor: 'action'!

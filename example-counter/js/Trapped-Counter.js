@@ -98,5 +98,21 @@ referencedClasses: []
 }),
 smalltalk.AppModel);
 
+smalltalk.addMethod(
+smalltalk.method({
+selector: "value:",
+category: 'accessing',
+fn: function (aNumber){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@value"]=aNumber;
+return self}, function($ctx1) {$ctx1.fill(self,"value:",{aNumber:aNumber},smalltalk.AppModel)})},
+args: ["aNumber"],
+source: "value: aNumber\x0a\x09value := aNumber",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.AppModel);
+
 
 });
