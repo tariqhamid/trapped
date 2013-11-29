@@ -1,4 +1,4 @@
-define("gh_herby_trapped_todo/Trapped-Todo", ["amber_vm/smalltalk", "amber_vm/nil", "amber_vm/_st", "gh_herby_trapped/Trapped-Backend", "amber_core/Kernel-Objects", "amber_core/Canvas", "gh_herby_trapped/Trapped-Frontend"], function(smalltalk,nil,_st){
+define("gh_herby_trapped_todo/Trapped-Todo", ["amber_vm/smalltalk", "amber_vm/nil", "amber_vm/_st", "gh_herby_trapped/Trapped-Backend", "amber_core/Kernel-Objects", "gh_herby_trapped/Trapped-Frontend"], function(smalltalk,nil,_st){
 smalltalk.addPackage('Trapped-Todo');
 smalltalk.packages["Trapped-Todo"].transport = {"type":"amd","amdNamespace":"gh_herby_trapped_todo"};
 
@@ -228,38 +228,6 @@ messageSends: ["reject:", "todos", "at:"],
 referencedClasses: []
 }),
 smalltalk.AppModel);
-
-
-
-smalltalk.addClass('TodoItemWidget', smalltalk.Widget, [], 'Trapped-Todo');
-smalltalk.TodoItemWidget.comment="<!-- Code from AngularJS Todo example, http://angularjs.org/#todo-html -->\x0a  <body>\x0a    <h2>Todo</h2>\x0a    <div ng-controller=\x22TodoCtrl\x22>\x0a      <span>{{remaining()}} of {{todos.length}} remaining</span>\x0a      [ <a href=\x22\x22 ng-click=\x22archive()\x22>archive</a> ]\x0a      <ul class=\x22unstyled\x22>\x0a        <li ng-repeat=\x22todo in todos\x22>\x0a          <input type=\x22checkbox\x22 ng-model=\x22todo.done\x22>\x0a          <span class=\x22done-{{todo.done}}\x22>{{todo.text}}</span>\x0a        </li>\x0a      </ul>\x0a      <form ng-submit=\x22addTodo()\x22>\x0a        <input type=\x22text\x22 ng-model=\x22todoText\x22  size=\x2230\x22\x0a               placeholder=\x22add new todo here\x22>\x0a        <input class=\x22btn-primary\x22 type=\x22submit\x22 value=\x22add\x22>\x0a      </form>\x0a    </div>\x0a  </body>";
-smalltalk.addMethod(
-smalltalk.method({
-selector: "renderOn:",
-category: 'rendering',
-fn: function (html){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$3,$4;
-_st(_st(html)._li())._with_((function(){
-return smalltalk.withContext(function($ctx2) {
-$1=_st(html)._input();
-_st($1)._type_("checkbox");
-$2=_st($1)._trap_processors_(["done"],["inputChecked"]);
-$ctx2.sendIdx["trap:processors:"]=1;
-$2;
-$3=_st(html)._span();
-_st($3)._trap_processors_(["done"],["classDoneXxx"]);
-$4=_st($3)._trap_(["text"]);
-return $4;
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"renderOn:",{html:html},smalltalk.TodoItemWidget)})},
-args: ["html"],
-source: "renderOn: html\x0a\x09html li with: [\x0a\x09\x09html input type: 'checkbox'; trap: #('done') processors: #(inputChecked).\x0a\x09\x09html span\x0a\x09\x09\x09trap: #('done') processors: #(classDoneXxx);\x0a\x09\x09\x09trap: #('text') ]",
-messageSends: ["with:", "li", "type:", "input", "trap:processors:", "span", "trap:"],
-referencedClasses: []
-}),
-smalltalk.TodoItemWidget);
 
 
 smalltalk.addMethod(
