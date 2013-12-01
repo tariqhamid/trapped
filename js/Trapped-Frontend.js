@@ -356,42 +356,19 @@ fn: function (anArray){
 var self=this;
 function $TrappedProcessor(){return smalltalk.TrappedProcessor||(typeof TrappedProcessor=="undefined"?nil:TrappedProcessor)}
 return smalltalk.withContext(function($ctx1) { 
-var $2,$3,$1;
+var $1;
 $1=self._new_(_st(_st(anArray)._ifEmpty_((function(){
 return smalltalk.withContext(function($ctx2) {
 return ["contents"];
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})})))._collect_((function(each){
 return smalltalk.withContext(function($ctx2) {
-$2=_st(each)._isString();
-if(smalltalk.assert($2)){
-return _st($TrappedProcessor())._perform_(each);
-} else {
-var selector,args;
-selector="";
-selector;
-args=[];
-args;
-_st(each)._withIndexDo_((function(element,index){
-return smalltalk.withContext(function($ctx3) {
-$3=_st(index)._odd();
-if(smalltalk.assert($3)){
-selector=_st(selector).__comma(element);
-$ctx3.sendIdx[","]=1;
-return selector;
-} else {
-selector=_st(selector).__comma(":");
-selector;
-return _st(args)._add_(element);
-};
-}, function($ctx3) {$ctx3.fillBlock({element:element,index:index},$ctx2,5)})}));
-return _st($TrappedProcessor())._perform_withArguments_(selector,args);
-};
+return _st(each)._asTrapProcSendTo_($TrappedProcessor());
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,2)})})));
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"newFromProcessorSpecs:",{anArray:anArray},smalltalk.TrappedProcessingChain.klass)})},
 args: ["anArray"],
-source: "newFromProcessorSpecs: anArray\x0a\x09^self new: ((anArray ifEmpty: [ #(contents) ]) collect: [ :each | each isString\x0a\x09\x09ifTrue: [ TrappedProcessor perform: each ]\x0a\x09\x09ifFalse: [\x0a\x09\x09\x09| selector args |\x0a\x09\x09\x09selector := ''.\x0a\x09\x09\x09args := #().\x0a\x09\x09\x09each withIndexDo: [ :element :index | index odd\x0a\x09\x09\x09\x09ifTrue: [ selector := selector, element ]\x0a\x09\x09\x09\x09ifFalse: [ selector := selector, ':'. args add: element ] ].\x0a\x09\x09\x09TrappedProcessor perform: selector withArguments: args ] ])",
-messageSends: ["new:", "collect:", "ifEmpty:", "ifTrue:ifFalse:", "isString", "perform:", "withIndexDo:", "odd", ",", "add:", "perform:withArguments:"],
+source: "newFromProcessorSpecs: anArray\x0a\x09^self new: ((anArray ifEmpty: [ #(contents) ]) collect: [ :each | each asTrapProcSendTo: TrappedProcessor ])",
+messageSends: ["new:", "collect:", "ifEmpty:", "asTrapProcSendTo:"],
 referencedClasses: ["TrappedProcessor"]
 }),
 smalltalk.TrappedProcessingChain.klass);
@@ -1182,6 +1159,77 @@ referencedClasses: []
 }),
 smalltalk.TrappedSnapshot);
 
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asTrapProcSendTo:",
+category: '*Trapped-Frontend',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st("Trapped cannot use processor descriptor of ".__comma(_st(self._class())._name())).__comma(" type.");
+$ctx1.sendIdx[","]=1;
+self._error_($1);
+return self}, function($ctx1) {$ctx1.fill(self,"asTrapProcSendTo:",{anObject:anObject},smalltalk.Object)})},
+args: ["anObject"],
+source: "asTrapProcSendTo: anObject\x0a\x09self error: 'Trapped cannot use processor descriptor of ', self class name, ' type.'",
+messageSends: ["error:", ",", "name", "class"],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asTrapProcSendTo:",
+category: '*Trapped-Frontend',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anObject)._perform_(self);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asTrapProcSendTo:",{anObject:anObject},smalltalk.String)})},
+args: ["anObject"],
+source: "asTrapProcSendTo: anObject\x0a\x09^anObject perform: self",
+messageSends: ["perform:"],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asTrapProcSendTo:",
+category: '*Trapped-Frontend',
+fn: function (anObject){
+var self=this;
+var selector,args;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+selector="";
+args=[];
+self._withIndexDo_((function(element,index){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(index)._odd();
+if(smalltalk.assert($1)){
+selector=_st(selector).__comma(element);
+$ctx2.sendIdx[","]=1;
+return selector;
+} else {
+selector=_st(selector).__comma(":");
+selector;
+return _st(args)._add_(element);
+};
+}, function($ctx2) {$ctx2.fillBlock({element:element,index:index},$ctx1,1)})}));
+$2=_st(anObject)._perform_withArguments_(selector,args);
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"asTrapProcSendTo:",{anObject:anObject,selector:selector,args:args},smalltalk.Array)})},
+args: ["anObject"],
+source: "asTrapProcSendTo: anObject\x0a\x09| selector args |\x0a\x09selector := ''.\x0a\x09args := #().\x0a\x09\x09self withIndexDo: [ :element :index | index odd\x0a\x09\x09\x09ifTrue: [ selector := selector, element ]\x0a\x09\x09\x09ifFalse: [ selector := selector, ':'. args add: element ] ].\x0a\x09^anObject perform: selector withArguments: args",
+messageSends: ["withIndexDo:", "ifTrue:ifFalse:", "odd", ",", "add:", "perform:withArguments:"],
+referencedClasses: []
+}),
+smalltalk.Array);
 
 smalltalk.addMethod(
 smalltalk.method({

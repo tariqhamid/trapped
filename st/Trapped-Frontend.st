@@ -107,16 +107,7 @@ new: anArray
 !
 
 newFromProcessorSpecs: anArray
-	^self new: ((anArray ifEmpty: [ #(contents) ]) collect: [ :each | each isString
-		ifTrue: [ TrappedProcessor perform: each ]
-		ifFalse: [
-			| selector args |
-			selector := ''.
-			args := #().
-			each withIndexDo: [ :element :index | index odd
-				ifTrue: [ selector := selector, element ]
-				ifFalse: [ selector := selector, ':'. args add: element ] ].
-			TrappedProcessor perform: selector withArguments: args ] ])
+	^self new: ((anArray ifEmpty: [ #(contents) ]) collect: [ :each | each asTrapProcSendTo: TrappedProcessor ])
 ! !
 
 !TrappedProcessingChain class methodsFor: 'private'!
@@ -439,7 +430,29 @@ watch: aBlock
 	self model watch: self path allButFirst do: aBlock
 ! !
 
+!Object methodsFor: '*Trapped-Frontend'!
+
+asTrapProcSendTo: anObject
+	self error: 'Trapped cannot use processor descriptor of ', self class name, ' type.'
+! !
+
+!String methodsFor: '*Trapped-Frontend'!
+
+asTrapProcSendTo: anObject
+	^anObject perform: self
+! !
+
 !Array methodsFor: '*Trapped-Frontend'!
+
+asTrapProcSendTo: anObject
+	| selector args |
+	selector := ''.
+	args := #().
+		self withIndexDo: [ :element :index | index odd
+			ifTrue: [ selector := selector, element ]
+			ifFalse: [ selector := selector, ':'. args add: element ] ].
+	^anObject perform: selector withArguments: args
+!
 
 trapDescend: aBlock
 	Trapped current descend: self snapshotDo: aBlock
