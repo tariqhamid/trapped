@@ -476,6 +476,113 @@ smalltalk.TrappedProcessorLoopProc);
 
 
 
+smalltalk.addClass('TrappedProcessorReplace', smalltalk.TrappedProcessor, ['left', 'right'], 'Trapped-Processors');
+smalltalk.TrappedProcessorReplace.comment="I convert data to string representation and do a regex replace.\x0aI get two parameters, in toView:, first is replaced with second,\x0aand in toModel:, the second is replaced with first.\x0a\x0aI remove leading '^' and ending '$' from the string used as replacement,\x0aso it safe to replace ^to with ^To, for example.\x0a";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "left:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@left"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"left:",{aString:aString},smalltalk.TrappedProcessorReplace)})},
+args: ["aString"],
+source: "left: aString\x0a\x09left := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorReplace);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "right:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@right"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"right:",{aString:aString},smalltalk.TrappedProcessorReplace)})},
+args: ["aString"],
+source: "right: aString\x0a\x09right := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorReplace);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toModel:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+var replacement;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@left"])._replace_with_("^\x5c^","");
+$ctx1.sendIdx["replace:with:"]=2;
+replacement=_st($1)._replace_with_("\x5c$$","");
+$ctx1.sendIdx["replace:with:"]=1;
+_st(aDataCarrier)._value_(_st(_st(_st(aDataCarrier)._value())._asString())._replace_with_(self["@right"],replacement));
+_st(aDataCarrier)._proceed();
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier,replacement:replacement},smalltalk.TrappedProcessorReplace)})},
+args: ["aDataCarrier"],
+source: "toModel: aDataCarrier\x0a\x09| replacement |\x0a\x09replacement := (left replace: '^\x5c^' with: '') replace: '\x5c$$' with: ''.\x0a\x09aDataCarrier value: (aDataCarrier value asString replace: right with: replacement).\x0a\x09aDataCarrier proceed",
+messageSends: ["replace:with:", "value:", "asString", "value", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorReplace);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+var replacement;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(self["@right"])._replace_with_("^\x5c^","");
+$ctx1.sendIdx["replace:with:"]=2;
+replacement=_st($1)._replace_with_("\x5c$$","");
+$ctx1.sendIdx["replace:with:"]=1;
+_st(aDataCarrier)._value_(_st(_st(_st(aDataCarrier)._value())._asString())._replace_with_(self["@left"],replacement));
+_st(aDataCarrier)._proceed();
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,replacement:replacement},smalltalk.TrappedProcessorReplace)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09| replacement |\x0a\x09replacement := (right replace: '^\x5c^' with: '') replace: '\x5c$$' with: ''.\x0a\x09aDataCarrier value: (aDataCarrier value asString replace: left with: replacement).\x0a\x09aDataCarrier proceed",
+messageSends: ["replace:with:", "value:", "asString", "value", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorReplace);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:with:",
+category: 'instance creation',
+fn: function (aString,anotherString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$4,$5,$1;
+$2=self._new();
+$3=$2;
+$4=_st(aString)._asString();
+$ctx1.sendIdx["asString"]=1;
+_st($3)._left_($4);
+_st($2)._right_(_st(anotherString)._asString());
+$5=_st($2)._yourself();
+$1=$5;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:with:",{aString:aString,anotherString:anotherString},smalltalk.TrappedProcessorReplace.klass)})},
+args: ["aString", "anotherString"],
+source: "new: aString with: anotherString\x0a\x09^ self new\x0a\x09\x09left: aString asString;\x0a\x09\x09right: anotherString asString;\x0a\x09\x09yourself",
+messageSends: ["left:", "new", "asString", "right:", "yourself"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorReplace.klass);
+
+
 smalltalk.addClass('TrappedProcessorSignal', smalltalk.TrappedProcessor, ['selector'], 'Trapped-Processors');
 smalltalk.TrappedProcessorSignal.comment="Instead of writing data directly to model,\x0aI instead modify it by sending a message specified when instantiating me.";
 smalltalk.addMethod(
@@ -933,6 +1040,25 @@ args: [],
 source: "path\x0a\x09^TrappedProcessorDescend new",
 messageSends: ["new"],
 referencedClasses: ["TrappedProcessorDescend"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "replace:with:",
+category: '*Trapped-Processors',
+fn: function (aString,anotherString){
+var self=this;
+function $TrappedProcessorReplace(){return smalltalk.TrappedProcessorReplace||(typeof TrappedProcessorReplace=="undefined"?nil:TrappedProcessorReplace)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorReplace())._new_with_(aString,anotherString);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"replace:with:",{aString:aString,anotherString:anotherString},smalltalk.TrappedProcessor.klass)})},
+args: ["aString", "anotherString"],
+source: "replace: aString with: anotherString\x0a\x09^TrappedProcessorReplace new: aString with: anotherString",
+messageSends: ["new:with:"],
+referencedClasses: ["TrappedProcessorReplace"]
 }),
 smalltalk.TrappedProcessor.klass);
 

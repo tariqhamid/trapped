@@ -253,6 +253,52 @@ toView: aDataCarrier
 	frozen target trapIter: #() after: [ :html | frozen copy target: html root; proceed ]
 ! !
 
+TrappedProcessor subclass: #TrappedProcessorReplace
+	instanceVariableNames: 'left right'
+	package: 'Trapped-Processors'!
+!TrappedProcessorReplace commentStamp!
+I convert data to string representation and do a regex replace.
+I get two parameters, in toView:, first is replaced with second,
+and in toModel:, the second is replaced with first.
+
+I remove leading '^' and ending '$' from the string used as replacement,
+so it safe to replace ^to with ^To, for example.!
+
+!TrappedProcessorReplace methodsFor: 'accessing'!
+
+left: aString
+	left := aString
+!
+
+right: aString
+	right := aString
+! !
+
+!TrappedProcessorReplace methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	| replacement |
+	replacement := (left replace: '^\^' with: '') replace: '\$$' with: ''.
+	aDataCarrier value: (aDataCarrier value asString replace: right with: replacement).
+	aDataCarrier proceed
+!
+
+toView: aDataCarrier
+	| replacement |
+	replacement := (right replace: '^\^' with: '') replace: '\$$' with: ''.
+	aDataCarrier value: (aDataCarrier value asString replace: left with: replacement).
+	aDataCarrier proceed
+! !
+
+!TrappedProcessorReplace class methodsFor: 'instance creation'!
+
+new: aString with: anotherString
+	^ self new
+		left: aString asString;
+		right: anotherString asString;
+		yourself
+! !
+
 TrappedProcessor subclass: #TrappedProcessorSignal
 	instanceVariableNames: 'selector'
 	package: 'Trapped-Processors'!
@@ -392,6 +438,10 @@ loopProc
 
 path
 	^TrappedProcessorDescend new
+!
+
+replace: aString with: anotherString
+	^TrappedProcessorReplace new: aString with: anotherString
 !
 
 signal: aString
