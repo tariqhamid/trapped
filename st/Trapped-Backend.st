@@ -327,22 +327,22 @@ read: path do: aBlock
 
 !Object methodsFor: '*Trapped-Backend'!
 
-reverseTrapAt: anObject
-	^nil
+asTrapAtPut: value sendTo: anObject
+	self error: 'Trapped cannot put at ', self class name, ' type key.'
 !
 
-reverseTrapAt: anObject put: value
-	self error: 'Trapped cannot put at ', self class name, ' type key.'
+asTrapAtSendTo: anObject
+	^nil
 ! !
 
 !Number methodsFor: '*Trapped-Backend'!
 
-reverseTrapAt: anObject
-	^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]
+asTrapAtPut: value sendTo: anObject
+	^anObject at: self put: value
 !
 
-reverseTrapAt: anObject put: value
-	^anObject at: self put: value
+asTrapAtSendTo: anObject
+	^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]
 ! !
 
 !SequenceableCollection methodsFor: '*Trapped-Backend'!
@@ -352,32 +352,32 @@ asEavModel
     model := EavModel new.
     model getBlock: [ :anObject |
         self inject: anObject into: [ :soFar :segment |
-            segment reverseTrapAt: soFar ]].
+            segment asTrapAtSendTo: soFar ]].
     self isEmpty ifFalse: [
         model putBlock: [ :anObject :value | | penultimate |
             penultimate :=  self allButLast inject: anObject into: [ :soFar :segment |
-                soFar ifNotNil: [ segment reverseTrapAt: soFar ]].
-            self last reverseTrapAt: penultimate put: value ]].
+                soFar ifNotNil: [ segment asTrapAtSendTo: soFar ]].
+            self last asTrapAtPut:value sendTo: penultimate ]].
     ^model
 ! !
 
 !String methodsFor: '*Trapped-Backend'!
 
-reverseTrapAt: anObject
-	^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]
+asTrapAtPut: value sendTo: anObject
+	^anObject at: self put: value
 !
 
-reverseTrapAt: anObject put: value
-	^anObject at: self put: value
+asTrapAtSendTo: anObject
+	^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]
 ! !
 
 !Array methodsFor: '*Trapped-Backend'!
 
-reverseTrapAt: anObject
-	^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]
+asTrapAtPut: value sendTo: anObject
+    ^anObject perform: (self first, ':') asSymbol withArguments: { value }
 !
 
-reverseTrapAt: anObject put: value
-    ^anObject perform: (self first, ':') asSymbol withArguments: { value }
+asTrapAtSendTo: anObject
+	^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]
 ! !
 

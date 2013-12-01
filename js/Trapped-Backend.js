@@ -801,34 +801,18 @@ smalltalk.ListKeyedIsolatedEntity);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "reverseTrapAt:",
+selector: "asTrapAtPut:sendTo:",
 category: '*Trapped-Backend',
-fn: function (anObject){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-return nil;
-}, function($ctx1) {$ctx1.fill(self,"reverseTrapAt:",{anObject:anObject},smalltalk.Object)})},
-args: ["anObject"],
-source: "reverseTrapAt: anObject\x0a\x09^nil",
-messageSends: [],
-referencedClasses: []
-}),
-smalltalk.Object);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "reverseTrapAt:put:",
-category: '*Trapped-Backend',
-fn: function (anObject,value){
+fn: function (value,anObject){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
 $1=_st("Trapped cannot put at ".__comma(_st(self._class())._name())).__comma(" type key.");
 $ctx1.sendIdx[","]=1;
 self._error_($1);
-return self}, function($ctx1) {$ctx1.fill(self,"reverseTrapAt:put:",{anObject:anObject,value:value},smalltalk.Object)})},
-args: ["anObject", "value"],
-source: "reverseTrapAt: anObject put: value\x0a\x09self error: 'Trapped cannot put at ', self class name, ' type key.'",
+return self}, function($ctx1) {$ctx1.fill(self,"asTrapAtPut:sendTo:",{value:value,anObject:anObject},smalltalk.Object)})},
+args: ["value", "anObject"],
+source: "asTrapAtPut: value sendTo: anObject\x0a\x09self error: 'Trapped cannot put at ', self class name, ' type key.'",
 messageSends: ["error:", ",", "name", "class"],
 referencedClasses: []
 }),
@@ -836,7 +820,41 @@ smalltalk.Object);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "reverseTrapAt:",
+selector: "asTrapAtSendTo:",
+category: '*Trapped-Backend',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return nil;
+}, function($ctx1) {$ctx1.fill(self,"asTrapAtSendTo:",{anObject:anObject},smalltalk.Object)})},
+args: ["anObject"],
+source: "asTrapAtSendTo: anObject\x0a\x09^nil",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.Object);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asTrapAtPut:sendTo:",
+category: '*Trapped-Backend',
+fn: function (value,anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anObject)._at_put_(self,value);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asTrapAtPut:sendTo:",{value:value,anObject:anObject},smalltalk.Number)})},
+args: ["value", "anObject"],
+source: "asTrapAtPut: value sendTo: anObject\x0a\x09^anObject at: self put: value",
+messageSends: ["at:put:"],
+referencedClasses: []
+}),
+smalltalk.Number);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asTrapAtSendTo:",
 category: '*Trapped-Backend',
 fn: function (anObject){
 var self=this;
@@ -851,28 +869,10 @@ return nil;
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)})}));
 };
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"reverseTrapAt:",{anObject:anObject},smalltalk.Number)})},
+}, function($ctx1) {$ctx1.fill(self,"asTrapAtSendTo:",{anObject:anObject},smalltalk.Number)})},
 args: ["anObject"],
-source: "reverseTrapAt: anObject\x0a\x09^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]",
+source: "asTrapAtSendTo: anObject\x0a\x09^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]",
 messageSends: ["ifNotNil:", "at:ifAbsent:"],
-referencedClasses: []
-}),
-smalltalk.Number);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "reverseTrapAt:put:",
-category: '*Trapped-Backend',
-fn: function (anObject,value){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(anObject)._at_put_(self,value);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"reverseTrapAt:put:",{anObject:anObject,value:value},smalltalk.Number)})},
-args: ["anObject", "value"],
-source: "reverseTrapAt: anObject put: value\x0a\x09^anObject at: self put: value",
-messageSends: ["at:put:"],
 referencedClasses: []
 }),
 smalltalk.Number);
@@ -892,8 +892,8 @@ _st(model)._getBlock_((function(anObject){
 return smalltalk.withContext(function($ctx2) {
 return self._inject_into_(anObject,(function(soFar,segment){
 return smalltalk.withContext(function($ctx3) {
-return _st(segment)._reverseTrapAt_(soFar);
-$ctx3.sendIdx["reverseTrapAt:"]=1;
+return _st(segment)._asTrapAtSendTo_(soFar);
+$ctx3.sendIdx["asTrapAtSendTo:"]=1;
 }, function($ctx3) {$ctx3.fillBlock({soFar:soFar,segment:segment},$ctx2,2)})}));
 $ctx2.sendIdx["inject:into:"]=1;
 }, function($ctx2) {$ctx2.fillBlock({anObject:anObject},$ctx1,1)})}));
@@ -907,26 +907,44 @@ return smalltalk.withContext(function($ctx3) {
 if(($receiver = soFar) == nil || $receiver == null){
 return soFar;
 } else {
-return _st(segment)._reverseTrapAt_(soFar);
+return _st(segment)._asTrapAtSendTo_(soFar);
 };
 }, function($ctx3) {$ctx3.fillBlock({soFar:soFar,segment:segment},$ctx2,5)})}));
 penultimate;
-return _st(self._last())._reverseTrapAt_put_(penultimate,value);
+return _st(self._last())._asTrapAtPut_sendTo_(value,penultimate);
 }, function($ctx2) {$ctx2.fillBlock({anObject:anObject,value:value,penultimate:penultimate},$ctx1,4)})}));
 };
 $2=model;
 return $2;
 }, function($ctx1) {$ctx1.fill(self,"asEavModel",{model:model},smalltalk.SequenceableCollection)})},
 args: [],
-source: "asEavModel\x0a    | model |\x0a    model := EavModel new.\x0a    model getBlock: [ :anObject |\x0a        self inject: anObject into: [ :soFar :segment |\x0a            segment reverseTrapAt: soFar ]].\x0a    self isEmpty ifFalse: [\x0a        model putBlock: [ :anObject :value | | penultimate |\x0a            penultimate :=  self allButLast inject: anObject into: [ :soFar :segment |\x0a                soFar ifNotNil: [ segment reverseTrapAt: soFar ]].\x0a            self last reverseTrapAt: penultimate put: value ]].\x0a    ^model",
-messageSends: ["new", "getBlock:", "inject:into:", "reverseTrapAt:", "ifFalse:", "isEmpty", "putBlock:", "allButLast", "ifNotNil:", "reverseTrapAt:put:", "last"],
+source: "asEavModel\x0a    | model |\x0a    model := EavModel new.\x0a    model getBlock: [ :anObject |\x0a        self inject: anObject into: [ :soFar :segment |\x0a            segment asTrapAtSendTo: soFar ]].\x0a    self isEmpty ifFalse: [\x0a        model putBlock: [ :anObject :value | | penultimate |\x0a            penultimate :=  self allButLast inject: anObject into: [ :soFar :segment |\x0a                soFar ifNotNil: [ segment asTrapAtSendTo: soFar ]].\x0a            self last asTrapAtPut:value sendTo: penultimate ]].\x0a    ^model",
+messageSends: ["new", "getBlock:", "inject:into:", "asTrapAtSendTo:", "ifFalse:", "isEmpty", "putBlock:", "allButLast", "ifNotNil:", "asTrapAtPut:sendTo:", "last"],
 referencedClasses: ["EavModel"]
 }),
 smalltalk.SequenceableCollection);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "reverseTrapAt:",
+selector: "asTrapAtPut:sendTo:",
+category: '*Trapped-Backend',
+fn: function (value,anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anObject)._at_put_(self,value);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"asTrapAtPut:sendTo:",{value:value,anObject:anObject},smalltalk.String)})},
+args: ["value", "anObject"],
+source: "asTrapAtPut: value sendTo: anObject\x0a\x09^anObject at: self put: value",
+messageSends: ["at:put:"],
+referencedClasses: []
+}),
+smalltalk.String);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "asTrapAtSendTo:",
 category: '*Trapped-Backend',
 fn: function (anObject){
 var self=this;
@@ -941,9 +959,9 @@ return nil;
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)})}));
 };
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"reverseTrapAt:",{anObject:anObject},smalltalk.String)})},
+}, function($ctx1) {$ctx1.fill(self,"asTrapAtSendTo:",{anObject:anObject},smalltalk.String)})},
 args: ["anObject"],
-source: "reverseTrapAt: anObject\x0a\x09^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]",
+source: "asTrapAtSendTo: anObject\x0a\x09^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]",
 messageSends: ["ifNotNil:", "at:ifAbsent:"],
 referencedClasses: []
 }),
@@ -951,25 +969,25 @@ smalltalk.String);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "reverseTrapAt:put:",
+selector: "asTrapAtPut:sendTo:",
 category: '*Trapped-Backend',
-fn: function (anObject,value){
+fn: function (value,anObject){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(anObject)._at_put_(self,value);
+$1=_st(anObject)._perform_withArguments_(_st(_st(self._first()).__comma(":"))._asSymbol(),[value]);
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"reverseTrapAt:put:",{anObject:anObject,value:value},smalltalk.String)})},
-args: ["anObject", "value"],
-source: "reverseTrapAt: anObject put: value\x0a\x09^anObject at: self put: value",
-messageSends: ["at:put:"],
+}, function($ctx1) {$ctx1.fill(self,"asTrapAtPut:sendTo:",{value:value,anObject:anObject},smalltalk.Array)})},
+args: ["value", "anObject"],
+source: "asTrapAtPut: value sendTo: anObject\x0a    ^anObject perform: (self first, ':') asSymbol withArguments: { value }",
+messageSends: ["perform:withArguments:", "asSymbol", ",", "first"],
 referencedClasses: []
 }),
-smalltalk.String);
+smalltalk.Array);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "reverseTrapAt:",
+selector: "asTrapAtSendTo:",
 category: '*Trapped-Backend',
 fn: function (anObject){
 var self=this;
@@ -988,29 +1006,11 @@ throw $early=[nil];
 return $1;
 }
 catch(e) {if(e===$early)return e[0]; throw e}
-}, function($ctx1) {$ctx1.fill(self,"reverseTrapAt:",{anObject:anObject},smalltalk.Array)})},
+}, function($ctx1) {$ctx1.fill(self,"asTrapAtSendTo:",{anObject:anObject},smalltalk.Array)})},
 args: ["anObject"],
-source: "reverseTrapAt: anObject\x0a\x09^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]",
+source: "asTrapAtSendTo: anObject\x0a\x09^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]",
 messageSends: ["on:do:", "perform:", "first"],
 referencedClasses: ["MessageNotUnderstood"]
-}),
-smalltalk.Array);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "reverseTrapAt:put:",
-category: '*Trapped-Backend',
-fn: function (anObject,value){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(anObject)._perform_withArguments_(_st(_st(self._first()).__comma(":"))._asSymbol(),[value]);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"reverseTrapAt:put:",{anObject:anObject,value:value},smalltalk.Array)})},
-args: ["anObject", "value"],
-source: "reverseTrapAt: anObject put: value\x0a    ^anObject perform: (self first, ':') asSymbol withArguments: { value }",
-messageSends: ["perform:withArguments:", "asSymbol", ",", "first"],
-referencedClasses: []
 }),
 smalltalk.Array);
 
