@@ -1,4 +1,33 @@
 Smalltalk current createPackage: 'Trapped-Processors'!
+TrappedDataExpectingProcessor subclass: #TrappedProcessorAttribute
+	instanceVariableNames: 'attrName'
+	package: 'Trapped-Processors'!
+!TrappedProcessorAttribute commentStamp!
+I set the data into an attribute speciried when creating me.
+No observing and sending back, atm.!
+
+!TrappedProcessorAttribute methodsFor: 'accessing'!
+
+attrName: aString
+	attrName := aString
+! !
+
+!TrappedProcessorAttribute methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	aDataCarrier value
+		ifNil: [ aDataCarrier target removeAt: attrName ]
+		ifNotNil: [ :value | aDataCarrier target at: attrName put: value ]
+! !
+
+!TrappedProcessorAttribute class methodsFor: 'instance creation'!
+
+new: aString
+	^self new
+		attrName: aString;
+		yourself
+! !
+
 TrappedDataExpectingProcessor subclass: #TrappedProcessorDataAdhoc
 	instanceVariableNames: 'toViewBlock'
 	package: 'Trapped-Processors'!
@@ -328,6 +357,10 @@ toTargetValue
 ! !
 
 !TrappedProcessor class methodsFor: '*Trapped-Processors'!
+
+attr: aString
+	^TrappedProcessorAttribute new: aString
+!
 
 dataToView: aBlock
 	^TrappedProcessorDataAdhoc newToView: aBlock

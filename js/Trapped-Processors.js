@@ -2,6 +2,73 @@ define("gh_herby_trapped/Trapped-Processors", ["amber_vm/smalltalk", "amber_vm/n
 smalltalk.addPackage('Trapped-Processors');
 smalltalk.packages["Trapped-Processors"].transport = {"type":"amd","amdNamespace":"gh_herby_trapped"};
 
+smalltalk.addClass('TrappedProcessorAttribute', smalltalk.TrappedDataExpectingProcessor, ['attrName'], 'Trapped-Processors');
+smalltalk.TrappedProcessorAttribute.comment="I set the data into an attribute speciried when creating me.\x0aNo observing and sending back, atm.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "attrName:",
+category: 'accessing',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@attrName"]=aString;
+return self}, function($ctx1) {$ctx1.fill(self,"attrName:",{aString:aString},smalltalk.TrappedProcessorAttribute)})},
+args: ["aString"],
+source: "attrName: aString\x0a\x09attrName := aString",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorAttribute);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(aDataCarrier)._value();
+if(($receiver = $1) == nil || $receiver == null){
+$2=_st(aDataCarrier)._target();
+$ctx1.sendIdx["target"]=1;
+_st($2)._removeAt_(self["@attrName"]);
+} else {
+var value;
+value=$receiver;
+_st(_st(aDataCarrier)._target())._at_put_(self["@attrName"],value);
+};
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorAttribute)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier value\x0a\x09\x09ifNil: [ aDataCarrier target removeAt: attrName ]\x0a\x09\x09ifNotNil: [ :value | aDataCarrier target at: attrName put: value ]",
+messageSends: ["ifNil:ifNotNil:", "value", "removeAt:", "target", "at:put:"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorAttribute);
+
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "new:",
+category: 'instance creation',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $2,$3,$1;
+$2=self._new();
+_st($2)._attrName_(aString);
+$3=_st($2)._yourself();
+$1=$3;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"new:",{aString:aString},smalltalk.TrappedProcessorAttribute.klass)})},
+args: ["aString"],
+source: "new: aString\x0a\x09^self new\x0a\x09\x09attrName: aString;\x0a\x09\x09yourself",
+messageSends: ["attrName:", "new", "yourself"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorAttribute.klass);
+
+
 smalltalk.addClass('TrappedProcessorDataAdhoc', smalltalk.TrappedDataExpectingProcessor, ['toViewBlock'], 'Trapped-Processors');
 smalltalk.TrappedProcessorDataAdhoc.comment="I put data into target via contents: in toView:";
 smalltalk.addMethod(
@@ -697,6 +764,25 @@ messageSends: ["val:", "asJQuery", "target", "ifNotNil:ifNil:", "value"],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "attr:",
+category: '*Trapped-Processors',
+fn: function (aString){
+var self=this;
+function $TrappedProcessorAttribute(){return smalltalk.TrappedProcessorAttribute||(typeof TrappedProcessorAttribute=="undefined"?nil:TrappedProcessorAttribute)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorAttribute())._new_(aString);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"attr:",{aString:aString},smalltalk.TrappedProcessor.klass)})},
+args: ["aString"],
+source: "attr: aString\x0a\x09^TrappedProcessorAttribute new: aString",
+messageSends: ["new:"],
+referencedClasses: ["TrappedProcessorAttribute"]
+}),
+smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
