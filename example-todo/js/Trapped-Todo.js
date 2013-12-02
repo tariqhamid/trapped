@@ -245,7 +245,7 @@ return _st(_st(carrier)._target())._class_("done-".__comma(_st(carrier)._value()
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"classDoneXxx",{},smalltalk.TrappedProcessor.klass)})},
 args: [],
-source: "classDoneXxx\x0a\x09^self dataToView: [ :carrier | carrier target class: 'done-', carrier value ]",
+source: "classDoneXxx\x0a\x09\x22This processor is not used any more,\x0a\x09it was replaced by generic\x0a\x09(replace ^ with ^done-) (attr class)\x0a\x09in HTML.\x0a\x0a\x09This example is left here to show how you can create quick\x0a\x09toView-only processor without class by just passing a block\x22\x0a\x0a\x09^self dataToView: [ :carrier | carrier target class: 'done-', carrier value ]",
 messageSends: ["dataToView:", "class:", "target", ",", "value"],
 referencedClasses: []
 }),

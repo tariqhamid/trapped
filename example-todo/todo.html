@@ -44,7 +44,7 @@
     <ul><ins data-trap="#todos: loopContents">
         <li>
             <input type="checkbox" data-trap="done: inputChecked" />
-            <span data-trap="done: classDoneXxx. text" ></span>
+            <span data-trap="done: (replace ^ with ^done-) (attr class). text" ></span>
         </li>
     </ins></ul>
     <form data-trap=": (signal addTodo) whenSubmitted">

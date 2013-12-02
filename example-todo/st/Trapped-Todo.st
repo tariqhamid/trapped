@@ -124,6 +124,14 @@ archive
 !TrappedProcessor class methodsFor: '*Trapped-Todo'!
 
 classDoneXxx
+	"This processor is not used any more,
+	it was replaced by generic
+	(replace ^ with ^done-) (attr class)
+	in HTML.
+
+	This example is left here to show how you can create quick
+	toView-only processor without class by just passing a block"
+
 	^self dataToView: [ :carrier | carrier target class: 'done-', carrier value ]
 ! !
 
