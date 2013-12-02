@@ -2,7 +2,7 @@ define("gh_herby_trapped/Trapped-Frontend", ["amber_vm/smalltalk", "amber_vm/nil
 smalltalk.addPackage('Trapped-Frontend');
 smalltalk.packages["Trapped-Frontend"].transport = {"type":"amd","amdNamespace":"gh_herby_trapped"};
 
-smalltalk.addClass('TrappedDataCarrier', smalltalk.Object, ['target', 'model', 'chain'], 'Trapped-Frontend');
+smalltalk.addClass('TrappedDataCarrier', smalltalk.Object, ['target', 'model', 'chain', 'source'], 'Trapped-Frontend');
 smalltalk.addMethod(
 smalltalk.method({
 selector: "chain:",
@@ -32,6 +32,40 @@ return self}, function($ctx1) {$ctx1.fill(self,"initialize",{},smalltalk.Trapped
 args: [],
 source: "initialize\x0a\x09super initialize.\x0a\x09model := true",
 messageSends: ["initialize"],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "source",
+category: 'accessing',
+fn: function (){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=self["@source"];
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"source",{},smalltalk.TrappedDataCarrier)})},
+args: [],
+source: "source\x0a\x09^source",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "source:",
+category: 'accessing',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+self["@source"]=anObject;
+return self}, function($ctx1) {$ctx1.fill(self,"source:",{anObject:anObject},smalltalk.TrappedDataCarrier)})},
+args: ["anObject"],
+source: "source: anObject\x0a\x09source := anObject",
+messageSends: [],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);
@@ -215,14 +249,17 @@ _st(self["@processors"])._do_((function(each){
 return smalltalk.withContext(function($ctx2) {
 return _st(each)._installToView_toModel_(toViewCarrier,toModelCarrier);
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})}));
+_st(toViewCarrier)._source_(aSnapshot);
+$ctx1.sendIdx["source:"]=1;
+_st(toModelCarrier)._source_(aTagBrush);
 $1=_st(_st(toViewCarrier)._value()).__eq(true);
 if(smalltalk.assert($1)){
 _st(_st(toViewCarrier)._copy())._proceed();
 };
 return self}, function($ctx1) {$ctx1.fill(self,"forSnapshot:andBrush:",{aSnapshot:aSnapshot,aTagBrush:aTagBrush,toViewCarrier:toViewCarrier,toModelCarrier:toModelCarrier},smalltalk.TrappedProcessingChain)})},
 args: ["aSnapshot", "aTagBrush"],
-source: "forSnapshot: aSnapshot andBrush: aTagBrush\x0a\x09| toViewCarrier toModelCarrier |\x0a\x09toViewCarrier := TrappedDataCarrierToView on: self target: aTagBrush.\x0a\x09toModelCarrier := TrappedDataCarrierToModel on: self target: aSnapshot.\x0a\x09processors do: [ :each | each installToView: toViewCarrier toModel: toModelCarrier ].\x0a\x09toViewCarrier value = true ifTrue: [ toViewCarrier copy proceed ]",
-messageSends: ["on:target:", "do:", "installToView:toModel:", "ifTrue:", "=", "value", "proceed", "copy"],
+source: "forSnapshot: aSnapshot andBrush: aTagBrush\x0a\x09| toViewCarrier toModelCarrier |\x0a\x09toViewCarrier := TrappedDataCarrierToView on: self target: aTagBrush.\x0a\x09toModelCarrier := TrappedDataCarrierToModel on: self target: aSnapshot.\x0a\x09processors do: [ :each | each installToView: toViewCarrier toModel: toModelCarrier ].\x0a\x09toViewCarrier source: aSnapshot.\x0a\x09toModelCarrier source: aTagBrush.\x0a\x09toViewCarrier value = true ifTrue: [ toViewCarrier copy proceed ]",
+messageSends: ["on:target:", "do:", "installToView:toModel:", "source:", "ifTrue:", "=", "value", "proceed", "copy"],
 referencedClasses: ["TrappedDataCarrierToView", "TrappedDataCarrierToModel"]
 }),
 smalltalk.TrappedProcessingChain);

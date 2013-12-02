@@ -1,12 +1,20 @@
 Smalltalk current createPackage: 'Trapped-Frontend'!
 Object subclass: #TrappedDataCarrier
-	instanceVariableNames: 'target model chain'
+	instanceVariableNames: 'target model chain source'
 	package: 'Trapped-Frontend'!
 
 !TrappedDataCarrier methodsFor: 'accessing'!
 
 chain: aProcessingChain
 	chain := aProcessingChain
+!
+
+source
+	^source
+!
+
+source: anObject
+	source := anObject
 !
 
 target
@@ -92,6 +100,8 @@ forSnapshot: aSnapshot andBrush: aTagBrush
 	toViewCarrier := TrappedDataCarrierToView on: self target: aTagBrush.
 	toModelCarrier := TrappedDataCarrierToModel on: self target: aSnapshot.
 	processors do: [ :each | each installToView: toViewCarrier toModel: toModelCarrier ].
+	toViewCarrier source: aSnapshot.
+	toModelCarrier source: aTagBrush.
 	toViewCarrier value = true ifTrue: [ toViewCarrier copy proceed ]
 ! !
 
