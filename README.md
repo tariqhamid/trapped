@@ -17,9 +17,9 @@ automagically communicated there and back.
 **Easy way** (but you cannot save and reload with new code):
 
 Visit the classic Counter example
-at http://www.herby.sk/trapped/example-counter/counter-html
+at http://www.herby.sk/trapped/example-counter/counter.html
 or simple Todo similat to one in AngularJS page
-at http://www.herby.sk/trapped/example-todo/todo-html.
+at http://www.herby.sk/trapped/example-todo/todo.html.
 
 **Hard way** (but you can save and reload with new code):
 
