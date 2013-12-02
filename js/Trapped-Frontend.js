@@ -1145,6 +1145,22 @@ smalltalk.TrappedSnapshot);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "read:",
+category: 'action',
+fn: function (aBlock){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(self._model())._read_do_(_st(self._path())._allButFirst(),aBlock);
+return self}, function($ctx1) {$ctx1.fill(self,"read:",{aBlock:aBlock},smalltalk.TrappedSnapshot)})},
+args: ["aBlock"],
+source: "read: aBlock\x0a\x09self model read: self path allButFirst do: aBlock",
+messageSends: ["read:do:", "model", "allButFirst", "path"],
+referencedClasses: []
+}),
+smalltalk.TrappedSnapshot);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "watch:",
 category: 'action',
 fn: function (aBlock){

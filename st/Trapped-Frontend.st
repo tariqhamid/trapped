@@ -426,6 +426,10 @@ modify: aBlock
 	self model modify: self path allButFirst do: aBlock
 !
 
+read: aBlock
+	self model read: self path allButFirst do: aBlock
+!
+
 watch: aBlock
 	self model watch: self path allButFirst do: aBlock
 ! !
