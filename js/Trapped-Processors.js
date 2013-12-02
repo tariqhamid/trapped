@@ -655,6 +655,29 @@ referencedClasses: []
 smalltalk.TrappedProcessorSignal.klass);
 
 
+smalltalk.addClass('TrappedProcessorToBlackboard', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorToBlackboard.comment="I save the data to blackboard in toModel:, to position specified by path.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toModel:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(aDataCarrier)._target())._modify_((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(aDataCarrier)._value();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorToBlackboard)})},
+args: ["aDataCarrier"],
+source: "toModel: aDataCarrier\x0a\x09aDataCarrier target modify: [ aDataCarrier value ]",
+messageSends: ["modify:", "target", "value"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorToBlackboard);
+
+
+
 smalltalk.addClass('TrappedProcessorWhenClicked', smalltalk.TrappedProcessor, [], 'Trapped-Processors');
 smalltalk.TrappedProcessorWhenClicked.comment="I bind to an element and send true to blackboard when clicked.";
 smalltalk.addMethod(
@@ -1078,6 +1101,25 @@ args: ["aString"],
 source: "signal: aString\x0a\x09^TrappedProcessorSignal new: aString",
 messageSends: ["new:"],
 referencedClasses: ["TrappedProcessorSignal"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toBlackboard",
+category: '*Trapped-Processors',
+fn: function (){
+var self=this;
+function $TrappedProcessorToBlackboard(){return smalltalk.TrappedProcessorToBlackboard||(typeof TrappedProcessorToBlackboard=="undefined"?nil:TrappedProcessorToBlackboard)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorToBlackboard())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"toBlackboard",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "toBlackboard\x0a\x09^TrappedProcessorToBlackboard new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorToBlackboard"]
 }),
 smalltalk.TrappedProcessor.klass);
 

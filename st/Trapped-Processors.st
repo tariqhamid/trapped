@@ -330,6 +330,18 @@ new: aString
 		yourself
 ! !
 
+TrappedDataExpectingProcessor subclass: #TrappedProcessorToBlackboard
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorToBlackboard commentStamp!
+I save the data to blackboard in toModel:, to position specified by path.!
+
+!TrappedProcessorToBlackboard methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	aDataCarrier target modify: [ aDataCarrier value ]
+! !
+
 TrappedProcessor subclass: #TrappedProcessorWhenClicked
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
@@ -446,6 +458,10 @@ replace: aString with: anotherString
 
 signal: aString
 	^TrappedProcessorSignal new: aString
+!
+
+toBlackboard
+	^TrappedProcessorToBlackboard new
 !
 
 whenClicked
