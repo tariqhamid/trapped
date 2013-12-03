@@ -702,6 +702,86 @@ smalltalk.TrappedProcessorToBlackboard);
 
 
 
+smalltalk.addClass('TrappedProcessorUriComponentDecode', smalltalk.TrappedProcessor, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorUriComponentDecode.comment="I uriComponentDecode in toView:\x0aand encode in toModel:";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toModel:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(aDataCarrier)._value_(_st(_st(aDataCarrier)._value())._uriComponentEncoded());
+$1=_st(aDataCarrier)._proceed();
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorUriComponentDecode)})},
+args: ["aDataCarrier"],
+source: "toModel: aDataCarrier\x0a\x09aDataCarrier\x0a\x09\x09value: aDataCarrier value uriComponentEncoded;\x0a\x09\x09proceed",
+messageSends: ["value:", "uriComponentEncoded", "value", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorUriComponentDecode);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(aDataCarrier)._value_(_st(_st(aDataCarrier)._value())._uriComponentDecoded());
+$1=_st(aDataCarrier)._proceed();
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorUriComponentDecode)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier\x0a\x09\x09value: aDataCarrier value uriComponentDecoded;\x0a\x09\x09proceed",
+messageSends: ["value:", "uriComponentDecoded", "value", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorUriComponentDecode);
+
+
+
+smalltalk.addClass('TrappedProcessorUriComponentEncode', smalltalk.TrappedProcessor, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorUriComponentEncode.comment="I uriComponentEncode in toView:\x0aand decode in toModel:";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toModel:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(aDataCarrier)._value_(_st(_st(aDataCarrier)._value())._uriComponentDecoded());
+$1=_st(aDataCarrier)._proceed();
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorUriComponentEncode)})},
+args: ["aDataCarrier"],
+source: "toModel: aDataCarrier\x0a\x09aDataCarrier\x0a\x09\x09value: aDataCarrier value uriComponentDecoded;\x0a\x09\x09proceed",
+messageSends: ["value:", "uriComponentDecoded", "value", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorUriComponentEncode);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+_st(aDataCarrier)._value_(_st(_st(aDataCarrier)._value())._uriComponentEncoded());
+$1=_st(aDataCarrier)._proceed();
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorUriComponentEncode)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier\x0a\x09\x09value: aDataCarrier value uriComponentEncoded;\x0a\x09\x09proceed",
+messageSends: ["value:", "uriComponentEncoded", "value", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorUriComponentEncode);
+
+
+
 smalltalk.addClass('TrappedProcessorWhenClicked', smalltalk.TrappedProcessor, [], 'Trapped-Processors');
 smalltalk.TrappedProcessorWhenClicked.comment="I bind to an element and send true to blackboard when clicked.";
 smalltalk.addMethod(
@@ -963,6 +1043,25 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "deuric",
+category: '*Trapped-Processors',
+fn: function (){
+var self=this;
+function $TrappedProcessorUriComponentDecoded(){return smalltalk.TrappedProcessorUriComponentDecoded||(typeof TrappedProcessorUriComponentDecoded=="undefined"?nil:TrappedProcessorUriComponentDecoded)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorUriComponentDecoded())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"deuric",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "deuric\x0a\x09^TrappedProcessorUriComponentDecoded new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorUriComponentDecoded"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "guardContents:",
 category: '*Trapped-Processors',
 fn: function (anArray){
@@ -1148,6 +1247,25 @@ args: [],
 source: "toBlackboard\x0a\x09^TrappedProcessorToBlackboard new",
 messageSends: ["new"],
 referencedClasses: ["TrappedProcessorToBlackboard"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "uric",
+category: '*Trapped-Processors',
+fn: function (){
+var self=this;
+function $TrappedProcessorUriComponentEncoded(){return smalltalk.TrappedProcessorUriComponentEncoded||(typeof TrappedProcessorUriComponentEncoded=="undefined"?nil:TrappedProcessorUriComponentEncoded)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorUriComponentEncoded())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"uric",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "uric\x0a\x09^TrappedProcessorUriComponentEncoded new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorUriComponentEncoded"]
 }),
 smalltalk.TrappedProcessor.klass);
 

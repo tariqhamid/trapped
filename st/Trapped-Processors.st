@@ -348,6 +348,48 @@ toModel: aDataCarrier
 	aDataCarrier target modify: [ aDataCarrier value ]
 ! !
 
+TrappedProcessor subclass: #TrappedProcessorUriComponentDecode
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorUriComponentDecode commentStamp!
+I uriComponentDecode in toView:
+and encode in toModel:!
+
+!TrappedProcessorUriComponentDecode methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	aDataCarrier
+		value: aDataCarrier value uriComponentEncoded;
+		proceed
+!
+
+toView: aDataCarrier
+	aDataCarrier
+		value: aDataCarrier value uriComponentDecoded;
+		proceed
+! !
+
+TrappedProcessor subclass: #TrappedProcessorUriComponentEncode
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorUriComponentEncode commentStamp!
+I uriComponentEncode in toView:
+and decode in toModel:!
+
+!TrappedProcessorUriComponentEncode methodsFor: 'data transformation'!
+
+toModel: aDataCarrier
+	aDataCarrier
+		value: aDataCarrier value uriComponentDecoded;
+		proceed
+!
+
+toView: aDataCarrier
+	aDataCarrier
+		value: aDataCarrier value uriComponentEncoded;
+		proceed
+! !
+
 TrappedProcessor subclass: #TrappedProcessorWhenClicked
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
@@ -432,6 +474,10 @@ dataToView: aBlock
 	^TrappedProcessorDataAdhoc newToView: aBlock
 !
 
+deuric
+	^TrappedProcessorUriComponentDecoded new
+!
+
 guardContents: anArray
 	^TrappedProcessorGuardContents new: anArray
 !
@@ -470,6 +516,10 @@ signal: aString
 
 toBlackboard
 	^TrappedProcessorToBlackboard new
+!
+
+uric
+	^TrappedProcessorUriComponentEncoded new
 !
 
 whenClicked
