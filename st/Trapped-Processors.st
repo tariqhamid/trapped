@@ -222,9 +222,10 @@ toView: aDataCarrier
 	| frozen contents tag |
 	frozen := aDataCarrier copy.
 	tag := (frozen target element at: 'tagName') asLowercase.
-	contents := tag = 'template'
-		ifTrue: [ frozen target element content asJQuery ]
-		ifFalse: [ frozen target asJQuery contents detach ].
+	contents := nil.
+	tag = 'template' ifTrue: [
+		contents := (frozen target element at: 'content' ifAbsent: [ nil ]) ifNotNil: [ :content | content asJQuery ] ].
+	contents ifNil: [ contents := frozen target asJQuery contents detach ].
 	frozen target trapIter: #() after: [ :html |
 		html root asJQuery append: contents clone.
 		Trapped current injectToJQuery: html root asJQuery ]

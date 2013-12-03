@@ -409,7 +409,7 @@ var self=this;
 var frozen,contents,tag;
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 return smalltalk.withContext(function($ctx1) { 
-var $3,$2,$1,$4,$7,$6,$5,$10,$9,$8,$12,$11;
+var $3,$2,$1,$4,$7,$6,$5,$8,$11,$10,$9,$13,$12;
 frozen=_st(aDataCarrier)._copy();
 $3=_st(frozen)._target();
 $ctx1.sendIdx["target"]=1;
@@ -417,35 +417,51 @@ $2=_st($3)._element();
 $ctx1.sendIdx["element"]=1;
 $1=_st($2)._at_("tagName");
 tag=_st($1)._asLowercase();
+contents=nil;
 $4=_st(tag).__eq("template");
 if(smalltalk.assert($4)){
 $7=_st(frozen)._target();
 $ctx1.sendIdx["target"]=2;
 $6=_st($7)._element();
-$5=_st($6)._content();
-contents=_st($5)._asJQuery();
-$ctx1.sendIdx["asJQuery"]=1;
+$5=_st($6)._at_ifAbsent_("content",(function(){
+return smalltalk.withContext(function($ctx2) {
+return nil;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)})}));
+if(($receiver = $5) == nil || $receiver == null){
+contents=$5;
 } else {
-$10=_st(frozen)._target();
+var content;
+content=$receiver;
+contents=_st(content)._asJQuery();
+$ctx1.sendIdx["asJQuery"]=1;
+};
+contents;
+};
+$8=contents;
+if(($receiver = $8) == nil || $receiver == null){
+$11=_st(frozen)._target();
 $ctx1.sendIdx["target"]=3;
-$9=_st($10)._asJQuery();
+$10=_st($11)._asJQuery();
 $ctx1.sendIdx["asJQuery"]=2;
-$8=_st($9)._contents();
-contents=_st($8)._detach();
+$9=_st($10)._contents();
+contents=_st($9)._detach();
+contents;
+} else {
+$8;
 };
 _st(_st(frozen)._target())._trapIter_after_([],(function(html){
 return smalltalk.withContext(function($ctx2) {
-$12=_st(html)._root();
+$13=_st(html)._root();
 $ctx2.sendIdx["root"]=1;
-$11=_st($12)._asJQuery();
+$12=_st($13)._asJQuery();
 $ctx2.sendIdx["asJQuery"]=3;
-_st($11)._append_(_st(contents)._clone());
+_st($12)._append_(_st(contents)._clone());
 return _st(_st($Trapped())._current())._injectToJQuery_(_st(_st(html)._root())._asJQuery());
-}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,3)})}));
+}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,5)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents,tag:tag},smalltalk.TrappedProcessorLoopContents)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| frozen contents tag |\x0a\x09frozen := aDataCarrier copy.\x0a\x09tag := (frozen target element at: 'tagName') asLowercase.\x0a\x09contents := tag = 'template'\x0a\x09\x09ifTrue: [ frozen target element content asJQuery ]\x0a\x09\x09ifFalse: [ frozen target asJQuery contents detach ].\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09html root asJQuery append: contents clone.\x0a\x09\x09Trapped current injectToJQuery: html root asJQuery ]",
-messageSends: ["copy", "asLowercase", "at:", "element", "target", "ifTrue:ifFalse:", "=", "asJQuery", "content", "detach", "contents", "trapIter:after:", "append:", "root", "clone", "injectToJQuery:", "current"],
+source: "toView: aDataCarrier\x0a\x09| frozen contents tag |\x0a\x09frozen := aDataCarrier copy.\x0a\x09tag := (frozen target element at: 'tagName') asLowercase.\x0a\x09contents := nil.\x0a\x09tag = 'template' ifTrue: [\x0a\x09\x09contents := (frozen target element at: 'content' ifAbsent: [ nil ]) ifNotNil: [ :content | content asJQuery ] ].\x0a\x09contents ifNil: [ contents := frozen target asJQuery contents detach ].\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09html root asJQuery append: contents clone.\x0a\x09\x09Trapped current injectToJQuery: html root asJQuery ]",
+messageSends: ["copy", "asLowercase", "at:", "element", "target", "ifTrue:", "=", "ifNotNil:", "at:ifAbsent:", "asJQuery", "ifNil:", "detach", "contents", "trapIter:after:", "append:", "root", "clone", "injectToJQuery:", "current"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedProcessorLoopContents);
