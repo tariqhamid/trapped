@@ -487,7 +487,7 @@ trapDescend: aBlock
 !HTMLCanvas methodsFor: '*Trapped-Frontend'!
 
 trapIter: path do: aBlock
-    self with: [ :html | html noscript trapIter: path after: aBlock ]
+    self with: [ :html | (html tag: 'template') trapIter: path after: aBlock ]
 ! !
 
 !TagBrush methodsFor: '*Trapped-Frontend'!
@@ -527,7 +527,7 @@ trapGuard: anArray contents: aBlock
 
 trapIter: path after: aBlock
 	| end |
-	end := TagBrush fromJQuery: ('<noscript />' asJQuery insertAfter: self asJQuery) canvas: canvas.
+	end := TagBrush fromJQuery: ('<script type="text/plain" />' asJQuery insertAfter: self asJQuery) canvas: canvas.
     self trap: path read: [ :model |
     	Trapped loop: model between: self and: end do: aBlock.
     ]

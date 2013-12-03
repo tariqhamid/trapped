@@ -219,9 +219,12 @@ noscript, ins or del).!
 !TrappedProcessorLoopContents methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	| frozen contents |
+	| frozen contents tag |
 	frozen := aDataCarrier copy.
-	contents := frozen target asJQuery contents detach.
+	tag := (frozen target element at: 'tagName') asLowercase.
+	contents := tag = 'template'
+		ifTrue: [ frozen target element content asJQuery ]
+		ifFalse: [ frozen target asJQuery contents detach ].
 	frozen target trapIter: #() after: [ :html |
 		html root asJQuery append: contents clone.
 		Trapped current injectToJQuery: html root asJQuery ]
