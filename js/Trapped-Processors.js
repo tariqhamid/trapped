@@ -27,21 +27,11 @@ category: 'data transformation',
 fn: function (aDataCarrier){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
-$1=_st(aDataCarrier)._falseAsNilValue();
-if(($receiver = $1) == nil || $receiver == null){
-$2=_st(aDataCarrier)._target();
-$ctx1.sendIdx["target"]=1;
-_st($2)._removeAt_(self["@attrName"]);
-} else {
-var value;
-value=$receiver;
-_st(_st(aDataCarrier)._target())._at_put_(self["@attrName"],value);
-};
+_st(aDataCarrier)._toTargetAttr_(self["@attrName"]);
 return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorAttribute)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09aDataCarrier falseAsNilValue\x0a\x09\x09ifNil: [ aDataCarrier target removeAt: attrName ]\x0a\x09\x09ifNotNil: [ :value | aDataCarrier target at: attrName put: value ]",
-messageSends: ["ifNil:ifNotNil:", "falseAsNilValue", "removeAt:", "target", "at:put:"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier toTargetAttr: attrName",
+messageSends: ["toTargetAttr:"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorAttribute);
@@ -830,24 +820,28 @@ category: '*Trapped-Processors',
 fn: function (aString){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$3,$2;
-$1=_st(self._target())._asJQuery();
-$3=self._value();
-$ctx1.sendIdx["value"]=1;
-if(($receiver = $3) == nil || $receiver == null){
-$2=(function(){
-return smalltalk.withContext(function($ctx2) {
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,3)})});
+var $1,$2,$3,$5,$4;
+$1=self._falseAsNilValue();
+if(($receiver = $1) == nil || $receiver == null){
+$2=self._target();
+$ctx1.sendIdx["target"]=1;
+_st($2)._removeAt_(aString);
 } else {
-var o;
-o=$receiver;
-$2=_st(o)._value();
+var value;
+value=$receiver;
+$3=self._target();
+$5=_st(value).__eq(true);
+if(smalltalk.assert($5)){
+$4=aString;
+} else {
+$4=value;
 };
-_st($1)._attr_put_(aString,$2);
+_st($3)._at_put_(aString,$4);
+};
 return self}, function($ctx1) {$ctx1.fill(self,"toTargetAttr:",{aString:aString},smalltalk.TrappedDataCarrier)})},
 args: ["aString"],
-source: "toTargetAttr: aString\x0a\x09self target asJQuery attr: aString put: (self value ifNotNil: [ :o | o value ] ifNil: [[]])",
-messageSends: ["attr:put:", "asJQuery", "target", "ifNotNil:ifNil:", "value"],
+source: "toTargetAttr: aString\x0a\x09self falseAsNilValue\x0a\x09\x09ifNil: [ self target removeAt: aString ]\x0a\x09\x09ifNotNil: [ :value | self target at: aString put: (value = true ifTrue: [ aString ] ifFalse: [ value ]) ]",
+messageSends: ["ifNil:ifNotNil:", "falseAsNilValue", "removeAt:", "target", "at:put:", "ifTrue:ifFalse:", "="],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);

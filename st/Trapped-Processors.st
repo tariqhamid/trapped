@@ -15,9 +15,7 @@ attrName: aString
 !TrappedProcessorAttribute methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	aDataCarrier falseAsNilValue
-		ifNil: [ aDataCarrier target removeAt: attrName ]
-		ifNotNil: [ :value | aDataCarrier target at: attrName put: value ]
+	aDataCarrier toTargetAttr: attrName
 ! !
 
 !TrappedProcessorAttribute class methodsFor: 'instance creation'!
@@ -407,7 +405,9 @@ modifyTargetByPerforming: aString
 !
 
 toTargetAttr: aString
-	self target asJQuery attr: aString put: (self value ifNotNil: [ :o | o value ] ifNil: [[]])
+	self falseAsNilValue
+		ifNil: [ self target removeAt: aString ]
+		ifNotNil: [ :value | self target at: aString put: (value = true ifTrue: [ aString ] ifFalse: [ value ]) ]
 !
 
 toTargetContents
