@@ -31,6 +31,18 @@ value
 
 value: anObject
 	model := anObject
+!
+
+value: anObject whenDifferentFrom: anotherObject
+	anObject = anotherObject ifFalse: [ self value: anObject ]
+! !
+
+!TrappedDataCarrier methodsFor: 'converting'!
+
+falseAsNilValue
+	| value |
+	value := self value.
+	value = false ifTrue: [ ^nil ] ifFalse: [ ^value ]
 ! !
 
 !TrappedDataCarrier methodsFor: 'initialization'!

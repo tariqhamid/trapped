@@ -28,7 +28,7 @@ fn: function (aDataCarrier){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1,$2;
-$1=_st(aDataCarrier)._value();
+$1=_st(aDataCarrier)._falseAsNilValue();
 if(($receiver = $1) == nil || $receiver == null){
 $2=_st(aDataCarrier)._target();
 $ctx1.sendIdx["target"]=1;
@@ -40,8 +40,8 @@ _st(_st(aDataCarrier)._target())._at_put_(self["@attrName"],value);
 };
 return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorAttribute)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09aDataCarrier value\x0a\x09\x09ifNil: [ aDataCarrier target removeAt: attrName ]\x0a\x09\x09ifNotNil: [ :value | aDataCarrier target at: attrName put: value ]",
-messageSends: ["ifNil:ifNotNil:", "value", "removeAt:", "target", "at:put:"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier falseAsNilValue\x0a\x09\x09ifNil: [ aDataCarrier target removeAt: attrName ]\x0a\x09\x09ifNotNil: [ :value | aDataCarrier target at: attrName put: value ]",
+messageSends: ["ifNil:ifNotNil:", "falseAsNilValue", "removeAt:", "target", "at:put:"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorAttribute);
@@ -516,19 +516,20 @@ selector: "toModel:",
 category: 'data transformation',
 fn: function (aDataCarrier){
 var self=this;
-var replacement;
+var replacement,old;
 return smalltalk.withContext(function($ctx1) { 
-var $1;
+var $1,$2;
 $1=_st(self["@left"])._replace_with_("^\x5c^","");
 $ctx1.sendIdx["replace:with:"]=2;
 replacement=_st($1)._replace_with_("\x5c$$","");
 $ctx1.sendIdx["replace:with:"]=1;
-_st(aDataCarrier)._value_(_st(_st(_st(aDataCarrier)._value())._asString())._replace_with_(self["@right"],replacement));
-_st(aDataCarrier)._proceed();
-return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier,replacement:replacement},smalltalk.TrappedProcessorReplace)})},
+old=_st(_st(aDataCarrier)._value())._asString();
+_st(aDataCarrier)._value_whenDifferentFrom_(_st(old)._replace_with_(self["@right"],replacement),old);
+$2=_st(aDataCarrier)._proceed();
+return self}, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier,replacement:replacement,old:old},smalltalk.TrappedProcessorReplace)})},
 args: ["aDataCarrier"],
-source: "toModel: aDataCarrier\x0a\x09| replacement |\x0a\x09replacement := (left replace: '^\x5c^' with: '') replace: '\x5c$$' with: ''.\x0a\x09aDataCarrier value: (aDataCarrier value asString replace: right with: replacement).\x0a\x09aDataCarrier proceed",
-messageSends: ["replace:with:", "value:", "asString", "value", "proceed"],
+source: "toModel: aDataCarrier\x0a\x09| replacement old |\x0a\x09replacement := (left replace: '^\x5c^' with: '') replace: '\x5c$$' with: ''.\x0a\x09old := aDataCarrier value asString.\x0a\x09aDataCarrier\x0a\x09\x09value: (old replace: right with: replacement) whenDifferentFrom: old;\x0a\x09\x09proceed",
+messageSends: ["replace:with:", "asString", "value", "value:whenDifferentFrom:", "proceed"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorReplace);
@@ -539,19 +540,20 @@ selector: "toView:",
 category: 'data transformation',
 fn: function (aDataCarrier){
 var self=this;
-var replacement;
+var replacement,old;
 return smalltalk.withContext(function($ctx1) { 
-var $1;
+var $1,$2;
 $1=_st(self["@right"])._replace_with_("^\x5c^","");
 $ctx1.sendIdx["replace:with:"]=2;
 replacement=_st($1)._replace_with_("\x5c$$","");
 $ctx1.sendIdx["replace:with:"]=1;
-_st(aDataCarrier)._value_(_st(_st(_st(aDataCarrier)._value())._asString())._replace_with_(self["@left"],replacement));
-_st(aDataCarrier)._proceed();
-return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,replacement:replacement},smalltalk.TrappedProcessorReplace)})},
+old=_st(_st(aDataCarrier)._value())._asString();
+_st(aDataCarrier)._value_whenDifferentFrom_(_st(old)._replace_with_(self["@left"],replacement),old);
+$2=_st(aDataCarrier)._proceed();
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,replacement:replacement,old:old},smalltalk.TrappedProcessorReplace)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| replacement |\x0a\x09replacement := (right replace: '^\x5c^' with: '') replace: '\x5c$$' with: ''.\x0a\x09aDataCarrier value: (aDataCarrier value asString replace: left with: replacement).\x0a\x09aDataCarrier proceed",
-messageSends: ["replace:with:", "value:", "asString", "value", "proceed"],
+source: "toView: aDataCarrier\x0a\x09| replacement old |\x0a\x09replacement := (right replace: '^\x5c^' with: '') replace: '\x5c$$' with: ''.\x0a\x09old := aDataCarrier value asString.\x0a\x09aDataCarrier\x0a\x09\x09value: (old replace: left with: replacement) whenDifferentFrom: old;\x0a\x09\x09proceed",
+messageSends: ["replace:with:", "asString", "value", "value:whenDifferentFrom:", "proceed"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorReplace);

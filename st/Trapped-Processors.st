@@ -15,7 +15,7 @@ attrName: aString
 !TrappedProcessorAttribute methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	aDataCarrier value
+	aDataCarrier falseAsNilValue
 		ifNil: [ aDataCarrier target removeAt: attrName ]
 		ifNotNil: [ :value | aDataCarrier target at: attrName put: value ]
 ! !
@@ -277,17 +277,21 @@ right: aString
 !TrappedProcessorReplace methodsFor: 'data transformation'!
 
 toModel: aDataCarrier
-	| replacement |
+	| replacement old |
 	replacement := (left replace: '^\^' with: '') replace: '\$$' with: ''.
-	aDataCarrier value: (aDataCarrier value asString replace: right with: replacement).
-	aDataCarrier proceed
+	old := aDataCarrier value asString.
+	aDataCarrier
+		value: (old replace: right with: replacement) whenDifferentFrom: old;
+		proceed
 !
 
 toView: aDataCarrier
-	| replacement |
+	| replacement old |
 	replacement := (right replace: '^\^' with: '') replace: '\$$' with: ''.
-	aDataCarrier value: (aDataCarrier value asString replace: left with: replacement).
-	aDataCarrier proceed
+	old := aDataCarrier value asString.
+	aDataCarrier
+		value: (old replace: left with: replacement) whenDifferentFrom: old;
+		proceed
 ! !
 
 !TrappedProcessorReplace class methodsFor: 'instance creation'!

@@ -21,6 +21,31 @@ smalltalk.TrappedDataCarrier);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "falseAsNilValue",
+category: 'converting',
+fn: function (){
+var self=this;
+var value;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+value=self._value();
+$1=_st(value).__eq(false);
+if(smalltalk.assert($1)){
+return nil;
+} else {
+$2=value;
+return $2;
+};
+return self}, function($ctx1) {$ctx1.fill(self,"falseAsNilValue",{value:value},smalltalk.TrappedDataCarrier)})},
+args: [],
+source: "falseAsNilValue\x0a\x09| value |\x0a\x09value := self value.\x0a\x09value = false ifTrue: [ ^nil ] ifFalse: [ ^value ]",
+messageSends: ["value", "ifTrue:ifFalse:", "="],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "initialize",
 category: 'initialization',
 fn: function (){
@@ -134,6 +159,26 @@ return self}, function($ctx1) {$ctx1.fill(self,"value:",{anObject:anObject},smal
 args: ["anObject"],
 source: "value: anObject\x0a\x09model := anObject",
 messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "value:whenDifferentFrom:",
+category: 'accessing',
+fn: function (anObject,anotherObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st(anObject).__eq(anotherObject);
+if(! smalltalk.assert($1)){
+self._value_(anObject);
+};
+return self}, function($ctx1) {$ctx1.fill(self,"value:whenDifferentFrom:",{anObject:anObject,anotherObject:anotherObject},smalltalk.TrappedDataCarrier)})},
+args: ["anObject", "anotherObject"],
+source: "value: anObject whenDifferentFrom: anotherObject\x0a\x09anObject = anotherObject ifFalse: [ self value: anObject ]",
+messageSends: ["ifFalse:", "=", "value:"],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);
