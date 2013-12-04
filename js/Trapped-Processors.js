@@ -220,27 +220,16 @@ var self=this;
 var frozen,contents;
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 return smalltalk.withContext(function($ctx1) { 
-var $3,$2,$1,$5,$4;
 frozen=_st(aDataCarrier)._copy();
-$3=_st(frozen)._target();
-$ctx1.sendIdx["target"]=1;
-$2=_st($3)._asJQuery();
-$ctx1.sendIdx["asJQuery"]=1;
-$1=_st($2)._contents();
-contents=_st($1)._detach();
+contents=_st(frozen)._contents();
 _st(_st(frozen)._target())._trapGuard_contents_(self["@guardPath"],(function(html){
 return smalltalk.withContext(function($ctx2) {
-$5=_st(html)._root();
-$ctx2.sendIdx["root"]=1;
-$4=_st($5)._asJQuery();
-$ctx2.sendIdx["asJQuery"]=2;
-_st($4)._append_(contents);
-return _st(_st($Trapped())._current())._injectToJQuery_(_st(_st(html)._root())._asJQuery());
+return _st(_st($Trapped())._current())._cloneAndInject_inPlaceOf_(contents,_st(html)._del());
 }, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents},smalltalk.TrappedProcessorGuardContents)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen target asJQuery contents detach.\x0a\x09frozen target trapGuard: guardPath contents: [ :html |\x0a\x09\x09html root asJQuery append: contents.\x0a\x09\x09Trapped current injectToJQuery: html root asJQuery ]",
-messageSends: ["copy", "detach", "contents", "asJQuery", "target", "trapGuard:contents:", "append:", "root", "injectToJQuery:", "current"],
+source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen contents.\x0a\x09frozen target trapGuard: guardPath contents: [ :html |\x0a\x09\x09Trapped current cloneAndInject: contents inPlaceOf: html del ]",
+messageSends: ["copy", "contents", "trapGuard:contents:", "target", "cloneAndInject:inPlaceOf:", "current", "del"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedProcessorGuardContents);
@@ -406,62 +395,19 @@ selector: "toView:",
 category: 'data transformation',
 fn: function (aDataCarrier){
 var self=this;
-var frozen,contents,tag;
+var frozen,contents;
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 return smalltalk.withContext(function($ctx1) { 
-var $3,$2,$1,$4,$7,$6,$5,$8,$11,$10,$9,$13,$12;
 frozen=_st(aDataCarrier)._copy();
-$3=_st(frozen)._target();
-$ctx1.sendIdx["target"]=1;
-$2=_st($3)._element();
-$ctx1.sendIdx["element"]=1;
-$1=_st($2)._at_("tagName");
-tag=_st($1)._asLowercase();
-contents=nil;
-$4=_st(tag).__eq("template");
-if(smalltalk.assert($4)){
-$7=_st(frozen)._target();
-$ctx1.sendIdx["target"]=2;
-$6=_st($7)._element();
-$5=_st($6)._at_ifAbsent_("content",(function(){
-return smalltalk.withContext(function($ctx2) {
-return nil;
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)})}));
-if(($receiver = $5) == nil || $receiver == null){
-contents=$5;
-} else {
-var content;
-content=$receiver;
-contents=_st(content)._asJQuery();
-$ctx1.sendIdx["asJQuery"]=1;
-};
-contents;
-};
-$8=contents;
-if(($receiver = $8) == nil || $receiver == null){
-$11=_st(frozen)._target();
-$ctx1.sendIdx["target"]=3;
-$10=_st($11)._asJQuery();
-$ctx1.sendIdx["asJQuery"]=2;
-$9=_st($10)._contents();
-contents=_st($9)._detach();
-contents;
-} else {
-$8;
-};
+contents=_st(frozen)._contents();
 _st(_st(frozen)._target())._trapIter_after_([],(function(html){
 return smalltalk.withContext(function($ctx2) {
-$13=_st(html)._root();
-$ctx2.sendIdx["root"]=1;
-$12=_st($13)._asJQuery();
-$ctx2.sendIdx["asJQuery"]=3;
-_st($12)._append_(_st(contents)._clone());
-return _st(_st($Trapped())._current())._injectToJQuery_(_st(_st(html)._root())._asJQuery());
-}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,5)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents,tag:tag},smalltalk.TrappedProcessorLoopContents)})},
+return _st(_st($Trapped())._current())._cloneAndInject_inPlaceOf_(contents,_st(html)._del());
+}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents},smalltalk.TrappedProcessorLoopContents)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| frozen contents tag |\x0a\x09frozen := aDataCarrier copy.\x0a\x09tag := (frozen target element at: 'tagName') asLowercase.\x0a\x09contents := nil.\x0a\x09tag = 'template' ifTrue: [\x0a\x09\x09contents := (frozen target element at: 'content' ifAbsent: [ nil ]) ifNotNil: [ :content | content asJQuery ] ].\x0a\x09contents ifNil: [ contents := frozen target asJQuery contents detach ].\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09html root asJQuery append: contents clone.\x0a\x09\x09Trapped current injectToJQuery: html root asJQuery ]",
-messageSends: ["copy", "asLowercase", "at:", "element", "target", "ifTrue:", "=", "ifNotNil:", "at:ifAbsent:", "asJQuery", "ifNil:", "detach", "contents", "trapIter:after:", "append:", "root", "clone", "injectToJQuery:", "current"],
+source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen contents.\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09Trapped current cloneAndInject: contents inPlaceOf: html del ]",
+messageSends: ["copy", "contents", "trapIter:after:", "target", "cloneAndInject:inPlaceOf:", "current", "del"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedProcessorLoopContents);
@@ -886,6 +832,69 @@ messageSends: ["viewName:", "new", "yourself"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorWidget.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "contents",
+category: '*Trapped-Processors',
+fn: function (){
+var self=this;
+var contents,tag,holder;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$4,$5,$3,$6,$7,$8,$9,$10;
+contents=nil;
+holder=_st(self._target())._asJQuery();
+$ctx1.sendIdx["asJQuery"]=1;
+$1=_st(holder)._prop_("tagName");
+$ctx1.sendIdx["prop:"]=1;
+tag=_st($1)._asLowercase();
+$ctx1.sendIdx["asLowercase"]=1;
+$2=_st(tag).__eq("script");
+$ctx1.sendIdx["="]=1;
+if(smalltalk.assert($2)){
+$4=_st(holder)._attr_("data-content");
+if(($receiver = $4) == nil || $receiver == null){
+$5=self._error_("<script> need data-content");
+return $5;
+} else {
+$3=$4;
+};
+holder=_st($3)._asJQuery();
+$ctx1.sendIdx["asJQuery"]=2;
+holder;
+$6=_st(holder)._prop_("tagName");
+$ctx1.sendIdx["prop:"]=2;
+tag=_st($6)._asLowercase();
+tag;
+};
+$7=_st(tag).__eq("template");
+if(smalltalk.assert($7)){
+$8=_st(holder)._prop_("content");
+if(($receiver = $8) == nil || $receiver == null){
+contents=$8;
+} else {
+var content;
+content=$receiver;
+contents=_st(content)._asJQuery();
+};
+contents;
+};
+$9=contents;
+if(($receiver = $9) == nil || $receiver == null){
+contents=_st(_st(holder)._contents())._detach();
+contents;
+} else {
+$9;
+};
+$10=contents;
+return $10;
+}, function($ctx1) {$ctx1.fill(self,"contents",{contents:contents,tag:tag,holder:holder},smalltalk.TrappedDataCarrier)})},
+args: [],
+source: "contents\x0a\x09| contents tag holder |\x0a\x09contents := nil.\x0a\x09holder := self target asJQuery.\x0a\x09tag := (holder prop: 'tagName') asLowercase.\x0a\x09tag = 'script' ifTrue: [\x0a\x09\x09holder := ((holder attr: 'data-content') ifNil: [ ^self error: '<script> need data-content' ]) asJQuery.\x0a\x09\x09tag := (holder prop: 'tagName') asLowercase ].\x0a\x09tag = 'template' ifTrue: [\x0a\x09\x09contents := (holder prop: 'content') ifNotNil: [ :content | content asJQuery ] ].\x0a\x09contents ifNil: [ contents := holder contents detach ].\x0a\x09^contents",
+messageSends: ["asJQuery", "target", "asLowercase", "prop:", "ifTrue:", "=", "ifNil:", "attr:", "error:", "ifNotNil:", "detach", "contents"],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
 
 smalltalk.addMethod(
 smalltalk.method({

@@ -310,6 +310,26 @@ register: aListKeyedEntity name: aString
 
 !Trapped methodsFor: 'action'!
 
+start: args
+	args do: [ :each | self register: each ].
+	self injectToJQuery: 'html' asJQuery
+! !
+
+!Trapped methodsFor: 'initialization'!
+
+initialize
+	super initialize.
+	registry := #{}.
+! !
+
+!Trapped methodsFor: 'private'!
+
+cloneAndInject: anObject inPlaceOf: aTagBrush
+	aTagBrush asJQuery append: anObject clone.
+	self injectToJQuery: aTagBrush asJQuery.
+	aTagBrush asJQuery contents unwrap
+!
+
 descend: anArray snapshotDo: aBlock
 	| tpsc |
     tpsc := TrappedPathStack current.
@@ -333,18 +353,6 @@ injectToJQuery: aJQuery
 				parsed do: [ :rule |
 					(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].
 			self injectToJQuery: jq children ]
-!
-
-start: args
-	args do: [ :each | self register: each ].
-	self injectToJQuery: 'html' asJQuery
-! !
-
-!Trapped methodsFor: 'initialization'!
-
-initialize
-	super initialize.
-	registry := #{}.
 ! !
 
 !Trapped class methodsFor: 'accessing'!
@@ -372,20 +380,18 @@ parse: aString
 
 !Trapped class methodsFor: 'private'!
 
-envelope: envelope loop: model before: endjq do: aBlock
-   	| envjq |
-    envjq := envelope asJQuery.
-    model withIndexDo: [ :item :i |
-        {i} trapDescend: [ envelope with: aBlock ].
-        envjq children detach insertBefore: endjq.
-    ].
-    envjq remove
+loop: model before: endjq do: aBlock
+	model withIndexDo: [ :item :i |
+		| env envjq |
+		envjq := '<div/>' asJQuery insertBefore: endjq.
+		{i} trapDescend: [ (HTMLCanvas onJQuery: envjq) root with: aBlock ].
+		envjq contents unwrap ]
 !
 
 loop: model between: start and: end do: aBlock
-    (start asJQuery nextUntil: end element) remove.
-    start with: [ :html | model ifNotNil: [
-    	self envelope: html div loop: model before: end asJQuery do: aBlock
+	(start asJQuery nextUntil: end element) remove.
+	start with: [ :html | model ifNotNil: [
+		self loop: model before: end asJQuery do: aBlock
 	]]
 ! !
 

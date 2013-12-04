@@ -114,10 +114,9 @@ data-trap attributes inside.!
 toView: aDataCarrier
 	| frozen contents |
 	frozen := aDataCarrier copy.
-	contents := frozen target asJQuery contents detach.
+	contents := frozen contents.
 	frozen target trapGuard: guardPath contents: [ :html |
-		html root asJQuery append: contents.
-		Trapped current injectToJQuery: html root asJQuery ]
+		Trapped current cloneAndInject: contents inPlaceOf: html del ]
 ! !
 
 TrappedProcessorGuardBase subclass: #TrappedProcessorGuardProc
@@ -219,16 +218,11 @@ noscript, ins or del).!
 !TrappedProcessorLoopContents methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	| frozen contents tag |
+	| frozen contents |
 	frozen := aDataCarrier copy.
-	tag := (frozen target element at: 'tagName') asLowercase.
-	contents := nil.
-	tag = 'template' ifTrue: [
-		contents := (frozen target element at: 'content' ifAbsent: [ nil ]) ifNotNil: [ :content | content asJQuery ] ].
-	contents ifNil: [ contents := frozen target asJQuery contents detach ].
+	contents := frozen contents.
 	frozen target trapIter: #() after: [ :html |
-		html root asJQuery append: contents clone.
-		Trapped current injectToJQuery: html root asJQuery ]
+		Trapped current cloneAndInject: contents inPlaceOf: html del ]
 ! !
 
 TrappedProcessorLoopBase subclass: #TrappedProcessorLoopProc
@@ -441,6 +435,20 @@ new: aString
 ! !
 
 !TrappedDataCarrier methodsFor: '*Trapped-Processors'!
+
+contents
+	| contents tag holder |
+	contents := nil.
+	holder := self target asJQuery.
+	tag := (holder prop: 'tagName') asLowercase.
+	tag = 'script' ifTrue: [
+		holder := ((holder attr: 'data-content') ifNil: [ ^self error: '<script> need data-content' ]) asJQuery.
+		tag := (holder prop: 'tagName') asLowercase ].
+	tag = 'template' ifTrue: [
+		contents := (holder prop: 'content') ifNotNil: [ :content | content asJQuery ] ].
+	contents ifNil: [ contents := holder contents detach ].
+	^contents
+!
 
 modifyTarget
 	self target modify: [ self value ]

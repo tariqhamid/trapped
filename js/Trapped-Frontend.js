@@ -740,8 +740,31 @@ smalltalk.Trapped);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "cloneAndInject:inPlaceOf:",
+category: 'private',
+fn: function (anObject,aTagBrush){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+$1=_st(aTagBrush)._asJQuery();
+$ctx1.sendIdx["asJQuery"]=1;
+_st($1)._append_(_st(anObject)._clone());
+$2=_st(aTagBrush)._asJQuery();
+$ctx1.sendIdx["asJQuery"]=2;
+self._injectToJQuery_($2);
+_st(_st(_st(aTagBrush)._asJQuery())._contents())._unwrap();
+return self}, function($ctx1) {$ctx1.fill(self,"cloneAndInject:inPlaceOf:",{anObject:anObject,aTagBrush:aTagBrush},smalltalk.Trapped)})},
+args: ["anObject", "aTagBrush"],
+source: "cloneAndInject: anObject inPlaceOf: aTagBrush\x0a\x09aTagBrush asJQuery append: anObject clone.\x0a\x09self injectToJQuery: aTagBrush asJQuery.\x0a\x09aTagBrush asJQuery contents unwrap",
+messageSends: ["append:", "asJQuery", "clone", "injectToJQuery:", "unwrap", "contents"],
+referencedClasses: []
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "descend:snapshotDo:",
-category: 'action',
+category: 'private',
 fn: function (anArray,aBlock){
 var self=this;
 var tpsc;
@@ -786,7 +809,7 @@ smalltalk.Trapped);
 smalltalk.addMethod(
 smalltalk.method({
 selector: "injectToJQuery:",
-category: 'action',
+category: 'private',
 fn: function (aJQuery){
 var self=this;
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
@@ -877,27 +900,28 @@ smalltalk.Trapped);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "envelope:loop:before:do:",
+selector: "loop:before:do:",
 category: 'private',
-fn: function (envelope,model,endjq,aBlock){
+fn: function (model,endjq,aBlock){
 var self=this;
-var envjq;
+function $HTMLCanvas(){return smalltalk.HTMLCanvas||(typeof HTMLCanvas=="undefined"?nil:HTMLCanvas)}
 return smalltalk.withContext(function($ctx1) { 
-envjq=_st(envelope)._asJQuery();
 _st(model)._withIndexDo_((function(item,i){
+var env,envjq;
 return smalltalk.withContext(function($ctx2) {
+envjq=_st("<div/>"._asJQuery())._insertBefore_(endjq);
+envjq;
 _st([i])._trapDescend_((function(){
 return smalltalk.withContext(function($ctx3) {
-return _st(envelope)._with_(aBlock);
+return _st(_st(_st($HTMLCanvas())._onJQuery_(envjq))._root())._with_(aBlock);
 }, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)})}));
-return _st(_st(_st(envjq)._children())._detach())._insertBefore_(endjq);
-}, function($ctx2) {$ctx2.fillBlock({item:item,i:i},$ctx1,1)})}));
-_st(envjq)._remove();
-return self}, function($ctx1) {$ctx1.fill(self,"envelope:loop:before:do:",{envelope:envelope,model:model,endjq:endjq,aBlock:aBlock,envjq:envjq},smalltalk.Trapped.klass)})},
-args: ["envelope", "model", "endjq", "aBlock"],
-source: "envelope: envelope loop: model before: endjq do: aBlock\x0a   \x09| envjq |\x0a    envjq := envelope asJQuery.\x0a    model withIndexDo: [ :item :i |\x0a        {i} trapDescend: [ envelope with: aBlock ].\x0a        envjq children detach insertBefore: endjq.\x0a    ].\x0a    envjq remove",
-messageSends: ["asJQuery", "withIndexDo:", "trapDescend:", "with:", "insertBefore:", "detach", "children", "remove"],
-referencedClasses: []
+return _st(_st(envjq)._contents())._unwrap();
+}, function($ctx2) {$ctx2.fillBlock({item:item,i:i,env:env,envjq:envjq},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"loop:before:do:",{model:model,endjq:endjq,aBlock:aBlock},smalltalk.Trapped.klass)})},
+args: ["model", "endjq", "aBlock"],
+source: "loop: model before: endjq do: aBlock\x0a\x09model withIndexDo: [ :item :i |\x0a\x09\x09| env envjq |\x0a\x09\x09envjq := '<div/>' asJQuery insertBefore: endjq.\x0a\x09\x09{i} trapDescend: [ (HTMLCanvas onJQuery: envjq) root with: aBlock ].\x0a\x09\x09envjq contents unwrap ]",
+messageSends: ["withIndexDo:", "insertBefore:", "asJQuery", "trapDescend:", "with:", "root", "onJQuery:", "unwrap", "contents"],
+referencedClasses: ["HTMLCanvas"]
 }),
 smalltalk.Trapped.klass);
 
@@ -918,13 +942,13 @@ return smalltalk.withContext(function($ctx2) {
 if(($receiver = model) == nil || $receiver == null){
 return model;
 } else {
-return self._envelope_loop_before_do_(_st(html)._div(),model,_st(end)._asJQuery(),aBlock);
+return self._loop_before_do_(model,_st(end)._asJQuery(),aBlock);
 };
 }, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"loop:between:and:do:",{model:model,start:start,end:end,aBlock:aBlock},smalltalk.Trapped.klass)})},
 args: ["model", "start", "end", "aBlock"],
-source: "loop: model between: start and: end do: aBlock\x0a    (start asJQuery nextUntil: end element) remove.\x0a    start with: [ :html | model ifNotNil: [\x0a    \x09self envelope: html div loop: model before: end asJQuery do: aBlock\x0a\x09]]",
-messageSends: ["remove", "nextUntil:", "asJQuery", "element", "with:", "ifNotNil:", "envelope:loop:before:do:", "div"],
+source: "loop: model between: start and: end do: aBlock\x0a\x09(start asJQuery nextUntil: end element) remove.\x0a\x09start with: [ :html | model ifNotNil: [\x0a\x09\x09self loop: model before: end asJQuery do: aBlock\x0a\x09]]",
+messageSends: ["remove", "nextUntil:", "asJQuery", "element", "with:", "ifNotNil:", "loop:before:do:"],
 referencedClasses: []
 }),
 smalltalk.Trapped.klass);
