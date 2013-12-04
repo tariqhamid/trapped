@@ -835,63 +835,114 @@ smalltalk.TrappedProcessorWidget.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "cleanedJQuery:",
+category: '*Trapped-Processors',
+fn: function (aJQuery){
+var self=this;
+var result;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+result=_st(_st(aJQuery)._remove())._clone();
+_st(aJQuery)._empty();
+_st(aJQuery)._removeAttr_("data-trap");
+$ctx1.sendIdx["removeAttr:"]=1;
+$1=_st(aJQuery)._removeAttr_("data-tramplate");
+$2=result;
+return $2;
+}, function($ctx1) {$ctx1.fill(self,"cleanedJQuery:",{aJQuery:aJQuery,result:result},smalltalk.TrappedDataCarrier)})},
+args: ["aJQuery"],
+source: "cleanedJQuery: aJQuery\x0a\x09| result |\x0a\x09result := aJQuery remove clone.\x0a\x09aJQuery empty; removeAttr: 'data-trap'; removeAttr: 'data-tramplate'.\x0a\x09^result",
+messageSends: ["clone", "remove", "empty", "removeAttr:"],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "contents",
 category: '*Trapped-Processors',
 fn: function (){
 var self=this;
-var contents,tag,holder;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$4,$5,$3,$6,$7,$8,$9,$10;
-contents=nil;
-holder=_st(self._target())._asJQuery();
-$ctx1.sendIdx["asJQuery"]=1;
-$1=_st(holder)._prop_("tagName");
-$ctx1.sendIdx["prop:"]=1;
-tag=_st($1)._asLowercase();
-$ctx1.sendIdx["asLowercase"]=1;
-$2=_st(tag).__eq("script");
-$ctx1.sendIdx["="]=1;
-if(smalltalk.assert($2)){
-$4=_st(holder)._attr_("data-content");
-if(($receiver = $4) == nil || $receiver == null){
-$5=self._error_("<script> need data-content");
-return $5;
+var $1;
+$1=self._contentsOf_(_st(self._target())._asJQuery());
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"contents",{},smalltalk.TrappedDataCarrier)})},
+args: [],
+source: "contents\x0a\x09^self contentsOf: self target asJQuery",
+messageSends: ["contentsOf:", "asJQuery", "target"],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "contentsOf:",
+category: '*Trapped-Processors',
+fn: function (holder){
+var self=this;
+var tag,tramplate;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$5,$4,$3,$6,$7,$8,$9,$10,$11,$12;
+$1=_st(holder)._attr_("data-tramplate");
+if(($receiver = $1) == nil || $receiver == null){
+tramplate="";
 } else {
-$3=$4;
+tramplate=$1;
 };
-holder=_st($3)._asJQuery();
-$ctx1.sendIdx["asJQuery"]=2;
-holder;
-$6=_st(holder)._prop_("tagName");
-$ctx1.sendIdx["prop:"]=2;
-tag=_st($6)._asLowercase();
-tag;
+$2=_st(tramplate)._matchesOf_("^see (.*)$");
+$ctx1.sendIdx["matchesOf:"]=1;
+if(($receiver = $2) == nil || $receiver == null){
+$2;
+} else {
+var seeMatch;
+seeMatch=$receiver;
+$5=_st(seeMatch)._second();
+$ctx1.sendIdx["second"]=1;
+$4=_st($5)._asJQuery();
+$ctx1.sendIdx["asJQuery"]=1;
+$3=self._contentsOf_($4);
+return $3;
 };
-$7=_st(tag).__eq("template");
-if(smalltalk.assert($7)){
-$8=_st(holder)._prop_("content");
-if(($receiver = $8) == nil || $receiver == null){
-contents=$8;
+$6=_st(tramplate)._matchesOf_("^until (.*)$");
+if(($receiver = $6) == nil || $receiver == null){
+$6;
+} else {
+var parentContents,start,end,untilMatch;
+untilMatch=$receiver;
+parentContents=_st(_st(holder)._parent())._contents();
+$ctx1.sendIdx["contents"]=1;
+parentContents;
+start=_st(parentContents)._index_(holder);
+$ctx1.sendIdx["index:"]=1;
+start;
+end=_st(parentContents)._index_(_st(holder)._nextAll_(_st(untilMatch)._second()));
+end;
+$7=self._cleanedJQuery_(_st(parentContents)._slice_until_(_st(start).__plus((1)),end));
+$ctx1.sendIdx["cleanedJQuery:"]=1;
+return $7;
+};
+$8=_st(holder)._prop_("tagName");
+$ctx1.sendIdx["prop:"]=1;
+tag=_st($8)._asLowercase();
+$9=_st(tag).__eq("template");
+if(smalltalk.assert($9)){
+$10=_st(holder)._prop_("content");
+if(($receiver = $10) == nil || $receiver == null){
+$10;
 } else {
 var content;
 content=$receiver;
-contents=_st(content)._asJQuery();
+$11=_st(content)._asJQuery();
+return $11;
 };
-contents;
 };
-$9=contents;
-if(($receiver = $9) == nil || $receiver == null){
-contents=_st(_st(holder)._contents())._detach();
-contents;
-} else {
-$9;
-};
-$10=contents;
-return $10;
-}, function($ctx1) {$ctx1.fill(self,"contents",{contents:contents,tag:tag,holder:holder},smalltalk.TrappedDataCarrier)})},
-args: [],
-source: "contents\x0a\x09| contents tag holder |\x0a\x09contents := nil.\x0a\x09holder := self target asJQuery.\x0a\x09tag := (holder prop: 'tagName') asLowercase.\x0a\x09tag = 'script' ifTrue: [\x0a\x09\x09holder := ((holder attr: 'data-content') ifNil: [ ^self error: '<script> need data-content' ]) asJQuery.\x0a\x09\x09tag := (holder prop: 'tagName') asLowercase ].\x0a\x09tag = 'template' ifTrue: [\x0a\x09\x09contents := (holder prop: 'content') ifNotNil: [ :content | content asJQuery ] ].\x0a\x09contents ifNil: [ contents := holder contents detach ].\x0a\x09^contents",
-messageSends: ["asJQuery", "target", "asLowercase", "prop:", "ifTrue:", "=", "ifNil:", "attr:", "error:", "ifNotNil:", "detach", "contents"],
+$12=self._cleanedJQuery_(_st(holder)._contents());
+return $12;
+}, function($ctx1) {$ctx1.fill(self,"contentsOf:",{holder:holder,tag:tag,tramplate:tramplate},smalltalk.TrappedDataCarrier)})},
+args: ["holder"],
+source: "contentsOf: holder\x0a\x09| tag tramplate |\x0a\x09tramplate := (holder attr: 'data-tramplate') ifNil: [ '' ].\x0a\x09(tramplate matchesOf: '^see (.*)$') ifNotNil: [ :seeMatch | ^self contentsOf: seeMatch second asJQuery ].\x0a\x09(tramplate matchesOf: '^until (.*)$') ifNotNil: [ :untilMatch |\x0a\x09\x09| parentContents start end |\x0a\x09\x09parentContents := holder parent contents.\x0a\x09\x09start := parentContents index: holder.\x0a\x09\x09end := parentContents index: (holder nextAll: untilMatch second).\x0a\x09\x09^self cleanedJQuery: (parentContents slice: start + 1 until: end) ].\x0a\x09tag := (holder prop: 'tagName') asLowercase.\x0a\x09tag = 'template' ifTrue: [ (holder prop: 'content') ifNotNil: [ :content | ^content asJQuery ] ].\x0a\x09^self cleanedJQuery: holder contents",
+messageSends: ["ifNil:", "attr:", "ifNotNil:", "matchesOf:", "contentsOf:", "asJQuery", "second", "contents", "parent", "index:", "nextAll:", "cleanedJQuery:", "slice:until:", "+", "asLowercase", "prop:", "ifTrue:", "="],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);

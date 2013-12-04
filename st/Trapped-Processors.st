@@ -436,18 +436,30 @@ new: aString
 
 !TrappedDataCarrier methodsFor: '*Trapped-Processors'!
 
+cleanedJQuery: aJQuery
+	| result |
+	result := aJQuery remove clone.
+	aJQuery empty; removeAttr: 'data-trap'; removeAttr: 'data-tramplate'.
+	^result
+!
+
 contents
-	| contents tag holder |
-	contents := nil.
-	holder := self target asJQuery.
+	^self contentsOf: self target asJQuery
+!
+
+contentsOf: holder
+	| tag tramplate |
+	tramplate := (holder attr: 'data-tramplate') ifNil: [ '' ].
+	(tramplate matchesOf: '^see (.*)$') ifNotNil: [ :seeMatch | ^self contentsOf: seeMatch second asJQuery ].
+	(tramplate matchesOf: '^until (.*)$') ifNotNil: [ :untilMatch |
+		| parentContents start end |
+		parentContents := holder parent contents.
+		start := parentContents index: holder.
+		end := parentContents index: (holder nextAll: untilMatch second).
+		^self cleanedJQuery: (parentContents slice: start + 1 until: end) ].
 	tag := (holder prop: 'tagName') asLowercase.
-	tag = 'script' ifTrue: [
-		holder := ((holder attr: 'data-content') ifNil: [ ^self error: '<script> need data-content' ]) asJQuery.
-		tag := (holder prop: 'tagName') asLowercase ].
-	tag = 'template' ifTrue: [
-		contents := (holder prop: 'content') ifNotNil: [ :content | content asJQuery ] ].
-	contents ifNil: [ contents := holder contents detach ].
-	^contents
+	tag = 'template' ifTrue: [ (holder prop: 'content') ifNotNil: [ :content | ^content asJQuery ] ].
+	^self cleanedJQuery: holder contents
 !
 
 modifyTarget
