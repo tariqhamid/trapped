@@ -883,7 +883,7 @@ fn: function (holder){
 var self=this;
 var tag,tramplate;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2,$5,$4,$3,$6,$7,$8,$9,$10,$11,$12;
+var $1,$2,$5,$4,$3,$6,$9,$10,$11,$8,$7,$12,$13,$14,$15,$16;
 $1=_st(holder)._attr_("data-tramplate");
 if(($receiver = $1) == nil || $receiver == null){
 tramplate="";
@@ -918,31 +918,41 @@ $ctx1.sendIdx["index:"]=1;
 start;
 end=_st(parentContents)._index_(_st(holder)._nextAll_(_st(untilMatch)._second()));
 end;
-$7=self._cleanedJQuery_(_st(parentContents)._slice_until_(_st(start).__plus((1)),end));
+$9=_st(end).__eq((-1));
+$ctx1.sendIdx["="]=1;
+if(smalltalk.assert($9)){
+$10=parentContents;
+$11=_st(start).__plus((1));
+$ctx1.sendIdx["+"]=1;
+$8=_st($10)._slice_($11);
+} else {
+$8=_st(parentContents)._slice_until_(_st(start).__plus((1)),end);
+};
+$7=self._cleanedJQuery_($8);
 $ctx1.sendIdx["cleanedJQuery:"]=1;
 return $7;
 };
-$8=_st(holder)._prop_("tagName");
+$12=_st(holder)._prop_("tagName");
 $ctx1.sendIdx["prop:"]=1;
-tag=_st($8)._asLowercase();
-$9=_st(tag).__eq("template");
-if(smalltalk.assert($9)){
-$10=_st(holder)._prop_("content");
-if(($receiver = $10) == nil || $receiver == null){
-$10;
+tag=_st($12)._asLowercase();
+$13=_st(tag).__eq("template");
+if(smalltalk.assert($13)){
+$14=_st(holder)._prop_("content");
+if(($receiver = $14) == nil || $receiver == null){
+$14;
 } else {
 var content;
 content=$receiver;
-$11=_st(content)._asJQuery();
-return $11;
+$15=_st(content)._asJQuery();
+return $15;
 };
 };
-$12=self._cleanedJQuery_(_st(holder)._contents());
-return $12;
+$16=self._cleanedJQuery_(_st(holder)._contents());
+return $16;
 }, function($ctx1) {$ctx1.fill(self,"contentsOf:",{holder:holder,tag:tag,tramplate:tramplate},smalltalk.TrappedDataCarrier)})},
 args: ["holder"],
-source: "contentsOf: holder\x0a\x09| tag tramplate |\x0a\x09tramplate := (holder attr: 'data-tramplate') ifNil: [ '' ].\x0a\x09(tramplate matchesOf: '^see (.*)$') ifNotNil: [ :seeMatch | ^self contentsOf: seeMatch second asJQuery ].\x0a\x09(tramplate matchesOf: '^until (.*)$') ifNotNil: [ :untilMatch |\x0a\x09\x09| parentContents start end |\x0a\x09\x09parentContents := holder parent contents.\x0a\x09\x09start := parentContents index: holder.\x0a\x09\x09end := parentContents index: (holder nextAll: untilMatch second).\x0a\x09\x09^self cleanedJQuery: (parentContents slice: start + 1 until: end) ].\x0a\x09tag := (holder prop: 'tagName') asLowercase.\x0a\x09tag = 'template' ifTrue: [ (holder prop: 'content') ifNotNil: [ :content | ^content asJQuery ] ].\x0a\x09^self cleanedJQuery: holder contents",
-messageSends: ["ifNil:", "attr:", "ifNotNil:", "matchesOf:", "contentsOf:", "asJQuery", "second", "contents", "parent", "index:", "nextAll:", "cleanedJQuery:", "slice:until:", "+", "asLowercase", "prop:", "ifTrue:", "="],
+source: "contentsOf: holder\x0a\x09| tag tramplate |\x0a\x09tramplate := (holder attr: 'data-tramplate') ifNil: [ '' ].\x0a\x09(tramplate matchesOf: '^see (.*)$') ifNotNil: [ :seeMatch | ^self contentsOf: seeMatch second asJQuery ].\x0a\x09(tramplate matchesOf: '^until (.*)$') ifNotNil: [ :untilMatch |\x0a\x09\x09| parentContents start end |\x0a\x09\x09parentContents := holder parent contents.\x0a\x09\x09start := parentContents index: holder.\x0a\x09\x09end := parentContents index: (holder nextAll: untilMatch second).\x0a\x09\x09^self cleanedJQuery: (end = -1 ifTrue: [ parentContents slice: start + 1 ] ifFalse: [ parentContents slice: start + 1 until: end ]) ].\x0a\x09tag := (holder prop: 'tagName') asLowercase.\x0a\x09tag = 'template' ifTrue: [ (holder prop: 'content') ifNotNil: [ :content | ^content asJQuery ] ].\x0a\x09^self cleanedJQuery: holder contents",
+messageSends: ["ifNil:", "attr:", "ifNotNil:", "matchesOf:", "contentsOf:", "asJQuery", "second", "contents", "parent", "index:", "nextAll:", "cleanedJQuery:", "ifTrue:ifFalse:", "=", "slice:", "+", "slice:until:", "asLowercase", "prop:", "ifTrue:"],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);

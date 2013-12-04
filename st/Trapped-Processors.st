@@ -456,7 +456,7 @@ contentsOf: holder
 		parentContents := holder parent contents.
 		start := parentContents index: holder.
 		end := parentContents index: (holder nextAll: untilMatch second).
-		^self cleanedJQuery: (parentContents slice: start + 1 until: end) ].
+		^self cleanedJQuery: (end = -1 ifTrue: [ parentContents slice: start + 1 ] ifFalse: [ parentContents slice: start + 1 until: end ]) ].
 	tag := (holder prop: 'tagName') asLowercase.
 	tag = 'template' ifTrue: [ (holder prop: 'content') ifNotNil: [ :content | ^content asJQuery ] ].
 	^self cleanedJQuery: holder contents
