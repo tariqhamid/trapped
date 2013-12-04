@@ -1377,14 +1377,18 @@ category: '*Trapped-Frontend',
 fn: function (path,aBlock){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
 self._with_((function(html){
 return smalltalk.withContext(function($ctx2) {
-return _st(_st(html)._tag_("template"))._trapIter_after_(path,aBlock);
+$1=_st(html)._tag_("script");
+_st($1)._at_put_("type","application/x-beacon");
+$2=_st($1)._trapIter_after_(path,aBlock);
+return $2;
 }, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"trapIter:do:",{path:path,aBlock:aBlock},smalltalk.HTMLCanvas)})},
 args: ["path", "aBlock"],
-source: "trapIter: path do: aBlock\x0a    self with: [ :html | (html tag: 'template') trapIter: path after: aBlock ]",
-messageSends: ["with:", "trapIter:after:", "tag:"],
+source: "trapIter: path do: aBlock\x0a    self with: [ :html | (html tag: 'script') at: 'type' put: 'application/x-beacon'; trapIter: path after: aBlock ]",
+messageSends: ["with:", "at:put:", "tag:", "trapIter:after:"],
 referencedClasses: []
 }),
 smalltalk.HTMLCanvas);
@@ -1522,7 +1526,7 @@ function $TagBrush(){return smalltalk.TagBrush||(typeof TagBrush=="undefined"?ni
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 return smalltalk.withContext(function($ctx1) { 
 var $2,$1;
-$2="<script type=\x22text/plain\x22 />"._asJQuery();
+$2="<script type=\x22application/x-beacon\x22 />"._asJQuery();
 $ctx1.sendIdx["asJQuery"]=1;
 $1=_st($2)._insertAfter_(self._asJQuery());
 end=_st($TagBrush())._fromJQuery_canvas_($1,self["@canvas"]);
@@ -1532,7 +1536,7 @@ return _st($Trapped())._loop_between_and_do_(model,self,end,aBlock);
 }, function($ctx2) {$ctx2.fillBlock({model:model},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"trapIter:after:",{path:path,aBlock:aBlock,end:end},smalltalk.TagBrush)})},
 args: ["path", "aBlock"],
-source: "trapIter: path after: aBlock\x0a\x09| end |\x0a\x09end := TagBrush fromJQuery: ('<script type=\x22text/plain\x22 />' asJQuery insertAfter: self asJQuery) canvas: canvas.\x0a    self trap: path read: [ :model |\x0a    \x09Trapped loop: model between: self and: end do: aBlock.\x0a    ]",
+source: "trapIter: path after: aBlock\x0a\x09| end |\x0a\x09end := TagBrush fromJQuery: ('<script type=\x22application/x-beacon\x22 />' asJQuery insertAfter: self asJQuery) canvas: canvas.\x0a    self trap: path read: [ :model |\x0a    \x09Trapped loop: model between: self and: end do: aBlock.\x0a    ]",
 messageSends: ["fromJQuery:canvas:", "insertAfter:", "asJQuery", "trap:read:", "loop:between:and:do:"],
 referencedClasses: ["TagBrush", "Trapped"]
 }),
