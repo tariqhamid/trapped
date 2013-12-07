@@ -504,7 +504,7 @@ dataToView: aBlock
 !
 
 deuric
-	^TrappedProcessorUriComponentDecoded new
+	^TrappedProcessorUriComponentDecode new
 !
 
 guardContents: anArray
@@ -552,7 +552,7 @@ toBlackboard
 !
 
 uric
-	^TrappedProcessorUriComponentEncoded new
+	^TrappedProcessorUriComponentEncode new
 !
 
 whenClicked

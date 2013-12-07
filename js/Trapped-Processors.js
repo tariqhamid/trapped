@@ -1077,16 +1077,16 @@ selector: "deuric",
 category: '*Trapped-Processors',
 fn: function (){
 var self=this;
-function $TrappedProcessorUriComponentDecoded(){return smalltalk.TrappedProcessorUriComponentDecoded||(typeof TrappedProcessorUriComponentDecoded=="undefined"?nil:TrappedProcessorUriComponentDecoded)}
+function $TrappedProcessorUriComponentDecode(){return smalltalk.TrappedProcessorUriComponentDecode||(typeof TrappedProcessorUriComponentDecode=="undefined"?nil:TrappedProcessorUriComponentDecode)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st($TrappedProcessorUriComponentDecoded())._new();
+$1=_st($TrappedProcessorUriComponentDecode())._new();
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"deuric",{},smalltalk.TrappedProcessor.klass)})},
 args: [],
-source: "deuric\x0a\x09^TrappedProcessorUriComponentDecoded new",
+source: "deuric\x0a\x09^TrappedProcessorUriComponentDecode new",
 messageSends: ["new"],
-referencedClasses: ["TrappedProcessorUriComponentDecoded"]
+referencedClasses: ["TrappedProcessorUriComponentDecode"]
 }),
 smalltalk.TrappedProcessor.klass);
 
@@ -1305,16 +1305,16 @@ selector: "uric",
 category: '*Trapped-Processors',
 fn: function (){
 var self=this;
-function $TrappedProcessorUriComponentEncoded(){return smalltalk.TrappedProcessorUriComponentEncoded||(typeof TrappedProcessorUriComponentEncoded=="undefined"?nil:TrappedProcessorUriComponentEncoded)}
+function $TrappedProcessorUriComponentEncode(){return smalltalk.TrappedProcessorUriComponentEncode||(typeof TrappedProcessorUriComponentEncode=="undefined"?nil:TrappedProcessorUriComponentEncode)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st($TrappedProcessorUriComponentEncoded())._new();
+$1=_st($TrappedProcessorUriComponentEncode())._new();
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"uric",{},smalltalk.TrappedProcessor.klass)})},
 args: [],
-source: "uric\x0a\x09^TrappedProcessorUriComponentEncoded new",
+source: "uric\x0a\x09^TrappedProcessorUriComponentEncode new",
 messageSends: ["new"],
-referencedClasses: ["TrappedProcessorUriComponentEncoded"]
+referencedClasses: ["TrappedProcessorUriComponentEncode"]
 }),
 smalltalk.TrappedProcessor.klass);
 
