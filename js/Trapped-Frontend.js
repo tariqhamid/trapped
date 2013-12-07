@@ -816,32 +816,53 @@ function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:T
 function $HTMLCanvas(){return smalltalk.HTMLCanvas||(typeof HTMLCanvas=="undefined"?nil:HTMLCanvas)}
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-_st(aJQuery)._each_((function(index,elem){
-var jq;
+$1=_st(aJQuery)._attr_("data-trap");
+if(($receiver = $1) == nil || $receiver == null){
+$1;
+} else {
+var attr;
+attr=$receiver;
+_st(aJQuery)._removeAttr_("data-trap");
+_st(_st($Trapped())._parse_(attr))._do_((function(rule){
 return smalltalk.withContext(function($ctx2) {
-jq=_st(elem)._asJQuery();
-jq;
-$1=_st(jq)._is_("[data-trap]");
-if(smalltalk.assert($1)){
-var parsed;
-parsed=_st($Trapped())._parse_(_st(jq)._attr_("data-trap"));
-parsed;
-_st(jq)._removeAttr_("data-trap");
-_st(parsed)._do_((function(rule){
+return _st(_st(_st($HTMLCanvas())._onJQuery_(aJQuery))._root())._trap_processors_(_st(rule)._first(),_st(rule)._at_ifAbsent_((2),(function(){
 return smalltalk.withContext(function($ctx3) {
-return _st(_st(_st($HTMLCanvas())._onJQuery_(jq))._root())._trap_processors_(_st(rule)._first(),_st(rule)._at_ifAbsent_((2),(function(){
-return smalltalk.withContext(function($ctx4) {
 return [];
-}, function($ctx4) {$ctx4.fillBlock({},$ctx3,4)})})));
-}, function($ctx3) {$ctx3.fillBlock({rule:rule},$ctx2,3)})}));
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)})})));
+}, function($ctx2) {$ctx2.fillBlock({rule:rule},$ctx1,2)})}));
 };
-return self._injectToJQuery_(_st(jq)._children());
-}, function($ctx2) {$ctx2.fillBlock({index:index,elem:elem,jq:jq},$ctx1,1)})}));
+self._injectToJQueryChildren_(aJQuery);
 return self}, function($ctx1) {$ctx1.fill(self,"injectToJQuery:",{aJQuery:aJQuery},smalltalk.Trapped)})},
 args: ["aJQuery"],
-source: "injectToJQuery: aJQuery\x0a\x09aJQuery each: [ :index :elem |\x0a\x09\x09| jq |\x0a\x09\x09jq := elem asJQuery.\x0a\x09\x09(jq is: '[data-trap]')\x0a\x09\x09\x09ifTrue: [\x0a\x09\x09\x09\x09| parsed |\x0a\x09\x09\x09\x09parsed := Trapped parse: (jq attr: 'data-trap').\x0a\x09\x09\x09\x09jq removeAttr: 'data-trap'.\x0a\x09\x09\x09\x09parsed do: [ :rule |\x0a\x09\x09\x09\x09\x09(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].\x0a\x09\x09\x09self injectToJQuery: jq children ]",
-messageSends: ["each:", "asJQuery", "ifTrue:", "is:", "parse:", "attr:", "removeAttr:", "do:", "trap:processors:", "root", "onJQuery:", "first", "at:ifAbsent:", "injectToJQuery:", "children"],
+source: "injectToJQuery: aJQuery\x0a\x09(aJQuery attr: 'data-trap') ifNotNil: [ :attr |\x0a\x09\x09aJQuery removeAttr: 'data-trap'.\x0a\x09\x09(Trapped parse: attr) do: [ :rule |\x0a\x09\x09\x09(HTMLCanvas onJQuery: aJQuery) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].\x0a\x09self injectToJQueryChildren: aJQuery",
+messageSends: ["ifNotNil:", "attr:", "removeAttr:", "do:", "parse:", "trap:processors:", "root", "onJQuery:", "first", "at:ifAbsent:", "injectToJQueryChildren:"],
 referencedClasses: ["Trapped", "HTMLCanvas"]
+}),
+smalltalk.Trapped);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "injectToJQueryChildren:",
+category: 'private',
+fn: function (aJQuery){
+var self=this;
+var child;
+return smalltalk.withContext(function($ctx1) { 
+child=_st(_st(aJQuery)._children())._first();
+_st((function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st(child)._length()).__gt((0));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}))._whileTrue_((function(){
+return smalltalk.withContext(function($ctx2) {
+self._injectToJQuery_(child);
+child=_st(child)._next();
+return child;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"injectToJQueryChildren:",{aJQuery:aJQuery,child:child},smalltalk.Trapped)})},
+args: ["aJQuery"],
+source: "injectToJQueryChildren: aJQuery\x0a\x09| child |\x0a\x09child := aJQuery children first.\x0a\x09[ child length > 0 ] whileTrue: [ self injectToJQuery: child. child := child next ]",
+messageSends: ["first", "children", "whileTrue:", ">", "length", "injectToJQuery:", "next"],
+referencedClasses: []
 }),
 smalltalk.Trapped);
 

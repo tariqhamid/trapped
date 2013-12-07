@@ -126,11 +126,11 @@ fn: function (aDataCarrier){
 var self=this;
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 return smalltalk.withContext(function($ctx1) { 
-_st(_st($Trapped())._current())._injectToJQuery_(_st(_st(_st(aDataCarrier)._target())._asJQuery())._children());
+_st(_st($Trapped())._current())._injectToJQueryChildren_(_st(_st(aDataCarrier)._target())._asJQuery());
 return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorDescend)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09Trapped current injectToJQuery: aDataCarrier target asJQuery children",
-messageSends: ["injectToJQuery:", "current", "children", "asJQuery", "target"],
+source: "toView: aDataCarrier\x0a\x09Trapped current injectToJQueryChildren: aDataCarrier target asJQuery",
+messageSends: ["injectToJQueryChildren:", "current", "asJQuery", "target"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedProcessorDescend);
@@ -841,12 +841,12 @@ fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(_st(_st(self._target())._asJQuery())._xontent())._clone();
+$1=_st(_st(self._target())._asJQuery())._xontent();
 return $1;
 }, function($ctx1) {$ctx1.fill(self,"contents",{},smalltalk.TrappedDataCarrier)})},
 args: [],
-source: "contents\x0a\x09^self target asJQuery xontent clone",
-messageSends: ["clone", "xontent", "asJQuery", "target"],
+source: "contents\x0a\x09^self target asJQuery xontent",
+messageSends: ["xontent", "asJQuery", "target"],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);

@@ -342,17 +342,17 @@ descend: anArray snapshotDo: aBlock
 !
 
 injectToJQuery: aJQuery
-	aJQuery each: [ :index :elem |
-		| jq |
-		jq := elem asJQuery.
-		(jq is: '[data-trap]')
-			ifTrue: [
-				| parsed |
-				parsed := Trapped parse: (jq attr: 'data-trap').
-				jq removeAttr: 'data-trap'.
-				parsed do: [ :rule |
-					(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].
-			self injectToJQuery: jq children ]
+	(aJQuery attr: 'data-trap') ifNotNil: [ :attr |
+		aJQuery removeAttr: 'data-trap'.
+		(Trapped parse: attr) do: [ :rule |
+			(HTMLCanvas onJQuery: aJQuery) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].
+	self injectToJQueryChildren: aJQuery
+!
+
+injectToJQueryChildren: aJQuery
+	| child |
+	child := aJQuery children first.
+	[ child length > 0 ] whileTrue: [ self injectToJQuery: child. child := child next ]
 ! !
 
 !Trapped class methodsFor: 'accessing'!
