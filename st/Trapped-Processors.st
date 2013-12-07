@@ -436,30 +436,8 @@ new: aString
 
 !TrappedDataCarrier methodsFor: '*Trapped-Processors'!
 
-cleanedJQuery: aJQuery
-	| result |
-	result := aJQuery remove clone.
-	aJQuery empty; removeAttr: 'data-trap'; removeAttr: 'data-tramplate'.
-	^result
-!
-
 contents
-	^self contentsOf: self target asJQuery
-!
-
-contentsOf: holder
-	| tag tramplate |
-	tramplate := (holder attr: 'data-tramplate') ifNil: [ '' ].
-	(tramplate matchesOf: '^see (.*)$') ifNotNil: [ :seeMatch | ^self contentsOf: seeMatch second asJQuery ].
-	(tramplate matchesOf: '^until (.*)$') ifNotNil: [ :untilMatch |
-		| parentContents start end |
-		parentContents := holder parent contents.
-		start := parentContents index: holder.
-		end := parentContents index: (holder nextAll: untilMatch second).
-		^self cleanedJQuery: (end = -1 ifTrue: [ parentContents slice: start + 1 ] ifFalse: [ parentContents slice: start + 1 until: end ]) ].
-	tag := (holder prop: 'tagName') asLowercase.
-	tag = 'template' ifTrue: [ (holder prop: 'content') ifNotNil: [ :content | ^content asJQuery ] ].
-	^self cleanedJQuery: holder contents
+	^self target asJQuery xontent clone
 !
 
 modifyTarget

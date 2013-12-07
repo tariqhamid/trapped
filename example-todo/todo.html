@@ -13,6 +13,11 @@
     <script type="text/javascript">
         var blackboard;
         require.config({
+            shim: {
+                'amber_lib/xontent/jquery.xontent': {
+                    deps: [ 'jquery' ]
+                }
+            },
             paths: {
                 'gh_herby_trapped': '../js',
                 'gh_herby_trapped_todo': 'js',
@@ -21,7 +26,7 @@
         });
         require(
                 ["amber/devel",
-                    "gh_herby_trapped/Trapped-Processors", "gh_herby_trapped_todo/Trapped-Todo" ],
+                    "gh_herby_trapped/Trapped-Processors", "gh_herby_trapped_todo/Trapped-Todo", "amber_lib/xontent/jquery.xontent" ],
                 function (smalltalk) {
                     smalltalk.defaultAmdNamespace = 'gh_herby_trapped_todo';
                     smalltalk.initialize();
@@ -41,12 +46,15 @@
 <div data-trap=": (guardContents (#todos #notNil))">
     <span data-trap="#remaining"></span> of <span data-trap="#todos #size"></span> remaning
     [ <a href="" data-trap=": (signal archive) whenClicked">archive</a> ]
-    <ul><ins data-trap="#todos: loopContents">
+    <ul>
+        <script type="application/x-beacon" data-trap="#todos: loopContents" data-xontent="until end"></script>
         <li>
-            <input type="checkbox" data-trap="done: inputChecked" />
-            <span data-trap="done: (replace ^ with ^done-) (attr class). text" ></span>
+            <label>
+                <input type="checkbox" data-trap="done: inputChecked"/>
+                <span data-trap="done: (replace ^ with ^done-) (attr class). text" ></span>
+            </label>
         </li>
-    </ins></ul>
+    </ul>
     <form data-trap=": (signal addTodo) whenSubmitted">
         <input type="text" data-trap="#todoText: inputValue" size="30" placeholder="add new todo here"/>
         <input type="submit" class="btn-primary" value="add"/>

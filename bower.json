@@ -23,6 +23,7 @@
     "tests"
   ],
   "dependencies": {
-    "amber": ">=0.12.2"
+    "amber": ">=0.12.2",
+    "xontent": "~0.0.1"
   }
 }
