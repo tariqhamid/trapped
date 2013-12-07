@@ -143,12 +143,12 @@ TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
 !TrappedProcessorInputChecked commentStamp!
-I bind to checkbox checked attribute.!
+I bind to checkbox checked state.!
 
 !TrappedProcessorInputChecked methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	aDataCarrier toTargetAttr: 'checked'
+	aDataCarrier toTargetProp: 'checked'
 ! !
 
 !TrappedProcessorInputChecked methodsFor: 'installation'!
@@ -156,7 +156,27 @@ toView: aDataCarrier
 installToView: aDataCarrier toModel: anotherDataCarrier
 	| brush |
 	brush := aDataCarrier target.
-	brush onChange: [ anotherDataCarrier copy value: (brush asJQuery attr: 'checked') notNil; proceed ]
+	brush onChange: [ anotherDataCarrier copy value: (brush asJQuery prop: 'checked'); proceed ]
+! !
+
+TrappedDataExpectingProcessor subclass: #TrappedProcessorInputSelected
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorInputSelected commentStamp!
+I bind to option selected state.!
+
+!TrappedProcessorInputSelected methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	aDataCarrier toTargetProp: 'selected'
+! !
+
+!TrappedProcessorInputSelected methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	| brush |
+	brush := aDataCarrier target.
+	brush onChange: [ anotherDataCarrier copy value: (brush asJQuery prop: 'selected'); proceed ]
 ! !
 
 TrappedDataExpectingProcessor subclass: #TrappedProcessorInputValue
@@ -448,18 +468,29 @@ modifyTargetByPerforming: aString
 	self target modify: [ :m | m perform: aString ]
 !
 
+primitive: anObject
+	<return anObject === nil ? null : anObject.valueOf()>
+!
+
 toTargetAttr: aString
 	self falseAsNilValue
 		ifNil: [ self target removeAt: aString ]
-		ifNotNil: [ :value | self target at: aString put: (value = true ifTrue: [ aString ] ifFalse: [ value ]) ]
+		ifNotNil: [ :bvalue |
+			| value |
+			value := self primitive: bvalue.
+			self target at: aString put: (value = true ifTrue: [ aString ] ifFalse: [ value ]) ]
 !
 
 toTargetContents
-	self target contents: self value
+	self target contents: (self primitive: self value)
+!
+
+toTargetProp: aString
+	self target element at: aString put: (self primitive: self value)
 !
 
 toTargetValue
-	self target asJQuery val: (self value ifNotNil: [ :o | o value ] ifNil: [[]])
+	self target asJQuery val: (self primitive: self value)
 ! !
 
 !TrappedProcessor class methodsFor: '*Trapped-Processors'!
@@ -486,6 +517,10 @@ guardProc: anArray
 
 inputChecked
 	^TrappedProcessorInputChecked new
+!
+
+inputSelected
+	^TrappedProcessorInputSelected new
 !
 
 inputValue

@@ -263,7 +263,7 @@ smalltalk.TrappedProcessorGuardProc);
 
 
 smalltalk.addClass('TrappedProcessorInputChecked', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Processors');
-smalltalk.TrappedProcessorInputChecked.comment="I bind to checkbox checked attribute.";
+smalltalk.TrappedProcessorInputChecked.comment="I bind to checkbox checked state.";
 smalltalk.addMethod(
 smalltalk.method({
 selector: "installToView:toModel:",
@@ -277,14 +277,14 @@ brush=_st(aDataCarrier)._target();
 _st(brush)._onChange_((function(){
 return smalltalk.withContext(function($ctx2) {
 $1=_st(anotherDataCarrier)._copy();
-_st($1)._value_(_st(_st(_st(brush)._asJQuery())._attr_("checked"))._notNil());
+_st($1)._value_(_st(_st(brush)._asJQuery())._prop_("checked"));
 $2=_st($1)._proceed();
 return $2;
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier,brush:brush},smalltalk.TrappedProcessorInputChecked)})},
 args: ["aDataCarrier", "anotherDataCarrier"],
-source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| brush |\x0a\x09brush := aDataCarrier target.\x0a\x09brush onChange: [ anotherDataCarrier copy value: (brush asJQuery attr: 'checked') notNil; proceed ]",
-messageSends: ["target", "onChange:", "value:", "copy", "notNil", "attr:", "asJQuery", "proceed"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| brush |\x0a\x09brush := aDataCarrier target.\x0a\x09brush onChange: [ anotherDataCarrier copy value: (brush asJQuery prop: 'checked'); proceed ]",
+messageSends: ["target", "onChange:", "value:", "copy", "prop:", "asJQuery", "proceed"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorInputChecked);
@@ -296,14 +296,59 @@ category: 'data transformation',
 fn: function (aDataCarrier){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-_st(aDataCarrier)._toTargetAttr_("checked");
+_st(aDataCarrier)._toTargetProp_("checked");
 return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorInputChecked)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09aDataCarrier toTargetAttr: 'checked'",
-messageSends: ["toTargetAttr:"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier toTargetProp: 'checked'",
+messageSends: ["toTargetProp:"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorInputChecked);
+
+
+
+smalltalk.addClass('TrappedProcessorInputSelected', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorInputSelected.comment="I bind to option selected state.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "installToView:toModel:",
+category: 'installation',
+fn: function (aDataCarrier,anotherDataCarrier){
+var self=this;
+var brush;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2;
+brush=_st(aDataCarrier)._target();
+_st(brush)._onChange_((function(){
+return smalltalk.withContext(function($ctx2) {
+$1=_st(anotherDataCarrier)._copy();
+_st($1)._value_(_st(_st(brush)._asJQuery())._prop_("selected"));
+$2=_st($1)._proceed();
+return $2;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier,brush:brush},smalltalk.TrappedProcessorInputSelected)})},
+args: ["aDataCarrier", "anotherDataCarrier"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| brush |\x0a\x09brush := aDataCarrier target.\x0a\x09brush onChange: [ anotherDataCarrier copy value: (brush asJQuery prop: 'selected'); proceed ]",
+messageSends: ["target", "onChange:", "value:", "copy", "prop:", "asJQuery", "proceed"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorInputSelected);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aDataCarrier)._toTargetProp_("selected");
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorInputSelected)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier toTargetProp: 'selected'",
+messageSends: ["toTargetProp:"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorInputSelected);
 
 
 
@@ -891,6 +936,22 @@ smalltalk.TrappedDataCarrier);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "primitive:",
+category: '*Trapped-Processors',
+fn: function (anObject){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+return anObject === nil ? null : anObject.valueOf();
+return self}, function($ctx1) {$ctx1.fill(self,"primitive:",{anObject:anObject},smalltalk.TrappedDataCarrier)})},
+args: ["anObject"],
+source: "primitive: anObject\x0a\x09<return anObject === nil ? null : anObject.valueOf()>",
+messageSends: [],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "toTargetAttr:",
 category: '*Trapped-Processors',
 fn: function (aString){
@@ -903,8 +964,10 @@ $2=self._target();
 $ctx1.sendIdx["target"]=1;
 _st($2)._removeAt_(aString);
 } else {
-var value;
-value=$receiver;
+var value,bvalue;
+bvalue=$receiver;
+value=self._primitive_(bvalue);
+value;
 $3=self._target();
 $5=_st(value).__eq(true);
 if(smalltalk.assert($5)){
@@ -916,8 +979,8 @@ _st($3)._at_put_(aString,$4);
 };
 return self}, function($ctx1) {$ctx1.fill(self,"toTargetAttr:",{aString:aString},smalltalk.TrappedDataCarrier)})},
 args: ["aString"],
-source: "toTargetAttr: aString\x0a\x09self falseAsNilValue\x0a\x09\x09ifNil: [ self target removeAt: aString ]\x0a\x09\x09ifNotNil: [ :value | self target at: aString put: (value = true ifTrue: [ aString ] ifFalse: [ value ]) ]",
-messageSends: ["ifNil:ifNotNil:", "falseAsNilValue", "removeAt:", "target", "at:put:", "ifTrue:ifFalse:", "="],
+source: "toTargetAttr: aString\x0a\x09self falseAsNilValue\x0a\x09\x09ifNil: [ self target removeAt: aString ]\x0a\x09\x09ifNotNil: [ :bvalue |\x0a\x09\x09\x09| value |\x0a\x09\x09\x09value := self primitive: bvalue.\x0a\x09\x09\x09self target at: aString put: (value = true ifTrue: [ aString ] ifFalse: [ value ]) ]",
+messageSends: ["ifNil:ifNotNil:", "falseAsNilValue", "removeAt:", "target", "primitive:", "at:put:", "ifTrue:ifFalse:", "="],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);
@@ -929,11 +992,27 @@ category: '*Trapped-Processors',
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-_st(self._target())._contents_(self._value());
+_st(self._target())._contents_(self._primitive_(self._value()));
 return self}, function($ctx1) {$ctx1.fill(self,"toTargetContents",{},smalltalk.TrappedDataCarrier)})},
 args: [],
-source: "toTargetContents\x0a\x09self target contents: self value",
-messageSends: ["contents:", "target", "value"],
+source: "toTargetContents\x0a\x09self target contents: (self primitive: self value)",
+messageSends: ["contents:", "target", "primitive:", "value"],
+referencedClasses: []
+}),
+smalltalk.TrappedDataCarrier);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toTargetProp:",
+category: '*Trapped-Processors',
+fn: function (aString){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(_st(self._target())._element())._at_put_(aString,self._primitive_(self._value()));
+return self}, function($ctx1) {$ctx1.fill(self,"toTargetProp:",{aString:aString},smalltalk.TrappedDataCarrier)})},
+args: ["aString"],
+source: "toTargetProp: aString\x0a\x09self target element at: aString put: (self primitive: self value)",
+messageSends: ["at:put:", "element", "target", "primitive:", "value"],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);
@@ -945,24 +1024,11 @@ category: '*Trapped-Processors',
 fn: function (){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$3,$2;
-$1=_st(self._target())._asJQuery();
-$3=self._value();
-$ctx1.sendIdx["value"]=1;
-if(($receiver = $3) == nil || $receiver == null){
-$2=(function(){
-return smalltalk.withContext(function($ctx2) {
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,3)})});
-} else {
-var o;
-o=$receiver;
-$2=_st(o)._value();
-};
-_st($1)._val_($2);
+_st(_st(self._target())._asJQuery())._val_(self._primitive_(self._value()));
 return self}, function($ctx1) {$ctx1.fill(self,"toTargetValue",{},smalltalk.TrappedDataCarrier)})},
 args: [],
-source: "toTargetValue\x0a\x09self target asJQuery val: (self value ifNotNil: [ :o | o value ] ifNil: [[]])",
-messageSends: ["val:", "asJQuery", "target", "ifNotNil:ifNil:", "value"],
+source: "toTargetValue\x0a\x09self target asJQuery val: (self primitive: self value)",
+messageSends: ["val:", "asJQuery", "target", "primitive:", "value"],
 referencedClasses: []
 }),
 smalltalk.TrappedDataCarrier);
@@ -1078,6 +1144,25 @@ args: [],
 source: "inputChecked\x0a\x09^TrappedProcessorInputChecked new",
 messageSends: ["new"],
 referencedClasses: ["TrappedProcessorInputChecked"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "inputSelected",
+category: '*Trapped-Processors',
+fn: function (){
+var self=this;
+function $TrappedProcessorInputSelected(){return smalltalk.TrappedProcessorInputSelected||(typeof TrappedProcessorInputSelected=="undefined"?nil:TrappedProcessorInputSelected)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorInputSelected())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"inputSelected",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "inputSelected\x0a\x09^TrappedProcessorInputSelected new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorInputSelected"]
 }),
 smalltalk.TrappedProcessor.klass);
 
