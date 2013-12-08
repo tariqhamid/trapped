@@ -218,10 +218,10 @@ toView: aDataCarrier
 	self subclassResponsibility
 ! !
 
-TrappedProcessorLoopBase subclass: #TrappedProcessorLoopProc
+TrappedProcessorLoopBase subclass: #TrappedProcessorLoopProcZ
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
-!TrappedProcessorLoopProc commentStamp!
+!TrappedProcessorLoopProcZ commentStamp!
 I am used to loop over data and repeat the contents filling process
 of the brush I am installed on.
 
@@ -234,7 +234,7 @@ My brush itself should be as least visible as possible,
 as it only serve as a position flag (use for example
 noscript, ins or del).!
 
-!TrappedProcessorLoopProc methodsFor: 'data transformation'!
+!TrappedProcessorLoopProcZ methodsFor: 'data transformation'!
 
 toView: aDataCarrier
 	| frozen |
@@ -242,10 +242,10 @@ toView: aDataCarrier
 	frozen target trapIter: #() after: [ :html | frozen copy target: html root; proceed ]
 ! !
 
-TrappedProcessorLoopBase subclass: #TrappedProcessorLoopXon
+TrappedProcessorLoopBase subclass: #TrappedProcessorLoopXonZ
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
-!TrappedProcessorLoopXon commentStamp!
+!TrappedProcessorLoopXonZ commentStamp!
 I am used to loop over data and repeat the contents
 of the brush I am installed on.
 
@@ -259,7 +259,7 @@ My brush itself should be as least visible as possible,
 as it only serve as a position flag (use for example
 noscript, ins or del).!
 
-!TrappedProcessorLoopXon methodsFor: 'data transformation'!
+!TrappedProcessorLoopXonZ methodsFor: 'data transformation'!
 
 toView: aDataCarrier
 	| frozen contents |
@@ -527,12 +527,12 @@ inputValue
 	^TrappedProcessorInputValue new
 !
 
-loopProc
-	^TrappedProcessorLoopProc new
+loopProcZ
+	^TrappedProcessorLoopProcZ new
 !
 
-loopXon
-	^TrappedProcessorLoopXon new
+loopXonZ
+	^TrappedProcessorLoopXonZ new
 !
 
 path
