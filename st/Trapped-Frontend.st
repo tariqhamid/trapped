@@ -312,7 +312,7 @@ register: aListKeyedEntity name: aString
 
 start: args
 	args do: [ :each | self register: each ].
-	self injectToJQuery: 'html' asJQuery
+	self injectToElement: document
 ! !
 
 !Trapped methodsFor: 'initialization'!
@@ -326,7 +326,7 @@ initialize
 
 cloneAndInject: anObject inPlaceOf: aTagBrush
 	aTagBrush asJQuery append: anObject clone.
-	self injectToJQuery: aTagBrush asJQuery.
+	self injectToElement: aTagBrush element.
 	aTagBrush asJQuery contents unwrap
 !
 
@@ -341,18 +341,20 @@ descend: anArray snapshotDo: aBlock
     ]
 !
 
-injectToJQuery: aJQuery
-	(aJQuery attr: 'data-trap') ifNotNil: [ :attr |
-		aJQuery removeAttr: 'data-trap'.
-		(Trapped parse: attr) do: [ :rule |
-			(HTMLCanvas onJQuery: aJQuery) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].
-	self injectToJQueryChildren: aJQuery
+injectToChildren: anElement
+	| child |
+	child := anElement firstChild.
+	[ child isNil ] whileFalse: [ self injectToElement: child. child := child nextSibling ]
 !
 
-injectToJQueryChildren: aJQuery
-	| child |
-	child := aJQuery children first.
-	[ child length > 0 ] whileTrue: [ self injectToJQuery: child. child := child next ]
+injectToElement: anElement
+	| jq |
+	jq := anElement asJQuery.
+	(jq attr: 'data-trap') ifNotNil: [ :attr |
+		jq removeAttr: 'data-trap'.
+		(Trapped parse: attr) do: [ :rule |
+			(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].
+	self injectToChildren: anElement
 ! !
 
 !Trapped class methodsFor: 'accessing'!

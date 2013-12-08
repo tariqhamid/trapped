@@ -126,11 +126,11 @@ fn: function (aDataCarrier){
 var self=this;
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 return smalltalk.withContext(function($ctx1) { 
-_st(_st($Trapped())._current())._injectToJQueryChildren_(_st(_st(aDataCarrier)._target())._asJQuery());
+_st(_st($Trapped())._current())._injectToChildren_(_st(_st(aDataCarrier)._target())._element());
 return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorDescend)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09Trapped current injectToJQueryChildren: aDataCarrier target asJQuery",
-messageSends: ["injectToJQueryChildren:", "current", "asJQuery", "target"],
+source: "toView: aDataCarrier\x0a\x09Trapped current injectToChildren: aDataCarrier target element",
+messageSends: ["injectToChildren:", "current", "element", "target"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedProcessorDescend);

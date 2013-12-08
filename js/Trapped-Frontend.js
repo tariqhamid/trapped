@@ -745,18 +745,16 @@ category: 'private',
 fn: function (anObject,aTagBrush){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
+var $1;
 $1=_st(aTagBrush)._asJQuery();
 $ctx1.sendIdx["asJQuery"]=1;
 _st($1)._append_(_st(anObject)._clone());
-$2=_st(aTagBrush)._asJQuery();
-$ctx1.sendIdx["asJQuery"]=2;
-self._injectToJQuery_($2);
+self._injectToElement_(_st(aTagBrush)._element());
 _st(_st(_st(aTagBrush)._asJQuery())._contents())._unwrap();
 return self}, function($ctx1) {$ctx1.fill(self,"cloneAndInject:inPlaceOf:",{anObject:anObject,aTagBrush:aTagBrush},smalltalk.Trapped)})},
 args: ["anObject", "aTagBrush"],
-source: "cloneAndInject: anObject inPlaceOf: aTagBrush\x0a\x09aTagBrush asJQuery append: anObject clone.\x0a\x09self injectToJQuery: aTagBrush asJQuery.\x0a\x09aTagBrush asJQuery contents unwrap",
-messageSends: ["append:", "asJQuery", "clone", "injectToJQuery:", "unwrap", "contents"],
+source: "cloneAndInject: anObject inPlaceOf: aTagBrush\x0a\x09aTagBrush asJQuery append: anObject clone.\x0a\x09self injectToElement: aTagBrush element.\x0a\x09aTagBrush asJQuery contents unwrap",
+messageSends: ["append:", "asJQuery", "clone", "injectToElement:", "element", "unwrap", "contents"],
 referencedClasses: []
 }),
 smalltalk.Trapped);
@@ -808,61 +806,63 @@ smalltalk.Trapped);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "injectToJQuery:",
+selector: "injectToChildren:",
 category: 'private',
-fn: function (aJQuery){
+fn: function (anElement){
 var self=this;
-function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
-function $HTMLCanvas(){return smalltalk.HTMLCanvas||(typeof HTMLCanvas=="undefined"?nil:HTMLCanvas)}
+var child;
 return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st(aJQuery)._attr_("data-trap");
-if(($receiver = $1) == nil || $receiver == null){
-$1;
-} else {
-var attr;
-attr=$receiver;
-_st(aJQuery)._removeAttr_("data-trap");
-_st(_st($Trapped())._parse_(attr))._do_((function(rule){
+child=_st(anElement)._firstChild();
+_st((function(){
 return smalltalk.withContext(function($ctx2) {
-return _st(_st(_st($HTMLCanvas())._onJQuery_(aJQuery))._root())._trap_processors_(_st(rule)._first(),_st(rule)._at_ifAbsent_((2),(function(){
-return smalltalk.withContext(function($ctx3) {
-return [];
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)})})));
-}, function($ctx2) {$ctx2.fillBlock({rule:rule},$ctx1,2)})}));
-};
-self._injectToJQueryChildren_(aJQuery);
-return self}, function($ctx1) {$ctx1.fill(self,"injectToJQuery:",{aJQuery:aJQuery},smalltalk.Trapped)})},
-args: ["aJQuery"],
-source: "injectToJQuery: aJQuery\x0a\x09(aJQuery attr: 'data-trap') ifNotNil: [ :attr |\x0a\x09\x09aJQuery removeAttr: 'data-trap'.\x0a\x09\x09(Trapped parse: attr) do: [ :rule |\x0a\x09\x09\x09(HTMLCanvas onJQuery: aJQuery) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].\x0a\x09self injectToJQueryChildren: aJQuery",
-messageSends: ["ifNotNil:", "attr:", "removeAttr:", "do:", "parse:", "trap:processors:", "root", "onJQuery:", "first", "at:ifAbsent:", "injectToJQueryChildren:"],
-referencedClasses: ["Trapped", "HTMLCanvas"]
+return _st(child)._isNil();
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}))._whileFalse_((function(){
+return smalltalk.withContext(function($ctx2) {
+self._injectToElement_(child);
+child=_st(child)._nextSibling();
+return child;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"injectToChildren:",{anElement:anElement,child:child},smalltalk.Trapped)})},
+args: ["anElement"],
+source: "injectToChildren: anElement\x0a\x09| child |\x0a\x09child := anElement firstChild.\x0a\x09[ child isNil ] whileFalse: [ self injectToElement: child. child := child nextSibling ]",
+messageSends: ["firstChild", "whileFalse:", "isNil", "injectToElement:", "nextSibling"],
+referencedClasses: []
 }),
 smalltalk.Trapped);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "injectToJQueryChildren:",
+selector: "injectToElement:",
 category: 'private',
-fn: function (aJQuery){
+fn: function (anElement){
 var self=this;
-var child;
+var jq;
+function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
+function $HTMLCanvas(){return smalltalk.HTMLCanvas||(typeof HTMLCanvas=="undefined"?nil:HTMLCanvas)}
 return smalltalk.withContext(function($ctx1) { 
-child=_st(_st(aJQuery)._children())._first();
-_st((function(){
+var $1;
+jq=_st(anElement)._asJQuery();
+$1=_st(jq)._attr_("data-trap");
+if(($receiver = $1) == nil || $receiver == null){
+$1;
+} else {
+var attr;
+attr=$receiver;
+_st(jq)._removeAttr_("data-trap");
+_st(_st($Trapped())._parse_(attr))._do_((function(rule){
 return smalltalk.withContext(function($ctx2) {
-return _st(_st(child)._length()).__gt((0));
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}))._whileTrue_((function(){
-return smalltalk.withContext(function($ctx2) {
-self._injectToJQuery_(child);
-child=_st(child)._next();
-return child;
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"injectToJQueryChildren:",{aJQuery:aJQuery,child:child},smalltalk.Trapped)})},
-args: ["aJQuery"],
-source: "injectToJQueryChildren: aJQuery\x0a\x09| child |\x0a\x09child := aJQuery children first.\x0a\x09[ child length > 0 ] whileTrue: [ self injectToJQuery: child. child := child next ]",
-messageSends: ["first", "children", "whileTrue:", ">", "length", "injectToJQuery:", "next"],
-referencedClasses: []
+return _st(_st(_st($HTMLCanvas())._onJQuery_(jq))._root())._trap_processors_(_st(rule)._first(),_st(rule)._at_ifAbsent_((2),(function(){
+return smalltalk.withContext(function($ctx3) {
+return [];
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)})})));
+}, function($ctx2) {$ctx2.fillBlock({rule:rule},$ctx1,2)})}));
+};
+self._injectToChildren_(anElement);
+return self}, function($ctx1) {$ctx1.fill(self,"injectToElement:",{anElement:anElement,jq:jq},smalltalk.Trapped)})},
+args: ["anElement"],
+source: "injectToElement: anElement\x0a\x09| jq |\x0a\x09jq := anElement asJQuery.\x0a\x09(jq attr: 'data-trap') ifNotNil: [ :attr |\x0a\x09\x09jq removeAttr: 'data-trap'.\x0a\x09\x09(Trapped parse: attr) do: [ :rule |\x0a\x09\x09\x09(HTMLCanvas onJQuery: jq) root trap: rule first processors: (rule at: 2 ifAbsent: [#()]) ] ].\x0a\x09self injectToChildren: anElement",
+messageSends: ["asJQuery", "ifNotNil:", "attr:", "removeAttr:", "do:", "parse:", "trap:processors:", "root", "onJQuery:", "first", "at:ifAbsent:", "injectToChildren:"],
+referencedClasses: ["Trapped", "HTMLCanvas"]
 }),
 smalltalk.Trapped);
 
@@ -909,11 +909,11 @@ _st(args)._do_((function(each){
 return smalltalk.withContext(function($ctx2) {
 return self._register_(each);
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)})}));
-self._injectToJQuery_("html"._asJQuery());
+self._injectToElement_(document);
 return self}, function($ctx1) {$ctx1.fill(self,"start:",{args:args},smalltalk.Trapped)})},
 args: ["args"],
-source: "start: args\x0a\x09args do: [ :each | self register: each ].\x0a\x09self injectToJQuery: 'html' asJQuery",
-messageSends: ["do:", "register:", "injectToJQuery:", "asJQuery"],
+source: "start: args\x0a\x09args do: [ :each | self register: each ].\x0a\x09self injectToElement: document",
+messageSends: ["do:", "register:", "injectToElement:"],
 referencedClasses: []
 }),
 smalltalk.Trapped);

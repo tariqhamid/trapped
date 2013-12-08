@@ -61,7 +61,7 @@ I intepret data-trap in descendants of my brush.!
 !TrappedProcessorDescend methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	Trapped current injectToJQueryChildren: aDataCarrier target asJQuery
+	Trapped current injectToChildren: aDataCarrier target element
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorGuardBase
