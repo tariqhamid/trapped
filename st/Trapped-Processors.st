@@ -97,28 +97,6 @@ new: anArray
 		yourself
 ! !
 
-TrappedProcessorGuardBase subclass: #TrappedProcessorGuardContents
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedProcessorGuardContents commentStamp!
-I am used to guard contents of the brush I am installed on.
-
-I save the brush contents, then I observe guard expression in the model,
-and when it changes to nil or false, I delete the brush contents;
-on the other hand, when it changes to non-nil and non-false,
-I restore it from remembered state and interpret all contained
-data-trap attributes inside.!
-
-!TrappedProcessorGuardContents methodsFor: 'data transformation'!
-
-toView: aDataCarrier
-	| frozen contents |
-	frozen := aDataCarrier copy.
-	contents := frozen contents.
-	frozen target trapGuard: guardPath contents: [ :html |
-		Trapped current cloneAndInject: contents inPlaceOf: html del ]
-! !
-
 TrappedProcessorGuardBase subclass: #TrappedProcessorGuardProc
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
@@ -137,6 +115,28 @@ toView: aDataCarrier
 	| frozen |
 	frozen := aDataCarrier copy.
 	frozen target trapGuard: guardPath contents: [ frozen copy proceed ]
+! !
+
+TrappedProcessorGuardBase subclass: #TrappedProcessorGuardXon
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorGuardXon commentStamp!
+I am used to guard contents of the brush I am installed on.
+
+I save the brush contents, then I observe guard expression in the model,
+and when it changes to nil or false, I delete the brush contents;
+on the other hand, when it changes to non-nil and non-false,
+I restore it from remembered state and interpret all contained
+data-trap attributes inside.!
+
+!TrappedProcessorGuardXon methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	| frozen contents |
+	frozen := aDataCarrier copy.
+	contents := frozen contents.
+	frozen target trapGuard: guardPath contents: [ :html |
+		Trapped current cloneAndInject: contents inPlaceOf: html del ]
 ! !
 
 TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
@@ -218,33 +218,6 @@ toView: aDataCarrier
 	self subclassResponsibility
 ! !
 
-TrappedProcessorLoopBase subclass: #TrappedProcessorLoopContents
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedProcessorLoopContents commentStamp!
-I am used to loop over data and repeat the contents
-of the brush I am installed on.
-
-I save the brush contents, then I observe the data in the model,
-and when it changes, I loop over it
-and restore the contents from remembered state
-and interpret all contained data-trap attributes inside
-for each element, putting the result _after_ my brush.
-
-My brush itself should be as least visible as possible,
-as it only serve as a position flag (use for example
-noscript, ins or del).!
-
-!TrappedProcessorLoopContents methodsFor: 'data transformation'!
-
-toView: aDataCarrier
-	| frozen contents |
-	frozen := aDataCarrier copy.
-	contents := frozen contents.
-	frozen target trapIter: #() after: [ :html |
-		Trapped current cloneAndInject: contents inPlaceOf: html del ]
-! !
-
 TrappedProcessorLoopBase subclass: #TrappedProcessorLoopProc
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
@@ -267,6 +240,33 @@ toView: aDataCarrier
 	| frozen |
 	frozen := aDataCarrier copy.
 	frozen target trapIter: #() after: [ :html | frozen copy target: html root; proceed ]
+! !
+
+TrappedProcessorLoopBase subclass: #TrappedProcessorLoopXon
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorLoopXon commentStamp!
+I am used to loop over data and repeat the contents
+of the brush I am installed on.
+
+I save the brush contents, then I observe the data in the model,
+and when it changes, I loop over it
+and restore the contents from remembered state
+and interpret all contained data-trap attributes inside
+for each element, putting the result _after_ my brush.
+
+My brush itself should be as least visible as possible,
+as it only serve as a position flag (use for example
+noscript, ins or del).!
+
+!TrappedProcessorLoopXon methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	| frozen contents |
+	frozen := aDataCarrier copy.
+	contents := frozen contents.
+	frozen target trapIter: #() after: [ :html |
+		Trapped current cloneAndInject: contents inPlaceOf: html del ]
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorReplace
@@ -507,12 +507,12 @@ deuric
 	^TrappedProcessorUriComponentDecode new
 !
 
-guardContents: anArray
-	^TrappedProcessorGuardContents new: anArray
-!
-
 guardProc: anArray
 	^TrappedProcessorGuardProc new: anArray
+!
+
+guardXon: anArray
+	^TrappedProcessorGuardXon new: anArray
 !
 
 inputChecked
@@ -527,12 +527,12 @@ inputValue
 	^TrappedProcessorInputValue new
 !
 
-loopContents
-	^TrappedProcessorLoopContents new
-!
-
 loopProc
 	^TrappedProcessorLoopProc new
+!
+
+loopXon
+	^TrappedProcessorLoopXon new
 !
 
 path

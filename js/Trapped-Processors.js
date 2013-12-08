@@ -209,33 +209,6 @@ referencedClasses: []
 smalltalk.TrappedProcessorGuardBase.klass);
 
 
-smalltalk.addClass('TrappedProcessorGuardContents', smalltalk.TrappedProcessorGuardBase, [], 'Trapped-Processors');
-smalltalk.TrappedProcessorGuardContents.comment="I am used to guard contents of the brush I am installed on.\x0a\x0aI save the brush contents, then I observe guard expression in the model,\x0aand when it changes to nil or false, I delete the brush contents;\x0aon the other hand, when it changes to non-nil and non-false,\x0aI restore it from remembered state and interpret all contained\x0adata-trap attributes inside.";
-smalltalk.addMethod(
-smalltalk.method({
-selector: "toView:",
-category: 'data transformation',
-fn: function (aDataCarrier){
-var self=this;
-var frozen,contents;
-function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
-return smalltalk.withContext(function($ctx1) { 
-frozen=_st(aDataCarrier)._copy();
-contents=_st(frozen)._contents();
-_st(_st(frozen)._target())._trapGuard_contents_(self["@guardPath"],(function(html){
-return smalltalk.withContext(function($ctx2) {
-return _st(_st($Trapped())._current())._cloneAndInject_inPlaceOf_(contents,_st(html)._del());
-}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents},smalltalk.TrappedProcessorGuardContents)})},
-args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen contents.\x0a\x09frozen target trapGuard: guardPath contents: [ :html |\x0a\x09\x09Trapped current cloneAndInject: contents inPlaceOf: html del ]",
-messageSends: ["copy", "contents", "trapGuard:contents:", "target", "cloneAndInject:inPlaceOf:", "current", "del"],
-referencedClasses: ["Trapped"]
-}),
-smalltalk.TrappedProcessorGuardContents);
-
-
-
 smalltalk.addClass('TrappedProcessorGuardProc', smalltalk.TrappedProcessorGuardBase, [], 'Trapped-Processors');
 smalltalk.TrappedProcessorGuardProc.comment="I am used to guard contents filling process of the brush I am installed on.\x0a\x0aI observe guard expression in the model,\x0aand when it changes to nil or false, I delete the brush contents;\x0aon the other hand, when it changes to non-nil and non-false,\x0aI run the rest on the chain, which should be one-time\x0athat sets up the contents,";
 smalltalk.addMethod(
@@ -259,6 +232,33 @@ messageSends: ["copy", "trapGuard:contents:", "target", "proceed"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorGuardProc);
+
+
+
+smalltalk.addClass('TrappedProcessorGuardXon', smalltalk.TrappedProcessorGuardBase, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorGuardXon.comment="I am used to guard contents of the brush I am installed on.\x0a\x0aI save the brush contents, then I observe guard expression in the model,\x0aand when it changes to nil or false, I delete the brush contents;\x0aon the other hand, when it changes to non-nil and non-false,\x0aI restore it from remembered state and interpret all contained\x0adata-trap attributes inside.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+var frozen,contents;
+function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
+return smalltalk.withContext(function($ctx1) { 
+frozen=_st(aDataCarrier)._copy();
+contents=_st(frozen)._contents();
+_st(_st(frozen)._target())._trapGuard_contents_(self["@guardPath"],(function(html){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st($Trapped())._current())._cloneAndInject_inPlaceOf_(contents,_st(html)._del());
+}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents},smalltalk.TrappedProcessorGuardXon)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen contents.\x0a\x09frozen target trapGuard: guardPath contents: [ :html |\x0a\x09\x09Trapped current cloneAndInject: contents inPlaceOf: html del ]",
+messageSends: ["copy", "contents", "trapGuard:contents:", "target", "cloneAndInject:inPlaceOf:", "current", "del"],
+referencedClasses: ["Trapped"]
+}),
+smalltalk.TrappedProcessorGuardXon);
 
 
 
@@ -432,33 +432,6 @@ smalltalk.TrappedProcessorLoopBase);
 
 
 
-smalltalk.addClass('TrappedProcessorLoopContents', smalltalk.TrappedProcessorLoopBase, [], 'Trapped-Processors');
-smalltalk.TrappedProcessorLoopContents.comment="I am used to loop over data and repeat the contents\x0aof the brush I am installed on.\x0a\x0aI save the brush contents, then I observe the data in the model,\x0aand when it changes, I loop over it\x0aand restore the contents from remembered state\x0aand interpret all contained data-trap attributes inside\x0afor each element, putting the result _after_ my brush.\x0a\x0aMy brush itself should be as least visible as possible,\x0aas it only serve as a position flag (use for example\x0anoscript, ins or del).";
-smalltalk.addMethod(
-smalltalk.method({
-selector: "toView:",
-category: 'data transformation',
-fn: function (aDataCarrier){
-var self=this;
-var frozen,contents;
-function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
-return smalltalk.withContext(function($ctx1) { 
-frozen=_st(aDataCarrier)._copy();
-contents=_st(frozen)._contents();
-_st(_st(frozen)._target())._trapIter_after_([],(function(html){
-return smalltalk.withContext(function($ctx2) {
-return _st(_st($Trapped())._current())._cloneAndInject_inPlaceOf_(contents,_st(html)._del());
-}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents},smalltalk.TrappedProcessorLoopContents)})},
-args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen contents.\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09Trapped current cloneAndInject: contents inPlaceOf: html del ]",
-messageSends: ["copy", "contents", "trapIter:after:", "target", "cloneAndInject:inPlaceOf:", "current", "del"],
-referencedClasses: ["Trapped"]
-}),
-smalltalk.TrappedProcessorLoopContents);
-
-
-
 smalltalk.addClass('TrappedProcessorLoopProc', smalltalk.TrappedProcessorLoopBase, [], 'Trapped-Processors');
 smalltalk.TrappedProcessorLoopProc.comment="I am used to loop over data and repeat the contents filling process\x0aof the brush I am installed on.\x0a\x0aI observe the data in the model,\x0aand when it changes, I loop over it\x0aand run the rest of the processing chain\x0afor each element, putting the result _after_ my brush.\x0a\x0aMy brush itself should be as least visible as possible,\x0aas it only serve as a position flag (use for example\x0anoscript, ins or del).";
 smalltalk.addMethod(
@@ -486,6 +459,33 @@ messageSends: ["copy", "trapIter:after:", "target", "target:", "root", "proceed"
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorLoopProc);
+
+
+
+smalltalk.addClass('TrappedProcessorLoopXon', smalltalk.TrappedProcessorLoopBase, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorLoopXon.comment="I am used to loop over data and repeat the contents\x0aof the brush I am installed on.\x0a\x0aI save the brush contents, then I observe the data in the model,\x0aand when it changes, I loop over it\x0aand restore the contents from remembered state\x0aand interpret all contained data-trap attributes inside\x0afor each element, putting the result _after_ my brush.\x0a\x0aMy brush itself should be as least visible as possible,\x0aas it only serve as a position flag (use for example\x0anoscript, ins or del).";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+var frozen,contents;
+function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
+return smalltalk.withContext(function($ctx1) { 
+frozen=_st(aDataCarrier)._copy();
+contents=_st(frozen)._contents();
+_st(_st(frozen)._target())._trapIter_after_([],(function(html){
+return smalltalk.withContext(function($ctx2) {
+return _st(_st($Trapped())._current())._cloneAndInject_inPlaceOf_(contents,_st(html)._del());
+}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents},smalltalk.TrappedProcessorLoopXon)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen contents.\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09Trapped current cloneAndInject: contents inPlaceOf: html del ]",
+messageSends: ["copy", "contents", "trapIter:after:", "target", "cloneAndInject:inPlaceOf:", "current", "del"],
+referencedClasses: ["Trapped"]
+}),
+smalltalk.TrappedProcessorLoopXon);
 
 
 
@@ -1092,25 +1092,6 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "guardContents:",
-category: '*Trapped-Processors',
-fn: function (anArray){
-var self=this;
-function $TrappedProcessorGuardContents(){return smalltalk.TrappedProcessorGuardContents||(typeof TrappedProcessorGuardContents=="undefined"?nil:TrappedProcessorGuardContents)}
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st($TrappedProcessorGuardContents())._new_(anArray);
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"guardContents:",{anArray:anArray},smalltalk.TrappedProcessor.klass)})},
-args: ["anArray"],
-source: "guardContents: anArray\x0a\x09^TrappedProcessorGuardContents new: anArray",
-messageSends: ["new:"],
-referencedClasses: ["TrappedProcessorGuardContents"]
-}),
-smalltalk.TrappedProcessor.klass);
-
-smalltalk.addMethod(
-smalltalk.method({
 selector: "guardProc:",
 category: '*Trapped-Processors',
 fn: function (anArray){
@@ -1125,6 +1106,25 @@ args: ["anArray"],
 source: "guardProc: anArray\x0a\x09^TrappedProcessorGuardProc new: anArray",
 messageSends: ["new:"],
 referencedClasses: ["TrappedProcessorGuardProc"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "guardXon:",
+category: '*Trapped-Processors',
+fn: function (anArray){
+var self=this;
+function $TrappedProcessorGuardXon(){return smalltalk.TrappedProcessorGuardXon||(typeof TrappedProcessorGuardXon=="undefined"?nil:TrappedProcessorGuardXon)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorGuardXon())._new_(anArray);
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"guardXon:",{anArray:anArray},smalltalk.TrappedProcessor.klass)})},
+args: ["anArray"],
+source: "guardXon: anArray\x0a\x09^TrappedProcessorGuardXon new: anArray",
+messageSends: ["new:"],
+referencedClasses: ["TrappedProcessorGuardXon"]
 }),
 smalltalk.TrappedProcessor.klass);
 
@@ -1187,25 +1187,6 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "loopContents",
-category: '*Trapped-Processors',
-fn: function (){
-var self=this;
-function $TrappedProcessorLoopContents(){return smalltalk.TrappedProcessorLoopContents||(typeof TrappedProcessorLoopContents=="undefined"?nil:TrappedProcessorLoopContents)}
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st($TrappedProcessorLoopContents())._new();
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"loopContents",{},smalltalk.TrappedProcessor.klass)})},
-args: [],
-source: "loopContents\x0a\x09^TrappedProcessorLoopContents new",
-messageSends: ["new"],
-referencedClasses: ["TrappedProcessorLoopContents"]
-}),
-smalltalk.TrappedProcessor.klass);
-
-smalltalk.addMethod(
-smalltalk.method({
 selector: "loopProc",
 category: '*Trapped-Processors',
 fn: function (){
@@ -1220,6 +1201,25 @@ args: [],
 source: "loopProc\x0a\x09^TrappedProcessorLoopProc new",
 messageSends: ["new"],
 referencedClasses: ["TrappedProcessorLoopProc"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "loopXon",
+category: '*Trapped-Processors',
+fn: function (){
+var self=this;
+function $TrappedProcessorLoopXon(){return smalltalk.TrappedProcessorLoopXon||(typeof TrappedProcessorLoopXon=="undefined"?nil:TrappedProcessorLoopXon)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorLoopXon())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"loopXon",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "loopXon\x0a\x09^TrappedProcessorLoopXon new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorLoopXon"]
 }),
 smalltalk.TrappedProcessor.klass);
 
