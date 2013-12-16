@@ -114,7 +114,7 @@ that sets up the contents,!
 toView: aDataCarrier
 	| frozen |
 	frozen := aDataCarrier copy.
-	frozen target trapGuard: guardPath contents: [ frozen copy proceed ]
+	frozen target trapGuard: guardPath contents: [ :html | frozen copy target: html root; proceed ]
 ! !
 
 TrappedProcessorGuardBase subclass: #TrappedProcessorGuardXon
@@ -132,11 +132,11 @@ data-trap attributes inside.!
 !TrappedProcessorGuardXon methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	| frozen contents |
+	| frozen |
 	frozen := aDataCarrier copy.
-	contents := frozen contents.
+	frozen contents.
 	frozen target trapGuard: guardPath contents: [ :html |
-		html root asJQuery append: (Trapped current cloneInFragmentAndInject: contents) ]
+		html root asJQuery append: (Trapped current cloneInFragmentAndInject: frozen contents) ]
 ! !
 
 TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
@@ -242,11 +242,11 @@ noscript, ins or del).!
 !TrappedProcessorLoopXonZ methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	| frozen contents |
+	| frozen |
 	frozen := aDataCarrier copy.
-	contents := frozen contents.
+	frozen contents.
 	frozen target trapIter: #() after: [ :html |
-		html root asJQuery append: (Trapped current cloneInFragmentAndInject: contents) ]
+		html root asJQuery append: (Trapped current cloneInFragmentAndInject: frozen contents) ]
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorReplace
