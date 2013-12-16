@@ -936,12 +936,13 @@ _st([i])._trapDescend_((function(){
 return smalltalk.withContext(function($ctx3) {
 return _st(_st(_st($HTMLCanvas())._onJQuery_(envjq))._root())._with_(aBlock);
 }, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)})}));
-return _st(_st(envjq)._contents())._unwrap();
+_st(_st(envjq)._contents())._unwrap();
+return _st(envjq)._remove();
 }, function($ctx2) {$ctx2.fillBlock({item:item,i:i,env:env,envjq:envjq},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"loop:before:do:",{model:model,endjq:endjq,aBlock:aBlock},smalltalk.Trapped.klass)})},
 args: ["model", "endjq", "aBlock"],
-source: "loop: model before: endjq do: aBlock\x0a\x09model withIndexDo: [ :item :i |\x0a\x09\x09| env envjq |\x0a\x09\x09envjq := '<div/>' asJQuery insertBefore: endjq.\x0a\x09\x09{i} trapDescend: [ (HTMLCanvas onJQuery: envjq) root with: aBlock ].\x0a\x09\x09envjq contents unwrap ]",
-messageSends: ["withIndexDo:", "insertBefore:", "asJQuery", "trapDescend:", "with:", "root", "onJQuery:", "unwrap", "contents"],
+source: "loop: model before: endjq do: aBlock\x0a\x09model withIndexDo: [ :item :i |\x0a\x09\x09| env envjq |\x0a\x09\x09envjq := '<div/>' asJQuery insertBefore: endjq.\x0a\x09\x09{i} trapDescend: [ (HTMLCanvas onJQuery: envjq) root with: aBlock ].\x0a\x09\x09envjq contents unwrap.\x0a\x09\x09envjq remove ]",
+messageSends: ["withIndexDo:", "insertBefore:", "asJQuery", "trapDescend:", "with:", "root", "onJQuery:", "unwrap", "contents", "remove"],
 referencedClasses: ["HTMLCanvas"]
 }),
 smalltalk.Trapped.klass);

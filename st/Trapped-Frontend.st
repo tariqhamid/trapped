@@ -387,7 +387,8 @@ loop: model before: endjq do: aBlock
 		| env envjq |
 		envjq := '<div/>' asJQuery insertBefore: endjq.
 		{i} trapDescend: [ (HTMLCanvas onJQuery: envjq) root with: aBlock ].
-		envjq contents unwrap ]
+		envjq contents unwrap.
+		envjq remove ]
 !
 
 loop: model between: start and: end do: aBlock
