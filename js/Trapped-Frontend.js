@@ -740,22 +740,24 @@ smalltalk.Trapped);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "cloneInFragmentAndInject:",
+selector: "cloneAndInject:",
 category: 'private',
 fn: function (anObject){
 var self=this;
-var frag;
 return smalltalk.withContext(function($ctx1) { 
-var $1;
-frag=_st(document)._createDocumentFragment();
-_st(_st(frag)._asJQuery())._append_(_st(anObject)._clone());
-self._injectToElement_(frag);
-$1=frag;
+var $2,$3,$1;
+$2=_st(_st(anObject)._asJQuery())._clone();
+_st($2)._each_((function(i,each){
+return smalltalk.withContext(function($ctx2) {
+return self._injectToElement_(each);
+}, function($ctx2) {$ctx2.fillBlock({i:i,each:each},$ctx1,1)})}));
+$3=_st($2)._get_((0));
+$1=$3;
 return $1;
-}, function($ctx1) {$ctx1.fill(self,"cloneInFragmentAndInject:",{anObject:anObject,frag:frag},smalltalk.Trapped)})},
+}, function($ctx1) {$ctx1.fill(self,"cloneAndInject:",{anObject:anObject},smalltalk.Trapped)})},
 args: ["anObject"],
-source: "cloneInFragmentAndInject: anObject\x0a\x09| frag |\x0a\x09frag := document createDocumentFragment.\x0a\x09frag asJQuery append: anObject clone.\x0a\x09self injectToElement: frag.\x0a\x09^frag",
-messageSends: ["createDocumentFragment", "append:", "asJQuery", "clone", "injectToElement:"],
+source: "cloneAndInject: anObject\x0a\x09^anObject asJQuery clone\x0a\x09\x09each: [ :i :each | self injectToElement: each ];\x0a\x09\x09get: 0",
+messageSends: ["each:", "clone", "asJQuery", "injectToElement:", "get:"],
 referencedClasses: []
 }),
 smalltalk.Trapped);

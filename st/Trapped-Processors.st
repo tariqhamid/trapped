@@ -132,11 +132,15 @@ data-trap attributes inside.!
 !TrappedProcessorGuardXon methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	| frozen |
+	| frozen xon |
 	frozen := aDataCarrier copy.
-	frozen xontent.
+	xon := frozen xontent.
 	frozen target trapGuard: guardPath contents: [ :html |
-		html root asJQuery append: (Trapped current cloneInFragmentAndInject: frozen copy xontent) ]
+		| worker |
+		worker := frozen copy.
+		worker target: html root.
+		worker target asJQuery xontent: 'set' data: xon.
+		worker target asJQuery append: (Trapped current cloneAndInject: (worker xontent get: 0)) ]
 ! !
 
 TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
@@ -242,11 +246,15 @@ noscript, ins or del).!
 !TrappedProcessorLoopXonZ methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	| frozen |
+	| frozen xon |
 	frozen := aDataCarrier copy.
-	frozen xontent.
+	xon := frozen xontent.
 	frozen target trapIter: #() after: [ :html |
-		html root asJQuery append: (Trapped current cloneInFragmentAndInject: frozen copy xontent) ]
+		| worker |
+		worker := frozen copy.
+		worker target: html root.
+		worker target asJQuery xontent: 'set' data: xon.
+		worker target asJQuery append: (Trapped current cloneAndInject: (worker xontent get: 0)) ]
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorReplace

@@ -324,12 +324,10 @@ initialize
 
 !Trapped methodsFor: 'private'!
 
-cloneInFragmentAndInject: anObject
-	| frag |
-	frag := document createDocumentFragment.
-	frag asJQuery append: anObject clone.
-	self injectToElement: frag.
-	^frag
+cloneAndInject: anObject
+	^anObject asJQuery clone
+		each: [ :i :each | self injectToElement: each ];
+		get: 0
 !
 
 descend: anArray snapshotDo: aBlock

@@ -247,21 +247,33 @@ selector: "toView:",
 category: 'data transformation',
 fn: function (aDataCarrier){
 var self=this;
-var frozen;
+var frozen,xon;
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 return smalltalk.withContext(function($ctx1) { 
+var $1,$3,$2;
 frozen=_st(aDataCarrier)._copy();
 $ctx1.sendIdx["copy"]=1;
-_st(frozen)._xontent();
+xon=_st(frozen)._xontent();
 $ctx1.sendIdx["xontent"]=1;
-_st(_st(frozen)._target())._trapGuard_contents_(self["@guardPath"],(function(html){
+$1=_st(frozen)._target();
+$ctx1.sendIdx["target"]=1;
+_st($1)._trapGuard_contents_(self["@guardPath"],(function(html){
+var worker;
 return smalltalk.withContext(function($ctx2) {
-return _st(_st(_st(html)._root())._asJQuery())._append_(_st(_st($Trapped())._current())._cloneInFragmentAndInject_(_st(_st(frozen)._copy())._xontent()));
-}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen},smalltalk.TrappedProcessorGuardXon)})},
+worker=_st(frozen)._copy();
+worker;
+_st(worker)._target_(_st(html)._root());
+$3=_st(worker)._target();
+$ctx2.sendIdx["target"]=2;
+$2=_st($3)._asJQuery();
+$ctx2.sendIdx["asJQuery"]=1;
+_st($2)._xontent_data_("set",xon);
+return _st(_st(_st(worker)._target())._asJQuery())._append_(_st(_st($Trapped())._current())._cloneAndInject_(_st(_st(worker)._xontent())._get_((0))));
+}, function($ctx2) {$ctx2.fillBlock({html:html,worker:worker},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,xon:xon},smalltalk.TrappedProcessorGuardXon)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| frozen |\x0a\x09frozen := aDataCarrier copy.\x0a\x09frozen xontent.\x0a\x09frozen target trapGuard: guardPath contents: [ :html |\x0a\x09\x09html root asJQuery append: (Trapped current cloneInFragmentAndInject: frozen copy xontent) ]",
-messageSends: ["copy", "xontent", "trapGuard:contents:", "target", "append:", "asJQuery", "root", "cloneInFragmentAndInject:", "current"],
+source: "toView: aDataCarrier\x0a\x09| frozen xon |\x0a\x09frozen := aDataCarrier copy.\x0a\x09xon := frozen xontent.\x0a\x09frozen target trapGuard: guardPath contents: [ :html |\x0a\x09\x09| worker |\x0a\x09\x09worker := frozen copy.\x0a\x09\x09worker target: html root.\x0a\x09\x09worker target asJQuery xontent: 'set' data: xon.\x0a\x09\x09worker target asJQuery append: (Trapped current cloneAndInject: (worker xontent get: 0)) ]",
+messageSends: ["copy", "xontent", "trapGuard:contents:", "target", "target:", "root", "xontent:data:", "asJQuery", "append:", "cloneAndInject:", "current", "get:"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedProcessorGuardXon);
@@ -431,21 +443,33 @@ selector: "toView:",
 category: 'data transformation',
 fn: function (aDataCarrier){
 var self=this;
-var frozen;
+var frozen,xon;
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 return smalltalk.withContext(function($ctx1) { 
+var $1,$3,$2;
 frozen=_st(aDataCarrier)._copy();
 $ctx1.sendIdx["copy"]=1;
-_st(frozen)._xontent();
+xon=_st(frozen)._xontent();
 $ctx1.sendIdx["xontent"]=1;
-_st(_st(frozen)._target())._trapIter_after_([],(function(html){
+$1=_st(frozen)._target();
+$ctx1.sendIdx["target"]=1;
+_st($1)._trapIter_after_([],(function(html){
+var worker;
 return smalltalk.withContext(function($ctx2) {
-return _st(_st(_st(html)._root())._asJQuery())._append_(_st(_st($Trapped())._current())._cloneInFragmentAndInject_(_st(_st(frozen)._copy())._xontent()));
-}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen},smalltalk.TrappedProcessorLoopXonZ)})},
+worker=_st(frozen)._copy();
+worker;
+_st(worker)._target_(_st(html)._root());
+$3=_st(worker)._target();
+$ctx2.sendIdx["target"]=2;
+$2=_st($3)._asJQuery();
+$ctx2.sendIdx["asJQuery"]=1;
+_st($2)._xontent_data_("set",xon);
+return _st(_st(_st(worker)._target())._asJQuery())._append_(_st(_st($Trapped())._current())._cloneAndInject_(_st(_st(worker)._xontent())._get_((0))));
+}, function($ctx2) {$ctx2.fillBlock({html:html,worker:worker},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,xon:xon},smalltalk.TrappedProcessorLoopXonZ)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| frozen |\x0a\x09frozen := aDataCarrier copy.\x0a\x09frozen xontent.\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09html root asJQuery append: (Trapped current cloneInFragmentAndInject: frozen copy xontent) ]",
-messageSends: ["copy", "xontent", "trapIter:after:", "target", "append:", "asJQuery", "root", "cloneInFragmentAndInject:", "current"],
+source: "toView: aDataCarrier\x0a\x09| frozen xon |\x0a\x09frozen := aDataCarrier copy.\x0a\x09xon := frozen xontent.\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09| worker |\x0a\x09\x09worker := frozen copy.\x0a\x09\x09worker target: html root.\x0a\x09\x09worker target asJQuery xontent: 'set' data: xon.\x0a\x09\x09worker target asJQuery append: (Trapped current cloneAndInject: (worker xontent get: 0)) ]",
+messageSends: ["copy", "xontent", "trapIter:after:", "target", "target:", "root", "xontent:data:", "asJQuery", "append:", "cloneAndInject:", "current", "get:"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedProcessorLoopXonZ);
