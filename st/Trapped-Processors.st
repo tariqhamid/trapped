@@ -112,9 +112,10 @@ that sets up the contents,!
 !TrappedProcessorGuardProc methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	| frozen |
+	| frozen xon |
 	frozen := aDataCarrier copy.
-	frozen target trapGuard: guardPath contents: [ :html | frozen copy target: html root; proceed ]
+	xon := frozen xontent.
+	frozen target trapGuard: guardPath contents: [ :html | frozen copy target: html root; xontent: xon; proceed ]
 ! !
 
 TrappedProcessorGuardBase subclass: #TrappedProcessorGuardXon
@@ -139,7 +140,7 @@ toView: aDataCarrier
 		| worker |
 		worker := frozen copy.
 		worker target: html root.
-		worker target asJQuery xontent: 'set' data: xon.
+		worker xontent: xon.
 		worker target asJQuery append: (Trapped current cloneAndInject: (worker xontent get: 0)) ]
 ! !
 
@@ -221,9 +222,10 @@ noscript, ins or del).!
 !TrappedProcessorLoopProcZ methodsFor: 'data transformation'!
 
 toView: aDataCarrier
-	| frozen |
+	| frozen xon |
 	frozen := aDataCarrier copy.
-	frozen target trapIter: #() after: [ :html | frozen copy target: html root; proceed ]
+	xon := frozen xontent.
+	frozen target trapIter: #() after: [ :html | frozen copy target: html root; xontent: xon; proceed ]
 ! !
 
 TrappedProcessorLoopBase subclass: #TrappedProcessorLoopXonZ
@@ -253,7 +255,7 @@ toView: aDataCarrier
 		| worker |
 		worker := frozen copy.
 		worker target: html root.
-		worker target asJQuery xontent: 'set' data: xon.
+		worker xontent: xon.
 		worker target asJQuery append: (Trapped current cloneAndInject: (worker xontent get: 0)) ]
 ! !
 
@@ -479,6 +481,10 @@ toTargetValue
 
 xontent
 	^self target asJQuery xontent
+!
+
+xontent: anObject
+	self target asJQuery xontent: 'set' data: anObject
 ! !
 
 !TrappedProcessor class methodsFor: '*Trapped-Processors'!
