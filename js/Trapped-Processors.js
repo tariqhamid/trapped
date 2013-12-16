@@ -307,51 +307,6 @@ smalltalk.TrappedProcessorInputChecked);
 
 
 
-smalltalk.addClass('TrappedProcessorInputSelected', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Processors');
-smalltalk.TrappedProcessorInputSelected.comment="I bind to option selected state.";
-smalltalk.addMethod(
-smalltalk.method({
-selector: "installToView:toModel:",
-category: 'installation',
-fn: function (aDataCarrier,anotherDataCarrier){
-var self=this;
-var brush;
-return smalltalk.withContext(function($ctx1) { 
-var $1,$2;
-brush=_st(aDataCarrier)._target();
-_st(brush)._onChange_((function(){
-return smalltalk.withContext(function($ctx2) {
-$1=_st(anotherDataCarrier)._copy();
-_st($1)._value_(_st(_st(brush)._asJQuery())._prop_("selected"));
-$2=_st($1)._proceed();
-return $2;
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier,brush:brush},smalltalk.TrappedProcessorInputSelected)})},
-args: ["aDataCarrier", "anotherDataCarrier"],
-source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| brush |\x0a\x09brush := aDataCarrier target.\x0a\x09brush onChange: [ anotherDataCarrier copy value: (brush asJQuery prop: 'selected'); proceed ]",
-messageSends: ["target", "onChange:", "value:", "copy", "prop:", "asJQuery", "proceed"],
-referencedClasses: []
-}),
-smalltalk.TrappedProcessorInputSelected);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "toView:",
-category: 'data transformation',
-fn: function (aDataCarrier){
-var self=this;
-return smalltalk.withContext(function($ctx1) { 
-_st(aDataCarrier)._toTargetProp_("selected");
-return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorInputSelected)})},
-args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09aDataCarrier toTargetProp: 'selected'",
-messageSends: ["toTargetProp:"],
-referencedClasses: []
-}),
-smalltalk.TrappedProcessorInputSelected);
-
-
-
 smalltalk.addClass('TrappedProcessorInputValue', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Processors');
 smalltalk.TrappedProcessorInputValue.comment="I bind to input value.";
 smalltalk.addMethod(
@@ -1144,25 +1099,6 @@ args: [],
 source: "inputChecked\x0a\x09^TrappedProcessorInputChecked new",
 messageSends: ["new"],
 referencedClasses: ["TrappedProcessorInputChecked"]
-}),
-smalltalk.TrappedProcessor.klass);
-
-smalltalk.addMethod(
-smalltalk.method({
-selector: "inputSelected",
-category: '*Trapped-Processors',
-fn: function (){
-var self=this;
-function $TrappedProcessorInputSelected(){return smalltalk.TrappedProcessorInputSelected||(typeof TrappedProcessorInputSelected=="undefined"?nil:TrappedProcessorInputSelected)}
-return smalltalk.withContext(function($ctx1) { 
-var $1;
-$1=_st($TrappedProcessorInputSelected())._new();
-return $1;
-}, function($ctx1) {$ctx1.fill(self,"inputSelected",{},smalltalk.TrappedProcessor.klass)})},
-args: [],
-source: "inputSelected\x0a\x09^TrappedProcessorInputSelected new",
-messageSends: ["new"],
-referencedClasses: ["TrappedProcessorInputSelected"]
 }),
 smalltalk.TrappedProcessor.klass);
 

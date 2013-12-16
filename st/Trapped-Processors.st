@@ -159,26 +159,6 @@ installToView: aDataCarrier toModel: anotherDataCarrier
 	brush onChange: [ anotherDataCarrier copy value: (brush asJQuery prop: 'checked'); proceed ]
 ! !
 
-TrappedDataExpectingProcessor subclass: #TrappedProcessorInputSelected
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedProcessorInputSelected commentStamp!
-I bind to option selected state.!
-
-!TrappedProcessorInputSelected methodsFor: 'data transformation'!
-
-toView: aDataCarrier
-	aDataCarrier toTargetProp: 'selected'
-! !
-
-!TrappedProcessorInputSelected methodsFor: 'installation'!
-
-installToView: aDataCarrier toModel: anotherDataCarrier
-	| brush |
-	brush := aDataCarrier target.
-	brush onChange: [ anotherDataCarrier copy value: (brush asJQuery prop: 'selected'); proceed ]
-! !
-
 TrappedDataExpectingProcessor subclass: #TrappedProcessorInputValue
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
@@ -517,10 +497,6 @@ guardXon: anArray
 
 inputChecked
 	^TrappedProcessorInputChecked new
-!
-
-inputSelected
-	^TrappedProcessorInputSelected new
 !
 
 inputValue
