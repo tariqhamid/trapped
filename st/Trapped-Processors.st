@@ -136,7 +136,7 @@ toView: aDataCarrier
 	frozen := aDataCarrier copy.
 	contents := frozen contents.
 	frozen target trapGuard: guardPath contents: [ :html |
-		Trapped current cloneAndInject: contents inPlaceOf: html del ]
+		html root asJQuery append: (Trapped current cloneInFragmentAndInject: contents) ]
 ! !
 
 TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
@@ -246,7 +246,7 @@ toView: aDataCarrier
 	frozen := aDataCarrier copy.
 	contents := frozen contents.
 	frozen target trapIter: #() after: [ :html |
-		Trapped current cloneAndInject: contents inPlaceOf: html del ]
+		html root asJQuery append: (Trapped current cloneInFragmentAndInject: contents) ]
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorReplace

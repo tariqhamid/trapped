@@ -324,10 +324,12 @@ initialize
 
 !Trapped methodsFor: 'private'!
 
-cloneAndInject: anObject inPlaceOf: aTagBrush
-	aTagBrush asJQuery append: anObject clone.
-	self injectToElement: aTagBrush element.
-	aTagBrush asJQuery contents unwrap
+cloneInFragmentAndInject: anObject
+	| frag |
+	frag := document createDocumentFragment.
+	frag asJQuery append: anObject clone.
+	self injectToElement: frag.
+	^frag
 !
 
 descend: anArray snapshotDo: aBlock
@@ -385,10 +387,9 @@ parse: aString
 loop: model before: endjq do: aBlock
 	model withIndexDo: [ :item :i |
 		| env envjq |
-		envjq := '<div/>' asJQuery insertBefore: endjq.
+		envjq := document createDocumentFragment asJQuery.
 		{i} trapDescend: [ (HTMLCanvas onJQuery: envjq) root with: aBlock ].
-		envjq contents unwrap.
-		envjq remove ]
+		envjq insertBefore: endjq ]
 !
 
 loop: model between: start and: end do: aBlock

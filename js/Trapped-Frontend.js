@@ -740,21 +740,22 @@ smalltalk.Trapped);
 
 smalltalk.addMethod(
 smalltalk.method({
-selector: "cloneAndInject:inPlaceOf:",
+selector: "cloneInFragmentAndInject:",
 category: 'private',
-fn: function (anObject,aTagBrush){
+fn: function (anObject){
 var self=this;
+var frag;
 return smalltalk.withContext(function($ctx1) { 
 var $1;
-$1=_st(aTagBrush)._asJQuery();
-$ctx1.sendIdx["asJQuery"]=1;
-_st($1)._append_(_st(anObject)._clone());
-self._injectToElement_(_st(aTagBrush)._element());
-_st(_st(_st(aTagBrush)._asJQuery())._contents())._unwrap();
-return self}, function($ctx1) {$ctx1.fill(self,"cloneAndInject:inPlaceOf:",{anObject:anObject,aTagBrush:aTagBrush},smalltalk.Trapped)})},
-args: ["anObject", "aTagBrush"],
-source: "cloneAndInject: anObject inPlaceOf: aTagBrush\x0a\x09aTagBrush asJQuery append: anObject clone.\x0a\x09self injectToElement: aTagBrush element.\x0a\x09aTagBrush asJQuery contents unwrap",
-messageSends: ["append:", "asJQuery", "clone", "injectToElement:", "element", "unwrap", "contents"],
+frag=_st(document)._createDocumentFragment();
+_st(_st(frag)._asJQuery())._append_(_st(anObject)._clone());
+self._injectToElement_(frag);
+$1=frag;
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"cloneInFragmentAndInject:",{anObject:anObject,frag:frag},smalltalk.Trapped)})},
+args: ["anObject"],
+source: "cloneInFragmentAndInject: anObject\x0a\x09| frag |\x0a\x09frag := document createDocumentFragment.\x0a\x09frag asJQuery append: anObject clone.\x0a\x09self injectToElement: frag.\x0a\x09^frag",
+messageSends: ["createDocumentFragment", "append:", "asJQuery", "clone", "injectToElement:"],
 referencedClasses: []
 }),
 smalltalk.Trapped);
@@ -930,19 +931,18 @@ return smalltalk.withContext(function($ctx1) {
 _st(model)._withIndexDo_((function(item,i){
 var env,envjq;
 return smalltalk.withContext(function($ctx2) {
-envjq=_st("<div/>"._asJQuery())._insertBefore_(endjq);
+envjq=_st(_st(document)._createDocumentFragment())._asJQuery();
 envjq;
 _st([i])._trapDescend_((function(){
 return smalltalk.withContext(function($ctx3) {
 return _st(_st(_st($HTMLCanvas())._onJQuery_(envjq))._root())._with_(aBlock);
 }, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)})}));
-_st(_st(envjq)._contents())._unwrap();
-return _st(envjq)._remove();
+return _st(envjq)._insertBefore_(endjq);
 }, function($ctx2) {$ctx2.fillBlock({item:item,i:i,env:env,envjq:envjq},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"loop:before:do:",{model:model,endjq:endjq,aBlock:aBlock},smalltalk.Trapped.klass)})},
 args: ["model", "endjq", "aBlock"],
-source: "loop: model before: endjq do: aBlock\x0a\x09model withIndexDo: [ :item :i |\x0a\x09\x09| env envjq |\x0a\x09\x09envjq := '<div/>' asJQuery insertBefore: endjq.\x0a\x09\x09{i} trapDescend: [ (HTMLCanvas onJQuery: envjq) root with: aBlock ].\x0a\x09\x09envjq contents unwrap.\x0a\x09\x09envjq remove ]",
-messageSends: ["withIndexDo:", "insertBefore:", "asJQuery", "trapDescend:", "with:", "root", "onJQuery:", "unwrap", "contents", "remove"],
+source: "loop: model before: endjq do: aBlock\x0a\x09model withIndexDo: [ :item :i |\x0a\x09\x09| env envjq |\x0a\x09\x09envjq := document createDocumentFragment asJQuery.\x0a\x09\x09{i} trapDescend: [ (HTMLCanvas onJQuery: envjq) root with: aBlock ].\x0a\x09\x09envjq insertBefore: endjq ]",
+messageSends: ["withIndexDo:", "asJQuery", "createDocumentFragment", "trapDescend:", "with:", "root", "onJQuery:", "insertBefore:"],
 referencedClasses: ["HTMLCanvas"]
 }),
 smalltalk.Trapped.klass);

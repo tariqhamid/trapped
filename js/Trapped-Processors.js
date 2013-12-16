@@ -250,12 +250,12 @@ frozen=_st(aDataCarrier)._copy();
 contents=_st(frozen)._contents();
 _st(_st(frozen)._target())._trapGuard_contents_(self["@guardPath"],(function(html){
 return smalltalk.withContext(function($ctx2) {
-return _st(_st($Trapped())._current())._cloneAndInject_inPlaceOf_(contents,_st(html)._del());
+return _st(_st(_st(html)._root())._asJQuery())._append_(_st(_st($Trapped())._current())._cloneInFragmentAndInject_(contents));
 }, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents},smalltalk.TrappedProcessorGuardXon)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen contents.\x0a\x09frozen target trapGuard: guardPath contents: [ :html |\x0a\x09\x09Trapped current cloneAndInject: contents inPlaceOf: html del ]",
-messageSends: ["copy", "contents", "trapGuard:contents:", "target", "cloneAndInject:inPlaceOf:", "current", "del"],
+source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen contents.\x0a\x09frozen target trapGuard: guardPath contents: [ :html |\x0a\x09\x09html root asJQuery append: (Trapped current cloneInFragmentAndInject: contents) ]",
+messageSends: ["copy", "contents", "trapGuard:contents:", "target", "append:", "asJQuery", "root", "cloneInFragmentAndInject:", "current"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedProcessorGuardXon);
@@ -432,12 +432,12 @@ frozen=_st(aDataCarrier)._copy();
 contents=_st(frozen)._contents();
 _st(_st(frozen)._target())._trapIter_after_([],(function(html){
 return smalltalk.withContext(function($ctx2) {
-return _st(_st($Trapped())._current())._cloneAndInject_inPlaceOf_(contents,_st(html)._del());
+return _st(_st(_st(html)._root())._asJQuery())._append_(_st(_st($Trapped())._current())._cloneInFragmentAndInject_(contents));
 }, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier,frozen:frozen,contents:contents},smalltalk.TrappedProcessorLoopXonZ)})},
 args: ["aDataCarrier"],
-source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen contents.\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09Trapped current cloneAndInject: contents inPlaceOf: html del ]",
-messageSends: ["copy", "contents", "trapIter:after:", "target", "cloneAndInject:inPlaceOf:", "current", "del"],
+source: "toView: aDataCarrier\x0a\x09| frozen contents |\x0a\x09frozen := aDataCarrier copy.\x0a\x09contents := frozen contents.\x0a\x09frozen target trapIter: #() after: [ :html |\x0a\x09\x09html root asJQuery append: (Trapped current cloneInFragmentAndInject: contents) ]",
+messageSends: ["copy", "contents", "trapIter:after:", "target", "append:", "asJQuery", "root", "cloneInFragmentAndInject:", "current"],
 referencedClasses: ["Trapped"]
 }),
 smalltalk.TrappedProcessorLoopXonZ);
