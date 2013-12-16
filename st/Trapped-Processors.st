@@ -134,9 +134,9 @@ data-trap attributes inside.!
 toView: aDataCarrier
 	| frozen |
 	frozen := aDataCarrier copy.
-	frozen contents.
+	frozen xontent.
 	frozen target trapGuard: guardPath contents: [ :html |
-		html root asJQuery append: (Trapped current cloneInFragmentAndInject: frozen contents) ]
+		html root asJQuery append: (Trapped current cloneInFragmentAndInject: frozen copy xontent) ]
 ! !
 
 TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
@@ -244,9 +244,9 @@ noscript, ins or del).!
 toView: aDataCarrier
 	| frozen |
 	frozen := aDataCarrier copy.
-	frozen contents.
+	frozen xontent.
 	frozen target trapIter: #() after: [ :html |
-		html root asJQuery append: (Trapped current cloneInFragmentAndInject: frozen contents) ]
+		html root asJQuery append: (Trapped current cloneInFragmentAndInject: frozen copy xontent) ]
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorReplace
@@ -436,10 +436,6 @@ new: aString
 
 !TrappedDataCarrier methodsFor: '*Trapped-Processors'!
 
-contents
-	^self target asJQuery xontent
-!
-
 modifyTarget
 	self target modify: [ self value ]
 !
@@ -471,6 +467,10 @@ toTargetProp: aString
 
 toTargetValue
 	self target asJQuery val: (self primitive: self value)
+!
+
+xontent
+	^self target asJQuery xontent
 ! !
 
 !TrappedProcessor class methodsFor: '*Trapped-Processors'!
