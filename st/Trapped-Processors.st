@@ -97,10 +97,10 @@ new: anArray
 		yourself
 ! !
 
-TrappedProcessorGuardBase subclass: #TrappedProcessorGuardProc
+TrappedProcessorGuardBase subclass: #TrappedProcessorGuard
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
-!TrappedProcessorGuardProc commentStamp!
+!TrappedProcessorGuard commentStamp!
 I am used to guard contents filling process of the brush I am installed on.
 
 I observe guard expression in the model,
@@ -109,39 +109,13 @@ on the other hand, when it changes to non-nil and non-false,
 I run the rest on the chain, which should be one-time
 that sets up the contents,!
 
-!TrappedProcessorGuardProc methodsFor: 'data transformation'!
+!TrappedProcessorGuard methodsFor: 'data transformation'!
 
 toView: aDataCarrier
 	| frozen xon |
 	frozen := aDataCarrier copy.
 	xon := frozen xontent.
 	frozen target trapGuard: guardPath contents: [ :html | frozen copy target: html root; xontent: xon; proceed ]
-! !
-
-TrappedProcessorGuardBase subclass: #TrappedProcessorGuardXon
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedProcessorGuardXon commentStamp!
-I am used to guard contents of the brush I am installed on.
-
-I save the brush contents, then I observe guard expression in the model,
-and when it changes to nil or false, I delete the brush contents;
-on the other hand, when it changes to non-nil and non-false,
-I restore it from remembered state and interpret all contained
-data-trap attributes inside.!
-
-!TrappedProcessorGuardXon methodsFor: 'data transformation'!
-
-toView: aDataCarrier
-	| frozen xon |
-	frozen := aDataCarrier copy.
-	xon := frozen xontent.
-	frozen target trapGuard: guardPath contents: [ :html |
-		| worker |
-		worker := frozen copy.
-		worker target: html root.
-		worker xontent: xon.
-		worker target asJQuery append: (Trapped current cloneAndInject: (worker xontent get: 0)) ]
 ! !
 
 TrappedDataExpectingProcessor subclass: #TrappedProcessorInputChecked
@@ -203,10 +177,10 @@ toView: aDataCarrier
 	self subclassResponsibility
 ! !
 
-TrappedProcessorLoopBase subclass: #TrappedProcessorLoopProcZ
+TrappedProcessorLoopBase subclass: #TrappedProcessorLoopZ
 	instanceVariableNames: ''
 	package: 'Trapped-Processors'!
-!TrappedProcessorLoopProcZ commentStamp!
+!TrappedProcessorLoopZ commentStamp!
 I am used to loop over data and repeat the contents filling process
 of the brush I am installed on.
 
@@ -217,46 +191,15 @@ for each element, putting the result _after_ my brush.
 
 My brush itself should be as least visible as possible,
 as it only serve as a position flag (use for example
-noscript, ins or del).!
+script type=application/x-beacon, noscript, ins or del).!
 
-!TrappedProcessorLoopProcZ methodsFor: 'data transformation'!
+!TrappedProcessorLoopZ methodsFor: 'data transformation'!
 
 toView: aDataCarrier
 	| frozen xon |
 	frozen := aDataCarrier copy.
 	xon := frozen xontent.
 	frozen target trapIter: #() after: [ :html | frozen copy target: html root; xontent: xon; proceed ]
-! !
-
-TrappedProcessorLoopBase subclass: #TrappedProcessorLoopXonZ
-	instanceVariableNames: ''
-	package: 'Trapped-Processors'!
-!TrappedProcessorLoopXonZ commentStamp!
-I am used to loop over data and repeat the contents
-of the brush I am installed on.
-
-I save the brush contents, then I observe the data in the model,
-and when it changes, I loop over it
-and restore the contents from remembered state
-and interpret all contained data-trap attributes inside
-for each element, putting the result _after_ my brush.
-
-My brush itself should be as least visible as possible,
-as it only serve as a position flag (use for example
-noscript, ins or del).!
-
-!TrappedProcessorLoopXonZ methodsFor: 'data transformation'!
-
-toView: aDataCarrier
-	| frozen xon |
-	frozen := aDataCarrier copy.
-	xon := frozen xontent.
-	frozen target trapIter: #() after: [ :html |
-		| worker |
-		worker := frozen copy.
-		worker target: html root.
-		worker xontent: xon.
-		worker target asJQuery append: (Trapped current cloneAndInject: (worker xontent get: 0)) ]
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorReplace
@@ -444,6 +387,23 @@ new: aString
 		yourself
 ! !
 
+TrappedProcessor subclass: #TrappedProcessorXontent
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorXontent commentStamp!
+I am used to show xontent of the brush I am installed on
+(see jQuery plugin Xontent for details).
+
+I clone xontent of the brush, put it into HTML
+and interpret all contained data-trap attributes.!
+
+!TrappedProcessorXontent methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	aDataCarrier target asJQuery append: (Trapped current cloneAndInject: (aDataCarrier xontent get: 0)).
+	aDataCarrier proceed
+! !
+
 !TrappedDataCarrier methodsFor: '*Trapped-Processors'!
 
 modifyTarget
@@ -501,12 +461,8 @@ deuric
 	^TrappedProcessorUriComponentDecode new
 !
 
-guardProc: anArray
-	^TrappedProcessorGuardProc new: anArray
-!
-
-guardXon: anArray
-	^TrappedProcessorGuardXon new: anArray
+guard: anArray
+	^TrappedProcessorGuard new: anArray
 !
 
 inputChecked
@@ -517,12 +473,8 @@ inputValue
 	^TrappedProcessorInputValue new
 !
 
-loopProcZ
-	^TrappedProcessorLoopProcZ new
-!
-
-loopXonZ
-	^TrappedProcessorLoopXonZ new
+loopZ
+	^TrappedProcessorLoopZ new
 !
 
 path
@@ -555,5 +507,9 @@ whenSubmitted
 
 widget: aString
 	^TrappedProcessorWidget new: aString
+!
+
+xontent
+	^TrappedProcessorXontent new
 ! !
 

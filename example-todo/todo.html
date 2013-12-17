@@ -43,11 +43,11 @@
 <body>
 <h2 data-trap="#title"></h2>
 
-<div data-trap=": (guardXon (#todos #notNil))">
+<div data-trap=": (guard (#todos #notNil)) xontent" data-xontent>
     <span data-trap="#remaining"></span> of <span data-trap="#todos #size"></span> remaning
     [ <a href="" data-trap=": (signal archive) whenClicked">archive</a> ]
     <ul>
-        <script type="application/x-beacon" data-trap="#todos: loopXonZ" data-xontent="until end"></script>
+        <script type="application/x-beacon" data-trap="#todos: loopZ xontent" data-xontent="until end"></script>
         <li>
             <label>
                 <input type="checkbox" data-trap="done: inputChecked"/>
@@ -60,6 +60,6 @@
         <input type="submit" class="btn-primary" value="add"/>
     </form>
 </div>
-<p data-trap=": (guardXon (#todos #isNil))">Loading (fake 2 sec pause)...</p>
+<p data-trap=": (guard (#todos #isNil)) xontent" data-xontent>Loading (fake 2 sec pause)...</p>
 </body>
 </html>
