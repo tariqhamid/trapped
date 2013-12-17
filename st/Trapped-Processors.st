@@ -202,6 +202,23 @@ toView: aDataCarrier
 	frozen target trapIter: #() after: [ :html | frozen copy target: html root; xontent: xon; proceed ]
 ! !
 
+TrappedDataExpectingProcessor subclass: #TrappedProcessorOptionValue
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorOptionValue commentStamp!
+I set the option value.
+
+Additionally, when changed (by toView:),
+I ping closest <select> with 'trappedselectreplay' event.!
+
+!TrappedProcessorOptionValue methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	aDataCarrier toTargetValue.
+	(aDataCarrier target asJQuery closest: 'select')
+		trigger: 'trappedselectreplay'
+! !
+
 TrappedProcessor subclass: #TrappedProcessorReplace
 	instanceVariableNames: 'left right'
 	package: 'Trapped-Processors'!
@@ -250,6 +267,42 @@ new: aString with: anotherString
 		left: aString asString;
 		right: anotherString asString;
 		yourself
+! !
+
+TrappedDataExpectingProcessor subclass: #TrappedProcessorSelectValue
+	instanceVariableNames: ''
+	package: 'Trapped-Processors'!
+!TrappedProcessorSelectValue commentStamp!
+I bind to select value.
+
+When changed (by toView: or by user),
+I remember the selected set.
+
+When pinged by 'trappedselectreplay',
+I set the remembered value.
+
+This allows to have select-option groups
+with later setting of option values
+(if those are set via related processor 'optionValue',
+which pings me with 'trappedselectreplay').!
+
+!TrappedProcessorSelectValue methodsFor: 'data transformation'!
+
+toView: aDataCarrier
+	aDataCarrier toTargetValue.
+	aDataCarrier target asJQuery data: 'trapped.saved.val' put: aDataCarrier value
+! !
+
+!TrappedProcessorSelectValue methodsFor: 'installation'!
+
+installToView: aDataCarrier toModel: anotherDataCarrier
+	| jq val |
+	jq := aDataCarrier target asJQuery.
+	val := jq val.
+	jq
+		data: 'trapped.saved.val';
+		on: 'change' bind: [ anotherDataCarrier copy value: jq val; proceed ];
+		on: 'trappedselectreplay' bind: [ jq val: (jq data: 'trapped.saved.val') ]
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorSignal
@@ -477,12 +530,20 @@ loopZ
 	^TrappedProcessorLoopZ new
 !
 
+optionValue
+	^TrappedProcessorOptionValue new
+!
+
 path
 	^TrappedProcessorDescend new
 !
 
 replace: aString with: anotherString
 	^TrappedProcessorReplace new: aString with: anotherString
+!
+
+selectValue
+	^TrappedProcessorSelectValue new
 !
 
 signal: aString

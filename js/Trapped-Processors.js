@@ -398,6 +398,27 @@ smalltalk.TrappedProcessorLoopZ);
 
 
 
+smalltalk.addClass('TrappedProcessorOptionValue', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorOptionValue.comment="I set the option value.\x0a\x0aAdditionally, when changed (by toView:),\x0aI ping closest <select> with 'trappedselectreplay' event.";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aDataCarrier)._toTargetValue();
+_st(_st(_st(_st(aDataCarrier)._target())._asJQuery())._closest_("select"))._trigger_("trappedselectreplay");
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorOptionValue)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier toTargetValue.\x0a\x09(aDataCarrier target asJQuery closest: 'select')\x0a\x09\x09trigger: 'trappedselectreplay'",
+messageSends: ["toTargetValue", "trigger:", "closest:", "asJQuery", "target"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorOptionValue);
+
+
+
 smalltalk.addClass('TrappedProcessorReplace', smalltalk.TrappedProcessor, ['left', 'right'], 'Trapped-Processors');
 smalltalk.TrappedProcessorReplace.comment="I convert data to string representation and do a regex replace.\x0aI get two parameters, in toView:, first is replaced with second,\x0aand in toModel:, the second is replaced with first.\x0a\x0aI remove leading '^' and ending '$' from the string used as replacement,\x0aso it safe to replace ^to with ^To, for example.\x0a";
 smalltalk.addMethod(
@@ -505,6 +526,62 @@ messageSends: ["left:", "new", "asString", "right:", "yourself"],
 referencedClasses: []
 }),
 smalltalk.TrappedProcessorReplace.klass);
+
+
+smalltalk.addClass('TrappedProcessorSelectValue', smalltalk.TrappedDataExpectingProcessor, [], 'Trapped-Processors');
+smalltalk.TrappedProcessorSelectValue.comment="I bind to select value.\x0a\x0aWhen changed (by toView: or by user),\x0aI remember the selected set.\x0a\x0aWhen pinged by 'trappedselectreplay',\x0aI set the remembered value.\x0a\x0aThis allows to have select-option groups\x0awith later setting of option values\x0a(if those are set via related processor 'optionValue',\x0awhich pings me with 'trappedselectreplay').";
+smalltalk.addMethod(
+smalltalk.method({
+selector: "installToView:toModel:",
+category: 'installation',
+fn: function (aDataCarrier,anotherDataCarrier){
+var self=this;
+var jq,val;
+return smalltalk.withContext(function($ctx1) { 
+var $1,$2,$3,$4;
+jq=_st(_st(aDataCarrier)._target())._asJQuery();
+val=_st(jq)._val();
+$ctx1.sendIdx["val"]=1;
+$1=jq;
+_st($1)._data_("trapped.saved.val");
+$ctx1.sendIdx["data:"]=1;
+_st($1)._on_bind_("change",(function(){
+return smalltalk.withContext(function($ctx2) {
+$2=_st(anotherDataCarrier)._copy();
+_st($2)._value_(_st(jq)._val());
+$3=_st($2)._proceed();
+return $3;
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)})}));
+$ctx1.sendIdx["on:bind:"]=1;
+$4=_st($1)._on_bind_("trappedselectreplay",(function(){
+return smalltalk.withContext(function($ctx2) {
+return _st(jq)._val_(_st(jq)._data_("trapped.saved.val"));
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"installToView:toModel:",{aDataCarrier:aDataCarrier,anotherDataCarrier:anotherDataCarrier,jq:jq,val:val},smalltalk.TrappedProcessorSelectValue)})},
+args: ["aDataCarrier", "anotherDataCarrier"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| jq val |\x0a\x09jq := aDataCarrier target asJQuery.\x0a\x09val := jq val.\x0a\x09jq\x0a\x09\x09data: 'trapped.saved.val';\x0a\x09\x09on: 'change' bind: [ anotherDataCarrier copy value: jq val; proceed ];\x0a\x09\x09on: 'trappedselectreplay' bind: [ jq val: (jq data: 'trapped.saved.val') ]",
+messageSends: ["asJQuery", "target", "val", "data:", "on:bind:", "value:", "copy", "proceed", "val:"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorSelectValue);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "toView:",
+category: 'data transformation',
+fn: function (aDataCarrier){
+var self=this;
+return smalltalk.withContext(function($ctx1) { 
+_st(aDataCarrier)._toTargetValue();
+_st(_st(_st(aDataCarrier)._target())._asJQuery())._data_put_("trapped.saved.val",_st(aDataCarrier)._value());
+return self}, function($ctx1) {$ctx1.fill(self,"toView:",{aDataCarrier:aDataCarrier},smalltalk.TrappedProcessorSelectValue)})},
+args: ["aDataCarrier"],
+source: "toView: aDataCarrier\x0a\x09aDataCarrier toTargetValue.\x0a\x09aDataCarrier target asJQuery data: 'trapped.saved.val' put: aDataCarrier value",
+messageSends: ["toTargetValue", "data:put:", "asJQuery", "target", "value"],
+referencedClasses: []
+}),
+smalltalk.TrappedProcessorSelectValue);
+
 
 
 smalltalk.addClass('TrappedProcessorSignal', smalltalk.TrappedProcessor, ['selector'], 'Trapped-Processors');
@@ -1115,6 +1192,25 @@ smalltalk.TrappedProcessor.klass);
 
 smalltalk.addMethod(
 smalltalk.method({
+selector: "optionValue",
+category: '*Trapped-Processors',
+fn: function (){
+var self=this;
+function $TrappedProcessorOptionValue(){return smalltalk.TrappedProcessorOptionValue||(typeof TrappedProcessorOptionValue=="undefined"?nil:TrappedProcessorOptionValue)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorOptionValue())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"optionValue",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "optionValue\x0a\x09^TrappedProcessorOptionValue new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorOptionValue"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
 selector: "path",
 category: '*Trapped-Processors',
 fn: function (){
@@ -1148,6 +1244,25 @@ args: ["aString", "anotherString"],
 source: "replace: aString with: anotherString\x0a\x09^TrappedProcessorReplace new: aString with: anotherString",
 messageSends: ["new:with:"],
 referencedClasses: ["TrappedProcessorReplace"]
+}),
+smalltalk.TrappedProcessor.klass);
+
+smalltalk.addMethod(
+smalltalk.method({
+selector: "selectValue",
+category: '*Trapped-Processors',
+fn: function (){
+var self=this;
+function $TrappedProcessorSelectValue(){return smalltalk.TrappedProcessorSelectValue||(typeof TrappedProcessorSelectValue=="undefined"?nil:TrappedProcessorSelectValue)}
+return smalltalk.withContext(function($ctx1) { 
+var $1;
+$1=_st($TrappedProcessorSelectValue())._new();
+return $1;
+}, function($ctx1) {$ctx1.fill(self,"selectValue",{},smalltalk.TrappedProcessor.klass)})},
+args: [],
+source: "selectValue\x0a\x09^TrappedProcessorSelectValue new",
+messageSends: ["new"],
+referencedClasses: ["TrappedProcessorSelectValue"]
 }),
 smalltalk.TrappedProcessor.klass);
 
