@@ -926,25 +926,25 @@ smalltalk.addMethod(
 smalltalk.method({
 selector: "loop:before:do:",
 category: 'private',
-fn: function (model,endjq,aBlock){
+fn: function (aSequenceableCollection,aNode,aBlock){
 var self=this;
 function $HTMLCanvas(){return smalltalk.HTMLCanvas||(typeof HTMLCanvas=="undefined"?nil:HTMLCanvas)}
 return smalltalk.withContext(function($ctx1) { 
-_st(model)._withIndexDo_((function(item,i){
-var env,envjq;
+_st(aSequenceableCollection)._withIndexDo_((function(item,i){
+var env;
 return smalltalk.withContext(function($ctx2) {
-envjq=_st(_st(document)._createDocumentFragment())._asJQuery();
-envjq;
+env=_st(document)._createDocumentFragment();
+env;
 _st([i])._trapDescend_((function(){
 return smalltalk.withContext(function($ctx3) {
-return _st(_st(_st($HTMLCanvas())._onJQuery_(envjq))._root())._with_(aBlock);
+return _st(_st(_st($HTMLCanvas())._onJQuery_(_st(env)._asJQuery()))._root())._with_(aBlock);
 }, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)})}));
-return _st(envjq)._insertBefore_(endjq);
-}, function($ctx2) {$ctx2.fillBlock({item:item,i:i,env:env,envjq:envjq},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"loop:before:do:",{model:model,endjq:endjq,aBlock:aBlock},smalltalk.Trapped.klass)})},
-args: ["model", "endjq", "aBlock"],
-source: "loop: model before: endjq do: aBlock\x0a\x09model withIndexDo: [ :item :i |\x0a\x09\x09| env envjq |\x0a\x09\x09envjq := document createDocumentFragment asJQuery.\x0a\x09\x09{i} trapDescend: [ (HTMLCanvas onJQuery: envjq) root with: aBlock ].\x0a\x09\x09envjq insertBefore: endjq ]",
-messageSends: ["withIndexDo:", "asJQuery", "createDocumentFragment", "trapDescend:", "with:", "root", "onJQuery:", "insertBefore:"],
+return _st(_st(aNode)._parentNode())._insertBefore_reference_(env,aNode);
+}, function($ctx2) {$ctx2.fillBlock({item:item,i:i,env:env},$ctx1,1)})}));
+return self}, function($ctx1) {$ctx1.fill(self,"loop:before:do:",{aSequenceableCollection:aSequenceableCollection,aNode:aNode,aBlock:aBlock},smalltalk.Trapped.klass)})},
+args: ["aSequenceableCollection", "aNode", "aBlock"],
+source: "loop: aSequenceableCollection before: aNode do: aBlock\x0a\x09aSequenceableCollection withIndexDo: [ :item :i |\x0a\x09\x09| env |\x0a\x09\x09env := document createDocumentFragment.\x0a\x09\x09{i} trapDescend: [ (HTMLCanvas onJQuery: env asJQuery) root with: aBlock ].\x0a\x09\x09aNode parentNode insertBefore: env reference: aNode ]",
+messageSends: ["withIndexDo:", "createDocumentFragment", "trapDescend:", "with:", "root", "onJQuery:", "asJQuery", "insertBefore:reference:", "parentNode"],
 referencedClasses: ["HTMLCanvas"]
 }),
 smalltalk.Trapped.klass);
@@ -953,26 +953,24 @@ smalltalk.addMethod(
 smalltalk.method({
 selector: "loop:between:and:do:",
 category: 'private',
-fn: function (model,start,end,aBlock){
+fn: function (aSequenceableCollection,aTagBrush,anotherTagBrush,aBlock){
 var self=this;
 return smalltalk.withContext(function($ctx1) { 
-var $2,$1;
-$2=_st(start)._asJQuery();
-$ctx1.sendIdx["asJQuery"]=1;
-$1=_st($2)._nextUntil_(_st(end)._element());
+var $2,$3,$1;
+$2=_st(aTagBrush)._asJQuery();
+$3=_st(anotherTagBrush)._element();
+$ctx1.sendIdx["element"]=1;
+$1=_st($2)._nextUntil_($3);
 _st($1)._remove();
-_st(start)._with_((function(html){
-return smalltalk.withContext(function($ctx2) {
-if(($receiver = model) == nil || $receiver == null){
-return model;
+if(($receiver = aSequenceableCollection) == nil || $receiver == null){
+aSequenceableCollection;
 } else {
-return self._loop_before_do_(model,_st(end)._asJQuery(),aBlock);
+self._loop_before_do_(aSequenceableCollection,_st(anotherTagBrush)._element(),aBlock);
 };
-}, function($ctx2) {$ctx2.fillBlock({html:html},$ctx1,1)})}));
-return self}, function($ctx1) {$ctx1.fill(self,"loop:between:and:do:",{model:model,start:start,end:end,aBlock:aBlock},smalltalk.Trapped.klass)})},
-args: ["model", "start", "end", "aBlock"],
-source: "loop: model between: start and: end do: aBlock\x0a\x09(start asJQuery nextUntil: end element) remove.\x0a\x09start with: [ :html | model ifNotNil: [\x0a\x09\x09self loop: model before: end asJQuery do: aBlock\x0a\x09]]",
-messageSends: ["remove", "nextUntil:", "asJQuery", "element", "with:", "ifNotNil:", "loop:before:do:"],
+return self}, function($ctx1) {$ctx1.fill(self,"loop:between:and:do:",{aSequenceableCollection:aSequenceableCollection,aTagBrush:aTagBrush,anotherTagBrush:anotherTagBrush,aBlock:aBlock},smalltalk.Trapped.klass)})},
+args: ["aSequenceableCollection", "aTagBrush", "anotherTagBrush", "aBlock"],
+source: "loop: aSequenceableCollection between: aTagBrush and: anotherTagBrush do: aBlock\x0a\x09(aTagBrush asJQuery nextUntil: anotherTagBrush element) remove.\x0a\x09aSequenceableCollection ifNotNil: [\x0a\x09\x09self loop: aSequenceableCollection before: anotherTagBrush element do: aBlock\x0a\x09]",
+messageSends: ["remove", "nextUntil:", "asJQuery", "element", "ifNotNil:", "loop:before:do:"],
 referencedClasses: []
 }),
 smalltalk.Trapped.klass);
@@ -1549,19 +1547,22 @@ var end;
 function $TagBrush(){return smalltalk.TagBrush||(typeof TagBrush=="undefined"?nil:TagBrush)}
 function $Trapped(){return smalltalk.Trapped||(typeof Trapped=="undefined"?nil:Trapped)}
 return smalltalk.withContext(function($ctx1) { 
-var $2,$1;
-$2="<script type=\x22application/x-beacon\x22 />"._asJQuery();
-$ctx1.sendIdx["asJQuery"]=1;
-$1=_st($2)._insertAfter_(self._asJQuery());
-end=_st($TagBrush())._fromJQuery_canvas_($1,self["@canvas"]);
+var $2,$1,$3;
+end=_st($TagBrush())._fromJQuery_canvas_("<script type=\x22application/x-beacon\x22 />"._asJQuery(),self["@canvas"]);
+$2=self._element();
+$ctx1.sendIdx["element"]=1;
+$1=_st($2)._parentNode();
+$3=_st(end)._element();
+$ctx1.sendIdx["element"]=2;
+_st($1)._insertBefore_reference_($3,_st(self._element())._nextSibling());
 self._trap_read_(path,(function(model){
 return smalltalk.withContext(function($ctx2) {
 return _st($Trapped())._loop_between_and_do_(model,self,end,aBlock);
 }, function($ctx2) {$ctx2.fillBlock({model:model},$ctx1,1)})}));
 return self}, function($ctx1) {$ctx1.fill(self,"trapIter:after:",{path:path,aBlock:aBlock,end:end},smalltalk.TagBrush)})},
 args: ["path", "aBlock"],
-source: "trapIter: path after: aBlock\x0a\x09| end |\x0a\x09end := TagBrush fromJQuery: ('<script type=\x22application/x-beacon\x22 />' asJQuery insertAfter: self asJQuery) canvas: canvas.\x0a    self trap: path read: [ :model |\x0a    \x09Trapped loop: model between: self and: end do: aBlock.\x0a    ]",
-messageSends: ["fromJQuery:canvas:", "insertAfter:", "asJQuery", "trap:read:", "loop:between:and:do:"],
+source: "trapIter: path after: aBlock\x0a\x09| end |\x0a\x09end := TagBrush fromJQuery: ('<script type=\x22application/x-beacon\x22 />' asJQuery) canvas: canvas.\x0a\x09self element parentNode insertBefore: end element reference: self element nextSibling.\x0a    self trap: path read: [ :model |\x0a    \x09Trapped loop: model between: self and: end do: aBlock.\x0a    ]",
+messageSends: ["fromJQuery:canvas:", "asJQuery", "insertBefore:reference:", "parentNode", "element", "nextSibling", "trap:read:", "loop:between:and:do:"],
 referencedClasses: ["TagBrush", "Trapped"]
 }),
 smalltalk.TagBrush);

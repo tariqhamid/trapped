@@ -382,19 +382,19 @@ parse: aString
 
 !Trapped class methodsFor: 'private'!
 
-loop: model before: endjq do: aBlock
-	model withIndexDo: [ :item :i |
-		| env envjq |
-		envjq := document createDocumentFragment asJQuery.
-		{i} trapDescend: [ (HTMLCanvas onJQuery: envjq) root with: aBlock ].
-		envjq insertBefore: endjq ]
+loop: aSequenceableCollection before: aNode do: aBlock
+	aSequenceableCollection withIndexDo: [ :item :i |
+		| env |
+		env := document createDocumentFragment.
+		{i} trapDescend: [ (HTMLCanvas onJQuery: env asJQuery) root with: aBlock ].
+		aNode parentNode insertBefore: env reference: aNode ]
 !
 
-loop: model between: start and: end do: aBlock
-	(start asJQuery nextUntil: end element) remove.
-	start with: [ :html | model ifNotNil: [
-		self loop: model before: end asJQuery do: aBlock
-	]]
+loop: aSequenceableCollection between: aTagBrush and: anotherTagBrush do: aBlock
+	(aTagBrush asJQuery nextUntil: anotherTagBrush element) remove.
+	aSequenceableCollection ifNotNil: [
+		self loop: aSequenceableCollection before: anotherTagBrush element do: aBlock
+	]
 ! !
 
 TrappedSingleton subclass: #TrappedPathStack
@@ -535,7 +535,8 @@ trapGuard: anArray contents: aBlock
 
 trapIter: path after: aBlock
 	| end |
-	end := TagBrush fromJQuery: ('<script type="application/x-beacon" />' asJQuery insertAfter: self asJQuery) canvas: canvas.
+	end := TagBrush fromJQuery: ('<script type="application/x-beacon" />' asJQuery) canvas: canvas.
+	self element parentNode insertBefore: end element reference: self element nextSibling.
     self trap: path read: [ :model |
     	Trapped loop: model between: self and: end do: aBlock.
     ]
