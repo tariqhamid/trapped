@@ -1,6 +1,6 @@
 {
   "name": "trapped",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/herby/trapped",
   "authors": [
     "Herbert Vojčík <herby@mailbox.sk>"
@@ -24,6 +24,6 @@
   ],
   "dependencies": {
     "amber": ">=0.12.2",
-    "xontent": "~0.0.1"
+    "xontent": "~0.1.0"
   }
 }
