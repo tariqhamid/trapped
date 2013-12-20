@@ -107,8 +107,8 @@ strings (without reserved characters),
 whole numbers (float ones use decimal dot, which is used as delimiter),
 or a sub-expression within parentheses (`()`).
 
-The syntax is resembling Smalltalk literal array syntax very closely
-- so similar or same expressions can be used in API in code as well
+The syntax is resembling Smalltalk literal array syntax very closely -
+so similar or same expressions can be used in API in code as well
 as in `data-trap` attribute.
 For example paths `#((value))` and `#((todos) 1 done)` from API examples
 in previous chapter could be written in `data-trap` as `'(value)'` and `'(todos) 1 done'`.
