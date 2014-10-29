@@ -1,5 +1,6 @@
 1 Introduction
 ====
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/herby/trapped?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Inspired by the idea that was present in AngularJS,
 Trapped is an Amber that creates bidirectional data-biuding
