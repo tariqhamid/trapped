@@ -1,0 +1,7 @@
+{
+    "paths": {
+        "trapped": "src",
+        "trapped-todo": "example-todo/src",
+        "trapped-counter": "example-counter/src"
+    }
+}

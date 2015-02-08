@@ -1,4 +1,4 @@
-Smalltalk current createPackage: 'Trapped-Todo'!
+Smalltalk createPackage: 'Trapped-Todo'!
 ListKeyedIsolatedEntity subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Todo'!

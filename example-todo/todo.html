@@ -7,34 +7,24 @@
             display: none
         }
     </style>
-    <script src="../bower_components/amber/support/amber.js"></script>
-    <script type='text/javascript' src='../bower_components/amber/support/requirejs/require.min.js'></script>
+    <meta name="author" content="Herbert Vojčík" />
     <link rel="stylesheet" href="todo.css"/>
+    <script type='text/javascript' src='../the.js'></script>
     <script type="text/javascript">
         var blackboard;
-        require.config({
-            shim: {
-                'amber_lib/xontent/jquery.xontent': {
-                    deps: [ 'jquery' ]
-                }
-            },
-            paths: {
-                'gh_herby_trapped': '../js',
-                'gh_herby_trapped_todo': 'js',
-                'gh_herby_trapped_todo/_source': 'st'
-            }
-        });
+        require.config({baseUrl: '..'});
         require(
-                ["amber/devel",
-                    "gh_herby_trapped/Trapped-Processors", "gh_herby_trapped_todo/Trapped-Todo", "amber_lib/xontent/jquery.xontent" ],
-                function (smalltalk) {
-                    smalltalk.defaultAmdNamespace = 'gh_herby_trapped_todo';
-                    smalltalk.initialize();
+                ["app", "trapped-todo/Trapped-Todo"],
+                function (amber) {
+                    amber.initialize({
+                        //used for all new packages in IDE
+                        'transport.defaultAmdNamespace': "trapped-todo"
+                    });
+                    require(["amber-ide-starter-dialog"], function (dlg) { dlg.start(); });
 
                     $(function () {
-                        smalltalk.Browser._openOn_(smalltalk.App);
-                        blackboard = smalltalk.App._new();
-                        smalltalk.Trapped._start_([blackboard]);
+                        blackboard = amber.globals.App._new();
+                        amber.globals.Trapped._start_([blackboard]);
                     });
                 }
         );

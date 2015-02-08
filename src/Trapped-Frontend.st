@@ -1,4 +1,4 @@
-Smalltalk current createPackage: 'Trapped-Frontend'!
+Smalltalk createPackage: 'Trapped-Frontend'!
 Object subclass: #TrappedDataCarrier
 	instanceVariableNames: 'target model chain source'
 	package: 'Trapped-Frontend'!
@@ -385,9 +385,18 @@ parse: aString
 loop: aSequenceableCollection before: aNode do: aBlock
 	aSequenceableCollection withIndexDo: [ :item :i |
 		| env |
-		env := document createDocumentFragment.
+		"env := document createDocumentFragment."
+		env := document createElement: 'ins'.
 		{i} trapDescend: [ (HTMLCanvas onJQuery: env asJQuery) root with: aBlock ].
-		aNode parentNode insertBefore: env reference: aNode ]
+		"aNode parentNode insertBefore: env reference: aNode"
+		(Array streamContents: [ :str |
+			| child |
+			child := env firstChild.
+			[ child isNil ] whileFalse: [
+				str nextPut: child.
+				child := child nextSibling ]])
+		do: [ :each | aNode parentNode insertBefore: each reference: aNode ]
+	]
 !
 
 loop: aSequenceableCollection between: aTagBrush and: anotherTagBrush do: aBlock
@@ -464,18 +473,6 @@ watch: aBlock
 	self model watch: self path allButFirst do: aBlock
 ! !
 
-!Object methodsFor: '*Trapped-Frontend'!
-
-asTrapProcSendTo: anObject
-	self error: 'Trapped cannot use processor descriptor of ', self class name, ' type.'
-! !
-
-!String methodsFor: '*Trapped-Frontend'!
-
-asTrapProcSendTo: anObject
-	^anObject perform: self
-! !
-
 !Array methodsFor: '*Trapped-Frontend'!
 
 asTrapProcSendTo: anObject
@@ -496,6 +493,18 @@ trapDescend: aBlock
 
 trapIter: path do: aBlock
     self with: [ :html | (html tag: 'script') at: 'type' put: 'application/x-beacon'; trapIter: path after: aBlock ]
+! !
+
+!Object methodsFor: '*Trapped-Frontend'!
+
+asTrapProcSendTo: anObject
+	self error: 'Trapped cannot use processor descriptor of ', self class name, ' type.'
+! !
+
+!String methodsFor: '*Trapped-Frontend'!
+
+asTrapProcSendTo: anObject
+	^anObject perform: self
 ! !
 
 !TagBrush methodsFor: '*Trapped-Frontend'!

@@ -1,4 +1,4 @@
-Smalltalk current createPackage: 'Trapped-Backend'!
+Smalltalk createPackage: 'Trapped-Backend'!
 Object subclass: #EavModel
 	instanceVariableNames: 'getBlock putBlock'
 	package: 'Trapped-Backend'!
@@ -325,14 +325,14 @@ read: path do: aBlock
     payload model: eavModel read: aBlock
 ! !
 
-!Object methodsFor: '*Trapped-Backend'!
+!Array methodsFor: '*Trapped-Backend'!
 
 asTrapAtPut: value sendTo: anObject
-	self error: 'Trapped cannot put at ', self class name, ' type key.'
+    ^anObject perform: (self first, ':') asSymbol withArguments: { value }
 !
 
 asTrapAtSendTo: anObject
-	^nil
+	^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]
 ! !
 
 !Number methodsFor: '*Trapped-Backend'!
@@ -343,6 +343,16 @@ asTrapAtPut: value sendTo: anObject
 
 asTrapAtSendTo: anObject
 	^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]
+! !
+
+!Object methodsFor: '*Trapped-Backend'!
+
+asTrapAtPut: value sendTo: anObject
+	self error: 'Trapped cannot put at ', self class name, ' type key.'
+!
+
+asTrapAtSendTo: anObject
+	^nil
 ! !
 
 !SequenceableCollection methodsFor: '*Trapped-Backend'!
@@ -369,15 +379,5 @@ asTrapAtPut: value sendTo: anObject
 
 asTrapAtSendTo: anObject
 	^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]
-! !
-
-!Array methodsFor: '*Trapped-Backend'!
-
-asTrapAtPut: value sendTo: anObject
-    ^anObject perform: (self first, ':') asSymbol withArguments: { value }
-!
-
-asTrapAtSendTo: anObject
-	^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]
 ! !
 

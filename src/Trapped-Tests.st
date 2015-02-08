@@ -1,4 +1,4 @@
-Smalltalk current createPackage: 'Trapped-Tests'!
+Smalltalk createPackage: 'Trapped-Tests'!
 TestCase subclass: #IsolatorTest
 	instanceVariableNames: 'rootModel'
 	package: 'Trapped-Tests'!

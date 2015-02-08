@@ -1,4 +1,4 @@
-Smalltalk current createPackage: 'Trapped-Counter'!
+Smalltalk createPackage: 'Trapped-Counter'!
 ListKeyedIsolatedEntity subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Counter'!

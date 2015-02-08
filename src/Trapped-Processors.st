@@ -1,4 +1,5 @@
-Smalltalk current createPackage: 'Trapped-Processors'!
+Smalltalk createPackage: 'Trapped-Processors'!
+(Smalltalk packageAt: 'Trapped-Processors') imports: {'jquery.xontent'}!
 TrappedDataExpectingProcessor subclass: #TrappedProcessorAttribute
 	instanceVariableNames: 'attrName'
 	package: 'Trapped-Processors'!
