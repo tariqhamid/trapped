@@ -365,9 +365,9 @@ messageSends: ["root:", "new"]
 $globals.Isolator.klass);
 
 
-$core.addClass('ListKeyedEntity', $globals.AxonizedObject, ['payload'], 'Trapped-Backend');
+$core.addClass('Trapper', $globals.AxonizedObject, ['payload'], 'Trapped-Backend');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.ListKeyedEntity.comment="I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,\x0athat moderate access to the wrapped model object via read;do and modify:do:\x0aand allow pub-sub via watch:do:.\x0aThe wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x0a - read:do:\x0a - modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x0a - axon: (with a subclass of `AxonBase`)\x0a - model: (with a wrapped object, after `axon:`)";
+$globals.Trapper.comment="A portmanteau of 'Trapped wrapper', I am base class for model objects wrapped by Trapped.\x0a\x0aWrapped object is indexed by #('string-at-index' #selector numeric-at-index) array paths. Operations using this indexing are:\x0a\x0a - `read:do` to get the indexed content\x0a - `modify:do:` to get and modify the indexed content, and\x0a - `watch:do:` to subscribe to changes of the indexed content.\x0a\x0aThe wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x0a - read:do:\x0a - modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x0a - axon: (with a subclass of `AxonBase`)\x0a - model: (with a wrapped object, after `axon:`)";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -422,7 +422,7 @@ self["@payload"]=anObject;
 self._changed_([]);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"model:",{anObject:anObject},$globals.ListKeyedEntity)});
+}, function($ctx1) {$ctx1.fill(self,"model:",{anObject:anObject},$globals.Trapper)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -432,7 +432,55 @@ referencedClasses: ["InterestedInTrapPathSubtree", "InterestedInTrapPath"],
 //>>excludeEnd("ide");
 messageSends: ["interestFactory:", "axon", "ifTrue:ifFalse:", "and:", "notEmpty", "isNil", "last", "aspect:block:", "new", "allButLast", "yourself", "changed:"]
 }),
-$globals.ListKeyedEntity);
+$globals.Trapper);
+
+$core.addMethod(
+$core.method({
+selector: "modify:do:",
+protocol: 'action',
+fn: function (path,aBlock){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self._subclassResponsibility();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"modify:do:",{path:path,aBlock:aBlock},$globals.Trapper)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["path", "aBlock"],
+source: "modify: path do: aBlock\x0a\x09self subclassResponsibility",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["subclassResponsibility"]
+}),
+$globals.Trapper);
+
+$core.addMethod(
+$core.method({
+selector: "read:do:",
+protocol: 'action',
+fn: function (path,aBlock){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self._subclassResponsibility();
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"read:do:",{path:path,aBlock:aBlock},$globals.Trapper)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["path", "aBlock"],
+source: "read: path do: aBlock\x0a\x09self subclassResponsibility",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["subclassResponsibility"]
+}),
+$globals.Trapper);
 
 $core.addMethod(
 $core.method({
@@ -454,7 +502,7 @@ return self._read_do_(path,aBlock);
 }));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"watch:do:",{path:path,aBlock:aBlock},$globals.ListKeyedEntity)});
+}, function($ctx1) {$ctx1.fill(self,"watch:do:",{path:path,aBlock:aBlock},$globals.Trapper)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -464,13 +512,13 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["on:hook:", "axon", "read:do:"]
 }),
-$globals.ListKeyedEntity);
+$globals.Trapper);
 
 
 
-$core.addClass('ListKeyedDirectEntity', $globals.ListKeyedEntity, [], 'Trapped-Backend');
+$core.addClass('DirectTrapper', $globals.Trapper, [], 'Trapped-Backend');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.ListKeyedDirectEntity.comment="I am ListKeyedEntity that directly manipulate\x0athe wrapped model object.";
+$globals.DirectTrapper.comment="I am Trapper that directly manipulate\x0athe wrapped model object.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -503,7 +551,7 @@ return self._changed_(path);
 }));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"modify:do:",{path:path,aBlock:aBlock,newValue:newValue,eavModel:eavModel},$globals.ListKeyedDirectEntity)});
+}, function($ctx1) {$ctx1.fill(self,"modify:do:",{path:path,aBlock:aBlock,newValue:newValue,eavModel:eavModel},$globals.DirectTrapper)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -513,7 +561,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["asEavModel", "value:", "on:", "ensure:", "on:put:", "changed:"]
 }),
-$globals.ListKeyedDirectEntity);
+$globals.DirectTrapper);
 
 $core.addMethod(
 $core.method({
@@ -529,7 +577,7 @@ eavModel=$recv(path)._asEavModel();
 $recv(aBlock)._value_($recv(eavModel)._on_(self["@payload"]));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"read:do:",{path:path,aBlock:aBlock,eavModel:eavModel},$globals.ListKeyedDirectEntity)});
+}, function($ctx1) {$ctx1.fill(self,"read:do:",{path:path,aBlock:aBlock,eavModel:eavModel},$globals.DirectTrapper)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -539,13 +587,13 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["asEavModel", "value:", "on:"]
 }),
-$globals.ListKeyedDirectEntity);
+$globals.DirectTrapper);
 
 
 
-$core.addClass('ListKeyedIsolatedEntity', $globals.ListKeyedEntity, [], 'Trapped-Backend');
+$core.addClass('IsolatingTrapper', $globals.Trapper, [], 'Trapped-Backend');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.ListKeyedIsolatedEntity.comment="I am ListKeyedEntity that guards access\x0ato the wrapped model object via Isolator.";
+$globals.IsolatingTrapper.comment="I am Trapper that guards access\x0ato the wrapped model object via Isolator.\x0a\x0aIOW, read:do: gets always its own deep copy,\x0amodify:do: is not reentrant\x0aand upon writing the written part is deep-copied as well\x0a(so modifier does not hold the source of truth\x0aand can change it later).\x0a\x0aThis also means, a wrapped object and all its parts\x0amust understand `#deepCopy`.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -561,13 +609,13 @@ return $core.withContext(function($ctx1) {
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.supercall = true, 
 //>>excludeEnd("ctx");
-$globals.ListKeyedIsolatedEntity.superclass.fn.prototype._model_.apply($recv(self), [$recv($Isolator())._on_(anObject)]));
+$globals.IsolatingTrapper.superclass.fn.prototype._model_.apply($recv(self), [$recv($Isolator())._on_(anObject)]));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.supercall = false;
 //>>excludeEnd("ctx");;
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"model:",{anObject:anObject},$globals.ListKeyedIsolatedEntity)});
+}, function($ctx1) {$ctx1.fill(self,"model:",{anObject:anObject},$globals.IsolatingTrapper)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -577,7 +625,7 @@ referencedClasses: ["Isolator"],
 //>>excludeEnd("ide");
 messageSends: ["model:", "on:"]
 }),
-$globals.ListKeyedIsolatedEntity);
+$globals.IsolatingTrapper);
 
 $core.addMethod(
 $core.method({
@@ -609,7 +657,7 @@ return self._changed_(path);
 }));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"modify:do:",{path:path,aBlock:aBlock,eavModel:eavModel},$globals.ListKeyedIsolatedEntity)});
+}, function($ctx1) {$ctx1.fill(self,"modify:do:",{path:path,aBlock:aBlock,eavModel:eavModel},$globals.IsolatingTrapper)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -619,7 +667,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["asEavModel", ",", "ensure:", "model:modify:", "changed:"]
 }),
-$globals.ListKeyedIsolatedEntity);
+$globals.IsolatingTrapper);
 
 $core.addMethod(
 $core.method({
@@ -635,7 +683,7 @@ eavModel=$recv($recv([["root"]]).__comma(path))._asEavModel();
 $recv(self["@payload"])._model_read_(eavModel,aBlock);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"read:do:",{path:path,aBlock:aBlock,eavModel:eavModel},$globals.ListKeyedIsolatedEntity)});
+}, function($ctx1) {$ctx1.fill(self,"read:do:",{path:path,aBlock:aBlock,eavModel:eavModel},$globals.IsolatingTrapper)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -645,7 +693,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["asEavModel", ",", "model:read:"]
 }),
-$globals.ListKeyedIsolatedEntity);
+$globals.IsolatingTrapper);
 
 
 $core.addMethod(

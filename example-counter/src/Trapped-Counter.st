@@ -1,5 +1,5 @@
 Smalltalk createPackage: 'Trapped-Counter'!
-ListKeyedIsolatedEntity subclass: #App
+IsolatingTrapper subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Counter'!
 !App commentStamp!

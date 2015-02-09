@@ -1,5 +1,5 @@
 Smalltalk createPackage: 'Trapped-Todo'!
-ListKeyedIsolatedEntity subclass: #App
+IsolatingTrapper subclass: #App
 	instanceVariableNames: ''
 	package: 'Trapped-Todo'!
 !App commentStamp!

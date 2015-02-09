@@ -95,13 +95,18 @@ on: anObject
 ^self new root: anObject
 ! !
 
-AxonizedObject subclass: #ListKeyedEntity
+AxonizedObject subclass: #Trapper
 	instanceVariableNames: 'payload'
 	package: 'Trapped-Backend'!
-!ListKeyedEntity commentStamp!
-I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,
-that moderate access to the wrapped model object via read;do and modify:do:
-and allow pub-sub via watch:do:.
+!Trapper commentStamp!
+A portmanteau of 'Trapped wrapper', I am base class for model objects wrapped by Trapped.
+
+Wrapped object is indexed by #('string-at-index' #selector numeric-at-index) array paths. Operations using this indexing are:
+
+ - `read:do` to get the indexed content
+ - `modify:do:` to get and modify the indexed content, and
+ - `watch:do:` to subscribe to changes of the indexed content.
+
 The wrapped model can be any smalltalk object.
 
 My subclasses need to provide implementation for:
@@ -114,7 +119,7 @@ and must issue these calls when initializing:
  - axon: (with a subclass of `AxonBase`)
  - model: (with a wrapped object, after `axon:`)!
 
-!ListKeyedEntity methodsFor: 'accessing'!
+!Trapper methodsFor: 'accessing'!
 
 model: anObject
 	self axon
@@ -126,20 +131,28 @@ model: anObject
     self changed: #()
 ! !
 
-!ListKeyedEntity methodsFor: 'action'!
+!Trapper methodsFor: 'action'!
+
+modify: path do: aBlock
+	self subclassResponsibility
+!
+
+read: path do: aBlock
+	self subclassResponsibility
+!
 
 watch: path do: aBlock
 	self axon on: path hook: [ self read: path do: aBlock ]
 ! !
 
-ListKeyedEntity subclass: #ListKeyedDirectEntity
+Trapper subclass: #DirectTrapper
 	instanceVariableNames: ''
 	package: 'Trapped-Backend'!
-!ListKeyedDirectEntity commentStamp!
-I am ListKeyedEntity that directly manipulate
+!DirectTrapper commentStamp!
+I am Trapper that directly manipulate
 the wrapped model object.!
 
-!ListKeyedDirectEntity methodsFor: 'action'!
+!DirectTrapper methodsFor: 'action'!
 
 modify: path do: aBlock
     | newValue eavModel |
@@ -154,20 +167,29 @@ read: path do: aBlock
     aBlock value: (eavModel on: payload)
 ! !
 
-ListKeyedEntity subclass: #ListKeyedIsolatedEntity
+Trapper subclass: #IsolatingTrapper
 	instanceVariableNames: ''
 	package: 'Trapped-Backend'!
-!ListKeyedIsolatedEntity commentStamp!
-I am ListKeyedEntity that guards access
-to the wrapped model object via Isolator.!
+!IsolatingTrapper commentStamp!
+I am Trapper that guards access
+to the wrapped model object via Isolator.
 
-!ListKeyedIsolatedEntity methodsFor: 'accessing'!
+IOW, read:do: gets always its own deep copy,
+modify:do: is not reentrant
+and upon writing the written part is deep-copied as well
+(so modifier does not hold the source of truth
+and can change it later).
+
+This also means, a wrapped object and all its parts
+must understand `#deepCopy`.!
+
+!IsolatingTrapper methodsFor: 'accessing'!
 
 model: anObject
 	super model: (Isolator on: anObject)
 ! !
 
-!ListKeyedIsolatedEntity methodsFor: 'action'!
+!IsolatingTrapper methodsFor: 'action'!
 
 modify: path do: aBlock
     | eavModel |

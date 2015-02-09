@@ -1,10 +1,10 @@
-define("trapped-counter/Trapped-Counter", ["amber/boot", "trapped/Trapped-Backend", "amber_core/Kernel-Objects"], function($boot){
+define("trapped-counter/Trapped-Counter", ["amber/boot", "amber_core/Kernel-Objects", "trapped/Trapped-Backend"], function($boot){
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Trapped-Counter');
 $core.packages["Trapped-Counter"].innerEval = function (expr) { return eval(expr); };
 $core.packages["Trapped-Counter"].transport = {"type":"amd","amdNamespace":"trapped-counter"};
 
-$core.addClass('App', $globals.ListKeyedIsolatedEntity, [], 'Trapped-Counter');
+$core.addClass('App', $globals.IsolatingTrapper, [], 'Trapped-Counter');
 //>>excludeStart("ide", pragmas.excludeIdeData);
 $globals.App.comment="// Code from AngularJS Todo example, http://angularjs.org/#todo-js\x0afunction TodoCtrl($scope) {\x0a  $scope.todos = [\x0a    {text:'learn angular', done:true},\x0a    {text:'build an angular app', done:false}];\x0a \x0a  $scope.addTodo = function() {\x0a    $scope.todos.push({text:$scope.todoText, done:false});\x0a    $scope.todoText = '';\x0a  };\x0a \x0a  $scope.remaining = function() {\x0a    var count = 0;\x0a    angular.forEach($scope.todos, function(todo) {\x0a      count += todo.done ? 0 : 1;\x0a    });\x0a    return count;\x0a  };\x0a \x0a  $scope.archive = function() {\x0a    var oldTodos = $scope.todos;\x0a    $scope.todos = [];\x0a    angular.forEach(oldTodos, function(todo) {\x0a      if (!todo.done) $scope.todos.push(todo);\x0a    });\x0a  };\x0a}";
 //>>excludeEnd("ide");
