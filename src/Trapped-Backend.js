@@ -1,4 +1,4 @@
-define("trapped/Trapped-Backend", ["amber/boot", "amber_core/Kernel-Objects", "amber_core/Kernel-Exceptions", "amber_core/Kernel-Collections"], function($boot){
+define("trapped/Trapped-Backend", ["amber/boot", "amber_core/Kernel-Objects", "axon/Axon", "amber_core/Kernel-Collections"], function($boot){
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Trapped-Backend');
 $core.packages["Trapped-Backend"].innerEval = function (expr) { return eval(expr); };
@@ -150,6 +150,104 @@ $globals.EavModel);
 
 
 
+$core.addClass('InterestedInTrapPath', $globals.AxonInterestBase, [], 'Trapped-Backend');
+$core.addMethod(
+$core.method({
+selector: "accepts:",
+protocol: 'testing',
+fn: function (anAspect){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $3,$4,$2,$1;
+$3=$recv(anAspect)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=1;
+//>>excludeEnd("ctx");
+$4=$recv(self["@aspect"])._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=2;
+//>>excludeEnd("ctx");
+$2=$recv($3).__lt_eq($4);
+$1=$recv($2)._and_((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv(anAspect).__eq($recv(self["@aspect"])._copyFrom_to_((1),$recv(anAspect)._size()));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"accepts:",{anAspect:anAspect},$globals.InterestedInTrapPath)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anAspect"],
+source: "accepts: anAspect\x0a    ^anAspect size <= aspect size and: [anAspect = (aspect copyFrom: 1 to: anAspect size)]",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["and:", "<=", "size", "=", "copyFrom:to:"]
+}),
+$globals.InterestedInTrapPath);
+
+
+
+$core.addClass('InterestedInTrapPathSubtree', $globals.AxonInterestBase, [], 'Trapped-Backend');
+$core.addMethod(
+$core.method({
+selector: "accepts:",
+protocol: 'testing',
+fn: function (anAspect){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $3,$4,$2,$6,$7,$5,$1;
+$3=$recv(anAspect)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=1;
+//>>excludeEnd("ctx");
+$4=$recv(self["@aspect"])._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=2;
+//>>excludeEnd("ctx");
+$2=$recv($3).__lt_eq($4);
+if($core.assert($2)){
+$6=self["@aspect"];
+$7=$recv(anAspect)._size();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["size"]=3;
+//>>excludeEnd("ctx");
+$5=$recv($6)._copyFrom_to_((1),$7);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["copyFrom:to:"]=1;
+//>>excludeEnd("ctx");
+$1=$recv(anAspect).__eq($5);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["="]=1;
+//>>excludeEnd("ctx");
+} else {
+$1=$recv(self["@aspect"]).__eq($recv(anAspect)._copyFrom_to_((1),$recv(self["@aspect"])._size()));
+};
+return $1;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"accepts:",{anAspect:anAspect},$globals.InterestedInTrapPathSubtree)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anAspect"],
+source: "accepts: anAspect\x0a    ^anAspect size <= aspect size\x0a\x09\x09ifTrue: [anAspect = (aspect copyFrom: 1 to: anAspect size)]\x0a\x09\x09ifFalse: [aspect = (anAspect copyFrom: 1 to: aspect size)]",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["ifTrue:ifFalse:", "<=", "size", "=", "copyFrom:to:"]
+}),
+$globals.InterestedInTrapPathSubtree);
+
+
+
 $core.addClass('Isolator', $globals.Object, ['root'], 'Trapped-Backend');
 $core.addMethod(
 $core.method({
@@ -267,618 +365,24 @@ messageSends: ["root:", "new"]
 $globals.Isolator.klass);
 
 
-$core.addClass('KeyedPubSubBase', $globals.Object, ['factory'], 'Trapped-Backend');
+$core.addClass('ListKeyedEntity', $globals.Object, ['axon', 'payload'], 'Trapped-Backend');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.KeyedPubSubBase.comment="I represent a pub-sub based on a key.\x0aI manage key-block subscriptions as well as running blocks that are dirty.\x0aThe subscription objects are reponsible of decision if the change is relevant for them.\x0aSubscription object must be subclasses of KeyedSubscriptionBase.\x0a\x0aMy subclasses must provide implementation for:\x0a\x09add:\x0a    do:\x0a    clean\x0a    (optionally) run\x0a\x0aand issue this call before actual use:\x0a\x09subscritionFactory: (setting [:key:block|...] factory that creates appropriate subscription)";
+$globals.ListKeyedEntity.comment="I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,\x0athat moderate access to the wrapped model object via read;do and modify:do:\x0aand allow pub-sub via watch:do:.\x0aThe wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x0a - read:do:\x0a - modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x0a - model: (with a wrapped object)\x0a - axon: (with a subclass of `AxonBase`)";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
-selector: "changed:",
-protocol: 'action',
-fn: function (key){
-var self=this;
-var needsToRun;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-needsToRun=false;
-self._do_((function(each){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-$1=$recv(each)._accepts_(key);
-if($core.assert($1)){
-$recv(each)._flag();
-needsToRun=true;
-return needsToRun;
-};
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-self._dirty_(needsToRun);
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"changed:",{key:key,needsToRun:needsToRun},$globals.KeyedPubSubBase)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["key"],
-source: "changed: key\x0a\x09| needsToRun |\x0a    needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09(each accepts: key) ifTrue: [\x0a\x09\x09\x09each flag.\x0a            needsToRun := true.\x0a\x09\x09]\x0a\x09].\x0a\x09self dirty: needsToRun",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["do:", "ifTrue:", "accepts:", "flag", "dirty:"]
-}),
-$globals.KeyedPubSubBase);
-
-$core.addMethod(
-$core.method({
-selector: "dirty:",
-protocol: 'action',
-fn: function (aBoolean){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-if($core.assert(aBoolean)){
-$recv((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return self._run();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)});
-//>>excludeEnd("ctx");
-}))._fork();
-};
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"dirty:",{aBoolean:aBoolean},$globals.KeyedPubSubBase)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aBoolean"],
-source: "dirty: aBoolean\x0a\x09aBoolean ifTrue: [[ self run ] fork]",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["ifTrue:", "fork", "run"]
-}),
-$globals.KeyedPubSubBase);
-
-$core.addMethod(
-$core.method({
-selector: "on:hook:",
-protocol: 'action',
-fn: function (key,aBlock){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-self._add_($recv($recv(self["@factory"])._value_value_(key,aBlock))._flag());
-self._dirty_(true);
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"on:hook:",{key:key,aBlock:aBlock},$globals.KeyedPubSubBase)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["key", "aBlock"],
-source: "on: key hook: aBlock\x0a\x09self add: (factory value: key value: aBlock) flag.\x0a   \x09self dirty: true",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["add:", "flag", "value:value:", "dirty:"]
-}),
-$globals.KeyedPubSubBase);
-
-$core.addMethod(
-$core.method({
-selector: "run",
-protocol: 'action',
-fn: function (){
-var self=this;
-function $Error(){return $globals.Error||(typeof Error=="undefined"?nil:Error)}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1,$2,$3;
-$recv((function(){
-var needsClean;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-needsClean=false;
-needsClean;
-self._do_((function(each){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx3) {
-//>>excludeEnd("ctx");
-$1=$recv(each)._isFlagged();
-if($core.assert($1)){
-$recv(each)._run();
-};
-$2=$recv(each)._isEnabled();
-if(!$core.assert($2)){
-needsClean=true;
-return needsClean;
-};
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({each:each},$ctx2,2)});
-//>>excludeEnd("ctx");
-}));
-$3=needsClean;
-if($core.assert($3)){
-return self._clean();
-};
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({needsClean:needsClean},$ctx1,1)});
-//>>excludeEnd("ctx");
-}))._on_do_($Error(),(function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return self._dirty_(true);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,6)});
-//>>excludeEnd("ctx");
-}));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"run",{},$globals.KeyedPubSubBase)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "run\x0a\x09[\x0a\x09\x09| needsClean |\x0a\x09    needsClean := false.\x0a\x09\x09self do: [ :each |\x0a\x09\x09\x09each isFlagged ifTrue: [ each run ].\x0a\x09        each isEnabled ifFalse: [ needsClean := true ]\x0a\x09\x09].\x0a    \x09needsClean ifTrue: [ self clean ]\x0a\x09] on: Error do: [ self dirty: true ]",
-referencedClasses: ["Error"],
-//>>excludeEnd("ide");
-messageSends: ["on:do:", "do:", "ifTrue:", "isFlagged", "run", "ifFalse:", "isEnabled", "clean", "dirty:"]
-}),
-$globals.KeyedPubSubBase);
-
-$core.addMethod(
-$core.method({
-selector: "subscriptionFactory:",
-protocol: 'action',
-fn: function (aBlock){
-var self=this;
-self["@factory"]=aBlock;
-return self;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aBlock"],
-source: "subscriptionFactory: aBlock\x0a    factory := aBlock",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.KeyedPubSubBase);
-
-
-
-$core.addClass('SimpleKeyedPubSub', $globals.KeyedPubSubBase, ['queue'], 'Trapped-Backend');
-$core.addMethod(
-$core.method({
-selector: "add:",
-protocol: 'accessing',
-fn: function (aSubscription){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv(self["@queue"])._add_(aSubscription);
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"add:",{aSubscription:aSubscription},$globals.SimpleKeyedPubSub)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aSubscription"],
-source: "add: aSubscription\x0a\x09queue add: aSubscription.",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["add:"]
-}),
-$globals.SimpleKeyedPubSub);
-
-$core.addMethod(
-$core.method({
-selector: "clean",
-protocol: 'bookkeeping',
-fn: function (){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-self["@queue"]=$recv(self["@queue"])._select_((function(each){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $recv(each)._isEnabled();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"clean",{},$globals.SimpleKeyedPubSub)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "clean\x0a\x09queue := queue select: [ :each | each isEnabled ]",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["select:", "isEnabled"]
-}),
-$globals.SimpleKeyedPubSub);
-
-$core.addMethod(
-$core.method({
-selector: "do:",
-protocol: 'enumeration',
-fn: function (aBlock){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv(self["@queue"])._do_(aBlock);
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"do:",{aBlock:aBlock},$globals.SimpleKeyedPubSub)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aBlock"],
-source: "do: aBlock\x0a\x09queue do: aBlock",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["do:"]
-}),
-$globals.SimpleKeyedPubSub);
-
-$core.addMethod(
-$core.method({
-selector: "initialize",
-protocol: 'initialization',
-fn: function (){
-var self=this;
-function $OrderedCollection(){return $globals.OrderedCollection||(typeof OrderedCollection=="undefined"?nil:OrderedCollection)}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-(
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.supercall = true, 
-//>>excludeEnd("ctx");
-$globals.SimpleKeyedPubSub.superclass.fn.prototype._initialize.apply($recv(self), []));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.supercall = false;
-//>>excludeEnd("ctx");;
-self["@queue"]=$recv($OrderedCollection())._new();
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.SimpleKeyedPubSub)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "initialize\x0a    super initialize.\x0a\x09queue := OrderedCollection new",
-referencedClasses: ["OrderedCollection"],
-//>>excludeEnd("ide");
-messageSends: ["initialize", "new"]
-}),
-$globals.SimpleKeyedPubSub);
-
-
-
-$core.addClass('KeyedPubSubUnsubscribe', $globals.Error, [], 'Trapped-Backend');
-//>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.KeyedPubSubUnsubscribe.comment="SIgnal me from the subscription block to unsubscribe it.";
-//>>excludeEnd("ide");
-
-
-$core.addClass('KeyedSubscriptionBase', $globals.Object, ['key', 'actionBlock', 'flagged'], 'Trapped-Backend');
-$core.addMethod(
-$core.method({
-selector: "accepts:",
-protocol: 'testing',
-fn: function (aKey){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-self._subclassResponsibility();
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"accepts:",{aKey:aKey},$globals.KeyedSubscriptionBase)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aKey"],
-source: "accepts: aKey\x0a    \x22Should return true if change for aKey is relevant for this subscription\x22\x0a    self subclassResponsibility",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["subclassResponsibility"]
-}),
-$globals.KeyedSubscriptionBase);
-
-$core.addMethod(
-$core.method({
-selector: "flag",
-protocol: 'accessing',
-fn: function (){
-var self=this;
-self["@flagged"]=true;
-return self;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "flag\x0a\x09flagged := true",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.KeyedSubscriptionBase);
-
-$core.addMethod(
-$core.method({
-selector: "initialize",
-protocol: 'initialization',
-fn: function (){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-(
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.supercall = true, 
-//>>excludeEnd("ctx");
-$globals.KeyedSubscriptionBase.superclass.fn.prototype._initialize.apply($recv(self), []));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.supercall = false;
-//>>excludeEnd("ctx");;
-self["@key"]=nil;
-self["@actionBlock"]=nil;
-self["@flagged"]=false;
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.KeyedSubscriptionBase)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "initialize\x0a\x09super initialize.\x0a    key := nil.\x0a    actionBlock := nil.\x0a    flagged := false.",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["initialize"]
-}),
-$globals.KeyedSubscriptionBase);
-
-$core.addMethod(
-$core.method({
-selector: "isEnabled",
-protocol: 'testing',
-fn: function (){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-$1=$recv(self["@actionBlock"])._notNil();
-return $1;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"isEnabled",{},$globals.KeyedSubscriptionBase)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "isEnabled\x0a\x09^actionBlock notNil",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["notNil"]
-}),
-$globals.KeyedSubscriptionBase);
-
-$core.addMethod(
-$core.method({
-selector: "isFlagged",
-protocol: 'testing',
-fn: function (){
-var self=this;
-var $1;
-$1=self["@flagged"];
-return $1;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "isFlagged\x0a\x09^flagged",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.KeyedSubscriptionBase);
-
-$core.addMethod(
-$core.method({
-selector: "key:block:",
-protocol: 'accessing',
-fn: function (anObject,aBlock){
-var self=this;
-self["@key"]=anObject;
-self["@actionBlock"]=aBlock;
-return self;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anObject", "aBlock"],
-source: "key: anObject block: aBlock\x0a\x09key := anObject.\x0a    actionBlock := aBlock",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.KeyedSubscriptionBase);
-
-$core.addMethod(
-$core.method({
-selector: "run",
-protocol: 'action',
-fn: function (){
-var self=this;
-function $KeyedPubSubUnsubscribe(){return $globals.KeyedPubSubUnsubscribe||(typeof KeyedPubSubUnsubscribe=="undefined"?nil:KeyedPubSubUnsubscribe)}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-self["@flagged"]=false;
-self["@flagged"];
-return $recv(self["@actionBlock"])._value();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
-//>>excludeEnd("ctx");
-}))._on_do_($KeyedPubSubUnsubscribe(),(function(){
-self["@actionBlock"]=nil;
-return self["@actionBlock"];
-
-}));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"run",{},$globals.KeyedSubscriptionBase)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "run\x0a\x09[ flagged := false. actionBlock value ]\x0a    on: KeyedPubSubUnsubscribe do: [ actionBlock := nil ]",
-referencedClasses: ["KeyedPubSubUnsubscribe"],
-//>>excludeEnd("ide");
-messageSends: ["on:do:", "value"]
-}),
-$globals.KeyedSubscriptionBase);
-
-
-
-$core.addClass('ListKeyedSubscription', $globals.KeyedSubscriptionBase, [], 'Trapped-Backend');
-$core.addMethod(
-$core.method({
-selector: "accepts:",
-protocol: 'testing',
-fn: function (aKey){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $3,$4,$2,$1;
-$3=$recv(aKey)._size();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["size"]=1;
-//>>excludeEnd("ctx");
-$4=$recv(self["@key"])._size();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["size"]=2;
-//>>excludeEnd("ctx");
-$2=$recv($3).__lt_eq($4);
-$1=$recv($2)._and_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $recv(aKey).__eq($recv(self["@key"])._copyFrom_to_((1),$recv(aKey)._size()));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-return $1;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"accepts:",{aKey:aKey},$globals.ListKeyedSubscription)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aKey"],
-source: "accepts: aKey\x0a    ^aKey size <= key size and: [aKey = (key copyFrom: 1 to: aKey size)]",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["and:", "<=", "size", "=", "copyFrom:to:"]
-}),
-$globals.ListKeyedSubscription);
-
-
-
-$core.addClass('TwoWayListKeyedSubscription', $globals.KeyedSubscriptionBase, [], 'Trapped-Backend');
-$core.addMethod(
-$core.method({
-selector: "accepts:",
-protocol: 'testing',
-fn: function (aKey){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $3,$4,$2,$6,$7,$5,$1;
-$3=$recv(aKey)._size();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["size"]=1;
-//>>excludeEnd("ctx");
-$4=$recv(self["@key"])._size();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["size"]=2;
-//>>excludeEnd("ctx");
-$2=$recv($3).__lt_eq($4);
-if($core.assert($2)){
-$6=self["@key"];
-$7=$recv(aKey)._size();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["size"]=3;
-//>>excludeEnd("ctx");
-$5=$recv($6)._copyFrom_to_((1),$7);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["copyFrom:to:"]=1;
-//>>excludeEnd("ctx");
-$1=$recv(aKey).__eq($5);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["="]=1;
-//>>excludeEnd("ctx");
-} else {
-$1=$recv(self["@key"]).__eq($recv(aKey)._copyFrom_to_((1),$recv(self["@key"])._size()));
-};
-return $1;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"accepts:",{aKey:aKey},$globals.TwoWayListKeyedSubscription)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aKey"],
-source: "accepts: aKey\x0a    ^aKey size <= key size\x0a\x09\x09ifTrue: [aKey = (key copyFrom: 1 to: aKey size)]\x0a\x09\x09ifFalse: [key = (aKey copyFrom: 1 to: key size)]",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["ifTrue:ifFalse:", "<=", "size", "=", "copyFrom:to:"]
-}),
-$globals.TwoWayListKeyedSubscription);
-
-
-
-$core.addClass('ListKeyedEntity', $globals.Object, ['dispatcher', 'payload'], 'Trapped-Backend');
-//>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.ListKeyedEntity.comment="I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,\x0athat moderate access to the wrapped model object via read;do and modify:do:\x0aand allow pub-sub via watch:do:.\x0aThis wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x09read:do:\x0a    modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x09model: (with a wrapped object)\x0a\x09dispatcher: (with a subclass of KeyedPubSubBase)";
-//>>excludeEnd("ide");
-$core.addMethod(
-$core.method({
-selector: "dispatcher",
+selector: "axon",
 protocol: 'accessing',
 fn: function (){
 var self=this;
 var $1;
-$1=self["@dispatcher"];
+$1=self["@axon"];
 return $1;
 
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "dispatcher\x0a\x09^dispatcher",
+source: "axon\x0a\x09^ axon",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
@@ -887,37 +391,37 @@ $globals.ListKeyedEntity);
 
 $core.addMethod(
 $core.method({
-selector: "dispatcher:",
+selector: "axon:",
 protocol: 'accessing',
-fn: function (aDispatcher){
+fn: function (anAxon){
 var self=this;
-function $TwoWayListKeyedSubscription(){return $globals.TwoWayListKeyedSubscription||(typeof TwoWayListKeyedSubscription=="undefined"?nil:TwoWayListKeyedSubscription)}
-function $ListKeyedSubscription(){return $globals.ListKeyedSubscription||(typeof ListKeyedSubscription=="undefined"?nil:ListKeyedSubscription)}
+function $InterestedInTrapPathSubtree(){return $globals.InterestedInTrapPathSubtree||(typeof InterestedInTrapPathSubtree=="undefined"?nil:InterestedInTrapPathSubtree)}
+function $InterestedInTrapPath(){return $globals.InterestedInTrapPath||(typeof InterestedInTrapPath=="undefined"?nil:InterestedInTrapPath)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
 var $1,$2,$3,$4,$5,$6;
-$recv(aDispatcher)._subscriptionFactory_((function(key,block){
+$recv(anAxon)._interestFactory_((function(description,block){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-$1=$recv($recv(key)._notEmpty())._and_((function(){
+$1=$recv($recv(description)._notEmpty())._and_((function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx3) {
 //>>excludeEnd("ctx");
-return $recv($recv(key)._last())._isNil();
+return $recv($recv(description)._last())._isNil();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)});
 //>>excludeEnd("ctx");
 }));
 if($core.assert($1)){
-$2=$recv($TwoWayListKeyedSubscription())._new();
+$2=$recv($InterestedInTrapPathSubtree())._new();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx2.sendIdx["new"]=1;
 //>>excludeEnd("ctx");
-$recv($2)._key_block_($recv(key)._allButLast(),block);
+$recv($2)._aspect_block_($recv(description)._allButLast(),block);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["key:block:"]=1;
+$ctx2.sendIdx["aspect:block:"]=1;
 //>>excludeEnd("ctx");
 $3=$recv($2)._yourself();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -925,8 +429,8 @@ $ctx2.sendIdx["yourself"]=1;
 //>>excludeEnd("ctx");
 return $3;
 } else {
-$4=$recv($ListKeyedSubscription())._new();
-$recv($4)._key_block_(key,block);
+$4=$recv($InterestedInTrapPath())._new();
+$recv($4)._aspect_block_(description,block);
 $5=$recv($4)._yourself();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx2.sendIdx["yourself"]=2;
@@ -934,22 +438,46 @@ $ctx2.sendIdx["yourself"]=2;
 return $5;
 };
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({key:key,block:block},$ctx1,1)});
+}, function($ctx2) {$ctx2.fillBlock({description:description,block:block},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
-$6=$recv(aDispatcher)._yourself();
-self["@dispatcher"]=$6;
+$6=$recv(anAxon)._yourself();
+self["@axon"]=$6;
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"dispatcher:",{aDispatcher:aDispatcher},$globals.ListKeyedEntity)});
+}, function($ctx1) {$ctx1.fill(self,"axon:",{anAxon:anAxon},$globals.ListKeyedEntity)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aDispatcher"],
-source: "dispatcher: aDispatcher\x0a\x09dispatcher := aDispatcher\x0a        subscriptionFactory: [ :key :block |\x0a\x09\x09\x09(key notEmpty and: [ key last isNil ])\x0a\x09\x09\x09\x09ifTrue: [ TwoWayListKeyedSubscription new key: key allButLast block: block; yourself ]\x0a\x09\x09\x09\x09ifFalse: [ ListKeyedSubscription new key: key block: block; yourself ]];\x0a        yourself",
-referencedClasses: ["TwoWayListKeyedSubscription", "ListKeyedSubscription"],
+args: ["anAxon"],
+source: "axon: anAxon\x0a\x09axon := anAxon\x0a\x09\x09interestFactory: [ :description :block |\x0a\x09\x09\x09(description notEmpty and: [ description last isNil ])\x0a\x09\x09\x09\x09ifTrue: [ InterestedInTrapPathSubtree new aspect: description allButLast block: block; yourself ]\x0a\x09\x09\x09\x09ifFalse: [ InterestedInTrapPath new aspect: description block: block; yourself ]];\x0a        yourself",
+referencedClasses: ["InterestedInTrapPathSubtree", "InterestedInTrapPath"],
 //>>excludeEnd("ide");
-messageSends: ["subscriptionFactory:", "ifTrue:ifFalse:", "and:", "notEmpty", "isNil", "last", "key:block:", "new", "allButLast", "yourself"]
+messageSends: ["interestFactory:", "ifTrue:ifFalse:", "and:", "notEmpty", "isNil", "last", "aspect:block:", "new", "allButLast", "yourself"]
+}),
+$globals.ListKeyedEntity);
+
+$core.addMethod(
+$core.method({
+selector: "changed:",
+protocol: 'action',
+fn: function (anAspect){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self._axon())._changed_(anAspect);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"changed:",{anAspect:anAspect},$globals.ListKeyedEntity)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anAspect"],
+source: "changed: anAspect\x0a\x09self axon changed: anAspect",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["changed:", "axon"]
 }),
 $globals.ListKeyedEntity);
 
@@ -963,7 +491,7 @@ var self=this;
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
 self["@payload"]=anObject;
-$recv(self._dispatcher())._changed_([]);
+self._changed_([]);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"model:",{anObject:anObject},$globals.ListKeyedEntity)});
@@ -971,10 +499,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anObject"],
-source: "model: anObject\x0a\x09payload := anObject.\x0a    self dispatcher changed: #()",
+source: "model: anObject\x0a\x09payload := anObject.\x0a    self changed: #()",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["changed:", "dispatcher"]
+messageSends: ["changed:"]
 }),
 $globals.ListKeyedEntity);
 
@@ -987,7 +515,7 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-$recv(self._dispatcher())._on_hook_(path,(function(){
+$recv(self._axon())._on_hook_(path,(function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
@@ -1003,10 +531,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["path", "aBlock"],
-source: "watch: path do: aBlock\x0a\x09self dispatcher on: path hook: [ self read: path do: aBlock ]",
+source: "watch: path do: aBlock\x0a\x09self axon on: path hook: [ self read: path do: aBlock ]",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["on:hook:", "dispatcher", "read:do:"]
+messageSends: ["on:hook:", "axon", "read:do:"]
 }),
 $globals.ListKeyedEntity);
 
@@ -1040,7 +568,7 @@ return $recv(eavModel)._on_put_(self["@payload"],newValue);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-return $recv(self._dispatcher())._changed_(path);
+return self._changed_(path);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)});
 //>>excludeEnd("ctx");
@@ -1052,10 +580,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["path", "aBlock"],
-source: "modify: path do: aBlock\x0a    | newValue eavModel |\x0a    eavModel := path asEavModel.\x0a    newValue := aBlock value: (eavModel on: payload).\x0a    [ eavModel on: payload put: newValue ] ensure: [ self dispatcher changed: path ]",
+source: "modify: path do: aBlock\x0a    | newValue eavModel |\x0a    eavModel := path asEavModel.\x0a    newValue := aBlock value: (eavModel on: payload).\x0a    [ eavModel on: payload put: newValue ] ensure: [ self changed: path ]",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["asEavModel", "value:", "on:", "ensure:", "on:put:", "changed:", "dispatcher"]
+messageSends: ["asEavModel", "value:", "on:", "ensure:", "on:put:", "changed:"]
 }),
 $globals.ListKeyedDirectEntity);
 
@@ -1146,7 +674,7 @@ return $recv(self["@payload"])._model_modify_(eavModel,aBlock);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-return $recv(self._dispatcher())._changed_(path);
+return self._changed_(path);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,2)});
 //>>excludeEnd("ctx");
@@ -1158,10 +686,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["path", "aBlock"],
-source: "modify: path do: aBlock\x0a    | eavModel |\x0a    eavModel := ({{#root}},path) asEavModel.\x0a    [ payload model: eavModel modify: aBlock ] ensure: [ self dispatcher changed: path ]",
+source: "modify: path do: aBlock\x0a    | eavModel |\x0a    eavModel := ({{#root}},path) asEavModel.\x0a    [ payload model: eavModel modify: aBlock ] ensure: [ self changed: path ]",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["asEavModel", ",", "ensure:", "model:modify:", "changed:", "dispatcher"]
+messageSends: ["asEavModel", ",", "ensure:", "model:modify:", "changed:"]
 }),
 $globals.ListKeyedIsolatedEntity);
 

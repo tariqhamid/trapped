@@ -246,7 +246,7 @@ installToView: aDataCarrier toModel: anotherDataCarrier
 	| snap |
 	snap := anotherDataCarrier target.
 	snap watch: [ :data |
-		(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
+		(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ AxonOff signal ].
         snap do: [ aDataCarrier copy value: data; proceed ] ].
 	aDataCarrier value: false
 ! !
@@ -522,7 +522,7 @@ trap: path processors: anArray
 trap: path read: aBlock
 	path trapDescend: [ :snap |
         snap watch: [ :data |
-            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].
+            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ AxonOff signal ].
         	snap do: [ self with: [ :html | aBlock value: data value: html ] ]
     	]
     ]

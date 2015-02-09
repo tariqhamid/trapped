@@ -35,9 +35,9 @@ function TodoCtrl($scope) {
 
 initialize
 	super initialize.
-    self dispatcher: SimpleKeyedPubSub new.
+    self axon: SimpleAxon new.
     self model: (AppModel new title: 'Todo').
-	self watch: #((todos) nil) do: [ self dispatcher changed: #((remaining)) ].
+	self watch: #((todos) nil) do: [ self changed: #((remaining)) ].
     [ self modify: #((todos)) do: [{
         #{'text'->'learn trapped'. 'done'->true}.
         #{'text'->'build a trapped app'. 'done'->false}

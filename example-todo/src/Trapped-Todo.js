@@ -14,7 +14,7 @@ selector: "initialize",
 protocol: 'initialization',
 fn: function (){
 var self=this;
-function $SimpleKeyedPubSub(){return $globals.SimpleKeyedPubSub||(typeof SimpleKeyedPubSub=="undefined"?nil:SimpleKeyedPubSub)}
+function $SimpleAxon(){return $globals.SimpleAxon||(typeof SimpleAxon=="undefined"?nil:SimpleAxon)}
 function $AppModel(){return $globals.AppModel||(typeof AppModel=="undefined"?nil:AppModel)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
@@ -28,17 +28,17 @@ $globals.App.superclass.fn.prototype._initialize.apply($recv(self), []));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.supercall = false;
 //>>excludeEnd("ctx");;
-$1=$recv($SimpleKeyedPubSub())._new();
+$1=$recv($SimpleAxon())._new();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["new"]=1;
 //>>excludeEnd("ctx");
-self._dispatcher_($1);
+self._axon_($1);
 self._model_($recv($recv($AppModel())._new())._title_("Todo"));
 self._watch_do_([["todos"], nil],(function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-return $recv(self._dispatcher())._changed_([["remaining"]]);
+return self._changed_([["remaining"]]);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
 //>>excludeEnd("ctx");
@@ -62,10 +62,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "initialize\x0a\x09super initialize.\x0a    self dispatcher: SimpleKeyedPubSub new.\x0a    self model: (AppModel new title: 'Todo').\x0a\x09self watch: #((todos) nil) do: [ self dispatcher changed: #((remaining)) ].\x0a    [ self modify: #((todos)) do: [{\x0a        #{'text'->'learn trapped'. 'done'->true}.\x0a        #{'text'->'build a trapped app'. 'done'->false}\x0a    }]] valueWithTimeout: 2000",
-referencedClasses: ["SimpleKeyedPubSub", "AppModel"],
+source: "initialize\x0a\x09super initialize.\x0a    self axon: SimpleAxon new.\x0a    self model: (AppModel new title: 'Todo').\x0a\x09self watch: #((todos) nil) do: [ self changed: #((remaining)) ].\x0a    [ self modify: #((todos)) do: [{\x0a        #{'text'->'learn trapped'. 'done'->true}.\x0a        #{'text'->'build a trapped app'. 'done'->false}\x0a    }]] valueWithTimeout: 2000",
+referencedClasses: ["SimpleAxon", "AppModel"],
 //>>excludeEnd("ide");
-messageSends: ["initialize", "dispatcher:", "new", "model:", "title:", "watch:do:", "changed:", "dispatcher", "valueWithTimeout:", "modify:do:"]
+messageSends: ["initialize", "axon:", "new", "model:", "title:", "watch:do:", "changed:", "valueWithTimeout:", "modify:do:"]
 }),
 $globals.App);
 

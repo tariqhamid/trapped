@@ -785,7 +785,7 @@ protocol: 'installation',
 fn: function (aDataCarrier,anotherDataCarrier){
 var self=this;
 var snap;
-function $KeyedPubSubUnsubscribe(){return $globals.KeyedPubSubUnsubscribe||(typeof KeyedPubSubUnsubscribe=="undefined"?nil:KeyedPubSubUnsubscribe)}
+function $AxonOff(){return $globals.AxonOff||(typeof AxonOff=="undefined"?nil:AxonOff)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
@@ -800,7 +800,7 @@ return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
 $1=$recv($recv($recv($recv($recv(aDataCarrier)._target())._asJQuery())._closest_("html"))._toArray())._isEmpty();
 if($core.assert($1)){
-$recv($KeyedPubSubUnsubscribe())._signal();
+$recv($AxonOff())._signal();
 };
 return $recv(snap)._do_((function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -829,8 +829,8 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aDataCarrier", "anotherDataCarrier"],
-source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| snap |\x0a\x09snap := anotherDataCarrier target.\x0a\x09snap watch: [ :data |\x0a\x09\x09(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].\x0a        snap do: [ aDataCarrier copy value: data; proceed ] ].\x0a\x09aDataCarrier value: false",
-referencedClasses: ["KeyedPubSubUnsubscribe"],
+source: "installToView: aDataCarrier toModel: anotherDataCarrier\x0a\x09| snap |\x0a\x09snap := anotherDataCarrier target.\x0a\x09snap watch: [ :data |\x0a\x09\x09(aDataCarrier target asJQuery closest: 'html') toArray isEmpty ifTrue: [ AxonOff signal ].\x0a        snap do: [ aDataCarrier copy value: data; proceed ] ].\x0a\x09aDataCarrier value: false",
+referencedClasses: ["AxonOff"],
 //>>excludeEnd("ide");
 messageSends: ["target", "watch:", "ifTrue:", "isEmpty", "toArray", "closest:", "asJQuery", "signal", "do:", "value:", "copy", "proceed"]
 }),
@@ -2141,7 +2141,7 @@ selector: "trap:read:",
 protocol: '*Trapped-Frontend',
 fn: function (path,aBlock){
 var self=this;
-function $KeyedPubSubUnsubscribe(){return $globals.KeyedPubSubUnsubscribe||(typeof KeyedPubSubUnsubscribe=="undefined"?nil:KeyedPubSubUnsubscribe)}
+function $AxonOff(){return $globals.AxonOff||(typeof AxonOff=="undefined"?nil:AxonOff)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
@@ -2156,7 +2156,7 @@ return $core.withContext(function($ctx3) {
 //>>excludeEnd("ctx");
 $1=$recv($recv($recv(self._asJQuery())._closest_("html"))._toArray())._isEmpty();
 if($core.assert($1)){
-$recv($KeyedPubSubUnsubscribe())._signal();
+$recv($AxonOff())._signal();
 };
 return $recv(snap)._do_((function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -2190,8 +2190,8 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["path", "aBlock"],
-source: "trap: path read: aBlock\x0a\x09path trapDescend: [ :snap |\x0a        snap watch: [ :data |\x0a            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ KeyedPubSubUnsubscribe signal ].\x0a        \x09snap do: [ self with: [ :html | aBlock value: data value: html ] ]\x0a    \x09]\x0a    ]",
-referencedClasses: ["KeyedPubSubUnsubscribe"],
+source: "trap: path read: aBlock\x0a\x09path trapDescend: [ :snap |\x0a        snap watch: [ :data |\x0a            (self asJQuery closest: 'html') toArray isEmpty ifTrue: [ AxonOff signal ].\x0a        \x09snap do: [ self with: [ :html | aBlock value: data value: html ] ]\x0a    \x09]\x0a    ]",
+referencedClasses: ["AxonOff"],
 //>>excludeEnd("ide");
 messageSends: ["trapDescend:", "watch:", "ifTrue:", "isEmpty", "toArray", "closest:", "asJQuery", "signal", "do:", "with:", "value:value:"]
 }),

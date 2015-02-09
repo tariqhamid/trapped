@@ -1,6 +1,7 @@
 {
     "paths": {
         "trapped": "src",
+        "axon": "src",
         "trapped-todo": "example-todo/src",
         "trapped-counter": "example-counter/src"
     }

@@ -35,7 +35,7 @@ function TodoCtrl($scope) {
 
 initialize
 	super initialize.
-    self dispatcher: SimpleKeyedPubSub new.
+    self axon: SimpleAxon new.
     self model: AppModel new
 ! !
 

@@ -37,6 +37,28 @@ initialize
 	putBlock := [ self error: 'No putter block.' ].
 ! !
 
+AxonInterestBase subclass: #InterestedInTrapPath
+	instanceVariableNames: ''
+	package: 'Trapped-Backend'!
+
+!InterestedInTrapPath methodsFor: 'testing'!
+
+accepts: anAspect
+    ^anAspect size <= aspect size and: [anAspect = (aspect copyFrom: 1 to: anAspect size)]
+! !
+
+AxonInterestBase subclass: #InterestedInTrapPathSubtree
+	instanceVariableNames: ''
+	package: 'Trapped-Backend'!
+
+!InterestedInTrapPathSubtree methodsFor: 'testing'!
+
+accepts: anAspect
+    ^anAspect size <= aspect size
+		ifTrue: [anAspect = (aspect copyFrom: 1 to: anAspect size)]
+		ifFalse: [aspect = (anAspect copyFrom: 1 to: aspect size)]
+! !
+
 Object subclass: #Isolator
 	instanceVariableNames: 'root'
 	package: 'Trapped-Backend'!
@@ -73,207 +95,53 @@ on: anObject
 ^self new root: anObject
 ! !
 
-Object subclass: #KeyedPubSubBase
-	instanceVariableNames: 'factory'
-	package: 'Trapped-Backend'!
-!KeyedPubSubBase commentStamp!
-I represent a pub-sub based on a key.
-I manage key-block subscriptions as well as running blocks that are dirty.
-The subscription objects are reponsible of decision if the change is relevant for them.
-Subscription object must be subclasses of KeyedSubscriptionBase.
-
-My subclasses must provide implementation for:
-	add:
-    do:
-    clean
-    (optionally) run
-
-and issue this call before actual use:
-	subscritionFactory: (setting [:key:block|...] factory that creates appropriate subscription)!
-
-!KeyedPubSubBase methodsFor: 'action'!
-
-changed: key
-	| needsToRun |
-    needsToRun := false.
-	self do: [ :each |
-		(each accepts: key) ifTrue: [
-			each flag.
-            needsToRun := true.
-		]
-	].
-	self dirty: needsToRun
-!
-
-dirty: aBoolean
-	aBoolean ifTrue: [[ self run ] fork]
-!
-
-on: key hook: aBlock
-	self add: (factory value: key value: aBlock) flag.
-   	self dirty: true
-!
-
-run
-	[
-		| needsClean |
-	    needsClean := false.
-		self do: [ :each |
-			each isFlagged ifTrue: [ each run ].
-	        each isEnabled ifFalse: [ needsClean := true ]
-		].
-    	needsClean ifTrue: [ self clean ]
-	] on: Error do: [ self dirty: true ]
-!
-
-subscriptionFactory: aBlock
-    factory := aBlock
-! !
-
-KeyedPubSubBase subclass: #SimpleKeyedPubSub
-	instanceVariableNames: 'queue'
-	package: 'Trapped-Backend'!
-
-!SimpleKeyedPubSub methodsFor: 'accessing'!
-
-add: aSubscription
-	queue add: aSubscription.
-! !
-
-!SimpleKeyedPubSub methodsFor: 'bookkeeping'!
-
-clean
-	queue := queue select: [ :each | each isEnabled ]
-! !
-
-!SimpleKeyedPubSub methodsFor: 'enumeration'!
-
-do: aBlock
-	queue do: aBlock
-! !
-
-!SimpleKeyedPubSub methodsFor: 'initialization'!
-
-initialize
-    super initialize.
-	queue := OrderedCollection new
-! !
-
-Error subclass: #KeyedPubSubUnsubscribe
-	instanceVariableNames: ''
-	package: 'Trapped-Backend'!
-!KeyedPubSubUnsubscribe commentStamp!
-SIgnal me from the subscription block to unsubscribe it.!
-
-Object subclass: #KeyedSubscriptionBase
-	instanceVariableNames: 'key actionBlock flagged'
-	package: 'Trapped-Backend'!
-
-!KeyedSubscriptionBase methodsFor: 'accessing'!
-
-flag
-	flagged := true
-!
-
-key: anObject block: aBlock
-	key := anObject.
-    actionBlock := aBlock
-! !
-
-!KeyedSubscriptionBase methodsFor: 'action'!
-
-run
-	[ flagged := false. actionBlock value ]
-    on: KeyedPubSubUnsubscribe do: [ actionBlock := nil ]
-! !
-
-!KeyedSubscriptionBase methodsFor: 'initialization'!
-
-initialize
-	super initialize.
-    key := nil.
-    actionBlock := nil.
-    flagged := false.
-! !
-
-!KeyedSubscriptionBase methodsFor: 'testing'!
-
-accepts: aKey
-    "Should return true if change for aKey is relevant for this subscription"
-    self subclassResponsibility
-!
-
-isEnabled
-	^actionBlock notNil
-!
-
-isFlagged
-	^flagged
-! !
-
-KeyedSubscriptionBase subclass: #ListKeyedSubscription
-	instanceVariableNames: ''
-	package: 'Trapped-Backend'!
-
-!ListKeyedSubscription methodsFor: 'testing'!
-
-accepts: aKey
-    ^aKey size <= key size and: [aKey = (key copyFrom: 1 to: aKey size)]
-! !
-
-KeyedSubscriptionBase subclass: #TwoWayListKeyedSubscription
-	instanceVariableNames: ''
-	package: 'Trapped-Backend'!
-
-!TwoWayListKeyedSubscription methodsFor: 'testing'!
-
-accepts: aKey
-    ^aKey size <= key size
-		ifTrue: [aKey = (key copyFrom: 1 to: aKey size)]
-		ifFalse: [key = (aKey copyFrom: 1 to: key size)]
-! !
-
 Object subclass: #ListKeyedEntity
-	instanceVariableNames: 'dispatcher payload'
+	instanceVariableNames: 'axon payload'
 	package: 'Trapped-Backend'!
 !ListKeyedEntity commentStamp!
 I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,
 that moderate access to the wrapped model object via read;do and modify:do:
 and allow pub-sub via watch:do:.
-This wrapped model can be any smalltalk object.
+The wrapped model can be any smalltalk object.
 
 My subclasses need to provide implementation for:
-	read:do:
-    modify:do:
+
+ - read:do:
+ - modify:do:
 
 and must issue these calls when initializing:
-	model: (with a wrapped object)
-	dispatcher: (with a subclass of KeyedPubSubBase)!
+
+ - model: (with a wrapped object)
+ - axon: (with a subclass of `AxonBase`)!
 
 !ListKeyedEntity methodsFor: 'accessing'!
 
-dispatcher
-	^dispatcher
+axon
+	^ axon
 !
 
-dispatcher: aDispatcher
-	dispatcher := aDispatcher
-        subscriptionFactory: [ :key :block |
-			(key notEmpty and: [ key last isNil ])
-				ifTrue: [ TwoWayListKeyedSubscription new key: key allButLast block: block; yourself ]
-				ifFalse: [ ListKeyedSubscription new key: key block: block; yourself ]];
+axon: anAxon
+	axon := anAxon
+		interestFactory: [ :description :block |
+			(description notEmpty and: [ description last isNil ])
+				ifTrue: [ InterestedInTrapPathSubtree new aspect: description allButLast block: block; yourself ]
+				ifFalse: [ InterestedInTrapPath new aspect: description block: block; yourself ]];
         yourself
 !
 
 model: anObject
 	payload := anObject.
-    self dispatcher changed: #()
+    self changed: #()
 ! !
 
 !ListKeyedEntity methodsFor: 'action'!
 
+changed: anAspect
+	self axon changed: anAspect
+!
+
 watch: path do: aBlock
-	self dispatcher on: path hook: [ self read: path do: aBlock ]
+	self axon on: path hook: [ self read: path do: aBlock ]
 ! !
 
 ListKeyedEntity subclass: #ListKeyedDirectEntity
@@ -289,7 +157,7 @@ modify: path do: aBlock
     | newValue eavModel |
     eavModel := path asEavModel.
     newValue := aBlock value: (eavModel on: payload).
-    [ eavModel on: payload put: newValue ] ensure: [ self dispatcher changed: path ]
+    [ eavModel on: payload put: newValue ] ensure: [ self changed: path ]
 !
 
 read: path do: aBlock
@@ -316,7 +184,7 @@ model: anObject
 modify: path do: aBlock
     | eavModel |
     eavModel := ({{#root}},path) asEavModel.
-    [ payload model: eavModel modify: aBlock ] ensure: [ self dispatcher changed: path ]
+    [ payload model: eavModel modify: aBlock ] ensure: [ self changed: path ]
 !
 
 read: path do: aBlock
