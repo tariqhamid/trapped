@@ -428,7 +428,7 @@ var self=this;
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
 self["@payload"]=anObject;
-self._changed_([]);
+$recv(self._axon())._changedAll();
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"model:",{anObject:anObject},$globals.Trapper)});
@@ -436,10 +436,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anObject"],
-source: "model: anObject\x0a\x09payload := anObject.\x0a    self changed: #()",
+source: "model: anObject\x0a\x09payload := anObject.\x0a    self axon changedAll",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["changed:"]
+messageSends: ["changedAll", "axon"]
 }),
 $globals.Trapper);
 

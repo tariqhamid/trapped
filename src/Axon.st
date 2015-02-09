@@ -24,13 +24,20 @@ addInterest: anInterest
 
 changed: anAspect
 	| needsToRun |
-    needsToRun := false.
+	needsToRun := false.
 	self do: [ :each |
 		(each accepts: anAspect) ifTrue: [
 			each flag.
-            needsToRun := true.
-		]
-	].
+			needsToRun := true ]].
+	self dirty: needsToRun
+!
+
+changedAll
+	| needsToRun |
+	needsToRun := false.
+	self do: [ :each |
+		each flag.
+		needsToRun := true ].
 	self dirty: needsToRun
 !
 

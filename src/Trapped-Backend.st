@@ -123,7 +123,7 @@ and must issue these calls when initializing:
 
 model: anObject
 	payload := anObject.
-    self changed: #()
+    self axon changedAll
 ! !
 
 !Trapper methodsFor: 'action'!

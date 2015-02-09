@@ -70,10 +70,47 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anAspect"],
-source: "changed: anAspect\x0a\x09| needsToRun |\x0a    needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09(each accepts: anAspect) ifTrue: [\x0a\x09\x09\x09each flag.\x0a            needsToRun := true.\x0a\x09\x09]\x0a\x09].\x0a\x09self dirty: needsToRun",
+source: "changed: anAspect\x0a\x09| needsToRun |\x0a\x09needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09(each accepts: anAspect) ifTrue: [\x0a\x09\x09\x09each flag.\x0a\x09\x09\x09needsToRun := true ]].\x0a\x09self dirty: needsToRun",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["do:", "ifTrue:", "accepts:", "flag", "dirty:"]
+}),
+$globals.AxonBase);
+
+$core.addMethod(
+$core.method({
+selector: "changedAll",
+protocol: 'action',
+fn: function (){
+var self=this;
+var needsToRun;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+needsToRun=false;
+self._do_((function(each){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+$recv(each)._flag();
+needsToRun=true;
+return needsToRun;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+self._dirty_(needsToRun);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"changedAll",{needsToRun:needsToRun},$globals.AxonBase)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "changedAll\x0a\x09| needsToRun |\x0a\x09needsToRun := false.\x0a\x09self do: [ :each |\x0a\x09\x09each flag.\x0a\x09\x09needsToRun := true ].\x0a\x09self dirty: needsToRun",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["do:", "flag", "dirty:"]
 }),
 $globals.AxonBase);
 
