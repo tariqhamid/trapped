@@ -122,16 +122,17 @@ and must issue these calls when initializing:
 !Trapper methodsFor: 'accessing'!
 
 model: anObject
-	self axon
-		interestFactory: [ :description :block |
-			(description notEmpty and: [ description last isNil ])
-				ifTrue: [ InterestedInTrapPathSubtree new aspect: description allButLast block: block; yourself ]
-				ifFalse: [ InterestedInTrapPath new aspect: description block: block; yourself ]].
 	payload := anObject.
     self changed: #()
 ! !
 
 !Trapper methodsFor: 'action'!
+
+interestOn: anAspect block: aBlock
+	(anAspect notEmpty and: [ anAspect last isNil ])
+		ifTrue: [ ^ InterestedInTrapPathSubtree new aspect: anAspect allButLast block: aBlock ]
+		ifFalse: [ ^ InterestedInTrapPath new aspect: anAspect block: aBlock ]
+!
 
 modify: path do: aBlock
 	self subclassResponsibility
@@ -142,7 +143,9 @@ read: path do: aBlock
 !
 
 watch: path do: aBlock
-	self axon on: path hook: [ self read: path do: aBlock ]
+	self axon addInterest: (self
+		interestOn: path
+		block: [ self read: path do: aBlock ])
 ! !
 
 Trapper subclass: #DirectTrapper

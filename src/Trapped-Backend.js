@@ -371,53 +371,62 @@ $globals.Trapper.comment="A portmanteau of 'Trapped wrapper', I am base class fo
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
-selector: "model:",
-protocol: 'accessing',
-fn: function (anObject){
+selector: "interestOn:block:",
+protocol: 'action',
+fn: function (anAspect,aBlock){
 var self=this;
 function $InterestedInTrapPathSubtree(){return $globals.InterestedInTrapPathSubtree||(typeof InterestedInTrapPathSubtree=="undefined"?nil:InterestedInTrapPathSubtree)}
 function $InterestedInTrapPath(){return $globals.InterestedInTrapPath||(typeof InterestedInTrapPath=="undefined"?nil:InterestedInTrapPath)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $1,$2,$3,$4,$5;
-$recv(self._axon())._interestFactory_((function(description,block){
+var $1,$3,$2,$4;
+$1=$recv($recv(anAspect)._notEmpty())._and_((function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-$1=$recv($recv(description)._notEmpty())._and_((function(){
+return $recv($recv(anAspect)._last())._isNil();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx3) {
-//>>excludeEnd("ctx");
-return $recv($recv(description)._last())._isNil();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({},$ctx2,2)});
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
 if($core.assert($1)){
-$2=$recv($InterestedInTrapPathSubtree())._new();
+$3=$recv($InterestedInTrapPathSubtree())._new();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["new"]=1;
+$ctx1.sendIdx["new"]=1;
 //>>excludeEnd("ctx");
-$recv($2)._aspect_block_($recv(description)._allButLast(),block);
+$2=$recv($3)._aspect_block_($recv(anAspect)._allButLast(),aBlock);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["aspect:block:"]=1;
+$ctx1.sendIdx["aspect:block:"]=1;
 //>>excludeEnd("ctx");
-$3=$recv($2)._yourself();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["yourself"]=1;
-//>>excludeEnd("ctx");
-return $3;
+return $2;
 } else {
-$4=$recv($InterestedInTrapPath())._new();
-$recv($4)._aspect_block_(description,block);
-$5=$recv($4)._yourself();
-return $5;
+$4=$recv($recv($InterestedInTrapPath())._new())._aspect_block_(anAspect,aBlock);
+return $4;
 };
+return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({description:description,block:block},$ctx1,1)});
+}, function($ctx1) {$ctx1.fill(self,"interestOn:block:",{anAspect:anAspect,aBlock:aBlock},$globals.Trapper)});
 //>>excludeEnd("ctx");
-}));
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anAspect", "aBlock"],
+source: "interestOn: anAspect block: aBlock\x0a\x09(anAspect notEmpty and: [ anAspect last isNil ])\x0a\x09\x09ifTrue: [ ^ InterestedInTrapPathSubtree new aspect: anAspect allButLast block: aBlock ]\x0a\x09\x09ifFalse: [ ^ InterestedInTrapPath new aspect: anAspect block: aBlock ]",
+referencedClasses: ["InterestedInTrapPathSubtree", "InterestedInTrapPath"],
+//>>excludeEnd("ide");
+messageSends: ["ifTrue:ifFalse:", "and:", "notEmpty", "isNil", "last", "aspect:block:", "new", "allButLast"]
+}),
+$globals.Trapper);
+
+$core.addMethod(
+$core.method({
+selector: "model:",
+protocol: 'accessing',
+fn: function (anObject){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
 self["@payload"]=anObject;
 self._changed_([]);
 return self;
@@ -427,10 +436,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anObject"],
-source: "model: anObject\x0a\x09self axon\x0a\x09\x09interestFactory: [ :description :block |\x0a\x09\x09\x09(description notEmpty and: [ description last isNil ])\x0a\x09\x09\x09\x09ifTrue: [ InterestedInTrapPathSubtree new aspect: description allButLast block: block; yourself ]\x0a\x09\x09\x09\x09ifFalse: [ InterestedInTrapPath new aspect: description block: block; yourself ]].\x0a\x09payload := anObject.\x0a    self changed: #()",
-referencedClasses: ["InterestedInTrapPathSubtree", "InterestedInTrapPath"],
+source: "model: anObject\x0a\x09payload := anObject.\x0a    self changed: #()",
+referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["interestFactory:", "axon", "ifTrue:ifFalse:", "and:", "notEmpty", "isNil", "last", "aspect:block:", "new", "allButLast", "yourself", "changed:"]
+messageSends: ["changed:"]
 }),
 $globals.Trapper);
 
@@ -491,7 +500,7 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-$recv(self._axon())._on_hook_(path,(function(){
+$recv(self._axon())._addInterest_(self._interestOn_block_(path,(function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
@@ -499,7 +508,7 @@ return self._read_do_(path,aBlock);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
 //>>excludeEnd("ctx");
-}));
+})));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"watch:do:",{path:path,aBlock:aBlock},$globals.Trapper)});
@@ -507,10 +516,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["path", "aBlock"],
-source: "watch: path do: aBlock\x0a\x09self axon on: path hook: [ self read: path do: aBlock ]",
+source: "watch: path do: aBlock\x0a\x09self axon addInterest: (self\x0a\x09\x09interestOn: path\x0a\x09\x09block: [ self read: path do: aBlock ])",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["on:hook:", "axon", "read:do:"]
+messageSends: ["addInterest:", "axon", "interestOn:block:", "read:do:"]
 }),
 $globals.Trapper);
 

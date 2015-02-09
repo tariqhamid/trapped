@@ -6,8 +6,36 @@ $core.packages["Axon"].transport = {"type":"amd","amdNamespace":"axon"};
 
 $core.addClass('AxonBase', $globals.Object, ['factory'], 'Axon');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.AxonBase.comment="I represent a pub-sub based on a key (called 'aspect').\x0aI manage aspect-block subscriptions (called 'interests') as well as run blocks of dirtied interests.\x0aThe interest objects are responsible of decision if the change of an aspect is relevant for them.\x0aInterest object must be subclasses of `AxonInterestBase`.\x0a\x0aMy subclasses must provide implementation for:\x0a\x0a - add:\x0a - do:\x0a - clean\x0a - (optionally) run\x0a\x0aand issue this call before actual use:\x0a\x0a\x09interestFactory: [ :description :block | ... factory that creates appropriate AxonInterest ... ]";
+$globals.AxonBase.comment="I represent a pub-sub based on a key (called 'aspect').\x0aI manage aspect-block subscriptions (called 'interests') as well as run blocks of dirtied interests.\x0aThe interest objects are responsible of decision if the change of an aspect is relevant for them.\x0aInterest object must be subclasses of `AxonInterestBase`.\x0a\x0aMy subclasses must provide implementation for:\x0a\x0a - add:\x0a - do:\x0a - clean";
 //>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "addInterest:",
+protocol: 'action',
+fn: function (anInterest){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$2;
+$recv(anInterest)._flag();
+$1=$recv(anInterest)._yourself();
+self._add_($1);
+$2=self._dirty_(true);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"addInterest:",{anInterest:anInterest},$globals.AxonBase)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anInterest"],
+source: "addInterest: anInterest\x0a\x09self\x0a\x09\x09add: (anInterest flag; yourself);\x0a\x09\x09dirty: true",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["add:", "flag", "yourself", "dirty:"]
+}),
+$globals.AxonBase);
+
 $core.addMethod(
 $core.method({
 selector: "changed:",
@@ -80,50 +108,6 @@ source: "dirty: aBoolean\x0a\x09aBoolean ifTrue: [[ self run ] fork]",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["ifTrue:", "fork", "run"]
-}),
-$globals.AxonBase);
-
-$core.addMethod(
-$core.method({
-selector: "interestFactory:",
-protocol: 'action',
-fn: function (aBlock){
-var self=this;
-self["@factory"]=aBlock;
-return self;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aBlock"],
-source: "interestFactory: aBlock\x0a    factory := aBlock",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.AxonBase);
-
-$core.addMethod(
-$core.method({
-selector: "on:hook:",
-protocol: 'action',
-fn: function (description,aBlock){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-self._add_($recv($recv(self["@factory"])._value_value_(description,aBlock))._flag());
-self._dirty_(true);
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"on:hook:",{description:description,aBlock:aBlock},$globals.AxonBase)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["description", "aBlock"],
-source: "on: description hook: aBlock\x0a\x09self add: (factory value: description value: aBlock) flag.\x0a   \x09self dirty: true",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["add:", "flag", "value:value:", "dirty:"]
 }),
 $globals.AxonBase);
 

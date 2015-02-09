@@ -12,14 +12,15 @@ My subclasses must provide implementation for:
 
  - add:
  - do:
- - clean
- - (optionally) run
-
-and issue this call before actual use:
-
-	interestFactory: [ :description :block | ... factory that creates appropriate AxonInterest ... ]!
+ - clean!
 
 !AxonBase methodsFor: 'action'!
+
+addInterest: anInterest
+	self
+		add: (anInterest flag; yourself);
+		dirty: true
+!
 
 changed: anAspect
 	| needsToRun |
@@ -35,15 +36,6 @@ changed: anAspect
 
 dirty: aBoolean
 	aBoolean ifTrue: [[ self run ] fork]
-!
-
-interestFactory: aBlock
-    factory := aBlock
-!
-
-on: description hook: aBlock
-	self add: (factory value: description value: aBlock) flag.
-   	self dirty: true
 !
 
 run
