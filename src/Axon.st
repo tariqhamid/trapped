@@ -149,3 +149,29 @@ Error subclass: #AxonOff
 !AxonOff commentStamp!
 SIgnal me from the subscription block to unsubscribe it.!
 
+Object subclass: #AxonizedObject
+	instanceVariableNames: 'axon'
+	package: 'Axon'!
+!AxonizedObject commentStamp!
+I am base class for object using Axon changed:
+for event / change logistics,
+
+Set AxonBase instance with `axon:` and then use
+`self changed: anAspect` to trigger axon's `changed:`.!
+
+!AxonizedObject methodsFor: 'accessing'!
+
+axon
+	^ axon
+!
+
+axon: anAxon
+	axon := anAxon
+! !
+
+!AxonizedObject methodsFor: 'action'!
+
+changed: anAspect
+	self axon changed: anAspect
+! !
+

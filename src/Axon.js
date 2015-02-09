@@ -527,4 +527,73 @@ $core.addClass('AxonOff', $globals.Error, [], 'Axon');
 $globals.AxonOff.comment="SIgnal me from the subscription block to unsubscribe it.";
 //>>excludeEnd("ide");
 
+
+$core.addClass('AxonizedObject', $globals.Object, ['axon'], 'Axon');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.AxonizedObject.comment="I am base class for object using Axon changed:\x0afor event / change logistics,\x0a\x0aSet AxonBase instance with `axon:` and then use\x0a`self changed: anAspect` to trigger axon's `changed:`.";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "axon",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@axon"];
+return $1;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "axon\x0a\x09^ axon",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.AxonizedObject);
+
+$core.addMethod(
+$core.method({
+selector: "axon:",
+protocol: 'accessing',
+fn: function (anAxon){
+var self=this;
+self["@axon"]=anAxon;
+return self;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anAxon"],
+source: "axon: anAxon\x0a\x09axon := anAxon",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.AxonizedObject);
+
+$core.addMethod(
+$core.method({
+selector: "changed:",
+protocol: 'action',
+fn: function (anAspect){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self._axon())._changed_(anAspect);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"changed:",{anAspect:anAspect},$globals.AxonizedObject)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anAspect"],
+source: "changed: anAspect\x0a\x09self axon changed: anAspect",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["changed:", "axon"]
+}),
+$globals.AxonizedObject);
+
+
 });

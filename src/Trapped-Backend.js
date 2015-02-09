@@ -365,43 +365,23 @@ messageSends: ["root:", "new"]
 $globals.Isolator.klass);
 
 
-$core.addClass('ListKeyedEntity', $globals.Object, ['axon', 'payload'], 'Trapped-Backend');
+$core.addClass('ListKeyedEntity', $globals.AxonizedObject, ['payload'], 'Trapped-Backend');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.ListKeyedEntity.comment="I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,\x0athat moderate access to the wrapped model object via read;do and modify:do:\x0aand allow pub-sub via watch:do:.\x0aThe wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x0a - read:do:\x0a - modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x0a - model: (with a wrapped object)\x0a - axon: (with a subclass of `AxonBase`)";
+$globals.ListKeyedEntity.comment="I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,\x0athat moderate access to the wrapped model object via read;do and modify:do:\x0aand allow pub-sub via watch:do:.\x0aThe wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x0a - read:do:\x0a - modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x0a - axon: (with a subclass of `AxonBase`)\x0a - model: (with a wrapped object, after `axon:`)";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
-selector: "axon",
+selector: "model:",
 protocol: 'accessing',
-fn: function (){
-var self=this;
-var $1;
-$1=self["@axon"];
-return $1;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "axon\x0a\x09^ axon",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.ListKeyedEntity);
-
-$core.addMethod(
-$core.method({
-selector: "axon:",
-protocol: 'accessing',
-fn: function (anAxon){
+fn: function (anObject){
 var self=this;
 function $InterestedInTrapPathSubtree(){return $globals.InterestedInTrapPathSubtree||(typeof InterestedInTrapPathSubtree=="undefined"?nil:InterestedInTrapPathSubtree)}
 function $InterestedInTrapPath(){return $globals.InterestedInTrapPath||(typeof InterestedInTrapPath=="undefined"?nil:InterestedInTrapPath)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $1,$2,$3,$4,$5,$6;
-$recv(anAxon)._interestFactory_((function(description,block){
+var $1,$2,$3,$4,$5;
+$recv(self._axon())._interestFactory_((function(description,block){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
@@ -432,64 +412,12 @@ return $3;
 $4=$recv($InterestedInTrapPath())._new();
 $recv($4)._aspect_block_(description,block);
 $5=$recv($4)._yourself();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["yourself"]=2;
-//>>excludeEnd("ctx");
 return $5;
 };
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({description:description,block:block},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
-$6=$recv(anAxon)._yourself();
-self["@axon"]=$6;
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"axon:",{anAxon:anAxon},$globals.ListKeyedEntity)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anAxon"],
-source: "axon: anAxon\x0a\x09axon := anAxon\x0a\x09\x09interestFactory: [ :description :block |\x0a\x09\x09\x09(description notEmpty and: [ description last isNil ])\x0a\x09\x09\x09\x09ifTrue: [ InterestedInTrapPathSubtree new aspect: description allButLast block: block; yourself ]\x0a\x09\x09\x09\x09ifFalse: [ InterestedInTrapPath new aspect: description block: block; yourself ]];\x0a        yourself",
-referencedClasses: ["InterestedInTrapPathSubtree", "InterestedInTrapPath"],
-//>>excludeEnd("ide");
-messageSends: ["interestFactory:", "ifTrue:ifFalse:", "and:", "notEmpty", "isNil", "last", "aspect:block:", "new", "allButLast", "yourself"]
-}),
-$globals.ListKeyedEntity);
-
-$core.addMethod(
-$core.method({
-selector: "changed:",
-protocol: 'action',
-fn: function (anAspect){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv(self._axon())._changed_(anAspect);
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"changed:",{anAspect:anAspect},$globals.ListKeyedEntity)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anAspect"],
-source: "changed: anAspect\x0a\x09self axon changed: anAspect",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["changed:", "axon"]
-}),
-$globals.ListKeyedEntity);
-
-$core.addMethod(
-$core.method({
-selector: "model:",
-protocol: 'accessing',
-fn: function (anObject){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
 self["@payload"]=anObject;
 self._changed_([]);
 return self;
@@ -499,10 +427,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anObject"],
-source: "model: anObject\x0a\x09payload := anObject.\x0a    self changed: #()",
-referencedClasses: [],
+source: "model: anObject\x0a\x09self axon\x0a\x09\x09interestFactory: [ :description :block |\x0a\x09\x09\x09(description notEmpty and: [ description last isNil ])\x0a\x09\x09\x09\x09ifTrue: [ InterestedInTrapPathSubtree new aspect: description allButLast block: block; yourself ]\x0a\x09\x09\x09\x09ifFalse: [ InterestedInTrapPath new aspect: description block: block; yourself ]].\x0a\x09payload := anObject.\x0a    self changed: #()",
+referencedClasses: ["InterestedInTrapPathSubtree", "InterestedInTrapPath"],
 //>>excludeEnd("ide");
-messageSends: ["changed:"]
+messageSends: ["interestFactory:", "axon", "ifTrue:ifFalse:", "and:", "notEmpty", "isNil", "last", "aspect:block:", "new", "allButLast", "yourself", "changed:"]
 }),
 $globals.ListKeyedEntity);
 

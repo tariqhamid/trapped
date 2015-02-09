@@ -95,8 +95,8 @@ on: anObject
 ^self new root: anObject
 ! !
 
-Object subclass: #ListKeyedEntity
-	instanceVariableNames: 'axon payload'
+AxonizedObject subclass: #ListKeyedEntity
+	instanceVariableNames: 'payload'
 	package: 'Trapped-Backend'!
 !ListKeyedEntity commentStamp!
 I am base class for #('string-at-index' #selector numeric-at-index)-array-path-keyed entities,
@@ -111,34 +111,22 @@ My subclasses need to provide implementation for:
 
 and must issue these calls when initializing:
 
- - model: (with a wrapped object)
- - axon: (with a subclass of `AxonBase`)!
+ - axon: (with a subclass of `AxonBase`)
+ - model: (with a wrapped object, after `axon:`)!
 
 !ListKeyedEntity methodsFor: 'accessing'!
 
-axon
-	^ axon
-!
-
-axon: anAxon
-	axon := anAxon
+model: anObject
+	self axon
 		interestFactory: [ :description :block |
 			(description notEmpty and: [ description last isNil ])
 				ifTrue: [ InterestedInTrapPathSubtree new aspect: description allButLast block: block; yourself ]
-				ifFalse: [ InterestedInTrapPath new aspect: description block: block; yourself ]];
-        yourself
-!
-
-model: anObject
+				ifFalse: [ InterestedInTrapPath new aspect: description block: block; yourself ]].
 	payload := anObject.
     self changed: #()
 ! !
 
 !ListKeyedEntity methodsFor: 'action'!
-
-changed: anAspect
-	self axon changed: anAspect
-!
 
 watch: path do: aBlock
 	self axon on: path hook: [ self read: path do: aBlock ]
