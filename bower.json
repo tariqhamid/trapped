@@ -25,7 +25,8 @@
   ],
   "dependencies": {
     "amber": ">=0.14.4",
-    "xontent": "^0.1.0"
+    "xontent": "^0.1.0",
+    "lyst": "^0.1.0"
   },
   "devDependencies": {
     "amber-ide-starter-dialog": "^0.1.0",
