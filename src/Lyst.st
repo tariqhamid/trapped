@@ -27,19 +27,34 @@ parse: message
 !Array methodsFor: '*Lyst'!
 
 atYndexIn: anObject ifAbsent: aBlock
-	| selector |
+	| receiver selector result |
 	selector := self first.
-	(anObject respondsTo: selector)
-		ifTrue: [ ^ anObject perform: selector ]
-		ifFalse: aBlock
+	receiver := anObject yourself. "JSObjectProxy hack"
+	
+	[ result := receiver perform: selector ]
+	on: MessageNotUnderstood do: [ :mnu |
+		((mnu message selector = selector
+			and: [ mnu receiver == receiver ])
+			and: [ mnu message arguments isEmpty ])
+			ifFalse: [ mnu resignal ].
+		^ aBlock value ].
+	^ result
 !
 
 atYndexIn: anObject ifAbsent: aBlock put: anotherObject
-	| selector |
+	| receiver selector arguments result |
 	selector := self first asMutator.
-	(anObject respondsTo: selector)
-		ifTrue: [ ^ anObject perform: selector withArguments: { anotherObject } ]
-		ifFalse: aBlock
+	receiver := anObject yourself. "JSObjectProxy hack"
+	arguments := { anotherObject }.
+	
+	[ result := receiver perform: selector withArguments: arguments ]
+	on: MessageNotUnderstood do: [ :mnu |
+		((mnu message selector = selector
+			and: [ mnu receiver == receiver ])
+			and: [ mnu message arguments = arguments ])
+			ifFalse: [ mnu resignal ].
+		^ aBlock value ].
+	^ result
 ! !
 
 !Number methodsFor: '*Lyst'!

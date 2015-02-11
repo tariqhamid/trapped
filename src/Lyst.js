@@ -211,38 +211,79 @@ selector: "atYndexIn:ifAbsent:",
 protocol: '*Lyst',
 fn: function (anObject,aBlock){
 var self=this;
-var selector;
+var receiver,selector,result;
+function $MessageNotUnderstood(){return $globals.MessageNotUnderstood||(typeof MessageNotUnderstood=="undefined"?nil:MessageNotUnderstood)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $1,$2;
+var $5,$4,$3,$2,$1,$6,$7;
 var $early={};
 try {
 selector=self._first();
-$1=$recv(anObject)._respondsTo_(selector);
-$recv($1)._ifTrue_ifFalse_((function(){
+receiver=$recv(anObject)._yourself();
+$recv((function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-$2=$recv(anObject)._perform_(selector);
-throw $early=[$2];
+result=$recv(receiver)._perform_(selector);
+return result;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
 //>>excludeEnd("ctx");
-}),aBlock);
-return self;
+}))._on_do_($MessageNotUnderstood(),(function(mnu){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+$5=$recv(mnu)._message();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["message"]=1;
+//>>excludeEnd("ctx");
+$4=$recv($5)._selector();
+$3=$recv($4).__eq(selector);
+$2=$recv($3)._and_((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx3) {
+//>>excludeEnd("ctx");
+return $recv($recv(mnu)._receiver()).__eq_eq(receiver);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)});
+//>>excludeEnd("ctx");
+}));
+$1=$recv($2)._and_((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx3) {
+//>>excludeEnd("ctx");
+return $recv($recv($recv(mnu)._message())._arguments())._isEmpty();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,4)});
+//>>excludeEnd("ctx");
+}));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["and:"]=1;
+//>>excludeEnd("ctx");
+if(!$core.assert($1)){
+$recv(mnu)._resignal();
+};
+$6=$recv(aBlock)._value();
+throw $early=[$6];
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({mnu:mnu},$ctx1,2)});
+//>>excludeEnd("ctx");
+}));
+$7=result;
+return $7;
 }
 catch(e) {if(e===$early)return e[0]; throw e}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"atYndexIn:ifAbsent:",{anObject:anObject,aBlock:aBlock,selector:selector},$globals.Array)});
+}, function($ctx1) {$ctx1.fill(self,"atYndexIn:ifAbsent:",{anObject:anObject,aBlock:aBlock,receiver:receiver,selector:selector,result:result},$globals.Array)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anObject", "aBlock"],
-source: "atYndexIn: anObject ifAbsent: aBlock\x0a\x09| selector |\x0a\x09selector := self first.\x0a\x09(anObject respondsTo: selector)\x0a\x09\x09ifTrue: [ ^ anObject perform: selector ]\x0a\x09\x09ifFalse: aBlock",
-referencedClasses: [],
+source: "atYndexIn: anObject ifAbsent: aBlock\x0a\x09| receiver selector result |\x0a\x09selector := self first.\x0a\x09receiver := anObject yourself. \x22JSObjectProxy hack\x22\x0a\x09\x0a\x09[ result := receiver perform: selector ]\x0a\x09on: MessageNotUnderstood do: [ :mnu |\x0a\x09\x09((mnu message selector = selector\x0a\x09\x09\x09and: [ mnu receiver == receiver ])\x0a\x09\x09\x09and: [ mnu message arguments isEmpty ])\x0a\x09\x09\x09ifFalse: [ mnu resignal ].\x0a\x09\x09^ aBlock value ].\x0a\x09^ result",
+referencedClasses: ["MessageNotUnderstood"],
 //>>excludeEnd("ide");
-messageSends: ["first", "ifTrue:ifFalse:", "respondsTo:", "perform:"]
+messageSends: ["first", "yourself", "on:do:", "perform:", "ifFalse:", "and:", "=", "selector", "message", "==", "receiver", "isEmpty", "arguments", "resignal", "value"]
 }),
 $globals.Array);
 
@@ -252,38 +293,83 @@ selector: "atYndexIn:ifAbsent:put:",
 protocol: '*Lyst',
 fn: function (anObject,aBlock,anotherObject){
 var self=this;
-var selector;
+var receiver,selector,arguments_,result;
+function $MessageNotUnderstood(){return $globals.MessageNotUnderstood||(typeof MessageNotUnderstood=="undefined"?nil:MessageNotUnderstood)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $1,$2;
+var $5,$4,$3,$2,$1,$6,$7;
 var $early={};
 try {
 selector=$recv(self._first())._asMutator();
-$1=$recv(anObject)._respondsTo_(selector);
-$recv($1)._ifTrue_ifFalse_((function(){
+receiver=$recv(anObject)._yourself();
+arguments_=[anotherObject];
+$recv((function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-$2=$recv(anObject)._perform_withArguments_(selector,[anotherObject]);
-throw $early=[$2];
+result=$recv(receiver)._perform_withArguments_(selector,arguments_);
+return result;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
 //>>excludeEnd("ctx");
-}),aBlock);
-return self;
+}))._on_do_($MessageNotUnderstood(),(function(mnu){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+$5=$recv(mnu)._message();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["message"]=1;
+//>>excludeEnd("ctx");
+$4=$recv($5)._selector();
+$3=$recv($4).__eq(selector);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["="]=1;
+//>>excludeEnd("ctx");
+$2=$recv($3)._and_((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx3) {
+//>>excludeEnd("ctx");
+return $recv($recv(mnu)._receiver()).__eq_eq(receiver);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,3)});
+//>>excludeEnd("ctx");
+}));
+$1=$recv($2)._and_((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx3) {
+//>>excludeEnd("ctx");
+return $recv($recv($recv(mnu)._message())._arguments()).__eq(arguments_);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx3) {$ctx3.fillBlock({},$ctx2,4)});
+//>>excludeEnd("ctx");
+}));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx2.sendIdx["and:"]=1;
+//>>excludeEnd("ctx");
+if(!$core.assert($1)){
+$recv(mnu)._resignal();
+};
+$6=$recv(aBlock)._value();
+throw $early=[$6];
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({mnu:mnu},$ctx1,2)});
+//>>excludeEnd("ctx");
+}));
+$7=result;
+return $7;
 }
 catch(e) {if(e===$early)return e[0]; throw e}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"atYndexIn:ifAbsent:put:",{anObject:anObject,aBlock:aBlock,anotherObject:anotherObject,selector:selector},$globals.Array)});
+}, function($ctx1) {$ctx1.fill(self,"atYndexIn:ifAbsent:put:",{anObject:anObject,aBlock:aBlock,anotherObject:anotherObject,receiver:receiver,selector:selector,arguments_:arguments_,result:result},$globals.Array)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anObject", "aBlock", "anotherObject"],
-source: "atYndexIn: anObject ifAbsent: aBlock put: anotherObject\x0a\x09| selector |\x0a\x09selector := self first asMutator.\x0a\x09(anObject respondsTo: selector)\x0a\x09\x09ifTrue: [ ^ anObject perform: selector withArguments: { anotherObject } ]\x0a\x09\x09ifFalse: aBlock",
-referencedClasses: [],
+source: "atYndexIn: anObject ifAbsent: aBlock put: anotherObject\x0a\x09| receiver selector arguments result |\x0a\x09selector := self first asMutator.\x0a\x09receiver := anObject yourself. \x22JSObjectProxy hack\x22\x0a\x09arguments := { anotherObject }.\x0a\x09\x0a\x09[ result := receiver perform: selector withArguments: arguments ]\x0a\x09on: MessageNotUnderstood do: [ :mnu |\x0a\x09\x09((mnu message selector = selector\x0a\x09\x09\x09and: [ mnu receiver == receiver ])\x0a\x09\x09\x09and: [ mnu message arguments = arguments ])\x0a\x09\x09\x09ifFalse: [ mnu resignal ].\x0a\x09\x09^ aBlock value ].\x0a\x09^ result",
+referencedClasses: ["MessageNotUnderstood"],
 //>>excludeEnd("ide");
-messageSends: ["asMutator", "first", "ifTrue:ifFalse:", "respondsTo:", "perform:withArguments:"]
+messageSends: ["asMutator", "first", "yourself", "on:do:", "perform:withArguments:", "ifFalse:", "and:", "=", "selector", "message", "==", "receiver", "arguments", "resignal", "value"]
 }),
 $globals.Array);
 
