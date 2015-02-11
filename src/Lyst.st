@@ -16,7 +16,7 @@ parse: message
 		inner := each.
 		[ inner notEmpty and: [ inner first = '(' ]] whileTrue: [ inner := inner allButFirst. stack add: (stack last add: #()) ].
 		[ inner notEmpty and: [ inner last = ')' ]] whileTrue: [ inner := inner allButLast. close := close + 1 ].
-		(inner notEmpty and: [ inner first = '#' ]) ifTrue: [ inner := { inner allButFirst } ].
+		(inner notEmpty and: [ inner first = '~' ]) ifTrue: [ inner := { inner allButFirst } ].
 		asNum := inner isString ifTrue: [ (inner ifEmpty: [ 'NaN' ]) asNumber ] ifFalse: [ inner ].
 		asNum = asNum ifTrue: [ stack last add: asNum ] ifFalse: [
 			inner ifNotEmpty: [ stack last add: inner ] ].

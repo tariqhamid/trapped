@@ -134,7 +134,7 @@ $8=$recv($recv(inner)._notEmpty())._and_((function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx3) {
 //>>excludeEnd("ctx");
-return $recv($recv(inner)._first()).__eq("#");
+return $recv($recv(inner)._first()).__eq("~");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx3.sendIdx["="]=3;
 //>>excludeEnd("ctx");
@@ -198,7 +198,7 @@ return $12;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["message"],
-source: "parse: message\x0a\x09| result stack anArray |\x0a\x09anArray := message tokenize: ' '.\x0a\x09result := #().\x0a\x09stack := { result }.\x0a\x09anArray do: [ :each |\x0a\x09\x09| asNum inner close |\x0a\x09\x09close := 0.\x0a\x09\x09inner := each.\x0a\x09\x09[ inner notEmpty and: [ inner first = '(' ]] whileTrue: [ inner := inner allButFirst. stack add: (stack last add: #()) ].\x0a\x09\x09[ inner notEmpty and: [ inner last = ')' ]] whileTrue: [ inner := inner allButLast. close := close + 1 ].\x0a\x09\x09(inner notEmpty and: [ inner first = '#' ]) ifTrue: [ inner := { inner allButFirst } ].\x0a\x09\x09asNum := inner isString ifTrue: [ (inner ifEmpty: [ 'NaN' ]) asNumber ] ifFalse: [ inner ].\x0a\x09\x09asNum = asNum ifTrue: [ stack last add: asNum ] ifFalse: [\x0a\x09\x09\x09inner ifNotEmpty: [ stack last add: inner ] ].\x0a\x09\x09close timesRepeat: [ stack removeLast ] ].\x0a\x09^ result",
+source: "parse: message\x0a\x09| result stack anArray |\x0a\x09anArray := message tokenize: ' '.\x0a\x09result := #().\x0a\x09stack := { result }.\x0a\x09anArray do: [ :each |\x0a\x09\x09| asNum inner close |\x0a\x09\x09close := 0.\x0a\x09\x09inner := each.\x0a\x09\x09[ inner notEmpty and: [ inner first = '(' ]] whileTrue: [ inner := inner allButFirst. stack add: (stack last add: #()) ].\x0a\x09\x09[ inner notEmpty and: [ inner last = ')' ]] whileTrue: [ inner := inner allButLast. close := close + 1 ].\x0a\x09\x09(inner notEmpty and: [ inner first = '~' ]) ifTrue: [ inner := { inner allButFirst } ].\x0a\x09\x09asNum := inner isString ifTrue: [ (inner ifEmpty: [ 'NaN' ]) asNumber ] ifFalse: [ inner ].\x0a\x09\x09asNum = asNum ifTrue: [ stack last add: asNum ] ifFalse: [\x0a\x09\x09\x09inner ifNotEmpty: [ stack last add: inner ] ].\x0a\x09\x09close timesRepeat: [ stack removeLast ] ].\x0a\x09^ result",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["tokenize:", "do:", "whileTrue:", "and:", "notEmpty", "=", "first", "allButFirst", "add:", "last", "allButLast", "+", "ifTrue:", "ifTrue:ifFalse:", "isString", "asNumber", "ifEmpty:", "ifNotEmpty:", "timesRepeat:", "removeLast"]

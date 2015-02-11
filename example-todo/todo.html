@@ -1,7 +1,7 @@
 <!doctype html>
 <html data-trap="App: path">
 <head>
-    <title data-trap="#title"></title>
+    <title data-trap="~title"></title>
     <style>
         [data-trap] {
             display: none
@@ -31,13 +31,13 @@
     </script>
 </head>
 <body>
-<h2 data-trap="#title"></h2>
+<h2 data-trap="~title"></h2>
 
-<div data-trap=": (guard (#todos #notNil)) xontent" data-xontent>
-    <span data-trap="#remaining"></span> of <span data-trap="#todos #size"></span> remaning
+<div data-trap=": (guard (~todos ~notNil)) xontent" data-xontent>
+    <span data-trap="~remaining"></span> of <span data-trap="~todos ~size"></span> remaning
     [ <a href="" data-trap=": (signal archive) whenClicked">archive</a> ]
     <ul>
-        <script type="application/x-beacon" data-trap="#todos: loopZ xontent" data-xontent="until end"></script>
+        <script type="application/x-beacon" data-trap="~todos: loopZ xontent" data-xontent="until end"></script>
         <li>
             <label>
                 <input type="checkbox" data-trap="done: inputChecked"/>
@@ -46,10 +46,10 @@
         </li>
     </ul>
     <form data-trap=": (signal addTodo) whenSubmitted">
-        <input type="text" data-trap="#todoText: inputValue" size="30" placeholder="add new todo here"/>
+        <input type="text" data-trap="~todoText: inputValue" size="30" placeholder="add new todo here"/>
         <input type="submit" class="btn-primary" value="add"/>
     </form>
 </div>
-<p data-trap=": (guard (#todos #isNil)) xontent" data-xontent>Loading (fake 2 sec pause)...</p>
+<p data-trap=": (guard (~todos ~isNil)) xontent" data-xontent>Loading (fake 2 sec pause)...</p>
 </body>
 </html>
