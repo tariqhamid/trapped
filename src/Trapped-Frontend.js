@@ -1402,13 +1402,14 @@ $globals.Trapped.klass);
 $core.addMethod(
 $core.method({
 selector: "parse:",
-protocol: 'accessing',
+protocol: 'parsing',
 fn: function (aString){
 var self=this;
+function $Lyst(){return $globals.Lyst||(typeof Lyst=="undefined"?nil:Lyst)}
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $2,$3,$4,$5,$6,$8,$7,$9,$10,$11,$12,$13,$14,$1;
+var $2,$1;
 $2=$recv(aString)._tokenize_(".");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.sendIdx["tokenize:"]=1;
@@ -1417,194 +1418,13 @@ $1=$recv($2)._collect_((function(rule){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-$3=$recv(rule)._tokenize_(":");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["tokenize:"]=2;
-//>>excludeEnd("ctx");
-return $recv($3)._collect_((function(message){
-var result,stack,anArray;
+return $recv($recv(rule)._tokenize_(":"))._collect_((function(message){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx3) {
 //>>excludeEnd("ctx");
-anArray=$recv(message)._tokenize_(" ");
-anArray;
-result=[];
-result;
-stack=[result];
-stack;
-$recv(anArray)._do_((function(each){
-var asNum,inner,close;
+return $recv($Lyst())._parse_(message);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx4) {
-//>>excludeEnd("ctx");
-close=(0);
-close;
-inner=each;
-inner;
-$recv((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx5) {
-//>>excludeEnd("ctx");
-$4=$recv(inner)._notEmpty();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx5.sendIdx["notEmpty"]=1;
-//>>excludeEnd("ctx");
-return $recv($4)._and_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx6) {
-//>>excludeEnd("ctx");
-$5=$recv(inner)._first();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx6.sendIdx["first"]=1;
-//>>excludeEnd("ctx");
-return $recv($5).__eq("(");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx6.sendIdx["="]=1;
-//>>excludeEnd("ctx");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx6) {$ctx6.fillBlock({},$ctx5,5)});
-//>>excludeEnd("ctx");
-}));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx5.sendIdx["and:"]=1;
-//>>excludeEnd("ctx");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx5) {$ctx5.fillBlock({},$ctx4,4)});
-//>>excludeEnd("ctx");
-}))._whileTrue_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx5) {
-//>>excludeEnd("ctx");
-inner=$recv(inner)._allButFirst();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx5.sendIdx["allButFirst"]=1;
-//>>excludeEnd("ctx");
-inner;
-$6=stack;
-$8=$recv(stack)._last();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx5.sendIdx["last"]=1;
-//>>excludeEnd("ctx");
-$7=$recv($8)._add_([]);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx5.sendIdx["add:"]=2;
-//>>excludeEnd("ctx");
-return $recv($6)._add_($7);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx5.sendIdx["add:"]=1;
-//>>excludeEnd("ctx");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx5) {$ctx5.fillBlock({},$ctx4,6)});
-//>>excludeEnd("ctx");
-}));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx4.sendIdx["whileTrue:"]=1;
-//>>excludeEnd("ctx");
-$recv((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx5) {
-//>>excludeEnd("ctx");
-$9=$recv(inner)._notEmpty();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx5.sendIdx["notEmpty"]=2;
-//>>excludeEnd("ctx");
-return $recv($9)._and_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx6) {
-//>>excludeEnd("ctx");
-$10=$recv(inner)._last();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx6.sendIdx["last"]=2;
-//>>excludeEnd("ctx");
-return $recv($10).__eq(")");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx6.sendIdx["="]=2;
-//>>excludeEnd("ctx");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx6) {$ctx6.fillBlock({},$ctx5,8)});
-//>>excludeEnd("ctx");
-}));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx5.sendIdx["and:"]=2;
-//>>excludeEnd("ctx");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx5) {$ctx5.fillBlock({},$ctx4,7)});
-//>>excludeEnd("ctx");
-}))._whileTrue_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx5) {
-//>>excludeEnd("ctx");
-inner=$recv(inner)._allButLast();
-inner;
-close=$recv(close).__plus((1));
-return close;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx5) {$ctx5.fillBlock({},$ctx4,9)});
-//>>excludeEnd("ctx");
-}));
-$11=$recv($recv(inner)._notEmpty())._and_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx5) {
-//>>excludeEnd("ctx");
-return $recv($recv(inner)._first()).__eq("#");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx5.sendIdx["="]=3;
-//>>excludeEnd("ctx");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx5) {$ctx5.fillBlock({},$ctx4,10)});
-//>>excludeEnd("ctx");
-}));
-if($core.assert($11)){
-inner=[$recv(inner)._allButFirst()];
-inner;
-};
-$12=$recv(inner)._isString();
-if($core.assert($12)){
-asNum=$recv($recv(inner)._ifEmpty_((function(){
-return "NaN";
-
-})))._asNumber();
-} else {
-asNum=inner;
-};
-asNum;
-$13=$recv(asNum).__eq(asNum);
-if($core.assert($13)){
-$14=$recv(stack)._last();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx4.sendIdx["last"]=3;
-//>>excludeEnd("ctx");
-$recv($14)._add_(asNum);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx4.sendIdx["add:"]=3;
-//>>excludeEnd("ctx");
-} else {
-$recv(inner)._ifNotEmpty_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx5) {
-//>>excludeEnd("ctx");
-return $recv($recv(stack)._last())._add_(inner);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx5) {$ctx5.fillBlock({},$ctx4,17)});
-//>>excludeEnd("ctx");
-}));
-};
-return $recv(close)._timesRepeat_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx5) {
-//>>excludeEnd("ctx");
-return $recv(stack)._removeLast();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx5) {$ctx5.fillBlock({},$ctx4,18)});
-//>>excludeEnd("ctx");
-}));
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx4) {$ctx4.fillBlock({each:each,asNum:asNum,inner:inner,close:close},$ctx3,3)});
-//>>excludeEnd("ctx");
-}));
-return result;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({message:message,result:result,stack:stack,anArray:anArray},$ctx2,2)});
+}, function($ctx3) {$ctx3.fillBlock({message:message},$ctx2,2)});
 //>>excludeEnd("ctx");
 }));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
@@ -1621,10 +1441,10 @@ return $1;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aString"],
-source: "parse: aString\x0a\x09^ (aString tokenize: '.') collect: [ :rule |\x0a\x09\x09(rule tokenize: ':') collect: [ :message |\x0a\x09\x09\x09| result stack anArray |\x0a\x09\x09\x09anArray := message tokenize: ' '.\x0a\x09\x09\x09result := #().\x0a\x09\x09\x09stack := { result }.\x0a\x09\x09\x09anArray do: [ :each |\x0a    \x09\x09\x09| asNum inner close |\x0a\x09\x09\x09\x09close := 0.\x0a\x09\x09\x09\x09inner := each.\x0a\x09\x09\x09\x09[ inner notEmpty and: [ inner first = '(' ]] whileTrue: [ inner := inner allButFirst. stack add: (stack last add: #()) ].\x0a\x09\x09\x09\x09[ inner notEmpty and: [ inner last = ')' ]] whileTrue: [ inner := inner allButLast. close := close + 1 ].\x0a\x09\x09\x09\x09(inner notEmpty and: [ inner first = '#' ]) ifTrue: [ inner := { inner allButFirst } ].\x0a\x09\x09       \x09asNum := inner isString ifTrue: [ (inner ifEmpty: [ 'NaN' ]) asNumber ] ifFalse: [ inner ].\x0a        \x09\x09asNum = asNum ifTrue: [ stack last add: asNum ] ifFalse: [\x0a\x09\x09\x09\x09\x09inner ifNotEmpty: [ stack last add: inner ] ].\x0a\x09\x09\x09\x09close timesRepeat: [ stack removeLast ] ].\x0a\x09\x09\x09result ] ]",
-referencedClasses: [],
+source: "parse: aString\x0a\x09^ (aString tokenize: '.') collect: [ :rule |\x0a\x09\x09(rule tokenize: ':') collect: [ :message |\x0a\x09\x09\x09Lyst parse: message ] ]",
+referencedClasses: ["Lyst"],
 //>>excludeEnd("ide");
-messageSends: ["collect:", "tokenize:", "do:", "whileTrue:", "and:", "notEmpty", "=", "first", "allButFirst", "add:", "last", "allButLast", "+", "ifTrue:", "ifTrue:ifFalse:", "isString", "asNumber", "ifEmpty:", "ifNotEmpty:", "timesRepeat:", "removeLast"]
+messageSends: ["collect:", "tokenize:", "parse:"]
 }),
 $globals.Trapped.klass);
 

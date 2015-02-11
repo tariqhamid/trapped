@@ -2,6 +2,7 @@
     "paths": {
         "trapped": "src",
         "axon": "src",
+        "lyst": "src",
         "trapped-todo": "example-todo/src",
         "trapped-counter": "example-counter/src"
     }

@@ -357,27 +357,12 @@ injectToElement: anElement
 	self injectToChildren: anElement
 ! !
 
-!Trapped class methodsFor: 'accessing'!
+!Trapped class methodsFor: 'parsing'!
 
 parse: aString
 	^ (aString tokenize: '.') collect: [ :rule |
 		(rule tokenize: ':') collect: [ :message |
-			| result stack anArray |
-			anArray := message tokenize: ' '.
-			result := #().
-			stack := { result }.
-			anArray do: [ :each |
-    			| asNum inner close |
-				close := 0.
-				inner := each.
-				[ inner notEmpty and: [ inner first = '(' ]] whileTrue: [ inner := inner allButFirst. stack add: (stack last add: #()) ].
-				[ inner notEmpty and: [ inner last = ')' ]] whileTrue: [ inner := inner allButLast. close := close + 1 ].
-				(inner notEmpty and: [ inner first = '#' ]) ifTrue: [ inner := { inner allButFirst } ].
-		       	asNum := inner isString ifTrue: [ (inner ifEmpty: [ 'NaN' ]) asNumber ] ifFalse: [ inner ].
-        		asNum = asNum ifTrue: [ stack last add: asNum ] ifFalse: [
-					inner ifNotEmpty: [ stack last add: inner ] ].
-				close timesRepeat: [ stack removeLast ] ].
-			result ] ]
+			Lyst parse: message ] ]
 ! !
 
 !Trapped class methodsFor: 'private'!

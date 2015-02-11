@@ -707,176 +707,6 @@ $globals.IsolatingTrapper);
 
 $core.addMethod(
 $core.method({
-selector: "asTrapAtPut:sendTo:",
-protocol: '*Trapped-Backend',
-fn: function (value,anObject){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-$1=$recv(anObject)._perform_withArguments_($recv($recv(self._first()).__comma(":"))._asSymbol(),[value]);
-return $1;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"asTrapAtPut:sendTo:",{value:value,anObject:anObject},$globals.Array)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["value", "anObject"],
-source: "asTrapAtPut: value sendTo: anObject\x0a    ^anObject perform: (self first, ':') asSymbol withArguments: { value }",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["perform:withArguments:", "asSymbol", ",", "first"]
-}),
-$globals.Array);
-
-$core.addMethod(
-$core.method({
-selector: "asTrapAtSendTo:",
-protocol: '*Trapped-Backend',
-fn: function (anObject){
-var self=this;
-function $MessageNotUnderstood(){return $globals.MessageNotUnderstood||(typeof MessageNotUnderstood=="undefined"?nil:MessageNotUnderstood)}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-var $early={};
-try {
-$1=$recv((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $recv(anObject)._perform_(self._first());
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
-//>>excludeEnd("ctx");
-}))._on_do_($MessageNotUnderstood(),(function(){
-throw $early=[nil];
-
-}));
-return $1;
-}
-catch(e) {if(e===$early)return e[0]; throw e}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"asTrapAtSendTo:",{anObject:anObject},$globals.Array)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anObject"],
-source: "asTrapAtSendTo: anObject\x0a\x09^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]",
-referencedClasses: ["MessageNotUnderstood"],
-//>>excludeEnd("ide");
-messageSends: ["on:do:", "perform:", "first"]
-}),
-$globals.Array);
-
-$core.addMethod(
-$core.method({
-selector: "asTrapAtPut:sendTo:",
-protocol: '*Trapped-Backend',
-fn: function (value,anObject){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-$1=$recv(anObject)._at_put_(self,value);
-return $1;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"asTrapAtPut:sendTo:",{value:value,anObject:anObject},$globals.Number)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["value", "anObject"],
-source: "asTrapAtPut: value sendTo: anObject\x0a\x09^anObject at: self put: value",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["at:put:"]
-}),
-$globals.Number);
-
-$core.addMethod(
-$core.method({
-selector: "asTrapAtSendTo:",
-protocol: '*Trapped-Backend',
-fn: function (anObject){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1,$receiver;
-if(($receiver = anObject) == null || $receiver.isNil){
-$1=anObject;
-} else {
-$1=$recv(anObject)._at_ifAbsent_(self,(function(){
-return nil;
-
-}));
-};
-return $1;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"asTrapAtSendTo:",{anObject:anObject},$globals.Number)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anObject"],
-source: "asTrapAtSendTo: anObject\x0a\x09^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["ifNotNil:", "at:ifAbsent:"]
-}),
-$globals.Number);
-
-$core.addMethod(
-$core.method({
-selector: "asTrapAtPut:sendTo:",
-protocol: '*Trapped-Backend',
-fn: function (value,anObject){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-$1=$recv("Trapped cannot put at ".__comma($recv(self._class())._name())).__comma(" type key.");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx[","]=1;
-//>>excludeEnd("ctx");
-self._error_($1);
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"asTrapAtPut:sendTo:",{value:value,anObject:anObject},$globals.Object)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["value", "anObject"],
-source: "asTrapAtPut: value sendTo: anObject\x0a\x09self error: 'Trapped cannot put at ', self class name, ' type key.'",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["error:", ",", "name", "class"]
-}),
-$globals.Object);
-
-$core.addMethod(
-$core.method({
-selector: "asTrapAtSendTo:",
-protocol: '*Trapped-Backend',
-fn: function (anObject){
-var self=this;
-return nil;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anObject"],
-source: "asTrapAtSendTo: anObject\x0a\x09^nil",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.Object);
-
-$core.addMethod(
-$core.method({
 selector: "asEavModel",
 protocol: '*Trapped-Backend',
 fn: function (){
@@ -886,26 +716,18 @@ function $EavModel(){return $globals.EavModel||(typeof EavModel=="undefined"?nil
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-var $1,$2,$receiver;
+var $1,$2;
 model=$recv($EavModel())._new();
 $recv(model)._getBlock_((function(anObject){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-return self._inject_into_(anObject,(function(soFar,segment){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx3) {
-//>>excludeEnd("ctx");
-return $recv(segment)._asTrapAtSendTo_(soFar);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx3.sendIdx["asTrapAtSendTo:"]=1;
-//>>excludeEnd("ctx");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({soFar:soFar,segment:segment},$ctx2,2)});
-//>>excludeEnd("ctx");
+return $recv(anObject)._atLyst_ifAbsent_(self,(function(){
+return nil;
+
 }));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["inject:into:"]=1;
+$ctx2.sendIdx["atLyst:ifAbsent:"]=1;
 //>>excludeEnd("ctx");
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({anObject:anObject},$ctx1,1)});
@@ -918,21 +740,14 @@ var penultimate;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-penultimate=$recv(self._allButLast())._inject_into_(anObject,(function(soFar,segment){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx3) {
-//>>excludeEnd("ctx");
-if(($receiver = soFar) == null || $receiver.isNil){
-return soFar;
-} else {
-return $recv(segment)._asTrapAtSendTo_(soFar);
-};
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx3) {$ctx3.fillBlock({soFar:soFar,segment:segment},$ctx2,5)});
-//>>excludeEnd("ctx");
+penultimate=$recv(anObject)._atLyst_ifAbsent_(self._allButLast(),(function(){
+return nil;
+
 }));
 penultimate;
-return $recv(self._last())._asTrapAtPut_sendTo_(value,penultimate);
+return $recv(self._last())._atYndexIn_ifAbsent_put_(penultimate,(function(){
+
+}),value);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({anObject:anObject,value:value,penultimate:penultimate},$ctx1,4)});
 //>>excludeEnd("ctx");
@@ -946,68 +761,11 @@ return $2;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "asEavModel\x0a    | model |\x0a    model := EavModel new.\x0a    model getBlock: [ :anObject |\x0a        self inject: anObject into: [ :soFar :segment |\x0a            segment asTrapAtSendTo: soFar ]].\x0a    self isEmpty ifFalse: [\x0a        model putBlock: [ :anObject :value | | penultimate |\x0a            penultimate :=  self allButLast inject: anObject into: [ :soFar :segment |\x0a                soFar ifNotNil: [ segment asTrapAtSendTo: soFar ]].\x0a            self last asTrapAtPut:value sendTo: penultimate ]].\x0a    ^model",
+source: "asEavModel\x0a    | model |\x0a    model := EavModel new.\x0a    model getBlock: [ :anObject | anObject atLyst: self ifAbsent: [ nil ] ].\x0a    self isEmpty ifFalse: [\x0a        model putBlock: [ :anObject :value | | penultimate |\x0a            penultimate := anObject atLyst: self allButLast ifAbsent: [ nil ].\x0a            self last atYndexIn: penultimate ifAbsent: [] put: value ]].\x0a    ^model",
 referencedClasses: ["EavModel"],
 //>>excludeEnd("ide");
-messageSends: ["new", "getBlock:", "inject:into:", "asTrapAtSendTo:", "ifFalse:", "isEmpty", "putBlock:", "allButLast", "ifNotNil:", "asTrapAtPut:sendTo:", "last"]
+messageSends: ["new", "getBlock:", "atLyst:ifAbsent:", "ifFalse:", "isEmpty", "putBlock:", "allButLast", "atYndexIn:ifAbsent:put:", "last"]
 }),
 $globals.SequenceableCollection);
-
-$core.addMethod(
-$core.method({
-selector: "asTrapAtPut:sendTo:",
-protocol: '*Trapped-Backend',
-fn: function (value,anObject){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1;
-$1=$recv(anObject)._at_put_(self,value);
-return $1;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"asTrapAtPut:sendTo:",{value:value,anObject:anObject},$globals.String)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["value", "anObject"],
-source: "asTrapAtPut: value sendTo: anObject\x0a\x09^anObject at: self put: value",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["at:put:"]
-}),
-$globals.String);
-
-$core.addMethod(
-$core.method({
-selector: "asTrapAtSendTo:",
-protocol: '*Trapped-Backend',
-fn: function (anObject){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1,$receiver;
-if(($receiver = anObject) == null || $receiver.isNil){
-$1=anObject;
-} else {
-$1=$recv(anObject)._at_ifAbsent_(self,(function(){
-return nil;
-
-}));
-};
-return $1;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"asTrapAtSendTo:",{anObject:anObject},$globals.String)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anObject"],
-source: "asTrapAtSendTo: anObject\x0a\x09^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["ifNotNil:", "at:ifAbsent:"]
-}),
-$globals.String);
 
 });

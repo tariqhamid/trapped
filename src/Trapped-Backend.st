@@ -206,59 +206,16 @@ read: path do: aBlock
     payload model: eavModel read: aBlock
 ! !
 
-!Array methodsFor: '*Trapped-Backend'!
-
-asTrapAtPut: value sendTo: anObject
-    ^anObject perform: (self first, ':') asSymbol withArguments: { value }
-!
-
-asTrapAtSendTo: anObject
-	^[anObject perform: self first] on: MessageNotUnderstood do: [^nil]
-! !
-
-!Number methodsFor: '*Trapped-Backend'!
-
-asTrapAtPut: value sendTo: anObject
-	^anObject at: self put: value
-!
-
-asTrapAtSendTo: anObject
-	^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]
-! !
-
-!Object methodsFor: '*Trapped-Backend'!
-
-asTrapAtPut: value sendTo: anObject
-	self error: 'Trapped cannot put at ', self class name, ' type key.'
-!
-
-asTrapAtSendTo: anObject
-	^nil
-! !
-
 !SequenceableCollection methodsFor: '*Trapped-Backend'!
 
 asEavModel
     | model |
     model := EavModel new.
-    model getBlock: [ :anObject |
-        self inject: anObject into: [ :soFar :segment |
-            segment asTrapAtSendTo: soFar ]].
+    model getBlock: [ :anObject | anObject atLyst: self ifAbsent: [ nil ] ].
     self isEmpty ifFalse: [
         model putBlock: [ :anObject :value | | penultimate |
-            penultimate :=  self allButLast inject: anObject into: [ :soFar :segment |
-                soFar ifNotNil: [ segment asTrapAtSendTo: soFar ]].
-            self last asTrapAtPut:value sendTo: penultimate ]].
+            penultimate := anObject atLyst: self allButLast ifAbsent: [ nil ].
+            self last atYndexIn: penultimate ifAbsent: [] put: value ]].
     ^model
-! !
-
-!String methodsFor: '*Trapped-Backend'!
-
-asTrapAtPut: value sendTo: anObject
-	^anObject at: self put: value
-!
-
-asTrapAtSendTo: anObject
-	^anObject ifNotNil: [ anObject at: self ifAbsent: [nil] ]
 ! !
 
