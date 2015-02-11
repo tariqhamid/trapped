@@ -115,8 +115,8 @@ For example paths `#((value))` and `#((todos) 1 done)` from API examples
 in previous chapter could be written in `data-trap` as `'(value)'` and `'(todos) 1 done'`.
 
 Syntactic sugar: as `(foo)` happens often in `data-trap` expressions,
-it can be written equivalently as `#foo`, to improve readability.
-So above paths would likely be written `#value` and `#todos 1 done` instead.
+it can be written equivalently as `~foo`, to improve readability.
+So above paths would likely be written `~value` and `~todos 1 done` instead.
 
 Semantics of path
 ----
@@ -183,7 +183,7 @@ In the moment, `TrappedProcessor` class itself serves as a factory.
  - using odd-element  _array_ processing element description other than one-element
  	is useless and produces an error (currently silent).
 
-Note: thus, in processing chain descriptors, `contents`, `#contents` and `(contents)`
+Note: thus, in processing chain descriptors, `contents`, `~contents` and `(contents)`
 describe the same one-element processing chain where the lone processing element
 is created inside Trapped by running `TrappedProcessor contents`.
 
