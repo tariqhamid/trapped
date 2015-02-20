@@ -4,7 +4,7 @@ $core.addPackage('Trapped-Frontend');
 $core.packages["Trapped-Frontend"].innerEval = function (expr) { return eval(expr); };
 $core.packages["Trapped-Frontend"].transport = {"type":"amd","amdNamespace":"trapped"};
 
-$core.addClass('TrappedDataCarrier', $globals.Object, ['target', 'model', 'chain', 'source'], 'Trapped-Frontend');
+$core.addClass('TrappedDataCarrier', $globals.Object, ['target', 'model', 'chain'], 'Trapped-Frontend');
 $core.addMethod(
 $core.method({
 selector: "chain:",
@@ -86,45 +86,6 @@ source: "initialize\x0a\x09super initialize.\x0a\x09model := true",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["initialize"]
-}),
-$globals.TrappedDataCarrier);
-
-$core.addMethod(
-$core.method({
-selector: "source",
-protocol: 'accessing',
-fn: function (){
-var self=this;
-var $1;
-$1=self["@source"];
-return $1;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "source\x0a\x09^source",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.TrappedDataCarrier);
-
-$core.addMethod(
-$core.method({
-selector: "source:",
-protocol: 'accessing',
-fn: function (anObject){
-var self=this;
-self["@source"]=anObject;
-return self;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anObject"],
-source: "source: anObject\x0a\x09source := anObject",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
 }),
 $globals.TrappedDataCarrier);
 
@@ -379,11 +340,6 @@ return $recv(each)._installToView_toModel_(toViewCarrier,toModelCarrier);
 }, function($ctx2) {$ctx2.fillBlock({each:each},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
-$recv(toViewCarrier)._source_(aSnapshot);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["source:"]=1;
-//>>excludeEnd("ctx");
-$recv(toModelCarrier)._source_(aTagBrush);
 $1=$recv($recv(toViewCarrier)._value()).__eq(true);
 if($core.assert($1)){
 $recv($recv(toViewCarrier)._copy())._proceed();
@@ -395,10 +351,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aSnapshot", "aTagBrush"],
-source: "forSnapshot: aSnapshot andBrush: aTagBrush\x0a\x09| toViewCarrier toModelCarrier |\x0a\x09toViewCarrier := TrappedDataCarrierToView on: self target: aTagBrush.\x0a\x09toModelCarrier := TrappedDataCarrierToModel on: self target: aSnapshot.\x0a\x09processors do: [ :each | each installToView: toViewCarrier toModel: toModelCarrier ].\x0a\x09toViewCarrier source: aSnapshot.\x0a\x09toModelCarrier source: aTagBrush.\x0a\x09toViewCarrier value = true ifTrue: [ toViewCarrier copy proceed ]",
+source: "forSnapshot: aSnapshot andBrush: aTagBrush\x0a\x09| toViewCarrier toModelCarrier |\x0a\x09toViewCarrier := TrappedDataCarrierToView on: self target: aTagBrush.\x0a\x09toModelCarrier := TrappedDataCarrierToModel on: self target: aSnapshot.\x0a\x09processors do: [ :each | each installToView: toViewCarrier toModel: toModelCarrier ].\x0a\x09toViewCarrier value = true ifTrue: [ toViewCarrier copy proceed ]",
 referencedClasses: ["TrappedDataCarrierToView", "TrappedDataCarrierToModel"],
 //>>excludeEnd("ide");
-messageSends: ["on:target:", "do:", "installToView:toModel:", "source:", "ifTrue:", "=", "value", "proceed", "copy"]
+messageSends: ["on:target:", "do:", "installToView:toModel:", "ifTrue:", "=", "value", "proceed", "copy"]
 }),
 $globals.TrappedProcessingChain);
 
