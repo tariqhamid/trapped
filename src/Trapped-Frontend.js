@@ -1,7 +1,16 @@
-define("trapped/Trapped-Frontend", ["amber/boot", "amber_core/Kernel-Objects", "amber_core/Kernel-Collections", "amber-contrib-web/Web"], function($boot){
+define("trapped/Trapped-Frontend", ["amber/boot"
+//>>excludeStart("imports", pragmas.excludeImports);
+, "amber-contrib-jquery/Wrappers-JQuery", "amber-contrib-web/Web"
+//>>excludeEnd("imports");
+, "amber_core/Kernel-Objects", "amber_core/Kernel-Collections", "amber-contrib-web/Web"], function($boot
+//>>excludeStart("imports", pragmas.excludeImports);
+
+//>>excludeEnd("imports");
+){
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Trapped-Frontend');
 $core.packages["Trapped-Frontend"].innerEval = function (expr) { return eval(expr); };
+$core.packages["Trapped-Frontend"].imports = ["amber-contrib-jquery/Wrappers-JQuery", "amber-contrib-web/Web"];
 $core.packages["Trapped-Frontend"].transport = {"type":"amd","amdNamespace":"trapped"};
 
 $core.addClass('TrappedDataCarrier', $globals.Object, ['target', 'model', 'chain'], 'Trapped-Frontend');
