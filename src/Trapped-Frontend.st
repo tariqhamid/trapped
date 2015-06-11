@@ -1,5 +1,5 @@
 Smalltalk createPackage: 'Trapped-Frontend'!
-(Smalltalk packageAt: 'Trapped-Frontend') imports: {'amber-contrib-jquery/Wrappers-JQuery'. 'amber-contrib-web/Web'}!
+(Smalltalk packageAt: 'Trapped-Frontend') imports: {'amber/jquery/Wrappers-JQuery'. 'amber/web/Web'}!
 Object subclass: #TrappedDataCarrier
 	instanceVariableNames: 'target model chain'
 	package: 'Trapped-Frontend'!

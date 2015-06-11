@@ -1,5 +1,5 @@
 Smalltalk createPackage: 'Trapped-Processors'!
-(Smalltalk packageAt: 'Trapped-Processors') imports: {'amber-contrib-jquery/Wrappers-JQuery'. 'jquery.xontent'}!
+(Smalltalk packageAt: 'Trapped-Processors') imports: {'amber/jquery/Wrappers-JQuery'. 'jquery.xontent'}!
 TrappedDataExpectingProcessor subclass: #TrappedProcessorAttribute
 	instanceVariableNames: 'attrName'
 	package: 'Trapped-Processors'!

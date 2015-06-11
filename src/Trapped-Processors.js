@@ -1,6 +1,6 @@
 define("trapped/Trapped-Processors", ["amber/boot"
 //>>excludeStart("imports", pragmas.excludeImports);
-, "amber-contrib-jquery/Wrappers-JQuery", "jquery.xontent"
+, "amber/jquery/Wrappers-JQuery", "jquery.xontent"
 //>>excludeEnd("imports");
 , "trapped/Trapped-Frontend"], function($boot
 //>>excludeStart("imports", pragmas.excludeImports);
@@ -10,7 +10,7 @@ define("trapped/Trapped-Processors", ["amber/boot"
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Trapped-Processors');
 $core.packages["Trapped-Processors"].innerEval = function (expr) { return eval(expr); };
-$core.packages["Trapped-Processors"].imports = ["amber-contrib-jquery/Wrappers-JQuery", "jquery.xontent"];
+$core.packages["Trapped-Processors"].imports = ["amber/jquery/Wrappers-JQuery", "jquery.xontent"];
 $core.packages["Trapped-Processors"].transport = {"type":"amd","amdNamespace":"trapped"};
 
 $core.addClass('TrappedProcessorAttribute', $globals.TrappedDataExpectingProcessor, ['attrName'], 'Trapped-Processors');

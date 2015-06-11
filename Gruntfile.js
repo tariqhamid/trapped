@@ -1,7 +1,8 @@
 'use strict';
 
 module.exports = function (grunt) {
-    var path = require('path');
+    var path = require('path'),
+        helpers = require('amber-dev/lib/helpers');
 
     // These plugins provide necessary tasks.
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -11,7 +12,7 @@ module.exports = function (grunt) {
 
     // Default task.
     grunt.registerTask('default', ['amberc:all', 'amberc:counter', 'amberc:todo']);
-    grunt.registerTask('test', ['amberc:test_runner', 'execute:test_runner', 'clean:test_runner']);
+    grunt.registerTask('test', ['amdconfig:app', 'requirejs:test_runner', 'execute:test_runner', 'clean:test_runner']);
     grunt.registerTask('devel', ['amdconfig:app', 'requirejs:devel']);
     grunt.registerTask('deploy', ['amdconfig:app', 'requirejs:deploy']);
 
@@ -28,8 +29,7 @@ module.exports = function (grunt) {
         amberc: {
             options: {
                 amber_dir: path.join(__dirname, "bower_components", "amber"),
-                library_dirs: ['src'],
-                closure_jar: ''
+                library_dirs: ['src']
             },
             all: {
                 src: [
@@ -52,17 +52,6 @@ module.exports = function (grunt) {
                 ],
                 amd_namespace: 'trapped-todo',
                 libraries: ['SUnit', 'Web', 'Trapped-Frontend', 'Trapped-Backend']
-            },
-            test_runner: {
-                src: ['node_modules/amber-dev/lib/Test.st'],
-                libraries: [
-                    /* add dependencies packages here */
-                    'Trapped', /* add other code-to-test packages here */
-                    'SUnit',
-                    'Trapped-Tests' /* add other test packages here */
-                ],
-                main_class: 'NodeTestRunner',
-                output_name: 'test_runner'
             }
         },
 
@@ -72,25 +61,44 @@ module.exports = function (grunt) {
             deploy: {
                 options: {
                     mainConfigFile: "config.js",
-                    onBuildWrite: function (moduleName, path, contents) {
-                        return moduleName === "config" ? contents + "\nrequire.config({map:{'*':{app:'deploy'}}});" : contents;
-                    },
+                    rawText: {"app": 'define(["deploy"],function(x){return x});'},
                     pragmas: {
                         excludeIdeData: true,
                         excludeDebugContexts: true
                     },
-                    include: ['config', 'node_modules/requirejs/require', 'deploy'],
+                    include: ['config', 'node_modules/requirejs/require', 'app'],
                     out: "the.js"
                 }
             },
             devel: {
                 options: {
                     mainConfigFile: "config.js",
-                    onBuildWrite: function (moduleName, path, contents) {
-                        return moduleName === "config" ? contents + "\nrequire.config({map:{'*':{app:'devel'}}});" : contents;
-                    },
-                    include: ['config', 'node_modules/requirejs/require'],
+                    rawText: {"app": 'define(["devel"],function(x){return x});'},
+                    include: ['config', 'node_modules/requirejs/require', 'app'],
+                    exclude: ['devel'],
                     out: "the.js"
+                }
+            },
+            test_runner: {
+                options: {
+                    mainConfigFile: "config.js",
+                    rawText: {
+                        "app": "(" + function () {
+                            define(["testing", "amber_devkit/NodeTestRunner"], function (amber) {
+                                amber.initialize();
+                                amber.globals.NodeTestRunner._main();
+                            });
+                        } + "());"
+                    },
+                    paths: {"amber_devkit": helpers.libPath},
+                    pragmas: {
+                        excludeIdeData: true
+                    },
+                    include: ['config-node', 'app'],
+                    insertRequire: ['app'],
+                    optimize: "none",
+                    wrap: helpers.nodeWrapperWithShebang,
+                    out: "test_runner.js"
                 }
             }
         },

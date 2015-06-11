@@ -1,6 +1,6 @@
 define([
+    './testing',
     'amber/devel',
-    './deploy',
     // --- packages used only during development begin here ---
     'trapped/Trapped-Tests',
     'amber-attic/IDE'
