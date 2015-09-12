@@ -1,4 +1,5 @@
 Smalltalk createPackage: 'Trapped-Backend'!
+(Smalltalk packageAt: 'Trapped-Backend') imports: {'lyst/Lyst'}!
 Object subclass: #EavModel
 	instanceVariableNames: 'getBlock putBlock'
 	package: 'Trapped-Backend'!
