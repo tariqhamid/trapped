@@ -1,4 +1,4 @@
-define("axon/Axon", ["amber/boot", "amber_core/Kernel-Objects", "amber_core/Kernel-Exceptions"], function($boot){
+define("axon/Axon", ["amber/boot", "amber_core/Kernel-Objects", "amber_core/Kernel-Exceptions"], function($boot){"use strict";
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Axon');
 $core.packages["Axon"].innerEval = function (expr) { return eval(expr); };
@@ -545,7 +545,7 @@ $globals.InterestedInEqual);
 
 $core.addClass('AxonOff', $globals.Error, [], 'Axon');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.AxonOff.comment="SIgnal me from the subscription block to unsubscribe it.";
+$globals.AxonOff.comment="Signal me from the subscription block to unsubscribe it.";
 //>>excludeEnd("ide");
 
 

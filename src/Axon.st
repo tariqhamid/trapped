@@ -146,7 +146,7 @@ Error subclass: #AxonOff
 	instanceVariableNames: ''
 	package: 'Axon'!
 !AxonOff commentStamp!
-SIgnal me from the subscription block to unsubscribe it.!
+Signal me from the subscription block to unsubscribe it.!
 
 Object subclass: #AxonizedObject
 	instanceVariableNames: 'axon'
