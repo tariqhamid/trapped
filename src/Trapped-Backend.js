@@ -1,4 +1,4 @@
-define("trapped/Trapped-Backend", ["amber/boot", "amber_core/Kernel-Objects", "axon/Axon", "amber_core/Kernel-Collections"], function($boot){
+define("trapped/Trapped-Backend", ["amber/boot", "amber_core/Kernel-Objects", "axon/Axon", "amber_core/Kernel-Collections"], function($boot){"use strict";
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Trapped-Backend');
 $core.packages["Trapped-Backend"].innerEval = function (expr) { return eval(expr); };
@@ -727,29 +727,21 @@ return nil;
 
 }));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx2.sendIdx["atLyst:ifAbsent:"]=1;
-//>>excludeEnd("ctx");
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx2) {$ctx2.fillBlock({anObject:anObject},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
 $1=self._isEmpty();
 if(!$core.assert($1)){
 $recv(model)._putBlock_((function(anObject,value){
-var penultimate;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-penultimate=$recv(anObject)._atLyst_ifAbsent_(self._allButLast(),(function(){
+return $recv(anObject)._atLyst_ifAbsent_put_(self,(function(){
 return nil;
-
-}));
-penultimate;
-return $recv(self._last())._atYndexIn_ifAbsent_put_(penultimate,(function(){
 
 }),value);
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({anObject:anObject,value:value,penultimate:penultimate},$ctx1,4)});
+}, function($ctx2) {$ctx2.fillBlock({anObject:anObject,value:value},$ctx1,4)});
 //>>excludeEnd("ctx");
 }));
 };
@@ -761,10 +753,10 @@ return $2;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "asEavModel\x0a    | model |\x0a    model := EavModel new.\x0a    model getBlock: [ :anObject | anObject atLyst: self ifAbsent: [ nil ] ].\x0a    self isEmpty ifFalse: [\x0a        model putBlock: [ :anObject :value | | penultimate |\x0a            penultimate := anObject atLyst: self allButLast ifAbsent: [ nil ].\x0a            self last atYndexIn: penultimate ifAbsent: [] put: value ]].\x0a    ^model",
+source: "asEavModel\x0a    | model |\x0a    model := EavModel new.\x0a    model getBlock: [ :anObject | anObject atLyst: self ifAbsent: [ nil ] ].\x0a    self isEmpty ifFalse: [\x0a        model putBlock: [ :anObject :value | anObject atLyst: self ifAbsent: [ nil ] put: value ]].\x0a    ^model",
 referencedClasses: ["EavModel"],
 //>>excludeEnd("ide");
-messageSends: ["new", "getBlock:", "atLyst:ifAbsent:", "ifFalse:", "isEmpty", "putBlock:", "allButLast", "atYndexIn:ifAbsent:put:", "last"]
+messageSends: ["new", "getBlock:", "atLyst:ifAbsent:", "ifFalse:", "isEmpty", "putBlock:", "atLyst:ifAbsent:put:"]
 }),
 $globals.SequenceableCollection);
 

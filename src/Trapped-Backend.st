@@ -213,9 +213,7 @@ asEavModel
     model := EavModel new.
     model getBlock: [ :anObject | anObject atLyst: self ifAbsent: [ nil ] ].
     self isEmpty ifFalse: [
-        model putBlock: [ :anObject :value | | penultimate |
-            penultimate := anObject atLyst: self allButLast ifAbsent: [ nil ].
-            self last atYndexIn: penultimate ifAbsent: [] put: value ]].
+        model putBlock: [ :anObject :value | anObject atLyst: self ifAbsent: [ nil ] put: value ]].
     ^model
 ! !
 
