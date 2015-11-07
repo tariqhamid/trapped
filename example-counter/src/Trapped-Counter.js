@@ -1,4 +1,4 @@
-define("trapped-counter/Trapped-Counter", ["amber/boot", "amber_core/Kernel-Objects", "trapped/Trapped-Backend"], function($boot){
+define("trapped-counter/Trapped-Counter", ["amber/boot", "trapped/Trapped-Backend", "amber_core/Kernel-Objects"], function($boot){"use strict";
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Trapped-Counter');
 $core.packages["Trapped-Counter"].innerEval = function (expr) { return eval(expr); };

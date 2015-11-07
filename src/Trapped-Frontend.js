@@ -6,7 +6,7 @@ define("trapped/Trapped-Frontend", ["amber/boot"
 //>>excludeStart("imports", pragmas.excludeImports);
 
 //>>excludeEnd("imports");
-){
+){"use strict";
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Trapped-Frontend');
 $core.packages["Trapped-Frontend"].innerEval = function (expr) { return eval(expr); };

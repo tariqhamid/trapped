@@ -1,4 +1,4 @@
-define("trapped-todo/Trapped-Todo", ["amber/boot", "trapped/Trapped-Backend", "amber_core/Kernel-Objects", "trapped/Trapped-Frontend"], function($boot){
+define("trapped-todo/Trapped-Todo", ["amber/boot", "trapped/Trapped-Backend", "amber_core/Kernel-Objects", "trapped/Trapped-Frontend"], function($boot){"use strict";
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Trapped-Todo');
 $core.packages["Trapped-Todo"].innerEval = function (expr) { return eval(expr); };
@@ -121,6 +121,86 @@ source: "archive\x0a    self todos: self todosNotDone",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["todos:", "todosNotDone"]
+}),
+$globals.AppModel);
+
+$core.addMethod(
+$core.method({
+selector: "decrement",
+protocol: 'action',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@value"]=$recv(self["@value"]).__minus((1));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"decrement",{},$globals.AppModel)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "decrement\x0a\x09value := value - 1",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["-"]
+}),
+$globals.AppModel);
+
+$core.addMethod(
+$core.method({
+selector: "increment",
+protocol: 'action',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+self["@value"]=$recv(self["@value"]).__plus((1));
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"increment",{},$globals.AppModel)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "increment\x0a\x09value := value + 1",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["+"]
+}),
+$globals.AppModel);
+
+$core.addMethod(
+$core.method({
+selector: "initialize",
+protocol: 'initialization',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+(
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.supercall = true, 
+//>>excludeEnd("ctx");
+$globals.AppModel.superclass.fn.prototype._initialize.apply($recv(self), []));
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.supercall = false;
+//>>excludeEnd("ctx");;
+self["@value"]=(0);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.AppModel)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "initialize\x0a\x09super initialize.\x0a\x09value := 0",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["initialize"]
 }),
 $globals.AppModel);
 
@@ -296,6 +376,45 @@ source: "todosNotDone\x0a    ^self todos reject: [ :each | each at: 'done' ]",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["reject:", "todos", "at:"]
+}),
+$globals.AppModel);
+
+$core.addMethod(
+$core.method({
+selector: "value",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@value"];
+return $1;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "value\x0a\x09^value",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.AppModel);
+
+$core.addMethod(
+$core.method({
+selector: "value:",
+protocol: 'accessing',
+fn: function (aNumber){
+var self=this;
+self["@value"]=aNumber;
+return self;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aNumber"],
+source: "value: aNumber\x0a\x09value := aNumber",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
 }),
 $globals.AppModel);
 
