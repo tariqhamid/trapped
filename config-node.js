@@ -5,3 +5,4 @@
 define("amber/Platform", ["amber_core/Platform-Node"], {});
 define("amber/browser-compatibility", {});
 define("jquery", {});
+define("jquery.xontent", {});
