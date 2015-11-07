@@ -11,7 +11,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('amber-dev');
 
     // Default task.
-    grunt.registerTask('default', ['amberc:all', 'amberc:counter', 'amberc:todo']);
+    grunt.registerTask('default', ['amdconfig:app', 'amberc:axon', 'amberc:all', 'amberc:counter', 'amberc:todo']);
     grunt.registerTask('test', ['amdconfig:app', 'requirejs:test_runner', 'execute:test_runner', 'clean:test_runner']);
     grunt.registerTask('devel', ['amdconfig:app', 'requirejs:devel']);
     grunt.registerTask('deploy', ['amdconfig:app', 'requirejs:deploy']);
@@ -29,7 +29,15 @@ module.exports = function (grunt) {
         amberc: {
             options: {
                 amber_dir: path.join(__dirname, "bower_components", "amber"),
-                library_dirs: ['src']
+                configFile: "config.js"
+            },
+            axon: {
+                src: [
+                    'src/Axon.st',  // list all sources in dependency order
+                    // list all tests in dependency order
+                ],
+                amd_namespace: 'axon',
+                libraries: ['amber_core/SUnit']
             },
             all: {
                 src: [
@@ -37,31 +45,37 @@ module.exports = function (grunt) {
                     'src/Trapped-Tests.st' // list all tests in dependency order
                 ],
                 amd_namespace: 'trapped',
-                libraries: ['SUnit', 'Web']
+                libraries: ['axon/Axon', 'amber_core/SUnit', 'amber/web/Web']
             },
             counter: {
                 src: [
                     'example-counter/src/Trapped-Counter.st'
                 ],
                 amd_namespace: 'trapped-counter',
-                libraries: ['SUnit', 'Web', 'Trapped-Backend']
+                libraries: ['amber_core/SUnit', 'amber/web/Web', 'trapped/Trapped-Backend']
             },
             todo: {
                 src: [
                     'example-todo/src/Trapped-Todo.st'
                 ],
                 amd_namespace: 'trapped-todo',
-                libraries: ['SUnit', 'Web', 'Trapped-Frontend', 'Trapped-Backend']
+                libraries: ['amber_core/SUnit', 'amber/web/Web', 'trapped/Trapped-Frontend', 'trapped/Trapped-Backend']
             }
         },
 
         amdconfig: {app: {dest: 'config.js'}},
 
         requirejs: {
+            options: {
+                useStrict: true
+            },
             deploy: {
                 options: {
                     mainConfigFile: "config.js",
-                    rawText: {"app": 'define(["deploy"],function(x){return x});'},
+                    rawText: {
+                        "amber/Platform": '/*stub*/',
+                        "app": 'define(["deploy"],function(x){return x});define("amber/Platform",["amber_core/Platform-Browser"],{});'
+                    },
                     pragmas: {
                         excludeIdeData: true,
                         excludeDebugContexts: true
@@ -73,7 +87,10 @@ module.exports = function (grunt) {
             devel: {
                 options: {
                     mainConfigFile: "config.js",
-                    rawText: {"app": 'define(["devel"],function(x){return x});'},
+                    rawText: {
+                        "amber/Platform": '/*stub*/',
+                        "app": 'define(["devel"],function(x){return x});define("amber/Platform",["amber_core/Platform-Browser"],{});'
+                    },
                     include: ['config', 'node_modules/requirejs/require', 'app'],
                     exclude: ['devel'],
                     out: "the.js"
