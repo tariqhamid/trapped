@@ -1,6 +1,6 @@
 define("trapped/Trapped-Backend", ["amber/boot"
 //>>excludeStart("imports", pragmas.excludeImports);
-, "lyst/Lyst"
+, "alybaba/Alybaba", "lyst/Lyst"
 //>>excludeEnd("imports");
 , "amber_core/Kernel-Objects", "axon/Axon", "amber_core/Kernel-Collections"], function($boot
 //>>excludeStart("imports", pragmas.excludeImports);
@@ -10,7 +10,7 @@ define("trapped/Trapped-Backend", ["amber/boot"
 var $core=$boot.api,nil=$boot.nil,$recv=$boot.asReceiver,$globals=$boot.globals;
 $core.addPackage('Trapped-Backend');
 $core.packages["Trapped-Backend"].innerEval = function (expr) { return eval(expr); };
-$core.packages["Trapped-Backend"].imports = ["lyst/Lyst"];
+$core.packages["Trapped-Backend"].imports = ["alybaba/Alybaba", "lyst/Lyst"];
 $core.packages["Trapped-Backend"].transport = {"type":"amd","amdNamespace":"trapped"};
 
 $core.addClass('EavModel', $globals.Object, ['getBlock', 'putBlock'], 'Trapped-Backend');

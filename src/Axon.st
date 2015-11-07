@@ -57,6 +57,32 @@ run
 	] on: Error do: [ self dirty: true ]
 ! !
 
+!Axon methodsFor: 'injecting'!
+
+registerIn: anObject
+<anObject.$axon$=self>
+! !
+
+Axon subclass: #DumbAxon
+	instanceVariableNames: ''
+	package: 'Axon'!
+!DumbAxon commentStamp!
+I am an axon that does nothing.!
+
+!DumbAxon methodsFor: 'as yet unclassified'!
+
+add: anInterest
+	"pass"
+!
+
+clean
+	"pass"
+!
+
+do: aBlock
+	"pass"
+! !
+
 Axon subclass: #SimpleAxon
 	instanceVariableNames: 'queue'
 	package: 'Axon'!
@@ -172,5 +198,11 @@ axon: anAxon
 
 changed: anAspect
 	self axon changed: anAspect
+! !
+
+!Object methodsFor: '*Axon'!
+
+registeredAxon
+<return self.$axon$>
 ! !
 

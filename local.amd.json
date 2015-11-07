@@ -2,6 +2,7 @@
     "paths": {
         "trapped": "src",
         "axon": "src",
+        "alybaba": "src",
         "trapped-todo": "example-todo/src",
         "trapped-counter": "example-counter/src"
     }

@@ -150,6 +150,30 @@ $globals.Axon);
 
 $core.addMethod(
 $core.method({
+selector: "registerIn:",
+protocol: 'injecting',
+fn: function (anObject){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+anObject.$axon$=self;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"registerIn:",{anObject:anObject},$globals.Axon)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anObject"],
+source: "registerIn: anObject\x0a<anObject.$axon$=self>",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Axon);
+
+$core.addMethod(
+$core.method({
 selector: "run",
 protocol: 'action',
 fn: function (){
@@ -212,6 +236,66 @@ referencedClasses: ["Error"],
 messageSends: ["on:do:", "do:", "ifTrue:", "isFlagged", "run", "ifFalse:", "isEnabled", "clean", "dirty:"]
 }),
 $globals.Axon);
+
+
+
+$core.addClass('DumbAxon', $globals.Axon, [], 'Axon');
+//>>excludeStart("ide", pragmas.excludeIdeData);
+$globals.DumbAxon.comment="I am an axon that does nothing.";
+//>>excludeEnd("ide");
+$core.addMethod(
+$core.method({
+selector: "add:",
+protocol: 'as yet unclassified',
+fn: function (anInterest){
+var self=this;
+return self;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anInterest"],
+source: "add: anInterest\x0a\x09\x22pass\x22",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.DumbAxon);
+
+$core.addMethod(
+$core.method({
+selector: "clean",
+protocol: 'as yet unclassified',
+fn: function (){
+var self=this;
+return self;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "clean\x0a\x09\x22pass\x22",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.DumbAxon);
+
+$core.addMethod(
+$core.method({
+selector: "do:",
+protocol: 'as yet unclassified',
+fn: function (aBlock){
+var self=this;
+return self;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aBlock"],
+source: "do: aBlock\x0a\x09\x22pass\x22",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.DumbAxon);
 
 
 
@@ -616,5 +700,29 @@ messageSends: ["changed:", "axon"]
 }),
 $globals.AxonizedObject);
 
+
+$core.addMethod(
+$core.method({
+selector: "registeredAxon",
+protocol: '*Axon',
+fn: function (){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+return self.$axon$;
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"registeredAxon",{},$globals.Object)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "registeredAxon\x0a<return self.$axon$>",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.Object);
 
 });
