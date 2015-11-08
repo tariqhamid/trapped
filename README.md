@@ -19,16 +19,16 @@ automagically communicated there and back.
 
 Visit the classic Counter example
 at http://www.herby.sk/trapped/example-counter/counter.html
-or simple Todo similat to one in AngularJS page
+or simple Todo similar to one in AngularJS page
 at http://www.herby.sk/trapped/example-todo/todo.html.
 
 **Hard way** (but you can save and reload with new code):
 
 Clone this repo. Run `bower install` to get amber, which is a dependency.
-Then start the server: `node bower_components/amber/bin/amber serve`
-from the project root directory. It starts on port 4000.
+Get the cli to start amber server: `npm -g install amber-cli`.
+Then start the server: `amber serve` from the project root directory. It starts on port 4000.
 Visit `http://localhost:4000/example-counter/counter.html` (similarly for Todo example)
-in your browser. Amber IDE opens.
+in your browser. Page opens, dialog to open IDE appears.
 
 3 Big picture
 ====
@@ -268,7 +268,7 @@ they instantiating and look into those classes.
 ====
 
 All processing elements (also called processors)
-are instances of  some subclass of `TrappedProcessor`.
+are instances of some subclass of `TrappedProcessor`.
 
 Basic processor _contents_ which is used as a default
 when no processing chain is specified, is contained within
