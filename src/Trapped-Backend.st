@@ -38,7 +38,7 @@ initialize
 	putBlock := [ self error: 'No putter block.' ].
 ! !
 
-AxonInterestBase subclass: #InterestedInTrapPath
+AxonInterest subclass: #InterestedInTrapPath
 	instanceVariableNames: ''
 	package: 'Trapped-Backend'!
 
@@ -48,7 +48,7 @@ accepts: anAspect
     ^anAspect size <= aspect size and: [anAspect = (aspect copyFrom: 1 to: anAspect size)]
 ! !
 
-AxonInterestBase subclass: #InterestedInTrapPathSubtree
+AxonInterest subclass: #InterestedInTrapPathSubtree
 	instanceVariableNames: ''
 	package: 'Trapped-Backend'!
 
@@ -160,7 +160,7 @@ My subclasses need to provide implementation for:
 
 and must issue these calls when initializing:
 
- - axon: (with a subclass of `AxonBase`)
+ - axon: (with a subclass of `Axon`)
  - model: (with a wrapped object, after `axon:`)!
 
 !Trapper methodsFor: 'accessing'!

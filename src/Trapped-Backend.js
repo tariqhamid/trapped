@@ -159,7 +159,7 @@ $globals.EavModel);
 
 
 
-$core.addClass('InterestedInTrapPath', $globals.AxonInterestBase, [], 'Trapped-Backend');
+$core.addClass('InterestedInTrapPath', $globals.AxonInterest, [], 'Trapped-Backend');
 $core.addMethod(
 $core.method({
 selector: "accepts:",
@@ -204,7 +204,7 @@ $globals.InterestedInTrapPath);
 
 
 
-$core.addClass('InterestedInTrapPathSubtree', $globals.AxonInterestBase, [], 'Trapped-Backend');
+$core.addClass('InterestedInTrapPathSubtree', $globals.AxonInterest, [], 'Trapped-Backend');
 $core.addMethod(
 $core.method({
 selector: "accepts:",
@@ -568,7 +568,7 @@ $globals.TrappedPosition);
 
 $core.addClass('Trapper', $globals.AxonizedObject, ['payload'], 'Trapped-Backend');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.Trapper.comment="A portmanteau of 'Trapped wrapper', I am base class for model objects wrapped by Trapped.\x0a\x0aWrapped object is indexed by #('string-at-index' #selector numeric-at-index) array paths. Operations using this indexing are:\x0a\x0a - `read:do` to get the indexed content\x0a - `modify:do:` to get and modify the indexed content, and\x0a - `watch:do:` to subscribe to changes of the indexed content.\x0a\x0aThe wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x0a - read:do:\x0a - modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x0a - axon: (with a subclass of `AxonBase`)\x0a - model: (with a wrapped object, after `axon:`)";
+$globals.Trapper.comment="A portmanteau of 'Trapped wrapper', I am base class for model objects wrapped by Trapped.\x0a\x0aWrapped object is indexed by #('string-at-index' #selector numeric-at-index) array paths. Operations using this indexing are:\x0a\x0a - `read:do` to get the indexed content\x0a - `modify:do:` to get and modify the indexed content, and\x0a - `watch:do:` to subscribe to changes of the indexed content.\x0a\x0aThe wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x0a - read:do:\x0a - modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x0a - axon: (with a subclass of `Axon`)\x0a - model: (with a wrapped object, after `axon:`)";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({

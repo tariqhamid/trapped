@@ -4,9 +4,9 @@ $core.addPackage('Axon');
 $core.packages["Axon"].innerEval = function (expr) { return eval(expr); };
 $core.packages["Axon"].transport = {"type":"amd","amdNamespace":"axon"};
 
-$core.addClass('AxonBase', $globals.Object, ['factory'], 'Axon');
+$core.addClass('Axon', $globals.Object, ['factory'], 'Axon');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.AxonBase.comment="I represent a pub-sub based on a key (called 'aspect').\x0aI manage aspect-block subscriptions (called 'interests') as well as run blocks of dirtied interests.\x0aThe interest objects are responsible of decision if the change of an aspect is relevant for them.\x0aInterest object must be subclasses of `AxonInterestBase`.\x0a\x0aMy subclasses must provide implementation for:\x0a\x0a - add:\x0a - do:\x0a - clean";
+$globals.Axon.comment="I represent a pub-sub based on a key (called 'aspect').\x0aI manage aspect-block subscriptions (called 'interests') as well as run blocks of dirtied interests.\x0aThe interest objects are responsible of decision if the change of an aspect is relevant for them.\x0aInterest object must be subclasses of `AxonInterest`.\x0a\x0aMy subclasses must provide implementation for:\x0a\x0a - add:\x0a - do:\x0a - clean";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({
@@ -24,7 +24,7 @@ self._add_($1);
 $2=self._dirty_(true);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"addInterest:",{anInterest:anInterest},$globals.AxonBase)});
+}, function($ctx1) {$ctx1.fill(self,"addInterest:",{anInterest:anInterest},$globals.Axon)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -34,7 +34,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["add:", "flag", "yourself", "dirty:"]
 }),
-$globals.AxonBase);
+$globals.Axon);
 
 $core.addMethod(
 $core.method({
@@ -65,7 +65,7 @@ return needsToRun;
 self._dirty_(needsToRun);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"changed:",{anAspect:anAspect,needsToRun:needsToRun},$globals.AxonBase)});
+}, function($ctx1) {$ctx1.fill(self,"changed:",{anAspect:anAspect,needsToRun:needsToRun},$globals.Axon)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -75,7 +75,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["do:", "ifTrue:", "accepts:", "flag", "dirty:"]
 }),
-$globals.AxonBase);
+$globals.Axon);
 
 $core.addMethod(
 $core.method({
@@ -102,7 +102,7 @@ return needsToRun;
 self._dirty_(needsToRun);
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"changedAll",{needsToRun:needsToRun},$globals.AxonBase)});
+}, function($ctx1) {$ctx1.fill(self,"changedAll",{needsToRun:needsToRun},$globals.Axon)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -112,7 +112,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["do:", "flag", "dirty:"]
 }),
-$globals.AxonBase);
+$globals.Axon);
 
 $core.addMethod(
 $core.method({
@@ -136,7 +136,7 @@ return self._run();
 };
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"dirty:",{aBoolean:aBoolean},$globals.AxonBase)});
+}, function($ctx1) {$ctx1.fill(self,"dirty:",{aBoolean:aBoolean},$globals.Axon)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -146,7 +146,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["ifTrue:", "fork", "run"]
 }),
-$globals.AxonBase);
+$globals.Axon);
 
 $core.addMethod(
 $core.method({
@@ -201,7 +201,7 @@ return self._dirty_(true);
 }));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"run",{},$globals.AxonBase)});
+}, function($ctx1) {$ctx1.fill(self,"run",{},$globals.Axon)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -211,11 +211,11 @@ referencedClasses: ["Error"],
 //>>excludeEnd("ide");
 messageSends: ["on:do:", "do:", "ifTrue:", "isFlagged", "run", "ifFalse:", "isEnabled", "clean", "dirty:"]
 }),
-$globals.AxonBase);
+$globals.Axon);
 
 
 
-$core.addClass('SimpleAxon', $globals.AxonBase, ['queue'], 'Axon');
+$core.addClass('SimpleAxon', $globals.Axon, ['queue'], 'Axon');
 $core.addMethod(
 $core.method({
 selector: "add:",
@@ -331,7 +331,7 @@ $globals.SimpleAxon);
 
 
 
-$core.addClass('AxonInterestBase', $globals.Object, ['aspect', 'actionBlock', 'flagged'], 'Axon');
+$core.addClass('AxonInterest', $globals.Object, ['aspect', 'actionBlock', 'flagged'], 'Axon');
 $core.addMethod(
 $core.method({
 selector: "accepts:",
@@ -344,7 +344,7 @@ return $core.withContext(function($ctx1) {
 self._subclassResponsibility();
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"accepts:",{anAspect:anAspect},$globals.AxonInterestBase)});
+}, function($ctx1) {$ctx1.fill(self,"accepts:",{anAspect:anAspect},$globals.AxonInterest)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -354,7 +354,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["subclassResponsibility"]
 }),
-$globals.AxonInterestBase);
+$globals.AxonInterest);
 
 $core.addMethod(
 $core.method({
@@ -374,7 +374,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
 }),
-$globals.AxonInterestBase);
+$globals.AxonInterest);
 
 $core.addMethod(
 $core.method({
@@ -393,7 +393,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
 }),
-$globals.AxonInterestBase);
+$globals.AxonInterest);
 
 $core.addMethod(
 $core.method({
@@ -408,7 +408,7 @@ return $core.withContext(function($ctx1) {
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.supercall = true, 
 //>>excludeEnd("ctx");
-$globals.AxonInterestBase.superclass.fn.prototype._initialize.apply($recv(self), []));
+$globals.AxonInterest.superclass.fn.prototype._initialize.apply($recv(self), []));
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 $ctx1.supercall = false;
 //>>excludeEnd("ctx");;
@@ -417,7 +417,7 @@ self["@actionBlock"]=nil;
 self["@flagged"]=false;
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.AxonInterestBase)});
+}, function($ctx1) {$ctx1.fill(self,"initialize",{},$globals.AxonInterest)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -427,7 +427,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["initialize"]
 }),
-$globals.AxonInterestBase);
+$globals.AxonInterest);
 
 $core.addMethod(
 $core.method({
@@ -442,7 +442,7 @@ var $1;
 $1=$recv(self["@actionBlock"])._notNil();
 return $1;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"isEnabled",{},$globals.AxonInterestBase)});
+}, function($ctx1) {$ctx1.fill(self,"isEnabled",{},$globals.AxonInterest)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -452,7 +452,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["notNil"]
 }),
-$globals.AxonInterestBase);
+$globals.AxonInterest);
 
 $core.addMethod(
 $core.method({
@@ -472,7 +472,7 @@ referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
 }),
-$globals.AxonInterestBase);
+$globals.AxonInterest);
 
 $core.addMethod(
 $core.method({
@@ -501,7 +501,7 @@ return self["@actionBlock"];
 }));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"run",{},$globals.AxonInterestBase)});
+}, function($ctx1) {$ctx1.fill(self,"run",{},$globals.AxonInterest)});
 //>>excludeEnd("ctx");
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
@@ -511,11 +511,11 @@ referencedClasses: ["AxonOff"],
 //>>excludeEnd("ide");
 messageSends: ["on:do:", "value"]
 }),
-$globals.AxonInterestBase);
+$globals.AxonInterest);
 
 
 
-$core.addClass('InterestedInEqual', $globals.AxonInterestBase, [], 'Axon');
+$core.addClass('InterestedInEqual', $globals.AxonInterest, [], 'Axon');
 $core.addMethod(
 $core.method({
 selector: "accepts:",
@@ -551,7 +551,7 @@ $globals.AxonOff.comment="Signal me from the subscription block to unsubscribe i
 
 $core.addClass('AxonizedObject', $globals.Object, ['axon'], 'Axon');
 //>>excludeStart("ide", pragmas.excludeIdeData);
-$globals.AxonizedObject.comment="I am base class for object using Axon changed:\x0afor event / change logistics,\x0a\x0aSet AxonBase instance with `axon:` and then use\x0a`self changed: anAspect` to trigger axon's `changed:`.";
+$globals.AxonizedObject.comment="I am base class for object using Axon changed:\x0afor event / change logistics,\x0a\x0aSet Axon instance with `axon:` and then use\x0a`self changed: anAspect` to trigger axon's `changed:`.";
 //>>excludeEnd("ide");
 $core.addMethod(
 $core.method({

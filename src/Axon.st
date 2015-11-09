@@ -1,12 +1,12 @@
 Smalltalk createPackage: 'Axon'!
-Object subclass: #AxonBase
+Object subclass: #Axon
 	instanceVariableNames: 'factory'
 	package: 'Axon'!
-!AxonBase commentStamp!
+!Axon commentStamp!
 I represent a pub-sub based on a key (called 'aspect').
 I manage aspect-block subscriptions (called 'interests') as well as run blocks of dirtied interests.
 The interest objects are responsible of decision if the change of an aspect is relevant for them.
-Interest object must be subclasses of `AxonInterestBase`.
+Interest object must be subclasses of `AxonInterest`.
 
 My subclasses must provide implementation for:
 
@@ -14,7 +14,7 @@ My subclasses must provide implementation for:
  - do:
  - clean!
 
-!AxonBase methodsFor: 'action'!
+!Axon methodsFor: 'action'!
 
 addInterest: anInterest
 	self
@@ -57,7 +57,7 @@ run
 	] on: Error do: [ self dirty: true ]
 ! !
 
-AxonBase subclass: #SimpleAxon
+Axon subclass: #SimpleAxon
 	instanceVariableNames: 'queue'
 	package: 'Axon'!
 
@@ -86,11 +86,11 @@ initialize
 	queue := OrderedCollection new
 ! !
 
-Object subclass: #AxonInterestBase
+Object subclass: #AxonInterest
 	instanceVariableNames: 'aspect actionBlock flagged'
 	package: 'Axon'!
 
-!AxonInterestBase methodsFor: 'accessing'!
+!AxonInterest methodsFor: 'accessing'!
 
 aspect: anAspect block: aBlock
 	aspect := anAspect.
@@ -101,14 +101,14 @@ flag
 	flagged := true
 ! !
 
-!AxonInterestBase methodsFor: 'action'!
+!AxonInterest methodsFor: 'action'!
 
 run
 	[ flagged := false. actionBlock value ]
     on: AxonOff do: [ actionBlock := nil ]
 ! !
 
-!AxonInterestBase methodsFor: 'initialization'!
+!AxonInterest methodsFor: 'initialization'!
 
 initialize
 	super initialize.
@@ -117,7 +117,7 @@ initialize
     flagged := false.
 ! !
 
-!AxonInterestBase methodsFor: 'testing'!
+!AxonInterest methodsFor: 'testing'!
 
 accepts: anAspect
     "Should return true if change for anAspect is relevant for this AxonInterest"
@@ -132,7 +132,7 @@ isFlagged
 	^flagged
 ! !
 
-AxonInterestBase subclass: #InterestedInEqual
+AxonInterest subclass: #InterestedInEqual
 	instanceVariableNames: ''
 	package: 'Axon'!
 
@@ -155,7 +155,7 @@ Object subclass: #AxonizedObject
 I am base class for object using Axon changed:
 for event / change logistics,
 
-Set AxonBase instance with `axon:` and then use
+Set Axon instance with `axon:` and then use
 `self changed: anAspect` to trigger axon's `changed:`.!
 
 !AxonizedObject methodsFor: 'accessing'!
