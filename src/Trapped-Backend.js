@@ -377,6 +377,55 @@ $globals.Isolator.klass);
 $core.addClass('TrappedPosition', $globals.Object, ['path', 'model'], 'Trapped-Backend');
 $core.addMethod(
 $core.method({
+selector: "interestOn:block:",
+protocol: 'private',
+fn: function (anAspect,aBlock){
+var self=this;
+function $InterestedInTrapPathSubtree(){return $globals.InterestedInTrapPathSubtree||(typeof InterestedInTrapPathSubtree=="undefined"?nil:InterestedInTrapPathSubtree)}
+function $InterestedInTrapPath(){return $globals.InterestedInTrapPath||(typeof InterestedInTrapPath=="undefined"?nil:InterestedInTrapPath)}
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+var $1,$3,$2,$4;
+$1=$recv($recv(anAspect)._notEmpty())._and_((function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return $recv($recv(anAspect)._last())._isNil();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
+//>>excludeEnd("ctx");
+}));
+if($core.assert($1)){
+$3=$recv($InterestedInTrapPathSubtree())._new();
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["new"]=1;
+//>>excludeEnd("ctx");
+$2=$recv($3)._aspect_block_($recv(anAspect)._allButLast(),aBlock);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+$ctx1.sendIdx["aspect:block:"]=1;
+//>>excludeEnd("ctx");
+return $2;
+} else {
+$4=$recv($recv($InterestedInTrapPath())._new())._aspect_block_(anAspect,aBlock);
+return $4;
+};
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"interestOn:block:",{anAspect:anAspect,aBlock:aBlock},$globals.TrappedPosition)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anAspect", "aBlock"],
+source: "interestOn: anAspect block: aBlock\x0a\x09(anAspect notEmpty and: [ anAspect last isNil ])\x0a\x09\x09ifTrue: [ ^ InterestedInTrapPathSubtree new aspect: anAspect allButLast block: aBlock ]\x0a\x09\x09ifFalse: [ ^ InterestedInTrapPath new aspect: anAspect block: aBlock ]",
+referencedClasses: ["InterestedInTrapPathSubtree", "InterestedInTrapPath"],
+//>>excludeEnd("ide");
+messageSends: ["ifTrue:ifFalse:", "and:", "notEmpty", "isNil", "last", "aspect:block:", "new", "allButLast"]
+}),
+$globals.TrappedPosition);
+
+$core.addMethod(
+$core.method({
 selector: "model",
 protocol: 'accessing',
 fn: function (){
@@ -492,7 +541,15 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-$recv(self._model())._watch_do_(self._path(),aBlock);
+$recv($recv(self._model())._axon())._addInterest_(self._interestOn_block_(self._path(),(function(){
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx2) {
+//>>excludeEnd("ctx");
+return self._read_(aBlock);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
+//>>excludeEnd("ctx");
+})));
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"watch:",{aBlock:aBlock},$globals.TrappedPosition)});
@@ -500,10 +557,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aBlock"],
-source: "watch: aBlock\x0a\x09self model watch: self path do: aBlock",
+source: "watch: aBlock\x0a\x09self model axon addInterest: (self\x0a\x09\x09interestOn: self path\x0a\x09\x09block: [ self read: aBlock ])",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["watch:do:", "model", "path"]
+messageSends: ["addInterest:", "axon", "model", "interestOn:block:", "path", "read:"]
 }),
 $globals.TrappedPosition);
 
@@ -513,55 +570,6 @@ $core.addClass('Trapper', $globals.AxonizedObject, ['payload'], 'Trapped-Backend
 //>>excludeStart("ide", pragmas.excludeIdeData);
 $globals.Trapper.comment="A portmanteau of 'Trapped wrapper', I am base class for model objects wrapped by Trapped.\x0a\x0aWrapped object is indexed by #('string-at-index' #selector numeric-at-index) array paths. Operations using this indexing are:\x0a\x0a - `read:do` to get the indexed content\x0a - `modify:do:` to get and modify the indexed content, and\x0a - `watch:do:` to subscribe to changes of the indexed content.\x0a\x0aThe wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x0a - read:do:\x0a - modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x0a - axon: (with a subclass of `AxonBase`)\x0a - model: (with a wrapped object, after `axon:`)";
 //>>excludeEnd("ide");
-$core.addMethod(
-$core.method({
-selector: "interestOn:block:",
-protocol: 'action',
-fn: function (anAspect,aBlock){
-var self=this;
-function $InterestedInTrapPathSubtree(){return $globals.InterestedInTrapPathSubtree||(typeof InterestedInTrapPathSubtree=="undefined"?nil:InterestedInTrapPathSubtree)}
-function $InterestedInTrapPath(){return $globals.InterestedInTrapPath||(typeof InterestedInTrapPath=="undefined"?nil:InterestedInTrapPath)}
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-var $1,$3,$2,$4;
-$1=$recv($recv(anAspect)._notEmpty())._and_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $recv($recv(anAspect)._last())._isNil();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
-if($core.assert($1)){
-$3=$recv($InterestedInTrapPathSubtree())._new();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["new"]=1;
-//>>excludeEnd("ctx");
-$2=$recv($3)._aspect_block_($recv(anAspect)._allButLast(),aBlock);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-$ctx1.sendIdx["aspect:block:"]=1;
-//>>excludeEnd("ctx");
-return $2;
-} else {
-$4=$recv($recv($InterestedInTrapPath())._new())._aspect_block_(anAspect,aBlock);
-return $4;
-};
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"interestOn:block:",{anAspect:anAspect,aBlock:aBlock},$globals.Trapper)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anAspect", "aBlock"],
-source: "interestOn: anAspect block: aBlock\x0a\x09(anAspect notEmpty and: [ anAspect last isNil ])\x0a\x09\x09ifTrue: [ ^ InterestedInTrapPathSubtree new aspect: anAspect allButLast block: aBlock ]\x0a\x09\x09ifFalse: [ ^ InterestedInTrapPath new aspect: anAspect block: aBlock ]",
-referencedClasses: ["InterestedInTrapPathSubtree", "InterestedInTrapPath"],
-//>>excludeEnd("ide");
-messageSends: ["ifTrue:ifFalse:", "and:", "notEmpty", "isNil", "last", "aspect:block:", "new", "allButLast"]
-}),
-$globals.Trapper);
-
 $core.addMethod(
 $core.method({
 selector: "model:",
@@ -632,38 +640,6 @@ source: "read: path do: aBlock\x0a\x09self subclassResponsibility",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: ["subclassResponsibility"]
-}),
-$globals.Trapper);
-
-$core.addMethod(
-$core.method({
-selector: "watch:do:",
-protocol: 'action',
-fn: function (path,aBlock){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv(self._axon())._addInterest_(self._interestOn_block_(path,(function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return self._read_do_(path,aBlock);
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
-//>>excludeEnd("ctx");
-})));
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"watch:do:",{path:path,aBlock:aBlock},$globals.Trapper)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["path", "aBlock"],
-source: "watch: path do: aBlock\x0a\x09self axon addInterest: (self\x0a\x09\x09interestOn: path\x0a\x09\x09block: [ self read: path do: aBlock ])",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["addInterest:", "axon", "interestOn:block:", "read:do:"]
 }),
 $globals.Trapper);
 

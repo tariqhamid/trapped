@@ -126,7 +126,17 @@ read: aBlock
 !
 
 watch: aBlock
-	self model watch: self path do: aBlock
+	self model axon addInterest: (self
+		interestOn: self path
+		block: [ self read: aBlock ])
+! !
+
+!TrappedPosition methodsFor: 'private'!
+
+interestOn: anAspect block: aBlock
+	(anAspect notEmpty and: [ anAspect last isNil ])
+		ifTrue: [ ^ InterestedInTrapPathSubtree new aspect: anAspect allButLast block: aBlock ]
+		ifFalse: [ ^ InterestedInTrapPath new aspect: anAspect block: aBlock ]
 ! !
 
 AxonizedObject subclass: #Trapper
@@ -162,24 +172,12 @@ model: anObject
 
 !Trapper methodsFor: 'action'!
 
-interestOn: anAspect block: aBlock
-	(anAspect notEmpty and: [ anAspect last isNil ])
-		ifTrue: [ ^ InterestedInTrapPathSubtree new aspect: anAspect allButLast block: aBlock ]
-		ifFalse: [ ^ InterestedInTrapPath new aspect: anAspect block: aBlock ]
-!
-
 modify: path do: aBlock
 	self subclassResponsibility
 !
 
 read: path do: aBlock
 	self subclassResponsibility
-!
-
-watch: path do: aBlock
-	self axon addInterest: (self
-		interestOn: path
-		block: [ self read: path do: aBlock ])
 ! !
 
 Trapper subclass: #DirectTrapper
