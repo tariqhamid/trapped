@@ -954,15 +954,7 @@ var self=this;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-$recv($recv(aDataCarrier)._target())._modify_((function(){
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx2) {
-//>>excludeEnd("ctx");
-return $recv(aDataCarrier)._value();
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({},$ctx1,1)});
-//>>excludeEnd("ctx");
-}));
+$recv(aDataCarrier)._modifyTarget();
 return self;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 }, function($ctx1) {$ctx1.fill(self,"toModel:",{aDataCarrier:aDataCarrier},$globals.TrappedProcessorToBlackboard)});
@@ -970,10 +962,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aDataCarrier"],
-source: "toModel: aDataCarrier\x0a\x09aDataCarrier target modify: [ aDataCarrier value ]",
+source: "toModel: aDataCarrier\x0a\x09aDataCarrier modifyTarget",
 referencedClasses: [],
 //>>excludeEnd("ide");
-messageSends: ["modify:", "target", "value"]
+messageSends: ["modifyTarget"]
 }),
 $globals.TrappedProcessorToBlackboard);
 

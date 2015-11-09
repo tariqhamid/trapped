@@ -346,7 +346,7 @@ I save the data to blackboard in toModel:, to position specified by path.!
 !TrappedProcessorToBlackboard methodsFor: 'data transformation'!
 
 toModel: aDataCarrier
-	aDataCarrier target modify: [ aDataCarrier value ]
+	aDataCarrier modifyTarget
 ! !
 
 TrappedProcessor subclass: #TrappedProcessorUriComponentDecode
