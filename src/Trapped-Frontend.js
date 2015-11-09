@@ -2,7 +2,7 @@ define("trapped/Trapped-Frontend", ["amber/boot"
 //>>excludeStart("imports", pragmas.excludeImports);
 , "amber/jquery/Wrappers-JQuery", "amber/web/Web"
 //>>excludeEnd("imports");
-, "amber_core/Kernel-Objects", "amber_core/Kernel-Collections", "amber/web/Web"], function($boot
+, "amber_core/Kernel-Objects", "trapped/Trapped-Backend", "amber_core/Kernel-Collections", "amber/web/Web"], function($boot
 //>>excludeStart("imports", pragmas.excludeImports);
 
 //>>excludeEnd("imports");
@@ -1009,19 +1009,29 @@ function $TrappedSnapshot(){return $globals.TrappedSnapshot||(typeof TrappedSnap
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
+var $1,$2,$3;
 tpsc=$recv($TrappedPathStack())._current();
 $recv(tpsc)._append_do_(anArray,(function(){
-var path,model;
+var prefix,modelPath,model;
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
-path=$recv($recv(tpsc)._elements())._copy();
-path;
-model=self._byName_($recv(path)._first());
-model;
-return $recv(aBlock)._value_($recv($recv($TrappedSnapshot())._new())._path_model_(path,model));
+$1=$recv(tpsc)._elements();
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx2) {$ctx2.fillBlock({path:path,model:model},$ctx1,1)});
+$ctx2.sendIdx["elements"]=1;
+//>>excludeEnd("ctx");
+prefix=$recv($1)._first();
+prefix;
+modelPath=$recv($recv(tpsc)._elements())._allButFirst();
+modelPath;
+model=self._byName_(prefix);
+model;
+$2=$recv($TrappedSnapshot())._new();
+$recv($2)._prefix_(prefix);
+$3=$recv($2)._path_model_(modelPath,model);
+return $recv(aBlock)._value_($3);
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx2) {$ctx2.fillBlock({prefix:prefix,modelPath:modelPath,model:model},$ctx1,1)});
 //>>excludeEnd("ctx");
 }));
 return self;
@@ -1031,10 +1041,10 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["anArray", "aBlock"],
-source: "descend: anArray snapshotDo: aBlock\x0a\x09| tpsc |\x0a    tpsc := TrappedPathStack current.\x0a    tpsc append: anArray do: [\x0a        | path model |\x0a        path := tpsc elements copy.\x0a   \x09    model := self byName: path first.\x0a        aBlock value: (TrappedSnapshot new path: path model: model)\x0a    ]",
+source: "descend: anArray snapshotDo: aBlock\x0a\x09| tpsc |\x0a    tpsc := TrappedPathStack current.\x0a    tpsc append: anArray do: [\x0a        | prefix modelPath model |\x0a\x09\x09prefix := tpsc elements first.\x0a\x09\x09modelPath := tpsc elements allButFirst.\x0a   \x09    model := self byName: prefix.\x0a        aBlock value: (TrappedSnapshot new prefix: prefix; path: modelPath model: model)\x0a    ]",
 referencedClasses: ["TrappedPathStack", "TrappedSnapshot"],
 //>>excludeEnd("ide");
-messageSends: ["current", "append:do:", "copy", "elements", "byName:", "first", "value:", "path:model:", "new"]
+messageSends: ["current", "append:do:", "first", "elements", "allButFirst", "byName:", "value:", "prefix:", "new", "path:model:"]
 }),
 $globals.Trapped);
 
@@ -1533,7 +1543,7 @@ $globals.TrappedPathStack);
 
 
 
-$core.addClass('TrappedSnapshot', $globals.Object, ['path', 'model'], 'Trapped-Frontend');
+$core.addClass('TrappedSnapshot', $globals.TrappedPosition, ['prefix'], 'Trapped-Frontend');
 $core.addMethod(
 $core.method({
 selector: "do:",
@@ -1544,7 +1554,7 @@ function $TrappedPathStack(){return $globals.TrappedPathStack||(typeof TrappedPa
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx1) {
 //>>excludeEnd("ctx");
-$recv($recv($TrappedPathStack())._current())._with_do_(self["@path"],(function(){
+$recv($recv($TrappedPathStack())._current())._with_do_($recv([self["@prefix"]]).__comma(self["@path"]),(function(){
 //>>excludeStart("ctx", pragmas.excludeDebugContexts);
 return $core.withContext(function($ctx2) {
 //>>excludeEnd("ctx");
@@ -1560,27 +1570,27 @@ return self;
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: ["aBlock"],
-source: "do: aBlock\x0a\x09TrappedPathStack current with: path do: [ aBlock value: model ]",
+source: "do: aBlock\x0a\x09TrappedPathStack current with: {prefix}, path do: [ aBlock value: model ]",
 referencedClasses: ["TrappedPathStack"],
 //>>excludeEnd("ide");
-messageSends: ["with:do:", "current", "value:"]
+messageSends: ["with:do:", "current", ",", "value:"]
 }),
 $globals.TrappedSnapshot);
 
 $core.addMethod(
 $core.method({
-selector: "model",
+selector: "prefix",
 protocol: 'accessing',
 fn: function (){
 var self=this;
 var $1;
-$1=self["@model"];
+$1=self["@prefix"];
 return $1;
 
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
 args: [],
-source: "model\x0a\x09^model",
+source: "prefix\x0a\x09^ prefix",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
@@ -1589,113 +1599,20 @@ $globals.TrappedSnapshot);
 
 $core.addMethod(
 $core.method({
-selector: "modify:",
-protocol: 'action',
-fn: function (aBlock){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv(self._model())._modify_do_($recv(self._path())._allButFirst(),aBlock);
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"modify:",{aBlock:aBlock},$globals.TrappedSnapshot)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aBlock"],
-source: "modify: aBlock\x0a\x09self model modify: self path allButFirst do: aBlock",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["modify:do:", "model", "allButFirst", "path"]
-}),
-$globals.TrappedSnapshot);
-
-$core.addMethod(
-$core.method({
-selector: "path",
+selector: "prefix:",
 protocol: 'accessing',
-fn: function (){
+fn: function (anObject){
 var self=this;
-var $1;
-$1=self["@path"];
-return $1;
+self["@prefix"]=anObject;
+return self;
 
 },
 //>>excludeStart("ide", pragmas.excludeIdeData);
-args: [],
-source: "path\x0a\x09^path",
+args: ["anObject"],
+source: "prefix: anObject\x0a\x09prefix := anObject",
 referencedClasses: [],
 //>>excludeEnd("ide");
 messageSends: []
-}),
-$globals.TrappedSnapshot);
-
-$core.addMethod(
-$core.method({
-selector: "path:model:",
-protocol: 'accessing',
-fn: function (anArray,aTrappedMW){
-var self=this;
-self["@path"]=anArray;
-self["@model"]=aTrappedMW;
-return self;
-
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["anArray", "aTrappedMW"],
-source: "path: anArray model: aTrappedMW\x0a\x09path := anArray.\x0a    model := aTrappedMW",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: []
-}),
-$globals.TrappedSnapshot);
-
-$core.addMethod(
-$core.method({
-selector: "read:",
-protocol: 'action',
-fn: function (aBlock){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv(self._model())._read_do_($recv(self._path())._allButFirst(),aBlock);
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"read:",{aBlock:aBlock},$globals.TrappedSnapshot)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aBlock"],
-source: "read: aBlock\x0a\x09self model read: self path allButFirst do: aBlock",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["read:do:", "model", "allButFirst", "path"]
-}),
-$globals.TrappedSnapshot);
-
-$core.addMethod(
-$core.method({
-selector: "watch:",
-protocol: 'action',
-fn: function (aBlock){
-var self=this;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-return $core.withContext(function($ctx1) {
-//>>excludeEnd("ctx");
-$recv(self._model())._watch_do_($recv(self._path())._allButFirst(),aBlock);
-return self;
-//>>excludeStart("ctx", pragmas.excludeDebugContexts);
-}, function($ctx1) {$ctx1.fill(self,"watch:",{aBlock:aBlock},$globals.TrappedSnapshot)});
-//>>excludeEnd("ctx");
-},
-//>>excludeStart("ide", pragmas.excludeIdeData);
-args: ["aBlock"],
-source: "watch: aBlock\x0a\x09self model watch: self path allButFirst do: aBlock",
-referencedClasses: [],
-//>>excludeEnd("ide");
-messageSends: ["watch:do:", "model", "allButFirst", "path"]
 }),
 $globals.TrappedSnapshot);
 

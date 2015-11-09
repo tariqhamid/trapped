@@ -96,6 +96,39 @@ on: anObject
 ^self new root: anObject
 ! !
 
+Object subclass: #TrappedPosition
+	instanceVariableNames: 'path model'
+	package: 'Trapped-Backend'!
+
+!TrappedPosition methodsFor: 'accessing'!
+
+model
+	^model
+!
+
+path
+	^path
+!
+
+path: anArray model: aTrappedMW
+	path := anArray.
+    model := aTrappedMW
+! !
+
+!TrappedPosition methodsFor: 'action'!
+
+modify: aBlock
+	self model modify: self path do: aBlock
+!
+
+read: aBlock
+	self model read: self path do: aBlock
+!
+
+watch: aBlock
+	self model watch: self path do: aBlock
+! !
+
 AxonizedObject subclass: #Trapper
 	instanceVariableNames: 'payload'
 	package: 'Trapped-Backend'!

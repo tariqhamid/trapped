@@ -325,10 +325,11 @@ descend: anArray snapshotDo: aBlock
 	| tpsc |
     tpsc := TrappedPathStack current.
     tpsc append: anArray do: [
-        | path model |
-        path := tpsc elements copy.
-   	    model := self byName: path first.
-        aBlock value: (TrappedSnapshot new path: path model: model)
+        | prefix modelPath model |
+		prefix := tpsc elements first.
+		modelPath := tpsc elements allButFirst.
+   	    model := self byName: prefix.
+        aBlock value: (TrappedSnapshot new prefix: prefix; path: modelPath model: model)
     ]
 !
 
@@ -412,41 +413,24 @@ initialize
 	elements := #().
 ! !
 
-Object subclass: #TrappedSnapshot
-	instanceVariableNames: 'path model'
+TrappedPosition subclass: #TrappedSnapshot
+	instanceVariableNames: 'prefix'
 	package: 'Trapped-Frontend'!
 
 !TrappedSnapshot methodsFor: 'accessing'!
 
-model
-	^model
+prefix
+	^ prefix
 !
 
-path
-	^path
-!
-
-path: anArray model: aTrappedMW
-	path := anArray.
-    model := aTrappedMW
+prefix: anObject
+	prefix := anObject
 ! !
 
 !TrappedSnapshot methodsFor: 'action'!
 
 do: aBlock
-	TrappedPathStack current with: path do: [ aBlock value: model ]
-!
-
-modify: aBlock
-	self model modify: self path allButFirst do: aBlock
-!
-
-read: aBlock
-	self model read: self path allButFirst do: aBlock
-!
-
-watch: aBlock
-	self model watch: self path allButFirst do: aBlock
+	TrappedPathStack current with: {prefix}, path do: [ aBlock value: model ]
 ! !
 
 !Array methodsFor: '*Trapped-Frontend'!

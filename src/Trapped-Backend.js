@@ -374,6 +374,141 @@ messageSends: ["root:", "new"]
 $globals.Isolator.klass);
 
 
+$core.addClass('TrappedPosition', $globals.Object, ['path', 'model'], 'Trapped-Backend');
+$core.addMethod(
+$core.method({
+selector: "model",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@model"];
+return $1;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "model\x0a\x09^model",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.TrappedPosition);
+
+$core.addMethod(
+$core.method({
+selector: "modify:",
+protocol: 'action',
+fn: function (aBlock){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self._model())._modify_do_(self._path(),aBlock);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"modify:",{aBlock:aBlock},$globals.TrappedPosition)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aBlock"],
+source: "modify: aBlock\x0a\x09self model modify: self path do: aBlock",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["modify:do:", "model", "path"]
+}),
+$globals.TrappedPosition);
+
+$core.addMethod(
+$core.method({
+selector: "path",
+protocol: 'accessing',
+fn: function (){
+var self=this;
+var $1;
+$1=self["@path"];
+return $1;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: [],
+source: "path\x0a\x09^path",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.TrappedPosition);
+
+$core.addMethod(
+$core.method({
+selector: "path:model:",
+protocol: 'accessing',
+fn: function (anArray,aTrappedMW){
+var self=this;
+self["@path"]=anArray;
+self["@model"]=aTrappedMW;
+return self;
+
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["anArray", "aTrappedMW"],
+source: "path: anArray model: aTrappedMW\x0a\x09path := anArray.\x0a    model := aTrappedMW",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: []
+}),
+$globals.TrappedPosition);
+
+$core.addMethod(
+$core.method({
+selector: "read:",
+protocol: 'action',
+fn: function (aBlock){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self._model())._read_do_(self._path(),aBlock);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"read:",{aBlock:aBlock},$globals.TrappedPosition)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aBlock"],
+source: "read: aBlock\x0a\x09self model read: self path do: aBlock",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["read:do:", "model", "path"]
+}),
+$globals.TrappedPosition);
+
+$core.addMethod(
+$core.method({
+selector: "watch:",
+protocol: 'action',
+fn: function (aBlock){
+var self=this;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+return $core.withContext(function($ctx1) {
+//>>excludeEnd("ctx");
+$recv(self._model())._watch_do_(self._path(),aBlock);
+return self;
+//>>excludeStart("ctx", pragmas.excludeDebugContexts);
+}, function($ctx1) {$ctx1.fill(self,"watch:",{aBlock:aBlock},$globals.TrappedPosition)});
+//>>excludeEnd("ctx");
+},
+//>>excludeStart("ide", pragmas.excludeIdeData);
+args: ["aBlock"],
+source: "watch: aBlock\x0a\x09self model watch: self path do: aBlock",
+referencedClasses: [],
+//>>excludeEnd("ide");
+messageSends: ["watch:do:", "model", "path"]
+}),
+$globals.TrappedPosition);
+
+
+
 $core.addClass('Trapper', $globals.AxonizedObject, ['payload'], 'Trapped-Backend');
 //>>excludeStart("ide", pragmas.excludeIdeData);
 $globals.Trapper.comment="A portmanteau of 'Trapped wrapper', I am base class for model objects wrapped by Trapped.\x0a\x0aWrapped object is indexed by #('string-at-index' #selector numeric-at-index) array paths. Operations using this indexing are:\x0a\x0a - `read:do` to get the indexed content\x0a - `modify:do:` to get and modify the indexed content, and\x0a - `watch:do:` to subscribe to changes of the indexed content.\x0a\x0aThe wrapped model can be any smalltalk object.\x0a\x0aMy subclasses need to provide implementation for:\x0a\x0a - read:do:\x0a - modify:do:\x0a\x0aand must issue these calls when initializing:\x0a\x0a - axon: (with a subclass of `AxonBase`)\x0a - model: (with a wrapped object, after `axon:`)";
